@@ -691,23 +691,9 @@ export default function Settings() {
       { value: "center", label: "Center" },
     ]),
     toggle("text", "italicLyrics", "Italic", "Slanted lyrics.", { preview: true }),
-    toggle("text", "allCaps", "ALL CAPS", "Lyrics in capital letters, in the panel and in album mode.", { preview: true }),
     slider("text", "titleScale", "Title size", "Size of the song title and artist.", { min: 0.8, max: 1.6, step: 0.05, fmt: times }),
 
     // Highlight: how the line being sung lights up
-    chips("highlight", "highlight", "Highlight colour", "The colour the sung part of each line lights up in. Rainbow cycles through them all.",
-      (Object.keys(HIGHLIGHTS) as Highlight[]).map((h) => ({
-        value: h,
-        label: (
-          <>
-            <span
-              className={`st-swatch st-swatch-${h}`}
-              style={{ "--sw-h": HIGHLIGHTS[h].h, "--sw-s": `${HIGHLIGHTS[h].s}%`, "--sw-l": `${HIGHLIGHTS[h].l}%` } as React.CSSProperties}
-            />
-            {HIGHLIGHTS[h].name}
-          </>
-        ),
-      }))),
     slider("highlight", "highlightStrength", "Highlight strength", "How bright the sung part of the line is.", { min: 0.5, max: 1.2, step: 0.05, fmt: times }),
     slider("highlight", "glowStrength", "Glow", "The soft glow around letters as they are sung.", { min: 0, max: 3, step: 0.1, fmt: times }),
     chips("highlight", "sweepDirection", "Sweep direction", "The fill runs along the line as it is sung, or top to bottom over each word.", [
@@ -718,11 +704,6 @@ export default function Settings() {
     slider("highlight", "upcomingBrightness", "Upcoming lines", "How bright the lines not yet sung are.", { min: 0.2, max: 1.9, step: 0.05, fmt: times }),
     slider("highlight", "sungBrightness", "Sung lines", "How bright the lines already sung are.", { min: 0.2, max: 2, step: 0.05, fmt: times }),
     toggle("highlight", "blurLines", "Blur distant lines", "Soften lines the further they are from the one being sung.", { preview: true }),
-    chips("highlight", "lyricMotion", "Lyric motion", "How much the sung letters bounce: Calm keeps them still, Bouncy doubles the wave.", [
-      { value: "calm", label: "Calm" },
-      { value: "normal", label: "Normal" },
-      { value: "bouncy", label: "Bouncy" },
-    ], { preview: false }),
 
     // Surface: the glass and the cover behind it
     slider("surface", "bgAlpha", "Background", "How see-through the widget is: 0% clear, 72% the default glass, 100% solid.", {
@@ -765,11 +746,30 @@ export default function Settings() {
     slider("album", "albumLyricSize", "Lyric size", "How big the album-mode lyric is.", { min: 11, max: 24, step: 1, fmt: (v) => `${v}px` }),
 
     // Fun
+    chips("fun", "highlight", "Highlight colour", "The colour the sung part of each line lights up in. Rainbow cycles through them all.",
+      (Object.keys(HIGHLIGHTS) as Highlight[]).map((h) => ({
+        value: h,
+        label: (
+          <>
+            <span
+              className={`st-swatch st-swatch-${h}`}
+              style={{ "--sw-h": HIGHLIGHTS[h].h, "--sw-s": `${HIGHLIGHTS[h].s}%`, "--sw-l": `${HIGHLIGHTS[h].l}%` } as React.CSSProperties}
+            />
+            {HIGHLIGHTS[h].name}
+          </>
+        ),
+      }))),
     slider("fun", "rainbowSpeed", "Rainbow speed", "Seconds for one trip round the colours, with the Rainbow highlight.", { min: 1, max: 20, step: 1, fmt: (v) => `${v}s` }),
     toggle("fun", "spinCover", "Spinning cover", "The small cover turns round like a record while music plays.", { preview: true }),
     slider("fun", "spinSpeed", "Spin speed", "Seconds per turn of the spinning cover.", { min: 1, max: 20, step: 1, fmt: (v) => `${v}s` }),
+    chips("fun", "lyricMotion", "Lyric motion", "How much the sung letters bounce: Calm keeps them still, Bouncy doubles the wave.", [
+      { value: "calm", label: "Calm" },
+      { value: "normal", label: "Normal" },
+      { value: "bouncy", label: "Bouncy" },
+    ], { preview: false }),
     toggle("fun", "floatingCover", "Floating cover", "The small cover gently bobs up and down.", { preview: true }),
     toggle("fun", "partyBackground", "Party background", "The cover's glow behind the widget cycles through every colour.", { preview: true }),
+    toggle("fun", "allCaps", "ALL CAPS", "Lyrics in capital letters, in the panel and in album mode.", { preview: true }),
 
     // Behavior
     toggle("behavior", "lyricsOnLaunch", "Open lyrics on launch", "Start with the lyrics panel open instead of just the player."),

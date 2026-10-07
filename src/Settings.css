@@ -301,9 +301,16 @@
 }
 
 /* the widget's surface rules (.widget, .widget-bg), at the chosen Background */
+/* A fixed height: trying a setting (a bigger size, another font, a wrap)
+   must not change it, or the list below moves under the pointer, the row
+   loses the hover, the try-out ends, and the list jumps back — a flicker. */
 .st-preview {
     position: relative;
     overflow: hidden;
+    height: 176px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     border-radius: var(--pv-radius, 10px);
     padding: 8px 10px 10px;
     background: rgba(var(--pv-tint, 20, 20, 22), var(--bg-a));
@@ -350,7 +357,8 @@
 
 /* progress bar and times, under the lyrics */
 .st-pv-bottom {
-    margin-top: 8px;
+    margin-top: auto;
+    padding-top: 8px;
 }
 
 .st-pv-bar {
@@ -458,6 +466,10 @@
 .st-pv-lyrics {
     display: flex;
     flex-direction: column;
+    /* takes what the top and bottom rows leave, and clips past it */
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
     /* Line spacing, scaled to the smaller preview */
     gap: var(--pv-gap, 6px);
     /* the CJK faces after the chosen one, as the widget does (--cjk-stack) */
@@ -532,7 +544,10 @@
     background: conic-gradient(#ff6b8b, #ffd36b, #6bffb0, #6bc8ff, #c56bff, #ff6b8b);
 }
 
+/* fixed at two lines for the same reason as the preview's height */
 .st-preview-caption {
+    height: 2.5em;
+    overflow: hidden;
     margin-top: 5px;
     min-height: 2.5em;
     font-size: 10px;

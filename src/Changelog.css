@@ -162,6 +162,36 @@
     color: rgba(255, 255, 255, 0.42);
 }
 
+/* A section of one version's changes: a coloured label, then its points. */
+.cl-kind + .cl-kind {
+    margin-top: 7px;
+}
+
+.cl-kind-name {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cl-kind-name::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--kind, #fff);
+}
+
+.cl-kind--new { --kind: #6bc8ff; }
+.cl-kind--appearance { --kind: #ff8fc8; }
+.cl-kind--qol { --kind: #6bffb0; }
+.cl-kind--performance { --kind: #ffd36b; }
+.cl-kind--fixes { --kind: #ff8a6b; }
+
 .cl-entry ul {
     margin: 3px 0 0;
     padding-left: 15px;

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
-import { CHANGELOG, compareVersions, type ChangelogEntry } from "./changelog";
+import { CHANGELOG, CHANGE_KINDS, compareVersions, type ChangeKind, type ChangelogEntry } from "./changelog";
 import { KEYS, usePersisted } from "./settings";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
@@ -52,11 +52,19 @@ function Entries({ entries, heads }: { entries: ChangelogEntry[]; heads: boolean
               <span className="cl-date">{fmtDate(e.date)}</span>
             </div>
           )}
-          <ul>
-            {e.changes.map((c) => (
-              <li key={c}>{c}</li>
+          {/* one section per kind of change, in CHANGE_KINDS order */}
+          {(Object.keys(CHANGE_KINDS) as ChangeKind[])
+            .filter((kind) => e.changes[kind]?.length)
+            .map((kind) => (
+              <div key={kind} className={`cl-kind cl-kind--${kind}`}>
+                <div className="cl-kind-name">{CHANGE_KINDS[kind]}</div>
+                <ul>
+                  {e.changes[kind]!.map((c) => (
+                    <li key={c}>{c}</li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
         </section>
       ))}
     </div>

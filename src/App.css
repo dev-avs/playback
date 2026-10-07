@@ -687,6 +687,12 @@ body {
     display: none;
 }
 
+/* ...and the hover outline closes the gap it cuts in its top edge for the
+   badge, which otherwise stays as an empty notch */
+.lyrics-inner.no-ts .lyric-line::before {
+    clip-path: none;
+}
+
 /* ALL CAPS lyrics, in the panel and album mode alike */
 .widget.caps-lyrics .lyric-line,
 .widget.caps-lyrics .art-lyric-text {
