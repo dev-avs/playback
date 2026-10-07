@@ -1,0 +1,224 @@
+/* Changelog window. The settings card's surface (dark glass over the blurred
+   cover), laid out like Spicy Lyrics' notice dialog: mark, brand line, title,
+   text, then the actions, each easing in a beat after the one before. */
+
+.cl-card {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    width: 320px;
+    overflow: hidden;
+    border-radius: 13px;
+    padding: 16px 16px 12px;
+    background: rgba(20, 20, 22, 0.72);
+    box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.08),
+        0 4px 16px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    user-select: none;
+    font-family: "SF Pro", "SF Pro Text", "SF Pro Display", -apple-system, "Segoe UI", sans-serif;
+    opacity: 0;
+    transform: scale(0.96) translateY(6px);
+    transition:
+        opacity 200ms ease,
+        transform 420ms var(--ease-out);
+    /* the window has no frame, so the card is what moves it */
+    -webkit-app-region: drag;
+}
+
+/* clicking and scrolling must still work inside the dragged card */
+.cl-card button,
+.cl-entries {
+    -webkit-app-region: no-drag;
+}
+
+.cl-card.is-open {
+    opacity: 1;
+    transform: none;
+}
+
+.cl-card.is-closing {
+    transition-duration: 200ms;
+}
+
+.cl-bg {
+    position: absolute;
+    inset: -60px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px) saturate(1.4);
+    opacity: 0.55;
+    z-index: 0;
+}
+
+.cl-card > :not(.cl-bg) {
+    position: relative;
+    z-index: 1;
+}
+
+/* Each block arrives a beat after the last (--cl-i set per block). */
+.cl-card [style*="--cl-i"] {
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+        opacity 260ms ease,
+        transform 420ms var(--ease-out);
+    transition-delay: calc(80ms + var(--cl-i) * 45ms);
+}
+
+.cl-card.is-open [style*="--cl-i"] {
+    opacity: 1;
+    transform: none;
+}
+
+.cl-card.is-closing [style*="--cl-i"] {
+    transition-delay: 0ms;
+}
+
+.cl-mark {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 10px;
+}
+
+.cl-mark svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.cl-brand {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.cl-title {
+    margin: 2px 0 6px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.cl-text {
+    margin: 0 0 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* Inline, not inline-block, so it sits on the sentence's baseline. Ordinary
+   (proportional) figures: tabular ones are each a full digit wide, which
+   spread "1.2.9" into "1 . 2 . 9". */
+.cl-pill {
+    padding: 1px 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-weight: 600;
+}
+
+/* A long history scrolls inside the card rather than growing the window. */
+.cl-entries {
+    max-height: 260px;
+    overflow-y: auto;
+    margin: 0 -6px;
+    padding: 0 6px;
+}
+
+/* A thin rounded thumb and no arrow buttons, instead of Windows' own bar. */
+.cl-entries::-webkit-scrollbar {
+    width: 4px;
+}
+
+.cl-entries::-webkit-scrollbar-button {
+    display: none;
+}
+
+.cl-entries::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.cl-entry + .cl-entry {
+    margin-top: 10px;
+}
+
+.cl-entry-head {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.cl-version {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cl-date {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.cl-entry ul {
+    margin: 3px 0 0;
+    padding-left: 15px;
+}
+
+.cl-entry li {
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.cl-entry li + li {
+    margin-top: 2px;
+}
+
+.cl-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 14px;
+}
+
+.cl-button {
+    border: none;
+    border-radius: 999px;
+    padding: 6px 13px;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 120ms ease, transform 120ms var(--ease-out);
+}
+
+.cl-button:active {
+    transform: scale(0.96);
+}
+
+.cl-button--quiet {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.cl-button--quiet:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.cl-button--primary {
+    background: #fff;
+    color: #141416;
+}
+
+.cl-button--primary:hover {
+    background: rgba(255, 255, 255, 0.88);
+}
+
+.cl-button:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+}

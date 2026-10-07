@@ -1,0 +1,150 @@
+export interface PlayerCaps {
+  play: boolean;
+  pause: boolean;
+  next: boolean;
+  prev: boolean;
+  seek: boolean;
+  shuffle: boolean;
+  repeat: boolean;
+}
+
+export interface SmtcState {
+  type: "state";
+  appId?: string;
+  title?: string;
+  artist?: string;
+  album?: string;
+  trackKey?: string;
+  status?: string;
+  playing?: boolean;
+  position?: number;
+  duration?: number;
+  updatedAt?: number;
+  sampledAt?: number;
+  shuffle?: boolean;
+  repeat?: "None" | "Track" | "List" | string;
+  /** app audio-session volume 0..1, or -1 when no session was found */
+  volume?: number;
+  caps?: PlayerCaps;
+  session?: null;
+}
+
+export interface SmtcError {
+  type: "error";
+  message: string;
+}
+
+export type SmtcEvent = SmtcState | SmtcError;
+
+export interface LyricsRequest {
+  artist: string;
+  title: string;
+  album?: string;
+  duration?: number;
+  geniusKey?: string;
+  /** ask just this provider instead of the whole chain */
+  only?: string;
+}
+
+export interface LyricsResponse {
+  /** NetEase `yrc` — word-by-word karaoke timing */
+  wordLyrics?: string;
+  syncedLyrics?: string;
+  plainLyrics?: string;
+  source: "lrclib" | "netease" | "genius";
+}
+
+export interface PlayerBridge {
+  onEvent(cb: (msg: SmtcEvent) => void): () => void;
+  /** the Spicetify extension delivered a Spotify token — see tokenBridge.cjs */
+  onTokenArrived?(cb: () => void): () => void;
+  play(): Promise<boolean>;
+  pause(): Promise<boolean>;
+  playPause(): Promise<boolean>;
+  next(): Promise<boolean>;
+  prev(): Promise<boolean>;
+  seek(seconds: number): Promise<boolean>;
+  setVolume(level: number): Promise<boolean>;
+  shuffle(): Promise<boolean>;
+  repeat(): Promise<boolean>;
+  fetchLyrics(req: LyricsRequest): Promise<LyricsResponse | null>;
+  fetchArt(req: { artist: string; title: string; album?: string }): Promise<string | null>;
+  /** romanized LRC for the track, or null when the source has none */
+  fetchRomanized(req: { artist: string; title: string }): Promise<string | null>;
+
+  /** Spicy Lyrics payload, still binary-packed; unpacked in src/spicy.ts */
+  fetchSpicyLyrics(req: {
+    artist: string;
+    title: string;
+    album?: string;
+    duration?: number;
+  }): Promise<{
+    status: "ok" | "no-auth" | "no-track" | "not-found" | "queued" | "error" | "disabled";
+    packed?: unknown;
+    /**
+     * Already-unpacked lyrics, handed over from the Spicy Lyrics client's own
+     * cache by the Spicetify extension. Present instead of `packed`.
+     */
+    lyrics?: unknown;
+    trackId?: string;
+    httpStatus?: number;
+  } | null>;
+
+  /**
+   * The Spicetify extension handed over lyrics Spicy Lyrics had cached, so the
+   * current track may now have a finer source than the one on screen.
+   */
+  onSpicyLyrics?(cb: () => void): () => void;
+
+  /** The Spicetify extension reported a new track; Spotify's cover is now known. */
+  onBridgedTrack?(cb: () => void): () => void;
+
+  spotifyStatus(): Promise<{
+    configured: boolean;
+    signedIn: boolean;
+    redirectUri: string;
+    /** epoch ms at which a hand-pasted token expires, if known */
+    tokenExpiresAt: number | null;
+  }>;
+  spotifyLogin(): Promise<{ ok: boolean; error?: string }>;
+  spotifySetToken(
+    token: string,
+  ): Promise<{ ok: boolean; error?: string; expiresAt?: number | null }>;
+  spotifySignOut(): Promise<void>;
+  /**
+   * Begin/end a window drag. The main process follows the OS cursor while a
+   * drag is active, so no pointer position is ever sent across.
+   */
+  dragStart(): Promise<void>;
+  dragEnd(): Promise<void>;
+  resizeTo(height: number, hovered?: boolean): Promise<void>;
+  setAlwaysOnTop(on: boolean): Promise<void>;
+
+  toggleSettings?(): Promise<void>;
+  openSettings?(): Promise<void>;
+  closeSettings?(): Promise<void>;
+  resizeSettings?(height: number): Promise<void>;
+
+  // The changelog window.
+  appVersion?(): Promise<string>;
+  openChangelog?(): Promise<void>;
+  openPastChangelog?(): Promise<void>;
+  /** at launch: opens the changelog if this version is new and `enabled` */
+  checkChangelog?(enabled: boolean): Promise<void>;
+  setWidgetHidden?(hidden: boolean): Promise<void>;
+  setWidgetWidth?(width: number): Promise<void>;
+  closeChangelog?(): Promise<void>;
+  resizeChangelog?(height: number): Promise<void>;
+  /** installed font family names */
+  listFonts?(): Promise<string[]>;
+  /** next track in Spotify's queue (via the Spicetify extension), or null */
+  getNext?(req: { title: string }): Promise<{ id: string; name: string; artist: string; image: string | null } | null>;
+  minimize(): Promise<void>;
+  close(): Promise<void>;
+}
+
+declare global {
+  interface Window {
+    player?: PlayerBridge;
+  }
+}

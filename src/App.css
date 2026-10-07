@@ -1,0 +1,2348 @@
+@import url("https://fonts.spikerko.org/spicy-lyrics/source.css");
+
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 300;
+    src: local("SF Pro Text Light"), local("SF-Pro-Text-Light");
+}
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 400;
+    src: local("SF Pro Text Regular"), local("SF-Pro-Text-Regular");
+}
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 500;
+    src: local("SF Pro Text Medium"), local("SF-Pro-Text-Medium");
+}
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 600;
+    src: local("SF Pro Text Semibold"), local("SF-Pro-Text-Semibold");
+}
+@font-face {
+    font-family: "SF Pro Text";
+    font-weight: 700;
+    src: local("SF Pro Text Bold"), local("SF-Pro-Text-Bold");
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Faces that own the Latin glyphs. Listed ahead of any CJK family
+       everywhere, because font fallback is per character: English words inside
+       a Korean or Chinese line still set in SF Pro this way. */
+    --latin-stack: "SpicyLyrics", "Noto Sans Georgian", "Vazirmatn", "SF Pro Text";
+
+    /* Untagged default only — used when the song's script is unknown. Han is
+       shared between Chinese and Japanese but drawn differently in each, and a
+       single stack cannot say which: the browser takes the first family that
+       covers the character, so whichever CJK face leads decides the letterforms
+       for every language. The :lang() rules below are what actually pick. */
+    --cjk-stack: "Yu Gothic UI", "Noto Sans KR", "Malgun Gothic", "Microsoft YaHei UI";
+
+    /* Per language, closest installed match to SF Pro's humanist sans:
+         ko — Noto Sans KR (Source Han Sans); cleaner and more even in colour
+              than Malgun Gothic, which is the dated Windows default.
+         ja — Yu Gothic UI, the most SF-like Japanese face Windows ships.
+         zh — Microsoft YaHei UI for Simplified, JhengHei UI for Traditional.
+              PingFang SC is the true SF counterpart but is Apple-only; MiSans
+              or Noto Sans SC would be closer than YaHei if installed. */
+    --cjk-ko: "Noto Sans KR", "Malgun Gothic";
+    --cjk-ja: "Yu Gothic UI", "Meiryo";
+    --cjk-zh: "Microsoft YaHei UI", "Microsoft JhengHei UI", "Microsoft YaHei";
+}
+
+body {
+    background: transparent;
+    font-family:
+        "SF Pro",
+        "SF Pro Text",
+        "SF Pro Display",
+        -apple-system,
+        "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* The Electron window hugs the widget, so nothing stretches to the viewport:
+   leftover transparent area would still intercept mouse clicks. */
+#root {
+    display: block;
+}
+
+.stage {
+    display: block;
+    /* must stay >= the widget's shadow radius, or the transparent window clips
+       the shadow into a hard black edge. Matches STAGE_PAD in main.cjs. */
+    padding: 22px;
+    background: transparent;
+}
+
+/* ── Widget ── */
+/* The Background setting: --bg-a is the glass's alpha (0 clear, 0.72 the
+   default, 1 solid) and --bg-k fades the cover blur (.widget-bg), edge and
+   shadow along with it below the default, so at 0 only the text and controls
+   are left. */
+.widget {
+    /* --tint: Glass tint; --edge-k / --shadow-k: Edge highlight and Shadow
+       strength; --widget-w: Widget width */
+    background: rgba(var(--tint, 20, 20, 22), var(--bg-a, 0.72));
+    border-radius: var(--widget-radius, 13px);
+    padding: 10px 10px 8px;
+    width: var(--widget-w, 350px);
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, calc(0.08 * var(--bg-k, 1) * var(--edge-k, 1))),
+        0 4px 16px rgba(0, 0, 0, calc(0.45 * var(--bg-k, 1) * var(--shadow-k, 1)));
+    transition:
+        background 400ms ease,
+        opacity 300ms ease;
+}
+
+/* Fade when not hovered */
+.widget:not(.hovered) {
+    opacity: var(--rest-opacity, 1);
+}
+
+.widget-bg {
+    position: absolute;
+    inset: -60px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(var(--cover-blur, 50px)) saturate(var(--cover-sat, 1.4)) brightness(var(--cover-bright, 1));
+    z-index: 0;
+    opacity: calc(0.55 * var(--bg-k, 1));
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.widget .top,
+.widget .lyrics-panel,
+.widget .scrubber,
+.widget .times,
+.widget .controls {
+    position: relative;
+    z-index: 1;
+}
+
+.widget.art-mode .top {
+    position: static;
+}
+
+.widget.art-mode .widget-bg {
+    display: none;
+}
+
+/* ── Top: art + info ── */
+.top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    transition:
+        flex-direction 300ms ease,
+        align-items 300ms ease,
+        gap 300ms ease,
+        margin-bottom 300ms ease;
+}
+
+.art-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--cover-radius, 6px);
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #5c0a0a 0%, #2a0505 40%, #1a0202 100%);
+    position: relative;
+    transition:
+        width 350ms cubic-bezier(0.4, 0, 0.2, 1),
+        height 350ms cubic-bezier(0.4, 0, 0.2, 1),
+        border-radius 350ms ease;
+}
+
+.art-wrap.art-fallback::after {
+    content: "F";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: rgba(255, 60, 40, 0.9);
+}
+
+.art {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    transition: margin-top 300ms ease;
+}
+
+.title {
+    font-size: calc(12.5px * var(--meta-k, 1));
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    transition:
+        font-size 300ms ease,
+        font-weight 300ms ease,
+        white-space 300ms ease;
+}
+
+.artist {
+    font-size: calc(11.5px * var(--meta-k, 1));
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.48);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+    transition:
+        font-size 300ms ease,
+        color 300ms ease,
+        white-space 300ms ease;
+}
+
+/* ── Lyrics panel ── */
+.lyrics-panel {
+    position: relative;
+    max-height: 0;
+    overflow: hidden;
+    transition:
+        max-height 350ms cubic-bezier(0.4, 0, 0.2, 1),
+        margin-bottom 350ms ease;
+    margin: 0 -10px;
+    margin-bottom: 0;
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        black 0%,
+        black 82%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        black 0%,
+        black 82%,
+        transparent 100%
+    );
+}
+
+.widget.lyrics-open .lyrics-panel {
+    max-height: var(--panel-h, 300px);
+    margin-bottom: 8px;
+}
+
+.lyrics-inner {
+    /* One size for every line — see .lyric-line. Backup vocals scale off it. */
+    --lyric-size: 17px;
+    /* Left-to-right wipe. spicy forces 180deg (top-to-bottom) on .line; we
+       deliberately do not — the fill should read as travelling along the line
+       in the direction the words are sung. Set to 180deg for spicy's own look. */
+    --sweep-angle: 90deg;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* Named because a collapsed interlude marker has to cancel exactly one of
+       these — see .lyric-line.lyric-gap. */
+    --row-gap: 10px;
+    gap: var(--row-gap);
+    /* Wide enough that the active line's scale-up still lands inside the
+       panel — the panel clips overflow, so any excess shears off the hover
+       outline and the timestamp badge. */
+    padding: 0 24px;
+    will-change: transform;
+    /* Follow speed */
+    transition: transform var(--follow-ms, 420ms) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Wheel scrolling: a quick glide per step, much shorter than the follow ease
+   above so the list keeps up with the hand. See the wheel handler. */
+.lyrics-inner.wheel {
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Lyric lines ──
+   spicy-lyrics never changes a line's size: every line renders at one font
+   size and the state is carried by opacity alone. Growing the current line
+   cost a 300ms reflow of the whole list on every line change, and it moved
+   offsetTop out from under the auto-scroller while that was mid-flight.
+
+   --fill-alpha is the text's own alpha, --line-opacity is the state. Keeping
+   them apart mirrors the reference's --gradient-alpha vs .line opacity, and
+   lets both animate without one clobbering the other. */
+.lyric-line {
+    /* Latin faces first so English inside a CJK line still sets in SF Pro —
+       fallback is per character. The CJK tail is only the untagged default; the
+       :lang() rules below override it per song. See --latin-stack. */
+    font-family: var(--latin-stack), var(--cjk-stack), sans-serif;
+    font-size: var(--lyric-size);
+    /* the reference sets lyrics bold throughout; the current line is
+       distinguished by fill, scale and glow rather than by weight. The Weight
+       setting can lighten them all alike. */
+    font-weight: var(--lyric-weight, 700);
+    /* tight, like the reference: the sweep runs top-to-bottom through each
+       unit's box, so generous leading would waste most of it on whitespace */
+    line-height: var(--lyric-lh, 1.18);
+    letter-spacing: var(--lyric-tracking, normal);
+    font-style: var(--lyric-style, normal);
+
+    /* --lit-k, --upcoming-k, --sung-k: Highlight strength and the two line
+       brightness settings, as multiples of the tuned values */
+    --grad-lit: calc(0.85 * var(--lit-k, 1));
+    --grad-dim: 0.35;
+    --fill-alpha: var(--grad-dim);
+    --line-opacity: calc(0.51 * var(--upcoming-k, 1));
+
+    color: rgba(255, 255, 255, var(--fill-alpha));
+    opacity: var(--line-opacity);
+    /* Depth cue, set per line in App.tsx from its distance to the playhead.
+       spicy dropped filter: blur() in favour of a text-shadow spread — same
+       defocus read, without rasterising every line into its own layer. */
+    text-shadow: 0 0 var(--BlurAmount, 0px) rgba(255, 255, 255, var(--fill-alpha));
+
+    transition:
+        opacity 200ms cubic-bezier(0.61, 1, 0.88, 1),
+        color 200ms linear,
+        text-shadow 200ms linear;
+    cursor: pointer;
+    position: relative;
+    border-radius: 7px;
+    padding: 2px 7px;
+    margin: 0 -7px;
+    background: transparent;
+}
+
+.lyric-line::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 5px;
+    border: 1px solid #fff;
+    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 120ms ease;
+    pointer-events: none;
+    clip-path: polygon(
+        0% 0%,
+        calc(100% - 18px - var(--ts-w, 32px) - 5px) 0%,
+        calc(100% - 18px - var(--ts-w, 32px) - 5px) 8px,
+        calc(100% - 13px) 8px,
+        calc(100% - 13px) 0%,
+        100% 0%,
+        100% 100%,
+        0% 100%
+    );
+}
+
+.lyric-line:hover::before {
+    opacity: 1;
+}
+
+.lyric-ts {
+    position: absolute;
+    top: -4px;
+    right: 18px;
+    font-size: 7.5px;
+    font-weight: 500;
+    line-height: 1;
+    color: rgba(255, 255, 255, 0.55);
+    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 120ms ease;
+    pointer-events: none;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.lyric-line:hover .lyric-ts {
+    opacity: 1;
+}
+
+/* Sung lines sit noticeably brighter than unsung ones — the list reads as a
+   trail behind the playhead rather than as a uniform grey block. */
+.lyric-line.past {
+    --fill-alpha: var(--grad-lit);
+    --line-opacity: calc(0.497 * var(--sung-k, 1));
+}
+
+/* No size or weight change: the emphasis belongs to the syllable being sung,
+   which the animator scales and lights per frame. */
+.lyric-line.current {
+    --line-opacity: 1;
+    z-index: 1;
+}
+
+/* The song's opening lyric before it is sung. Full strength so there is
+   something to read during an intro, where every other line is unsung and the
+   only thing playing is the dots marker. It carries no fill, scale or glow —
+   those still belong to the line actually being sung — so it reads as legible
+   rather than as current. The blur exemption is applied in App.tsx, since the
+   depth cue is written per line as an inline style. */
+.lyric-line.intro-preview {
+    --line-opacity: 1;
+}
+
+/* declared last so it wins at equal specificity against .past / .current */
+.lyric-line:hover {
+    --line-opacity: 1;
+    --BlurAmount: 0px;
+}
+
+/* ── Backup vocals ──
+   Their own line, tucked tight under the lead they belong to: 75% size, lighter
+   weight, dimmer fill. Everything else — springs, wave, sweep — is identical to
+   a lead line; a bg line is just a line that happens to be small and quiet. */
+.lyric-line.bg-line {
+    font-size: calc(var(--lyric-size) * 0.75);
+    font-weight: 600;
+    --grad-lit: 0.6;
+    --grad-dim: 0.3;
+    /* cancels most of the list gap, so the pair reads as one block instead of
+       the bg line floating between two leads (spicy: 0.2cqw vs 1cqw) */
+    margin-top: -7px;
+}
+
+/* Duet lines answer from the other side. */
+.lyric-line.opposite {
+    text-align: right;
+}
+
+/* Per-language faces. The lang attribute comes from detectLyricLang(), which
+   reads the lines actually on screen — so a romanized song drops back to the
+   Latin stack instead of holding on to a CJK face it no longer needs. */
+.lyric-line:lang(ko),
+.art-lyric-overlay:lang(ko) {
+    font-family: var(--latin-stack), var(--cjk-ko), sans-serif;
+}
+
+.lyric-line:lang(ja),
+.art-lyric-overlay:lang(ja) {
+    font-family: var(--latin-stack), var(--cjk-ja), sans-serif;
+}
+
+.lyric-line:lang(zh),
+.art-lyric-overlay:lang(zh) {
+    font-family: var(--latin-stack), var(--cjk-zh), sans-serif;
+}
+
+/* ── Credits ──
+   Songwriter/production credits. Some providers (NetEase especially) ship these
+   as timestamped lines at the head of the track, so they used to parse as
+   lyrics and get sung by the animator. They are lifted out in lyrics.ts and
+   land here instead — no timing, no animation, never the current line.
+   Proportions from spicy's .Credits: 0.47em, weight 600, 0.6 opacity. */
+.lyrics-credits {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 10px;
+    padding: 0 7px;
+    font-size: calc(var(--lyric-size) * 0.47);
+    font-weight: 600;
+    line-height: 1.35;
+    color: #fff;
+    opacity: 0.6;
+    cursor: default;
+}
+
+.sync-btn {
+    display: block;
+    margin: 0 auto 6px;
+    background: rgba(255, 255, 255, 0.18);
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 5px 16px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.01em;
+    transition: background 120ms ease;
+    position: relative;
+    z-index: 1;
+}
+.sync-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.lyrics-fade-top,
+.lyrics-fade-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 72px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.lyrics-fade-top {
+    top: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(28, 12, 6, 1) 0%,
+        rgba(28, 12, 6, 0.85) 25%,
+        rgba(28, 12, 6, 0.5) 55%,
+        rgba(28, 12, 6, 0.15) 80%,
+        rgba(28, 12, 6, 0) 100%
+    );
+}
+
+.lyrics-fade-bottom {
+    bottom: 0;
+    background: linear-gradient(
+        to top,
+        rgba(28, 12, 6, 1) 0%,
+        rgba(28, 12, 6, 0.85) 25%,
+        rgba(28, 12, 6, 0.5) 55%,
+        rgba(28, 12, 6, 0.15) 80%,
+        rgba(28, 12, 6, 0) 100%
+    );
+}
+
+/* ── Scrubber ── */
+/* Fixed height with the track centred inside: the track thickens on hover and
+   while dragging, and a fixed row keeps that from changing the widget height
+   (which would resize the window mid-drag). */
+.scrubber {
+    cursor: pointer;
+    height: 12px;
+    display: flex;
+    align-items: center;
+}
+
+/* Seek slider — a native range input, same as the volume control. The thumb is
+   sized for grabbing but fully transparent: no circle, just the bar. */
+.scrub {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 12px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+    display: block;
+}
+
+.scrub:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.scrub::-webkit-slider-runnable-track {
+    height: var(--bar-h, 2px);
+    border-radius: 3px;
+    background: linear-gradient(
+        to right,
+        #fff var(--pos, 0%),
+        rgba(255, 255, 255, 0.22) var(--pos, 0%)
+    );
+    transition: height 130ms ease;
+}
+
+.widget.hovered .scrub::-webkit-slider-runnable-track {
+    height: calc(var(--bar-h, 2px) + 1px);
+}
+
+.widget.dragging .scrub::-webkit-slider-runnable-track {
+    height: 6px;
+}
+
+/* Art-mode variant: sits between the two time labels in the mini bar. */
+.scrub-mini {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    height: 10px;
+}
+
+.scrub-mini::-webkit-slider-runnable-track {
+    height: var(--bar-h, 2px);
+}
+
+.widget.dragging .scrub-mini::-webkit-slider-runnable-track {
+    height: 5px;
+}
+
+.scrub::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: transparent;
+    border: none;
+    margin-top: -6px;
+}
+
+/* ── Times ── */
+.times {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1px;
+}
+
+.time-flip {
+    cursor: pointer;
+}
+
+/* Buttons and inputs do not inherit the page's font (the Next hint fell back
+   to Arial). Zero specificity, so controls that set their own face — the Aa
+   and あ toggles with their CJK fallbacks — keep it. */
+:where(.widget) :where(button, input) {
+    font-family: inherit;
+}
+
+/* Show source label off: hidden but still holding the middle, so the two
+   times keep their places. */
+.platform.hidden {
+    visibility: hidden;
+}
+
+/* ── Layout switches (Settings → Layout) ── */
+.widget.no-cover:not(.art-mode) .art-wrap,
+.widget.no-artist:not(.art-mode) .artist,
+.widget.no-times .times,
+.widget.no-progress .scrubber {
+    display: none;
+}
+
+/* hidden but keeping their place, so the rest of the row does not shift */
+.widget.no-shufrep :is([aria-label="Shuffle"], [aria-label="Repeat"]),
+.widget.no-volume :is(.ctrl-vol-btn-wrap, .art-vol-btn-wrap) {
+    visibility: hidden;
+}
+
+/* Colour the progress bar: lit in the Highlight colour */
+.widget.tint-bar .scrub::-webkit-slider-runnable-track {
+    background: linear-gradient(
+        to right,
+        hsl(var(--lit-h, 0) var(--lit-s, 0%) var(--lit-l, 100%)) var(--pos, 0%),
+        rgba(255, 255, 255, 0.22) var(--pos, 0%)
+    );
+}
+
+/* Lyrics the user chose not to see */
+.lyrics-inner.no-gaps .lyric-gap,
+.lyrics-inner.no-bg .bg-line,
+.lyrics-inner.no-credits .lyrics-credits {
+    display: none;
+}
+
+/* Party background: the cover glow cycles round the colour wheel */
+.widget.party .widget-bg {
+    animation: party-hue 6s linear infinite;
+}
+
+@keyframes party-hue {
+    from {
+        filter: blur(var(--cover-blur, 50px)) saturate(var(--cover-sat, 1.4)) brightness(var(--cover-bright, 1)) hue-rotate(0deg);
+    }
+    to {
+        filter: blur(var(--cover-blur, 50px)) saturate(var(--cover-sat, 1.4)) brightness(var(--cover-bright, 1)) hue-rotate(360deg);
+    }
+}
+
+/* Floating cover: the small cover gently bobs */
+.widget.float-cover:not(.art-mode) .art-wrap {
+    animation: cover-float 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes cover-float {
+    from {
+        transform: translateY(-1.5px);
+    }
+    to {
+        transform: translateY(1.5px);
+    }
+}
+
+/* Show line times on hover: off */
+.lyrics-inner.no-ts .lyric-ts {
+    display: none;
+}
+
+/* ALL CAPS lyrics, in the panel and album mode alike */
+.widget.caps-lyrics .lyric-line,
+.widget.caps-lyrics .art-lyric-text {
+    text-transform: uppercase;
+}
+
+/* Spinning cover: the small cover goes round and turns like a record while
+   music plays, holding its angle when paused. */
+.widget.spin-cover:not(.art-mode) .art-wrap {
+    border-radius: 50%;
+}
+
+.widget.spin-cover:not(.art-mode) .art {
+    animation: cover-spin var(--spin-s, 6s) linear infinite;
+    animation-play-state: paused;
+}
+
+.widget.spin-cover.is-playing:not(.art-mode) .art {
+    animation-play-state: running;
+}
+
+@keyframes cover-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Album-mode visualizer off */
+.art-mini-bars.off {
+    display: none;
+}
+
+/* Lyrics alignment: Center. Duet lines keep their own side. */
+.lyrics-inner.centered .lyric-line:not(.opposite) {
+    text-align: center;
+}
+
+/* Highlight colour: Rainbow. The hue is registered so it can be animated,
+   and inherited so every sung unit in the list follows it. */
+@property --lit-h {
+    syntax: "<number>";
+    inherits: true;
+    initial-value: 0;
+}
+
+.rainbow {
+    animation: lit-rainbow var(--rainbow-s, 8s) linear infinite;
+}
+
+@keyframes lit-rainbow {
+    to {
+        --lit-h: 360;
+    }
+}
+
+.time-el,
+.time-rem {
+    font-size: 9.5px;
+    color: rgba(255, 255, 255, 0.42);
+    font-family:
+        "SF Pro Text",
+        "SF Pro Display",
+        -apple-system,
+        sans-serif;
+}
+
+.platform {
+    font-size: 9.5px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.42);
+    letter-spacing: 0.02em;
+}
+
+/* ── Controls ── */
+.controls {
+    display: flex;
+    align-items: center;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        max-height 200ms ease,
+        opacity 160ms ease,
+        margin-top 200ms ease;
+    margin-top: 0;
+}
+
+.widget.hovered .controls,
+.widget.controls-pinned .controls {
+    max-height: 32px;
+    opacity: 1;
+    margin-top: 5px;
+    overflow: visible;
+}
+
+/* The two edges share the leftover space equally and the transport cluster
+   sizes to its content, so it stays optically centred however many buttons sit
+   on either side. A fixed-width left edge against a right edge that grows with
+   the romanize toggle is what knocked it off centre. */
+.ctrl-edge {
+    flex: 1 1 0;
+    min-width: 22px;
+}
+
+.controls .ctrl-vol-btn-wrap.ctrl-edge {
+    justify-content: flex-start;
+}
+
+/* The volume readout is centred on its *button*, not on the wrapper.
+   .ctrl-edge stretches (flex: 1 1 0) so the transport cluster stays optically
+   centred, and the button is pinned to flex-start inside it — so the pill's
+   `left: 50%` was centring it on the whole flexible column and leaving it
+   floating well to the right of the icon it labels.
+
+   The width below is the button's own box: the 14px icon plus its 4px side
+   padding (see .ctrl-btn). Kept as a variable so the two cannot drift apart
+   silently. */
+.controls .ctrl-vol-btn-wrap.ctrl-edge {
+    --vol-btn-w: 22px;
+}
+
+.controls .ctrl-vol-btn-wrap.ctrl-edge .ctrl-vol-pct {
+    left: calc(var(--vol-btn-w) / 2);
+}
+
+.art-vol-btn-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.art-vol-btn-wrap:hover .ctrl-vol-pct {
+    opacity: 1;
+}
+
+.art-vol-btn-wrap.vol-open .ctrl-vol-pct {
+    opacity: 0 !important;
+}
+
+.ctrl-vol-btn-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ctrl-vol-pct {
+    position: absolute;
+    bottom: calc(100% + 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    /* the volume pop-up's glass, so the two read as one family */
+    background: rgba(20, 20, 22, 0.72);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 5px;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 120ms ease;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+
+.ctrl-vol-btn-wrap:hover .ctrl-vol-pct {
+    opacity: 1;
+}
+
+.ctrl-vol-btn-wrap.vol-open .ctrl-vol-pct {
+    opacity: 0 !important;
+    pointer-events: none;
+}
+
+
+.vol-pill {
+    position: absolute;
+    bottom: 30px;
+    left: 6px;
+    width: 172px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    /* the widget and settings surface: dark glass over the blurred cover
+       (.vol-pill-bg), so it takes the song's colour instead of sitting grey */
+    background: rgba(20, 20, 22, 0.72);
+    overflow: hidden;
+    border-radius: 8px;
+    padding: 5px 12px 5px 10px;
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.12),
+        0 6px 18px rgba(0, 0, 0, 0.4);
+    animation: vol-pill-in 160ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.vol-pill-bg {
+    position: absolute;
+    inset: -40px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px) saturate(1.4);
+    opacity: 0.55;
+    z-index: 0;
+}
+
+.vol-pill > :not(.vol-pill-bg) {
+    position: relative;
+    z-index: 1;
+}
+
+.vol-pill svg {
+    flex-shrink: 0;
+}
+
+/* sized for "100" and left-aligned, so the gap after the bar stays the same
+   at any level and the bar does not resize while dragging past 9 → 10 */
+.vol-pct {
+    flex-shrink: 0;
+    min-width: 3ch;
+    font-size: 10px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+@keyframes vol-pill-in {
+    from { opacity: 0; transform: translateY(3px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.widget.art-mode .vol-pill {
+    bottom: 44px;
+}
+
+/* The input is deliberately much taller than the visible track: the bar used
+   to be a 2 px tall target with a zero-size thumb, which is why it was so
+   fiddly. The track and thumb are drawn on the pseudo-elements instead. */
+.vol-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    flex: 1;
+    min-width: 0;
+    height: 16px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Drawn like the seek bar: a thin line that thickens under the pointer and
+   more while held, with no knob. */
+/* corners squared off to match the pop-up's 8px, not a fully round pill */
+.vol-slider::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 1.5px;
+    background: linear-gradient(
+        to right,
+        #fff var(--vol, 100%),
+        rgba(255, 255, 255, 0.22) var(--vol, 100%)
+    );
+    transition: height 130ms ease;
+}
+
+.vol-slider:hover::-webkit-slider-runnable-track {
+    height: 4px;
+}
+
+/* Grabbable but invisible, as on the seek bar. */
+.vol-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: transparent;
+    border: none;
+    margin-top: -5.5px;
+}
+
+/* Held: same idea as the seek bar, thicken so it is obvious you have hold. */
+/* Right-hand control cluster: the romanize toggle sits beside the lyrics
+   toggle. Deliberately not .ctrl-edge — that is a fixed 22px, sized for one
+   button, and would squash two. */
+.token-entry {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 0 14px;
+    width: 100%;
+}
+
+.token-alt {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font: 400 10px/1 inherit;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.token-alt:hover {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.spotify-signin {
+    background: rgba(255, 255, 255, 0.12);
+    border: 0.5px solid rgba(255, 255, 255, 0.16);
+    color: rgba(255, 255, 255, 0.85);
+    font: 500 11px/1 inherit;
+    padding: 6px 11px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.spotify-signin:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.ctrl-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 2px;
+    flex: 1 1 0;
+    min-width: 22px;
+}
+
+.vol-pill.vol-dragging .vol-slider::-webkit-slider-runnable-track {
+    height: 6px;
+}
+
+
+
+.ctrl-center {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+}
+
+.ctrl-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.68);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 4px;
+    border-radius: 4px;
+    transition: color 80ms ease;
+    line-height: 1;
+}
+
+
+.ctrl-btn:hover {
+    color: #fff;
+}
+.ctrl-btn:active {
+    opacity: 0.5;
+}
+.ctrl-play {
+    color: #fff;
+}
+
+/* Aa button — active state */
+.ctrl-aa {
+    /* the romanize (あ) toggle lives on this class too, so it needs the CJK
+       faces — the body stack is Latin-only and would leave that glyph to
+       Windows font-linking */
+    font-family:
+        "SF Pro",
+        "SF Pro Text",
+        "Yu Gothic UI",
+        "Microsoft YaHei UI",
+        sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding-bottom: 5px;
+}
+
+.ctrl-aa::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 150ms ease;
+}
+
+.ctrl-aa.active {
+    color: #fff;
+    font-weight: 700;
+}
+
+.ctrl-aa.active::after {
+    opacity: 1;
+}
+
+/* ── Album Art Mode ── */
+.widget.art-mode {
+    background: transparent;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+    /* square: as tall as the widget is wide */
+    height: var(--widget-w, 350px);
+}
+
+.widget.art-mode .art-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--widget-radius, 13px);
+    z-index: 0;
+}
+
+.widget.art-mode .top {
+    margin-bottom: 0;
+    position: static;
+}
+
+.widget.art-mode .widget-bg {
+    display: none;
+}
+
+/* Album art overlay buttons */
+.art-overlay-btn {
+    position: absolute;
+    top: 10px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition:
+        opacity 150ms ease,
+        background 100ms ease;
+    z-index: 5;
+    backdrop-filter: blur(4px);
+}
+
+.widget.hovered .art-overlay-btn {
+    opacity: 1;
+}
+
+.art-overlay-btn:hover {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.art-btn-back {
+    left: 10px;
+}
+
+.art-btn-aa {
+    right: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.55);
+    flex-direction: column;
+    gap: 2px;
+    transition:
+        opacity 150ms ease,
+        background 100ms ease,
+        color 150ms ease;
+}
+
+.art-btn-aa.active {
+    color: #fff;
+}
+
+.art-btn-aa::after {
+    content: "";
+    position: static;
+    width: 3px;
+    height: 0;
+    border-radius: 50%;
+    background: #fff;
+    opacity: 0;
+    flex-shrink: 0;
+    transition:
+        height 150ms ease,
+        opacity 150ms ease;
+}
+
+.art-btn-aa.active::after {
+    height: 3px;
+    opacity: 1;
+}
+
+/* ── Animated units ──
+   Every value below is written per frame by lyricAnimator.ts:
+     --s   scale               --y   lift, as a multiple of font size
+     --gb  glow blur, in em    --go  glow alpha
+     --gp  fill position, %    --o   opacity (dots only)
+
+   Nothing here transitions. The springs already carry the motion, and a CSS
+   transition layered on top would fight them — that was the old .word-active
+   pop, which shook on fast lines because two easings were arguing.
+
+   inline-block so the transform applies without the scale being part of layout:
+   neighbouring syllables never reflow as the playhead moves. */
+.word,
+.wordGroup,
+.letter,
+.dot {
+    display: inline-block;
+    /* pin the line box: an inline-block otherwise contributes a different
+       height than the plain text used for non-current lines, so rows would
+       nudge as the current line moved */
+    vertical-align: baseline;
+    line-height: inherit;
+    transform-origin: 50% 85%;
+    transform: translateY(calc(1em * var(--y, 0.01))) scale(var(--s, 0.95));
+}
+
+/* Syllables of one word ("Tues" + "day") have no space between them, so each
+   scaling about its own centre opens a visible gap at the joint while they
+   rest at 0.95. As in spicy: the first part scales from its right edge, middle
+   parts from the centre, the last part from its left edge, so every part
+   shrinks toward the joint instead of away from it. */
+.partOfWord {
+    transform-origin: 100% 85%;
+}
+
+.partOfWord + .partOfWord {
+    transform-origin: 50% 85%;
+}
+
+.partOfWord + :is(.word, .wordGroup):not(.partOfWord) {
+    transform-origin: 0% 85%;
+}
+
+/* A held syllable carries its own rise while its letters ripple inside it, so
+   the two transforms compound exactly as they do in the reference. */
+.wordGroup {
+    display: inline-flex;
+}
+
+/* Line-sweep unit: one per line, covering all of its text. The animator writes
+   only --gp for these, so the resting scale/lift the other units start from
+   would otherwise stick permanently — pin them upright, a swept line should sit
+   flat and just fill.
+
+   Block, not inline-block, for two reasons: a wrapped line stays a single box
+   so the gradient runs through every row of it rather than restarting per row,
+   and the line box matches the plain text used for non-current lines, so rows
+   do not nudge as the playhead arrives.
+
+   180deg overrides the 90deg on .lyrics-inner: with real syllables the fill
+   should travel along the line the way the words are sung, but a line-timed
+   source knows no horizontal position, so it wipes top to bottom over the whole
+   line instead — which is what spicy does for its own line-synced lyrics. */
+.word[data-sweep] {
+    --s: 1;
+    --y: 0;
+    --sweep-angle: 180deg;
+    display: block;
+}
+
+/* Only units that own a fill get the gradient — a .wordGroup is a pure carrier,
+   and painting it too would show a second sweep behind its letters.
+
+   The sweep is the fill: lit up to --gp, dim after it, with a 20% ramp between
+   so the edge is soft rather than a hard line crossing the glyph. */
+.word,
+.letter,
+.dot {
+    background-image: linear-gradient(
+        var(--sweep-angle, 180deg),
+        /* lit in the Highlight colour (white unless changed; see HIGHLIGHTS) */
+        hsl(var(--lit-h, 0) var(--lit-s, 0%) var(--lit-l, 100%) / var(--grad-lit)) var(--gp, -20%),
+        rgba(255, 255, 255, var(--grad-dim)) calc(var(--gp, -20%) + var(--sweep-soft, 20%))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 calc(1em * var(--gb, 0.09)) rgba(255, 255, 255, calc(var(--go, 0) * var(--glow-k, 1)));
+}
+
+/* ── Art mode lyric overlay ── */
+.art-lyric-overlay {
+    /* same per-language handling as .lyric-line */
+    font-family:
+        var(--latin-stack),
+        var(--cjk-stack),
+        sans-serif;
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, var(--bubble-a, 0.48));
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    border-radius: 12px;
+    padding: 10px 12px;
+    z-index: 3;
+    color: #fff;
+    font-size: var(--album-lyric-size, 13px);
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    letter-spacing: -0.015em;
+    pointer-events: none;
+    transition: bottom 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    text-shadow:
+        0 0 8px rgba(255, 255, 255, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Each new line is keyed in React, so it remounts and plays this. */
+.art-lyric-text {
+    display: block;
+    animation: art-lyric-in 320ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes art-lyric-in {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Drag handle for art mode, inset so it clears the back button. */
+.art-drag-strip {
+    position: absolute;
+    top: 0;
+    left: 46px;
+    right: 8px;
+    height: 30px;
+    z-index: 4;
+    cursor: grab;
+}
+
+/* ── Art mode mini player bar ── */
+.art-mini-bar {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.52);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+    border-radius: 12px;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    padding: 9px 12px 8px;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    opacity: 0;
+    transform: translateY(6px);
+    pointer-events: none;
+    transition:
+        opacity 220ms cubic-bezier(0.4, 0, 0.2, 1),
+        transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.art-mini-bar.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.art-mini-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+}
+
+.art-mini-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    flex: 1;
+}
+
+.art-mini-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+}
+
+.art-mini-artist {
+    font-size: 10.5px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.52);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.35;
+}
+
+/* ── Art-mode level meter ──
+   Rounded white pills, the same white-on-glass as the seek bar: each rises and
+   falls smoothly with its band. Heights run 3px (a round dot, the bar's own
+   width) to 14px and must agree with BAR_MIN/BAR_MAX in useAudioBars.ts. */
+.art-mini-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.art-mini-bars span {
+    display: block;
+    /* Integer width, deliberately. At 2.5px a bar straddles a device pixel,
+       so on a fractional DPI some rasterised at 2px and some at 3px and the
+       bars visibly disagreed in thickness. */
+    width: 3px;
+    height: 3px;
+    border-radius: 1.5px;
+    background: rgba(255, 255, 255, 0.85);
+    animation: none;
+}
+
+/* Idle fallback, used when loopback capture is unavailable. Eased, so it
+   breathes like the live meter rather than ticking. */
+.art-mini-bars.playing span {
+    animation: bar-pulse 1.1s ease-in-out infinite alternate;
+}
+.art-mini-bars.playing span:nth-child(1) { animation-delay: 0s; }
+.art-mini-bars.playing span:nth-child(2) { animation-delay: 0.18s; }
+.art-mini-bars.playing span:nth-child(3) { animation-delay: 0.36s; }
+.art-mini-bars.playing span:nth-child(4) { animation-delay: 0.54s; }
+.art-mini-bars.playing span:nth-child(5) { animation-delay: 0.72s; }
+
+/* Live system audio drives the heights, so the canned loop must not fight it
+   for the same property. Declared last on purpose: this ties with
+   `.art-mini-bars.playing span` at (0,2,1), so source order is the only thing
+   that decides it — above them it silently lost. */
+.art-mini-bars.live span {
+    animation: none;
+    /* No transition: the height is rewritten per animation frame, so one would
+       just smear each frame into the next. Smoothing is done in the analyser. */
+    transition: none;
+}
+
+@keyframes bar-pulse {
+    0%   { height: 3px; }
+    25%  { height: 8px; }
+    50%  { height: 5px; }
+    75%  { height: 14px; }
+    100% { height: 8px; }
+}
+
+.art-mini-progress {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.art-mini-time {
+    font-size: 9px;
+    color: rgba(255, 255, 255, 0.45);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    min-width: 24px;
+    line-height: 1;
+}
+
+.art-mini-rem {
+    text-align: right;
+}
+
+.art-mini-bar {
+    display: flex;
+    flex-direction: column;
+}
+
+.art-mini-compact-section {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        max-height 280ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 220ms ease;
+}
+
+.art-mini-compact-section.visible {
+    max-height: 60px;
+    opacity: 1;
+}
+
+.art-mini-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition:
+        max-height 240ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 180ms ease,
+        margin-top 240ms ease;
+    margin-top: 0;
+}
+
+.art-mini-controls.visible {
+    max-height: 32px;
+    opacity: 1;
+    margin-top: 2px;
+    overflow: visible;
+}
+
+.art-mini-spacer {
+    flex: 1;
+}
+
+.art-mini-transport {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.art-mini-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 4px;
+    transition: color 80ms ease;
+    flex-shrink: 0;
+}
+
+.art-mini-btn:hover { color: #fff; }
+.art-mini-btn:active { opacity: 0.5; }
+
+.art-mini-play {
+    color: #fff;
+    padding: 3px 5px;
+}
+
+/* ── Fullscreen overlay ── */
+.fs-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: stretch;
+    animation: fs-in 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes fs-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fs-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(80px) saturate(1.2) brightness(0.35);
+    transform: scale(1.1);
+    z-index: 0;
+}
+
+.fs-close {
+    position: absolute;
+    top: 24px;
+    right: 28px;
+    z-index: 2;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px;
+    transition: color 100ms ease;
+}
+.fs-close:hover {
+    color: #fff;
+}
+
+.fs-dev-btn {
+    position: absolute;
+    top: 24px;
+    right: 70px;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    cursor: pointer;
+}
+
+.fs-dev-drag-handle {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px dashed rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    font-family: monospace;
+    padding: 8px 14px;
+    cursor: grab;
+    user-select: none;
+    margin-bottom: 8px;
+}
+.fs-dev-drag-handle:active {
+    cursor: grabbing;
+}
+
+.fs-dev-readout {
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.82);
+    color: #fff;
+    font-family: monospace;
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    white-space: nowrap;
+    line-height: 1.8;
+    pointer-events: none;
+}
+
+.fs-left {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 52vw;
+    padding-left: 11vw;
+    padding-top: 18vh;
+    flex-shrink: 0;
+    gap: 0;
+}
+
+
+
+.fs-art {
+    width: min(680px, 44vw);
+    height: min(680px, 44vw);
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+}
+
+.fs-right {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 18vh 2vw 0;
+}
+
+.fs-lyrics-window {
+    height: calc(100vh - 18vh);
+    overflow-y: auto;
+    width: 88%;
+    scrollbar-width: none;
+    transform: translateX(-0.3vw);
+}
+.fs-lyrics-window::-webkit-scrollbar {
+    display: none;
+}
+
+.fs-lyrics-inner {
+    position: relative;
+    padding-top: 110px;
+    padding-bottom: 80vh;
+}
+
+.fs-lyric-line {
+    font-size: 52px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 32px;
+    cursor: pointer;
+    transition:
+        color 200ms ease,
+        filter 300ms ease,
+        font-size 300ms ease,
+        font-weight 300ms ease;
+}
+
+.fs-lyric-line.current {
+    font-size: 67.6px;
+    font-weight: 700;
+    text-shadow:
+        0 0 4px rgba(255, 255, 255, 1),
+        0 0 14px rgba(255, 255, 255, 0.6),
+        0 0 32px rgba(255, 255, 255, 0.2);
+}
+
+.fs-bottom-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 220ms ease, transform 220ms ease;
+    pointer-events: none;
+}
+
+.fs-overlay:hover .fs-bottom-controls {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.fs-bottom-top {
+    display: flex;
+    align-items: flex-start;
+}
+
+.fs-bottom-info,
+.fs-default-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.fs-bottom-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+}
+
+.fs-bottom-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.fs-scrubber-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.fs-time {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.45);
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+    min-width: 32px;
+}
+
+.fs-time-rem {
+    text-align: right;
+}
+
+.fs-scrubber-bar {
+    flex: 1;
+    cursor: pointer;
+    padding: 8px 0;
+}
+
+.fs-scrubber-track {
+    position: relative;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    transition: height 100ms ease;
+}
+
+.fs-scrubber-bar:hover .fs-scrubber-track {
+    height: 4px;
+}
+
+.fs-scrubber-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    background: #fff;
+    border-radius: 2px;
+    pointer-events: none;
+}
+
+.fs-scrubber-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 13px;
+    height: 13px;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 100ms ease;
+    pointer-events: none;
+}
+
+
+.fs-bottom-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+}
+
+.fs-ctrl-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 50%;
+    transition: color 100ms ease;
+}
+
+.fs-ctrl-btn:hover { color: #fff; }
+
+.fs-ctrl-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+.fs-ctrl-play {
+    color: #fff;
+    background: rgba(255,255,255,0.15);
+    width: 44px;
+    height: 44px;
+}
+
+.fs-ctrl-play svg {
+    width: 22px;
+    height: 22px;
+}
+
+.fs-ctrl-play:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+/* ── Fullscreen under-art morph ── */
+.fs-under-art {
+    width: min(680px, 44vw);
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* expanded header — hidden by default */
+.fs-exp-header {
+    display: flex;
+    align-items: flex-start;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+        max-height 260ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 200ms ease;
+}
+
+.fs-ctrl-expanded .fs-exp-header {
+    max-height: 64px;
+    opacity: 1;
+}
+
+.fs-exp-header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.fs-exp-song {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+}
+
+.fs-exp-artist-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.2;
+}
+
+
+/* default info — visible by default, collapses on hover */
+.fs-default-info {
+    max-height: 48px;
+    opacity: 1;
+    overflow: hidden;
+    transition:
+        max-height 220ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 160ms ease;
+}
+
+.fs-ctrl-expanded .fs-default-info {
+    max-height: 0;
+    opacity: 0;
+}
+
+/* expanded transport controls — hidden by default */
+.fs-exp-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition:
+        max-height 260ms cubic-bezier(0.4, 0, 0.2, 1),
+        opacity 220ms ease 40ms;
+}
+
+.fs-ctrl-expanded .fs-exp-controls {
+    max-height: 52px;
+    opacity: 1;
+}
+
+.fs-exp-ctrl-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 50%;
+    transition: color 80ms ease;
+}
+
+.fs-exp-ctrl-btn:hover { color: #fff; }
+.fs-exp-ctrl-btn:active { opacity: 0.5; }
+
+.fs-exp-ctrl-btn svg {
+    height: 18px;
+    width: auto;
+    display: block;
+}
+
+.fs-exp-ctrl-btn:nth-child(3) svg {
+    height: 20px;
+    width: auto;
+}
+
+
+/* ── Electron overlay shell ───────────────────────────────────
+   The window is frameless + transparent, so the widget itself is the drag
+   handle and every interactive control has to opt back out. */
+
+/* Kill the stray dark artefacts a Chromium window shows by default: tap
+   highlight boxes, focus rings, selection fill, and native image dragging. */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+img,
+svg {
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+.widget button:focus,
+.widget input:focus {
+    outline: none;
+}
+
+::selection {
+    background: transparent;
+}
+
+/* No -webkit-app-region anywhere: the OS drag region rubberbands on a
+   transparent always-on-top window, because Chromium moves the frame on its own
+   schedule while Windows runs its drag loop and the two visibly diverge. The
+   drag is implemented in main.cjs instead, which follows the OS cursor
+   directly. Exclusions live in NO_DRAG_SELECTOR in App.tsx. */
+.widget {
+    cursor: grab;
+}
+
+.widget.dragging {
+    cursor: grabbing;
+}
+
+/* Interactive surfaces keep their own cursor — they never start a drag. */
+.widget button,
+.widget input,
+.widget a,
+.widget .scrubber,
+.widget .lyrics-panel,
+.widget .art-wrap,
+.widget .vol-pill {
+    cursor: default;
+}
+
+/* disabled transport controls — the source app said it cannot do this */
+.ctrl-btn:disabled,
+.art-mini-btn:disabled {
+    opacity: 0.25;
+    cursor: default;
+    pointer-events: none;
+}
+
+/* Aa greys out when a song has no lyrics, but still reads as a button under
+   the pointer instead of letting the widget's grab hand show through */
+.ctrl-aa:disabled {
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+/* toggled shuffle / repeat */
+.ctrl-btn.active,
+.art-mini-btn.active {
+    color: #fff;
+}
+
+/* ── Nothing playing: the player with its text drawn as placeholders ── */
+.widget-empty .info span,
+.widget-empty .time-el,
+.widget-empty .time-rem {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Our own mark rather than a font's dash: a rounded line sitting where the
+   text's x-height would be, sized per field like the text it stands in for.
+   The row keeps its text line height, so nothing moves when a song arrives. */
+.placeholder-mark {
+    display: inline-block;
+    vertical-align: middle;
+    height: 4px;
+    border-radius: 2px;
+    background: currentColor;
+}
+
+.widget-empty .artist .placeholder-mark {
+    height: 3px;
+}
+
+/* with no text to size it, the column would shrink to nothing and take the
+   percentage-wide marks with it */
+.widget-empty .info {
+    flex: 1;
+}
+
+/* only pulse while actually waiting on something */
+.widget-empty.connecting .info span {
+    animation: empty-pulse 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes empty-pulse {
+    from { opacity: 1; }
+    to   { opacity: 0.3; }
+}
+
+/* ── Instrumental gap marker ──
+   Three dots with back-to-back windows. They are not words: the animator gives
+   them their own curves — a bigger rise from 0.75, a much deeper lift, and
+   opacity as the primary tell (0.35 resting → 1 lit) rather than a fill sweep,
+   which is what a single glyph cannot show. */
+/* Collapsed to nothing unless it is the current line.
+   Scaling the dotGroup hides the dots but reclaims no layout space, so every
+   interlude still reserved a blank row between the lyrics around it. spicy
+   collapses the line itself (Mixed.css `.line.musical-line`: height, line-height,
+   overflow, margin and padding all zeroed, restored on .Active) and that is what
+   makes the marker occupy nothing while it is not showing.
+
+   min-height is ours, not spicy's: .lyrics-inner is a flex column, and a flex
+   item defaults to min-height:auto, which refuses to shrink below its content
+   and would keep the row at full height however small height is set. */
+.lyric-line.lyric-gap {
+    cursor: pointer;
+    height: 0;
+    min-height: 0;
+    line-height: 0;
+    padding: 0;
+    overflow: hidden;
+    --line-opacity: 0;
+    /* Zero height is not enough on its own. .lyrics-inner is a flex column with
+       a row gap, and the gap is applied *between every pair of items* — so a
+       zero-height marker sitting between two lyrics turns one gap into two and
+       leaves a blank row exactly the height of the gap. Pulling one gap back up
+       makes the collapsed marker occupy nothing at all.
+
+       spicy has no equivalent because its lines are spaced by their own margins
+       rather than by a flex gap, so collapsing the box was sufficient there.
+
+       The -7px sides are not part of that: every .lyric-line pairs `padding: 2px
+       7px` with `margin: 0 -7px` so the hover plate can extend past the text
+       while the text itself stays flush with the column. Dropping it here while
+       keeping the padding is what pushed the dots 7px right of the lyrics. */
+    margin: calc(-1 * var(--row-gap)) -7px 0;
+}
+
+.lyric-line.lyric-gap.current {
+    height: auto;
+    line-height: 1.1;
+    padding: 4px 7px;
+    overflow: visible;
+    --line-opacity: 1;
+    margin: 0 -7px;
+}
+
+/* The whole marker animates by scaling its group, which is how spicy does it
+   (Mixed.css `.line.musical-line .dotGroup`). The dots inside still get their
+   own springs from the animator; this is the container growing in and
+   collapsing out around them. */
+.dotGroup {
+    display: inline-flex;
+    gap: 0.18em;
+    transform-origin: center center;
+    transition: scale 0.3s;
+    scale: 1;
+}
+
+/* Hidden whenever the marker is not the current line, and from the moment it
+   starts hiding. Two separate curves on purpose, exactly as in the reference:
+   growing in is a plain 0.3s ease, while collapsing runs 0.4s along a curve
+   that goes *negative* first — progress dips to -0.189 around the midpoint, so
+   the dots swell to about 1.19x before snapping away. That anticipation is what
+   makes them pop rather than simply shrink. */
+.lyric-line.lyric-gap:not(.current) .dotGroup,
+.lyric-line.lyric-gap.gap-hiding .dotGroup {
+    transition: scale 0.4s
+        linear(
+            0,
+            -0.006 9.4%,
+            -0.029 18%,
+            -0.157 43.3%,
+            -0.185 51.4%,
+            -0.189 55.9%,
+            -0.182 60%,
+            -0.163 63.9%,
+            -0.133 67.6%,
+            -0.074 72.3%,
+            0.006 76.7%,
+            0.238 85%,
+            0.566 92.7%,
+            1
+        );
+    scale: 0;
+}
+
+.dot {
+    font-size: 1.3em;
+    line-height: 0.65;
+    opacity: var(--o, 0.35);
+    /* always fully painted — a dot's state is carried by opacity and scale */
+    --gp: 100%;
+}
+
+.lyric-line.lyric-gap .lyric-ts {
+    display: none;
+}
+
+/* The line itself no longer fades — the dotGroup scale above carries the whole
+   entrance and exit, which is what spicy animates. Fading the line as well
+   double-animated it and made the marker dissolve instead of pop. The row keeps
+   its height either way, so nothing below it shifts as the dots come and go. */
+
+/* ── Lyric offset toast ── */
+.offset-toast {
+    position: absolute;
+    left: 50%;
+    bottom: 34px;
+    transform: translateX(-50%);
+    z-index: 12;
+    background: rgba(0, 0, 0, 0.66);
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-size: 10.5px;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+    pointer-events: none;
+    animation: vol-pill-in 140ms ease forwards;
+}
+
+/* ── Lyrics loading skeleton ── */
+.lyrics-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.lyrics-skeleton span {
+    height: 11px;
+    border-radius: 5px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.07) 0%,
+        rgba(255, 255, 255, 0.17) 50%,
+        rgba(255, 255, 255, 0.07) 100%
+    );
+    background-size: 220% 100%;
+    animation: skeleton-sweep 1.6s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 130ms);
+}
+
+/* ragged widths so it reads as text, not as a loading bar */
+.lyrics-skeleton span:nth-child(1) { width: 78%; }
+.lyrics-skeleton span:nth-child(2) { width: 92%; }
+.lyrics-skeleton span:nth-child(3) { width: 64%; }
+.lyrics-skeleton span:nth-child(4) { width: 84%; }
+
+@keyframes skeleton-sweep {
+    0% { background-position: 120% 0; }
+    100% { background-position: -120% 0; }
+}
+
+.lyrics-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: rgba(255, 255, 255, 0.35);
+    font: 400 12px/1.3 "SF Pro Text", sans-serif;
+}
+
+/* ── Next up (top-right, Spotify only — from the Spicetify extension) ── */
+.next-up {
+    margin-left: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+    max-width: 128px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    padding: 3px 3px 3px 6px;
+    border-radius: 6px;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 120ms ease, background 120ms ease;
+    animation: vol-pill-in 200ms ease forwards;
+}
+
+.next-up:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.next-up:disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+.next-up-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 0;
+    line-height: 1.3;
+}
+
+/* matches .platform */
+.next-up-label {
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.next-up-name {
+    max-width: 100%;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.75);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.next-up-art {
+    width: 26px;
+    height: 26px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+/* ── Lyric provider + timing, beside the platform name ──
+   Click cycles to the next provider that has lyrics for this song. */
+.lyric-source {
+    background: none;
+    border: none;
+    padding: 0 0 0 4px;
+    font: inherit;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: inherit;
+    cursor: pointer;
+    transition: color 100ms ease;
+}
+
+.lyric-source:hover {
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.tier-dots {
+    margin-left: 4px;
+    font-size: 6.5px;
+    letter-spacing: 1px;
+    vertical-align: 1.5px;
+}

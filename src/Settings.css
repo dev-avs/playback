@@ -1,0 +1,825 @@
+/* Settings window. Same surface as the widget (.widget / .widget-bg in App.css):
+   dark glass over the blurred cover, 13px corners, white-on-alpha type. */
+
+.st-card {
+    position: relative;
+    width: 600px;
+    overflow: hidden;
+    border-radius: 13px;
+    padding: 12px 12px 10px;
+    background: rgba(20, 20, 22, 0.72);
+    box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, 0.08),
+        0 4px 16px rgba(0, 0, 0, 0.45);
+    color: #fff;
+    user-select: none;
+    font-family: "SF Pro", "SF Pro Text", "SF Pro Display", -apple-system, "Segoe UI", sans-serif;
+}
+
+.st-bg {
+    position: absolute;
+    inset: -60px;
+    background-size: cover;
+    background-position: center;
+    filter: blur(50px) saturate(1.4);
+    opacity: 0.55;
+    z-index: 0;
+}
+
+/* Buttons and inputs do not inherit the page's font: left alone they fall back
+   to the browser's own (Arial here), so every chip, pill and footer button
+   would set in a different face from the labels beside them. :where() keeps
+   this at zero specificity, so a control with its own font (the preview's
+   language chips, each font chip's inline face) still has it. */
+:where(.st-card) :where(button, input) {
+    font-family: inherit;
+}
+
+/* the newest cover fades in over the one before (see the cover state) */
+.st-bg-in {
+    animation: st-bg-in 500ms ease;
+}
+
+@keyframes st-bg-in {
+    from {
+        opacity: 0;
+    }
+}
+
+.st-card > :not(.st-bg) {
+    position: relative;
+    z-index: 1;
+}
+
+/* ── Header — the window is dragged by it ── */
+.st-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    -webkit-app-region: drag;
+    cursor: grab;
+}
+
+/* searches every setting's name and explanation, across all sections */
+.st-search {
+    -webkit-app-region: no-drag;
+    flex: 1;
+    margin-left: auto;
+    max-width: 260px;
+    background: rgba(0, 0, 0, 0.28);
+    border: 0.5px solid rgba(255, 255, 255, 0.14);
+    border-radius: 7px;
+    color: #fff;
+    font-size: 11.5px;
+    padding: 5px 10px;
+    outline: none;
+}
+
+.st-search::placeholder {
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.st-search:focus {
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Sidebar and the section beside it ── */
+.st-body {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 12px;
+}
+
+.st-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.st-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    background: none;
+    border-radius: 7px;
+    padding: 6px 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11.5px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.st-nav-item:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.st-nav-item.on {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.st-nav-icon {
+    width: 16px;
+    text-align: center;
+    font-family: "SF Pro Text", "Yu Gothic UI", sans-serif;
+    font-size: 11px;
+    opacity: 0.85;
+}
+
+.st-nav-count {
+    margin-left: auto;
+    font-size: 9.5px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.38);
+}
+
+.st-main {
+    min-width: 0;
+}
+
+/* The settings scroll under the pinned preview, so the window stays a
+   sensible height however long a section is. */
+.st-list {
+    max-height: 340px;
+    overflow-y: auto;
+    margin: 0 -6px;
+    padding: 0 6px 4px;
+}
+
+.st-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.st-list::-webkit-scrollbar-button {
+    display: none;
+}
+
+.st-list::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.st-list-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 4px 0 4px;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.st-result-cat {
+    margin-top: 6px;
+    font-size: 9.5px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.st-item {
+    padding: 2px 0 3px;
+}
+
+.st-item + .st-item,
+.st-item:not(:first-child) {
+    border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+}
+
+.st-empty {
+    padding: 12px 0;
+}
+
+.st-foot-right {
+    display: flex;
+    gap: 2px;
+}
+
+.st-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+}
+
+.st-sub {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.48);
+    line-height: 1.35;
+}
+
+.st-close {
+    -webkit-app-region: no-drag;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.68);
+    padding: 5px;
+    border-radius: 5px;
+    display: flex;
+    cursor: pointer;
+    transition: color 80ms ease, background 80ms ease;
+}
+
+.st-close:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Groups ── */
+.st-group {
+    padding: 6px 0 4px;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.st-group:first-of-type {
+    border-top: none;
+}
+
+/* the widget's .platform label */
+.st-group-label {
+    font-size: 9.5px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.42);
+    margin: 2px 0 2px;
+}
+
+.st-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 28px;
+}
+
+.st-label {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.25;
+    min-width: 0;
+}
+
+/* ── Hold a setting's name to reset it ──
+   The name dims, then fills left to right over the hold like a sung syllable
+   (the widget's .word sweep: lit up to --hold, a soft 20% ramp, dim after). */
+@property --hold {
+    syntax: "<percentage>";
+    inherits: false;
+    initial-value: -20%;
+}
+
+.st-holdable .st-label-text {
+    --hold: -20%;
+    background-image: linear-gradient(
+        90deg,
+        #fff var(--hold),
+        rgba(255, 255, 255, 0.35) calc(var(--hold) + 20%)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    transition: --hold 200ms ease;
+}
+
+.st-holdable.holding .st-label-text {
+    --hold: 100%;
+    color: transparent;
+    transition: --hold 1s linear;
+}
+
+/* ── Live preview ── */
+.st-preview-wrap {
+    margin: 6px 0 4px;
+}
+
+/* the widget's surface rules (.widget, .widget-bg), at the chosen Background */
+.st-preview {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--pv-radius, 10px);
+    padding: 8px 10px 10px;
+    background: rgba(var(--pv-tint, 20, 20, 22), var(--bg-a));
+    box-shadow:
+        0 0 0 0.5px rgba(255, 255, 255, var(--pv-edge, 0.12)),
+        0 3px 10px rgba(0, 0, 0, var(--pv-shadow, 0.45));
+}
+
+.st-preview-bg {
+    position: absolute;
+    inset: -40px;
+    background-size: cover;
+    background-position: center;
+    filter: var(--pv-cover-filter, blur(30px) saturate(1.4));
+    opacity: calc(0.55 * var(--bg-k));
+}
+
+/* Party background, as the widget's (App.css) */
+.st-preview.party .st-preview-bg {
+    animation: pv-party 6s linear infinite;
+}
+
+@keyframes pv-party {
+    to {
+        filter: var(--pv-cover-filter) hue-rotate(360deg);
+    }
+}
+
+/* Spinning and floating cover, as the widget's */
+.st-pv-art.spin {
+    border-radius: 50%;
+    animation: cover-spin var(--pv-spin-s, 6s) linear infinite;
+}
+
+.st-pv-art.float {
+    animation: cover-float 2.6s ease-in-out infinite alternate;
+}
+
+.st-pv-art.spin.float {
+    animation:
+        cover-spin var(--pv-spin-s, 6s) linear infinite,
+        cover-float 2.6s ease-in-out infinite alternate;
+}
+
+/* progress bar and times, under the lyrics */
+.st-pv-bottom {
+    margin-top: 8px;
+}
+
+.st-pv-bar {
+    height: var(--pv-bar-h, 2px);
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.22);
+    overflow: hidden;
+}
+
+.st-pv-bar span {
+    display: block;
+    width: 33%;
+    height: 100%;
+    background: #fff;
+}
+
+.st-preview.tint-bar .st-pv-bar span {
+    background: hsl(var(--lit-h, 0) var(--lit-s, 0%) var(--lit-l, 100%));
+}
+
+.st-pv-times {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3px;
+    font-size: 8.5px;
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.st-preview > :not(.st-preview-bg) {
+    position: relative;
+    z-index: 1;
+}
+
+.st-pv-top {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 8px;
+}
+
+.st-pv-art {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--pv-cover-radius, 5px);
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.12);
+    flex-shrink: 0;
+}
+
+.st-pv-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    line-height: 1.2;
+}
+
+/* sample language and a preview-only romanize toggle, top right */
+.st-pv-langs {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+}
+
+.st-pv-chip {
+    border: none;
+    border-radius: 999px;
+    padding: 2px 6px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    font-family: "SF Pro Text", "Yu Gothic UI", "Malgun Gothic", sans-serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.st-pv-chip.on {
+    background: #fff;
+    color: #141416;
+}
+
+.st-pv-chip:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.st-pv-title {
+    font-size: calc(11px * var(--pv-meta-k, 1));
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.st-pv-artist {
+    font-size: calc(10px * var(--pv-meta-k, 1));
+    color: rgba(255, 255, 255, 0.48);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* .lyric-line's look: bold, tight, dim with the distance glow; the current
+   line lit and part-way through its sweep */
+.st-pv-lyrics {
+    display: flex;
+    flex-direction: column;
+    /* Line spacing, scaled to the smaller preview */
+    gap: var(--pv-gap, 6px);
+    /* the CJK faces after the chosen one, as the widget does (--cjk-stack) */
+    font-family: var(--pv-font), var(--cjk-stack), sans-serif;
+    font-size: var(--pv-size);
+    font-weight: var(--pv-weight, 700);
+    line-height: var(--pv-lh, 1.18);
+    letter-spacing: var(--pv-tracking, normal);
+    font-style: var(--pv-style, normal);
+}
+
+.st-pv-line {
+    color: rgba(255, 255, 255, 0.35);
+    text-shadow: 0 0 var(--pv-blur, 0px) rgba(255, 255, 255, 0.35);
+}
+
+/* per-language faces, as the widget's :lang() rules (App.css) */
+.st-pv-lyrics:lang(ja) {
+    font-family: var(--pv-font), var(--pv-ja), sans-serif;
+}
+
+.st-pv-lyrics:lang(ko) {
+    font-family: var(--pv-font), var(--pv-ko), sans-serif;
+}
+
+.st-pv-lyrics:lang(zh) {
+    font-family: var(--pv-font), var(--pv-zh), sans-serif;
+}
+
+.st-pv-lyrics.caps {
+    text-transform: uppercase;
+}
+
+.st-pv-lyrics.centered {
+    text-align: center;
+    /* a text-wide current line has to be centred as a box too */
+    align-items: center;
+}
+
+.st-pv-line.current {
+    /* as wide as its text, so the sweep's percentages run along the words
+       (the widget's units are inline boxes for the same reason) */
+    width: fit-content;
+    opacity: 1;
+    color: transparent;
+    /* lit in the Highlight colour, like .word in App.css */
+    /* Sweep direction, edge, Highlight strength and Glow, as .word in App.css */
+    background-image: linear-gradient(
+        var(--pv-angle, 90deg),
+        hsl(var(--lit-h, 0) var(--lit-s, 0%) var(--lit-l, 100%) / var(--pv-lit-a, 0.85)) 45%,
+        rgba(255, 255, 255, 0.35) calc(45% + var(--pv-soft, 20%))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* a text-shadow, not filter: drop-shadow, which flattens the clipped fill */
+    text-shadow: 0 0 0.09em rgba(255, 255, 255, calc(var(--pv-glow, 0.35) * 0.4));
+}
+
+/* colour dot inside a Highlight colour chip */
+.st-swatch {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 5px;
+    border-radius: 50%;
+    vertical-align: 0;
+    background: hsl(var(--sw-h) var(--sw-s) var(--sw-l));
+    box-shadow: 0 0 0 0.5px rgba(0, 0, 0, 0.35);
+}
+
+.st-swatch-rainbow {
+    background: conic-gradient(#ff6b8b, #ffd36b, #6bffb0, #6bc8ff, #c56bff, #ff6b8b);
+}
+
+.st-preview-caption {
+    margin-top: 5px;
+    min-height: 2.5em;
+    font-size: 10px;
+    line-height: 1.25;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.st-hint {
+    font-size: 9.5px;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.st-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Switch ── */
+.st-switch {
+    flex: 0 0 auto;
+    width: 28px;
+    height: 16px;
+    border: none;
+    border-radius: 999px;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.18);
+    position: relative;
+    cursor: pointer;
+    transition: background 160ms ease;
+}
+
+.st-switch .st-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1), background 160ms ease;
+}
+
+.st-switch.on {
+    background: #fff;
+}
+
+.st-switch.on .st-knob {
+    transform: translateX(12px);
+    background: rgba(20, 20, 22, 0.9);
+}
+
+.st-switch:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+/* ── Slider — the widget's scrubber, with a dot to grab ── */
+.st-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 104px;
+    height: 14px;
+    background: transparent;
+    outline: none;
+    cursor: pointer;
+}
+
+.st-slider::-webkit-slider-runnable-track {
+    height: 3px;
+    border-radius: 3px;
+    background: linear-gradient(
+        to right,
+        #fff var(--pos, 0%),
+        rgba(255, 255, 255, 0.22) var(--pos, 0%)
+    );
+}
+
+.st-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    margin-top: -3.5px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    transition: transform 120ms ease;
+}
+
+.st-slider:active::-webkit-slider-thumb {
+    transform: scale(1.25);
+}
+
+/* ── Font chips ── */
+.st-font-label {
+    margin-top: 6px;
+}
+
+.st-fonts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 4px 0 4px;
+}
+
+.st-chip {
+    border: 0.5px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 11.5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+}
+
+.st-chip:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.st-chip.on {
+    background: #fff;
+    border-color: #fff;
+    color: rgba(20, 20, 22, 0.95);
+}
+
+.st-chip-more {
+    border-style: dashed;
+}
+
+.st-chip-more.open {
+    border-style: solid;
+    color: #fff;
+}
+
+/* ── Installed font list ── */
+.st-fontlist {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 2px 0 6px;
+}
+
+.st-search-fonts {
+    background: rgba(0, 0, 0, 0.3);
+    border: 0.5px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 10px;
+    outline: none;
+}
+
+.st-search-fonts:focus {
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+.st-fontlist-scroll {
+    max-height: 168px;
+    overflow-y: auto;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.22);
+    padding: 3px;
+}
+
+.st-fontlist-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.st-fontlist-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.st-fontlist-msg {
+    padding: 6px 8px;
+}
+
+.st-font {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.st-font:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.st-font.on {
+    background: #fff;
+    color: rgba(20, 20, 22, 0.95);
+}
+
+/* ── Small buttons ── */
+.st-pill {
+    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 3px 9px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.st-pill:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.st-pill:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+/* ── Token entry ── */
+.st-token {
+    display: flex;
+    gap: 6px;
+    margin: 2px 0 4px;
+}
+
+.st-token input {
+    flex: 1;
+    min-width: 0;
+    background: rgba(0, 0, 0, 0.3);
+    border: 0.5px solid rgba(255, 255, 255, 0.16);
+    border-radius: 999px;
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 10px;
+    outline: none;
+}
+
+.st-token input:focus {
+    border-color: rgba(255, 255, 255, 0.45);
+}
+
+.st-error {
+    font-size: 10px;
+    color: #ff9b8a;
+    margin-bottom: 4px;
+}
+
+/* ── Footer ── */
+.st-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+    font-size: 9.5px;
+    color: rgba(255, 255, 255, 0.42);
+}
+
+.st-reset {
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 10.5px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color 120ms ease, background 120ms ease;
+}
+
+.st-reset:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.st-reset.confirm {
+    color: #fff;
+    background: rgba(255, 90, 70, 0.55);
+}

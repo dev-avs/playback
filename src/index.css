@@ -1,0 +1,5 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { margin: 0; background: transparent; overflow: hidden; }
+/* No viewport-filling centering: the Electron window is sized to hug the
+   widget, and any leftover transparent area would still eat mouse clicks. */
+#root { display: block; }
