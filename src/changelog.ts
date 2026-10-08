@@ -20,6 +20,23 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.3",
+    date: "2026-10-08",
+    changes: {
+      new: [
+        "Setup: a checklist for Spotify, Spicetify and the bridge, with Spicetify's install command to copy and Check again. It opens on the first launch, and later only when something needs you.",
+        "On a new PC the first launch sets the bridge up by itself (Spotify restarts once). After that, Setup asks first: Apply now (restarts Spotify).",
+      ],
+      performance: ["A smaller installer: it carries only what the app runs, and the old development leftovers are gone."],
+      qol: [
+        "The Spotify companion script is now player-bridge.js. The old player-token.js is removed for you; Spotify needs one restart to load the new one, and Setup offers it.",
+        "The changelog waits until Setup is closed, so the two never stack.",
+        "The Settings window keeps one size whichever section you open.",
+      ],
+      fixes: ["A long song title running under the NEXT hint; it now cuts off before it."],
+    },
+  },
+  {
     version: "1.3.2",
     date: "2026-10-07",
     changes: {

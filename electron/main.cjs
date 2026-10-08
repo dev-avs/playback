@@ -3,6 +3,7 @@ const {
   BrowserWindow,
   ipcMain,
   shell,
+  clipboard,
   Menu,
   screen,
   session,
@@ -14,7 +15,7 @@ const spicy = require("./spicy.cjs");
 const { resolveSpicyLyrics } = require("./spicyResolver.cjs");
 const { pickNeteaseSong } = require("./pick.cjs");
 const { startTokenBridge } = require("./tokenBridge.cjs");
-const { syncSpicetifyExtension } = require("./spicetifySync.cjs");
+const spicetifySetup = require("./spicetifySetup.cjs");
 const lyricsCache = require("./lyricsCache.cjs");
 const { pickTrack, createIdCache } = require("./spotifyLookup.cjs");
 const quickOpen = require("./spotifyQuickOpen.cjs");
@@ -1005,7 +1006,80 @@ function showChangelogAfterUpdate(enabled) {
   } catch (e) {
     console.error("[changelog] could not record the version:", e.message);
   }
-  if (enabled && previous !== current) openChangelog(previous);
+  // after the Setup window, when it is up, so the two never stack
+  if (enabled && previous !== current) setupSettled.then(() => openChangelog(previous));
+}
+
+// ── Setup window ───────────────────────────────────────────────
+// Spotify, Spicetify and the bridge (spicetifySetup.cjs), as a checklist.
+// Opens on the first run, and later only when the user has something to do
+// (shouldShowSetup). Same page again, loaded with #setup.
+const SETUP_W = 340 + STAGE_PAD * 2;
+let setupWin = null;
+let firstRun = false;
+/** the latest ensure(), as a SetupState (src/player.d.ts) */
+let setupWork = null;
+// Settles once Setup is out of the way: not needed this launch, or closed.
+// The changelog waits on it.
+let setupDone;
+const setupSettled = new Promise((resolve) => (setupDone = resolve));
+
+/** Puts the bridge in place; `allowApply` lets it run `spicetify apply`, which restarts Spotify. */
+function runSetup(allowApply) {
+  const source = fs.readFileSync(path.join(app.getAppPath(), "spicetify", spicetifySetup.BRIDGE));
+  setupWork = spicetifySetup
+    .ensure(source, { allowApply })
+    .catch((e) => {
+      // say what failed, and offer the apply again
+      const status = spicetifySetup.check(source);
+      const ready = spicetifySetup.isReady(status);
+      return { status, ready, actions: [], needsApply: status.spicetify && !ready, error: e.message };
+    })
+    .then((r) => {
+      for (const a of r.actions) console.log("[setup]", a);
+      if (r.error) console.error("[setup]", r.error);
+      else if (r.needsApply) console.log("[setup] the bridge waits on `spicetify apply`");
+      return { ...r, firstRun };
+    });
+  return setupWork;
+}
+
+function openSetup() {
+  if (setupWin) {
+    setupWin.focus();
+    return;
+  }
+  // Centred on the widget's screen, like the changelog it comes before.
+  const [wx, wy] = win ? win.getPosition() : [100, 100];
+  const area = screen.getDisplayNearestPoint({ x: wx, y: wy }).workArea;
+  setupWin = new BrowserWindow({
+    x: Math.round(area.x + (area.width - SETUP_W) / 2),
+    y: Math.round(area.y + area.height * 0.2),
+    width: SETUP_W,
+    height: 480,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    hasShadow: false,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
+      spellcheck: false,
+      contextIsolation: true,
+      nodeIntegration: false,
+      devTools: !!DEV_URL,
+    },
+  });
+  setupWin.setAlwaysOnTop(true, "screen-saver");
+  setupWin.once("ready-to-show", () => setupWin?.show());
+  setupWin.on("closed", () => {
+    setupWin = null;
+    setupDone();
+  });
+  if (DEV_URL) setupWin.loadURL(`${DEV_URL}#setup`);
+  else setupWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash: "setup" });
 }
 
 /**
@@ -1067,14 +1141,22 @@ app.whenReady().then(() => {
 
   lyricsCache.init(app.getPath("userData"));
   idCache = createIdCache(path.join(app.getPath("userData"), "spotify-ids.json"));
-  // Refresh the Spicetify companion extension in place. Silent no-op when the
-  // user does not have Spicetify installed; only rewrites files that already
-  // exist and whose bytes differ from the bundled copy.
-  try {
-    syncSpicetifyExtension(path.join(app.getAppPath(), "spicetify", "player-token.js"));
-  } catch (e) {
-    console.error("[spicetify-sync] unexpected failure:", e.message);
-  }
+  // Keep the Spicetify bridge in place and current (spicetifySetup.cjs). Only
+  // a first run (no version recorded yet) applies Spicetify on its own, which
+  // restarts Spotify; later launches leave that to Setup's Apply now. Read
+  // before the widget records this version.
+  firstRun = !fs.existsSync(path.join(app.getPath("userData"), "last-version.json"));
+  // a first run shows Setup at once, so the Spotify restart is explained
+  if (firstRun) openSetup();
+  runSetup(firstRun)
+    .then((s) => {
+      if (spicetifySetup.shouldShowSetup(s, firstRun)) openSetup();
+      else setupDone();
+    })
+    .catch((e) => {
+      console.error("[setup]", e.message);
+      setupDone();
+    });
   createWindow();
   startSmtc();
 
@@ -1110,17 +1192,25 @@ app.whenReady().then(() => {
   ipcMain.handle("changelog:open", () => openChangelog());
   ipcMain.handle("changelog:openPast", () => openPastChangelog());
   ipcMain.handle("changelog:check", (_e, enabled) => showChangelogAfterUpdate(!!enabled));
-  // Both changelog windows: whichever one asked.
+  // Both changelog windows and Setup: whichever one asked.
   ipcMain.handle("changelog:close", (e) => BrowserWindow.fromWebContents(e.sender)?.close());
   ipcMain.handle("changelog:resize", (e, height) => {
     const w = BrowserWindow.fromWebContents(e.sender);
     if (!w) return;
     const h = Math.max(120, Math.min(1000, Math.ceil(height)));
-    if (Math.abs(w.getSize()[1] - h) < 2) return;
+    const [width, current] = w.getSize();
+    if (Math.abs(current - h) < 2) return;
     // same Windows quirk as applyWindowHeight: setSize needs resizable
     w.setResizable(true);
-    w.setSize(CHANGELOG_W, h);
+    w.setSize(width, h);
     w.setResizable(false);
+  });
+  ipcMain.handle("setup:state", () => setupWork);
+  ipcMain.handle("setup:recheck", () => runSetup(false));
+  ipcMain.handle("setup:apply", () => runSetup(true));
+  ipcMain.handle("setup:copy", (_e, text) => clipboard.writeText(String(text)));
+  ipcMain.handle("setup:openLink", (_e, url) => {
+    if (/^https:\/\//.test(url)) shell.openExternal(url);
   });
   // Hide when nothing is playing (Settings → Behavior). Shown again without
   // taking focus, so music starting never pulls focus from what you are doing.

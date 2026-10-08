@@ -285,7 +285,7 @@ const IconShuffle = () => (
   </svg>
 );
 /**
- * Transport and volume glyphs, from the SF Symbols exports in icons/.
+ * Transport and volume glyphs, from the SF Symbols exports in scripts/icons/.
  *
  * Those arrive with a per-file viewBox many hundreds of units across and a
  * `scale(1, -1)` flip, and no two share a scale — dropping them in as-is would
@@ -297,7 +297,7 @@ const IconShuffle = () => (
  *
  * Height is what is held constant, so widths differ by glyph the way they
  * should — the skip icons are broader than play because they carry a bar as
- * well as a triangle. Regenerate with `node gen-icons.mjs` if icons/ changes.
+ * well as a triangle. Regenerate with `node scripts/icons/gen-icons.mjs` if those change.
  */
 const IconPrev = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">

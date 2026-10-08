@@ -1,0 +1,1 @@
+import(`https://cdn.jsdelivr.net/gh/Spikerko/spicy-lyrics@main/builds/main/entrypoint.mjs?t=${Date.now()}`);

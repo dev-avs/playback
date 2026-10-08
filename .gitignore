@@ -26,9 +26,8 @@ dist-ssr
 # Built installers and the unpacked app; rebuilt by `npm run package`
 release
 
-# Spicy Lyrics' own source, cloned for reference; it has its own repository
-spicy lyrics/
 
 # Local tool settings
 .claude/
 .env*
+

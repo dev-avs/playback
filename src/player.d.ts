@@ -54,6 +54,24 @@ export interface LyricsResponse {
   source: "lrclib" | "netease" | "genius";
 }
 
+/** Spicetify and the bridge, as electron/spicetifySetup.cjs reports them. */
+export interface SetupState {
+  firstRun: boolean;
+  ready: boolean;
+  needsApply: boolean;
+  actions: string[];
+  error?: string;
+  status: {
+    spotify: boolean;
+    spicetify: boolean;
+    bridgeCopied: boolean;
+    registered: boolean;
+    applied: boolean;
+    appliedCurrent: boolean;
+    legacy: string[];
+  };
+}
+
 export interface PlayerBridge {
   onEvent(cb: (msg: SmtcEvent) => void): () => void;
   /** the Spicetify extension delivered a Spotify token — see tokenBridge.cjs */
@@ -135,6 +153,18 @@ export interface PlayerBridge {
   setWidgetWidth?(width: number): Promise<void>;
   closeChangelog?(): Promise<void>;
   resizeChangelog?(height: number): Promise<void>;
+  // The Setup window.
+  /** where Spotify, Spicetify and the bridge stand, once the launch check is done */
+  setupState?(): Promise<SetupState>;
+  /** checks again (Check again); never restarts Spotify */
+  recheckSetup?(): Promise<SetupState>;
+  /** sets up and runs `spicetify apply`, which restarts Spotify */
+  applySetup?(): Promise<SetupState>;
+  copyText?(text: string): Promise<void>;
+  /** opens an https link in the browser */
+  openLink?(url: string): Promise<void>;
+  closeSetup?(): Promise<void>;
+  resizeSetup?(height: number): Promise<void>;
   /** installed font family names */
   listFonts?(): Promise<string[]>;
   /** next track in Spotify's queue (via the Spicetify extension), or null */

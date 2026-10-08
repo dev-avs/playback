@@ -4,14 +4,17 @@ import './index.css'
 import App from './App.tsx'
 import Settings from './Settings.tsx'
 import Changelog from './Changelog.tsx'
+import Setup from './Setup.tsx'
 import { DEFAULTS, KEYS } from './settings.ts'
 
-// One bundle, three windows: settings loads this page with #settings, the
-// changelog with #changelog (plus ?from=<version> after an update).
+// One bundle, four windows: settings loads this page with #settings, the
+// changelog with #changelog (plus ?from=<version> after an update), setup with
+// #setup.
 const isSettings = location.hash === '#settings'
 const isChangelog = location.hash.startsWith('#changelog')
+const isSetup = location.hash === '#setup'
 
-if (!isSettings && !isChangelog) {
+if (!isSettings && !isChangelog && !isSetup) {
   // Romanize starts each launch from its default; the settings window can flip
   // it afterwards. Seeded before the first render so the widget never flashes.
   let initial = DEFAULTS.romanizeDefault
@@ -29,6 +32,6 @@ if (!isSettings && !isChangelog) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    {isSettings ? <Settings /> : isChangelog ? <Changelog /> : <App />}
+    {isSettings ? <Settings /> : isChangelog ? <Changelog /> : isSetup ? <Setup /> : <App />}
   </StrictMode>,
 )

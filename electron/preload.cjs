@@ -85,6 +85,15 @@ contextBridge.exposeInMainWorld("player", {
   setWidgetWidth: (width) => ipcRenderer.invoke("win:setWidth", width),
   closeChangelog: () => ipcRenderer.invoke("changelog:close"),
   resizeChangelog: (height) => ipcRenderer.invoke("changelog:resize", height),
+  // The Setup window (Spotify, Spicetify and the bridge).
+  setupState: () => ipcRenderer.invoke("setup:state"),
+  recheckSetup: () => ipcRenderer.invoke("setup:recheck"),
+  applySetup: () => ipcRenderer.invoke("setup:apply"),
+  copyText: (text) => ipcRenderer.invoke("setup:copy", text),
+  openLink: (url) => ipcRenderer.invoke("setup:openLink", url),
+  // closes and sizes itself the way the changelog does
+  closeSetup: () => ipcRenderer.invoke("changelog:close"),
+  resizeSetup: (height) => ipcRenderer.invoke("changelog:resize", height),
   listFonts: () => ipcRenderer.invoke("fonts:list"),
   getNext: (req) => ipcRenderer.invoke("bridge:next", req),
   minimize: () => ipcRenderer.invoke("win:minimize"),

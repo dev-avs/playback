@@ -1,0 +1,130 @@
+/* Setup window: the changelog card (Changelog.css), a little wider for the
+   install command, with a checklist in place of the changes. */
+
+.su-card {
+    width: 340px;
+}
+
+.su-card code,
+.su-card .su-error {
+    -webkit-app-region: no-drag;
+    user-select: text;
+}
+
+.su-steps {
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 0;
+}
+
+.su-step {
+    display: flex;
+    gap: 8px;
+    padding: 7px 0;
+}
+
+.su-step + .su-step {
+    border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+}
+
+/* A ring with a tick (done), a bar (to do) or a dash (waiting). */
+.su-mark {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    fill: none;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: rgba(255, 255, 255, 0.4);
+}
+
+.su-step--ok .su-mark {
+    stroke: #6bffb0;
+}
+
+.su-step--todo .su-mark {
+    stroke: #ffd36b;
+}
+
+.su-body {
+    min-width: 0;
+}
+
+.su-name {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.su-detail {
+    margin-top: 1px;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+.su-link {
+    -webkit-app-region: no-drag;
+    padding: 0;
+    border: none;
+    background: none;
+    font: inherit;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    cursor: pointer;
+}
+
+.su-cmd {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 5px;
+    padding: 6px 6px 6px 8px;
+    border-radius: 7px;
+    background: rgba(0, 0, 0, 0.32);
+}
+
+.su-cmd code {
+    flex: 1;
+    min-width: 0;
+    font: 10.5px/1.45 "Cascadia Mono", Consolas, monospace;
+    color: rgba(255, 255, 255, 0.9);
+    word-break: break-all;
+}
+
+.su-copy {
+    flex-shrink: 0;
+    border: none;
+    border-radius: 999px;
+    padding: 4px 9px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    font-family: inherit;
+    font-size: 10.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.su-copy:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.su-error {
+    display: block;
+    margin-top: 4px;
+    font: 10.5px/1.4 "Cascadia Mono", Consolas, monospace;
+    color: #ff8a6b;
+    word-break: break-word;
+}
+
+.su-card .cl-button {
+    white-space: nowrap;
+}
+
+.su-card .cl-button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}

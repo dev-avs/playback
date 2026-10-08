@@ -6,7 +6,8 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // Spicy Lyrics is their code, kept for reference; release/ is build output
+  globalIgnores(['dist', 'release', 'spicy lyrics']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

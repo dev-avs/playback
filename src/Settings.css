@@ -144,8 +144,10 @@
 
 /* The settings scroll under the pinned preview, so the window stays a
    sensible height however long a section is. */
+/* A fixed height, not a maximum: every section and search result gets the
+   same room, so switching sections never resizes the window. */
 .st-list {
-    max-height: 340px;
+    height: 340px;
     overflow-y: auto;
     margin: 0 -6px;
     padding: 0 6px 4px;

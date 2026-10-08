@@ -7,7 +7,7 @@
 // extension can simply read it.
 //
 // We are a separate process, so we cannot call `sp://` ourselves. The companion
-// extension in `spicetify/player-token.js` does it inside Spotify and posts the
+// extension in `spicetify/player-bridge.js` does it inside Spotify and posts the
 // result here. It also knows the real expiry, so the token never has to be aged
 // by guesswork the way a hand-pasted one does.
 //

@@ -8,7 +8,7 @@ const STAGE_PAD = 22;
 const CLOSE_MS = 200;
 
 /** The app icon (public/logo.svg) at mark size: glass tile and visualizer bars. */
-const AppMark = () => (
+export const AppMark = () => (
   <svg viewBox="0 0 64 64" aria-hidden="true">
     <defs>
       <radialGradient id="cl-p" cx="18" cy="16" r="36" gradientUnits="userSpaceOnUse">

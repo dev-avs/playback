@@ -2268,7 +2268,10 @@ svg {
 /* ── Next up (top-right, Spotify only — from the Spicetify extension) ── */
 .next-up {
     margin-left: auto;
-    flex: 0 1 auto;
+    /* Never squeezed by a long title: shrunk below its art and label, the
+       right-aligned NEXT stuck out to the left, under the title. The title
+       gives way instead; the hint's own name cuts off within its 128px. */
+    flex: 0 0 auto;
     min-width: 0;
     max-width: 128px;
     display: flex;
