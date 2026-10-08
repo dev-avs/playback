@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "node --test tests/spicy.test.cjs tests/spotifyLookup.test.cjs tests/spicetifySetup.test.cjs",
+    "test": "node --test tests/spicy.test.cjs tests/spotifyLookup.test.cjs tests/spicetifySetup.test.cjs tests/mediaHelper.test.cjs",
     "test:layout": "npm run build && electron --in-process-gpu --disable-gpu tests/lyrics-layout.cjs",
     "lint": "eslint .",
     "preview": "vite preview",

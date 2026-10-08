@@ -16,6 +16,7 @@ const { resolveSpicyLyrics } = require("./spicyResolver.cjs");
 const { pickNeteaseSong } = require("./pick.cjs");
 const { startTokenBridge } = require("./tokenBridge.cjs");
 const spicetifySetup = require("./spicetifySetup.cjs");
+const { helperCommand } = require("./mediaHelper.cjs");
 const lyricsCache = require("./lyricsCache.cjs");
 const { pickTrack, createIdCache } = require("./spotifyLookup.cjs");
 const quickOpen = require("./spotifyQuickOpen.cjs");
@@ -228,22 +229,15 @@ let shrinkTimer = null;
 let lastState = null; // replayed to the renderer on reload
 
 // ── SMTC bridge ────────────────────────────────────────────────
-// One long-lived Windows PowerShell 5.1 process: JSON state on stdout,
-// commands on stdin. 5.1 specifically — PowerShell 7 has no WinRT projection.
+// One long-lived helper process (mediaHelper.cjs picks it per platform; on
+// Windows, smtc.ps1): JSON state on stdout, commands on stdin.
 function startSmtc() {
-  // powershell.exe -File needs a real path on disk. In a packaged build
-  // __dirname points inside app.asar, which Electron can read but PowerShell
-  // cannot — the spawn would fail and the widget would sit on the idle
-  // placeholder forever. smtc.ps1 is listed in build.asarUnpack so it is
-  // written out beside the archive; point at that copy instead.
-  const script = app.isPackaged
-    ? path.join(process.resourcesPath, "app.asar.unpacked", "electron", "smtc.ps1")
-    : path.join(__dirname, "smtc.ps1");
-  ps = spawn(
-    "powershell.exe",
-    ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", script],
-    { windowsHide: true },
-  );
+  const helper = helperCommand({ isPackaged: app.isPackaged, resourcesPath: process.resourcesPath, dir: __dirname });
+  if (!helper) {
+    console.error(`[smtc] no now-playing helper for ${process.platform}`);
+    return;
+  }
+  ps = spawn(helper.command, helper.args, { windowsHide: true });
 
   readline.createInterface({ input: ps.stdout }).on("line", (line) => {
     if (!line.trim()) return;
