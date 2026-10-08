@@ -44,7 +44,20 @@ allows, without paying for an Apple Developer account. Started 2026-10-08.
   docs and install.sh; **unverified on a real Mac**. Tests in
   `tests/spicetifySetup.test.cjs`.
 
-## Phase 1: the Mac now-playing helper
+- **Phase 1 (first draft, never compiled):** `electron/mac/media-helper.swift`
+  (Spotify + Music through AppleScript, smtc.ps1's protocol and emit rules,
+  only scripts apps that are already running, distributed notifications + 1 s
+  poll), `npm run build:mac-helper` (`scripts/build-mac-helper.sh`, universal
+  binary, gitignored), `build.asarUnpack` entry, `helperCommand()` on darwin
+  (null while the binary is not built). Tests in `tests/mediaHelper.test.cjs`.
+  appId: `spotify.exe` for Spotify, `com.apple.Music` for Music (labelled
+  "Apple Music"). Spotify repeat is on/off only (reported as List/None).
+  Extra state fields `spotifyUri`, `artUrl` are emitted but unused.
+  Still open from Phase 1: `NSAppleEventsUsageDescription` goes in with the
+  Phase 3 `extendInfo`; in dev, Electron.app may lack it, so test the helper
+  from Terminal first.
+
+## Phase 1: the Mac now-playing helper (plan, kept for reference)
 
 A small Swift command-line program, `electron/mac/media-helper.swift`, speaking
 exactly the smtc.ps1 protocol (see `electron/mediaHelper.cjs` and `SmtcState`
@@ -112,6 +125,27 @@ in `src/player.d.ts`): JSON lines out, one command per line in.
 ## Phase 4: later
 
 Browser extension, VLC, maybe mediaremote-adapter for every other app.
+
+## Next session
+
+Phase 1 needs its first compile on the Mac (steps below). Phase 2 not started.
+
+## Steps for the friend (Phase 1 test)
+
+1. `xcode-select --install` (once), and Node.js 20+.
+2. Get the repo (it is private: the user must add them or send a zip), then
+   `npm install` and `npm run build:mac-helper`. Send back any compile errors
+   verbatim.
+3. Start Spotify, play a song, then in Terminal: `./electron/mac/media-helper`.
+   Allow the Automation prompt. JSON lines should appear about every 5 s and on
+   every change. Type `playpause`, Enter; then `next`, `seek 30`,
+   `volume 0.5`, `shuffle`, `repeat`. Ctrl+D quits.
+4. Same with Music.
+5. Quit Spotify and Music, run the helper again for 10 s: neither must start;
+   it should print `{"type":"state","session":null}` once.
+6. `npm start`: the widget should show the song (there may be no Automation
+   prompt from inside Electron; report what happens).
+7. Report: macOS version, chip, and the output of each step.
 
 ## Checklist for the friend's Mac
 

@@ -6,16 +6,18 @@
 // `seek <sec>`, `volume <0..1>`, `shuffle`, `repeat`).
 //
 // Windows: smtc.ps1 under Windows PowerShell 5.1 (PowerShell 7 has no WinRT
-// projection). macOS has no helper yet; see mac-port.md.
+// projection). macOS: electron/mac/media-helper, a Swift program built on a Mac
+// by `npm run build:mac-helper`; see mac-port.md.
 
+const fs = require("fs");
 const path = require("path");
 
 /**
  * The command that starts this platform's helper, or null when there is none.
  * @param {{ platform?: string, isPackaged: boolean, resourcesPath?: string, dir: string }} where
- *   `dir` is the electron/ folder (main.cjs's __dirname)
+ *   `dir` is the electron/ folder (main.cjs's __dirname); `exists` is for tests
  */
-function helperCommand({ platform = process.platform, isPackaged, resourcesPath, dir }) {
+function helperCommand({ platform = process.platform, isPackaged, resourcesPath, dir, exists = fs.existsSync }) {
   if (platform === "win32") {
     // powershell.exe -File needs a real path on disk. In a packaged build
     // `dir` points inside app.asar, which Electron can read but PowerShell
@@ -29,6 +31,15 @@ function helperCommand({ platform = process.platform, isPackaged, resourcesPath,
       command: "powershell.exe",
       args: ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", script],
     };
+  }
+  if (platform === "darwin") {
+    // Unpacked beside app.asar like smtc.ps1: a binary inside the archive
+    // cannot be executed.
+    const bin = isPackaged
+      ? path.posix.join(resourcesPath, "app.asar.unpacked", "electron", "mac", "media-helper")
+      : path.posix.join(dir, "mac", "media-helper");
+    // Not built yet (it is not in git): no helper rather than a failed spawn.
+    return exists(bin) ? { command: bin, args: [] } : null;
   }
   return null;
 }

@@ -31,3 +31,6 @@ release
 .claude/
 .env*
 
+
+# Built on a Mac by `npm run build:mac-helper`
+electron/mac/media-helper
