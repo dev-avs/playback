@@ -7,7 +7,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   // Spicy Lyrics is their code, kept for reference; release/ is build output
-  globalIgnores(['dist', 'release', 'spicy lyrics']),
+  globalIgnores(['dist', 'release', 'vendor']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

@@ -13,7 +13,7 @@
 // Build: npm run build:mac-helper (scripts/build-mac-helper.sh).
 //
 // UNVERIFIED: written without a Mac and never compiled. Check on a real Mac
-// (mac-port.md, "Checklist for the friend's Mac").
+// (docs/mac-port.md, "Checklist for the friend's Mac").
 
 import AppKit
 import Foundation

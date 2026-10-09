@@ -237,8 +237,8 @@ Genius has no timestamps, so those lyrics scroll on an estimated schedule.
 ```bash
 npm test                                # unit tests
 npm run test:layout                     # hidden Electron lyric positioning check
-node electron/test-bridge.mjs              # watch raw SMTC state for 10s
-node electron/test-bridge.mjs "seek 30"    # watch, then send a command
+node scripts/test-bridge.mjs               # watch raw SMTC state for 10s
+node scripts/test-bridge.mjs "seek 30"     # watch, then send a command
 ```
 
 Set `SMTC_LOG=trace.log` to trace the PowerShell poll loop to a file.

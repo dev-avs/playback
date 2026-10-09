@@ -17,11 +17,11 @@ The user runs the installed app, not the dev build. A fix is not done until it i
 9. Tell the user the new version is installed and running, whether Spotify was restarted (and why), and link the release.
 
 ## Spicy Lyrics copy
-`spicy lyrics/spicy-lyrics/` is a full copy of https://github.com/Spikerko/spicy-lyrics, kept in this repo as plain files for reference. The app does not run it (`src/vendor/objpack.ts` is the one file taken from it), and ESLint skips it. Always update it by reinstalling with a fresh clone, never by editing it in place:
-1. Delete `spicy lyrics/spicy-lyrics/`.
-2. `git clone --depth 1 https://github.com/Spikerko/spicy-lyrics "spicy lyrics/spicy-lyrics"`
-3. Note their commit with `git -C "spicy lyrics/spicy-lyrics" log -1 --format="%h %cs"`, then delete its `.git` folder so it stays plain files in this repo.
-4. If `git status` shows changes under `spicy lyrics/`, they go into the release commit; mention their commit in its body (e.g. `Spicy Lyrics reference: e1d49d8 (2026-10-05)`).
+`vendor/spicy-lyrics/` is a full copy of https://github.com/Spikerko/spicy-lyrics, kept in this repo as plain files for reference. The app does not run it (`src/vendor/objpack.ts` is the one file taken from it), and ESLint skips it. Always update it by reinstalling with a fresh clone, never by editing it in place:
+1. Delete `vendor/spicy-lyrics/`.
+2. `git clone --depth 1 https://github.com/Spikerko/spicy-lyrics vendor/spicy-lyrics`
+3. Note their commit with `git -C vendor/spicy-lyrics log -1 --format="%h %cs"`, then delete its `.git` folder so it stays plain files in this repo.
+4. If `git status` shows changes under `vendor/spicy-lyrics/`, they go into the release commit; mention their commit in its body (e.g. `Spicy Lyrics reference: e1d49d8 (2026-10-05)`).
 
 ## How we work
 - **Preview before install.** After building a change, run it for the user to try before packaging: stop the installed `player` process, then start `node_modules/electron/dist/electron.exe .` from the project folder (it loads `dist/`). Package and install only once they approve ("ship it" / "push it"), unless they say to just ship. The preview shares the installed app's data folder, so it records its version in `%APPDATA%\player\last-version.json`; before installing, set that back to the installed version so the changelog still pops up.
@@ -32,6 +32,6 @@ The user runs the installed app, not the dev build. A fix is not done until it i
 
 ## In progress (update or remove this section as it moves)
 1.3.3 is released (committed, tagged, pushed) but deliberately not installed: on 2026-10-08 the user uninstalled the app, deleted `%APPDATA%\player` and took `player-bridge.js` out of Spicetify to try a new-PC first run themselves with `release/player-setup-1.3.3.exe`. So nothing is installed right now; don't assume an installed version.
-- **Mac port:** plan, decisions and progress live in `mac-port.md`; read it before any Mac work. Groundwork and a first, never-compiled Phase 1 helper are committed (not released; nothing changes on Windows). Next: the friend compiles and tests it (steps in `mac-port.md`), then Phase 2.
+- **Mac port:** plan, decisions and progress live in `docs/mac-port.md`; read it before any Mac work. Groundwork and a first, never-compiled Phase 1 helper are committed (not released; nothing changes on Windows). Next: the friend compiles and tests it (steps in `docs/mac-port.md`), then Phase 2.
 - Possibly later: NetEase sometimes returns credits as lyric lines ("Estelle -- American Boy (Ft. Kanye West)", "…, songwriters", "…, producer"); the user said to leave this for now.
 - `npm run lint` fails on a setState-in-effect in `App.tsx` (`setOutOfSync(false)`, ~line 1530), already in 1.3.2; not fixed yet.

@@ -17,7 +17,7 @@
     "start": "npm run build && electron .",
     "icon": "electron scripts/make-icon.cjs",
     "build:mac-helper": "sh scripts/build-mac-helper.sh",
-    "pack:app": "electron-packager . player --platform=win32 --arch=x64 --out=release --overwrite --icon=build/icon.ico --asar.unpackDir=electron --ignore=\"^/(?!(dist|electron|spicetify|package\\.json)(/|$))\" --ignore=\"^/electron/test-bridge\\.mjs$\"",
+    "pack:app": "electron-packager . player --platform=win32 --arch=x64 --out=release --overwrite --icon=build/icon.ico --asar.unpackDir=electron --ignore=\"^/(?!(dist|electron|spicetify|package\\.json)(/|$))\"",
     "package": "npm run build && npm run pack:app && electron-builder --win nsis --prepackaged release/player-win32-x64"
   },
   "build": {
@@ -31,8 +31,7 @@
       "dist/**",
       "electron/**",
       "spicetify/player-bridge.js",
-      "package.json",
-      "!electron/test-bridge.mjs"
+      "package.json"
     ],
     "asarUnpack": [
       "electron/smtc.ps1",

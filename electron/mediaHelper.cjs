@@ -7,7 +7,7 @@
 //
 // Windows: smtc.ps1 under Windows PowerShell 5.1 (PowerShell 7 has no WinRT
 // projection). macOS: electron/mac/media-helper, a Swift program built on a Mac
-// by `npm run build:mac-helper`; see mac-port.md.
+// by `npm run build:mac-helper`; see docs/mac-port.md.
 
 const fs = require("fs");
 const path = require("path");

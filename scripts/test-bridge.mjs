@@ -1,6 +1,6 @@
 // Manual harness: drives smtc.ps1 exactly the way main.cjs does.
-//   node electron/test-bridge.mjs            -> observe state for 10s
-//   node electron/test-bridge.mjs "seek 30"  -> observe, then send a command
+//   node scripts/test-bridge.mjs             -> observe state for 10s
+//   node scripts/test-bridge.mjs "seek 30"   -> observe, then send a command
 import { spawn } from "child_process";
 import readline from "readline";
 import path from "path";
@@ -11,7 +11,7 @@ const cmd = process.argv[2];
 
 const ps = spawn(
   "powershell.exe",
-  ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "smtc.ps1")],
+  ["-NoProfile", "-NonInteractive", "-ExecutionPolicy", "Bypass", "-File", path.join(__dirname, "..", "electron", "smtc.ps1")],
   { windowsHide: true },
 );
 

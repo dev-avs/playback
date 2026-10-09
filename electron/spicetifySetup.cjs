@@ -39,7 +39,7 @@ function defaultPaths(env = process.env, platform = process.platform) {
 }
 
 // macOS, from Spicetify's install.sh and docs; not yet checked on a real Mac
-// (see mac-port.md). The CLI lands in ~/.spicetify, the config follows XDG,
+// (see docs/mac-port.md). The CLI lands in ~/.spicetify, the config follows XDG,
 // and Spotify is an app bundle that `spicetify apply` unpacks in place.
 function macPaths(env) {
   const p = path.posix;
