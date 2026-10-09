@@ -26,8 +26,7 @@ const BRIDGE = "player-bridge.js";
 const LEGACY = ["player-token.js"];
 
 /** Where Spicetify and Spotify keep things, per their installers' defaults. */
-function defaultPaths(env = process.env, platform = process.platform) {
-  if (platform === "darwin") return macPaths(env);
+function defaultPaths(env = process.env) {
   const local = env.LOCALAPPDATA ?? "";
   const roaming = env.APPDATA ?? "";
   return {
@@ -38,30 +37,12 @@ function defaultPaths(env = process.env, platform = process.platform) {
   };
 }
 
-// macOS, from Spicetify's install.sh and docs; not yet checked on a real Mac
-// (see docs/mac-port.md). The CLI lands in ~/.spicetify, the config follows XDG,
-// and Spotify is an app bundle that `spicetify apply` unpacks in place.
-function macPaths(env) {
-  const p = path.posix;
-  const home = env.HOME ?? "";
-  const spotifyApp =
-    [p.join(home, "Applications", "Spotify.app"), "/Applications/Spotify.app"].find((a) => fs.existsSync(a)) ??
-    "/Applications/Spotify.app";
-  return {
-    cli: findCli(p.join(home, ".spicetify", "spicetify"), env, p, "spicetify"),
-    configDir: p.join(env.XDG_CONFIG_HOME || p.join(home, ".config"), "spicetify"),
-    // the bundle stands in for Spotify.exe: check() only asks whether it exists
-    spotifyExe: spotifyApp,
-    appliedDir: p.join(spotifyApp, "Contents", "Resources", "Apps", "xpui", "extensions"),
-  };
-}
-
 // The official installer puts spicetify.exe in %LOCALAPPDATA%\spicetify; other
-// installs (scoop, winget, Homebrew) only put it on PATH.
-function findCli(preferred, env, p = path, name = "spicetify.exe") {
+// installs (scoop, winget) only put it on PATH.
+function findCli(preferred, env) {
   if (fs.existsSync(preferred)) return preferred;
-  for (const dir of (env.PATH ?? "").split(p.delimiter)) {
-    const exe = p.join(dir, name);
+  for (const dir of (env.PATH ?? "").split(path.delimiter)) {
+    const exe = path.join(dir, "spicetify.exe");
     if (dir && fs.existsSync(exe)) return exe;
   }
   return preferred;

@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
-const { check, ensure, shouldShowSetup, defaultPaths, BRIDGE } = require("../electron/spicetifySetup.cjs");
+const { check, ensure, shouldShowSetup, BRIDGE } = require("../electron/spicetifySetup.cjs");
 
 const SOURCE = Buffer.from("// bridge v2\n");
 
@@ -168,21 +168,4 @@ test("Setup opens on the first run, and later only when there is something to do
   assert.equal(shouldShowSetup(missing, false), false);
   assert.equal(shouldShowSetup({ ...missing, needsApply: true }, false), true);
   assert.equal(shouldShowSetup({ ...missing, error: "spicetify apply: failed" }, false), true);
-});
-
-test("macOS paths: CLI in ~/.spicetify, XDG config, Spotify's app bundle", () => {
-  const p = defaultPaths({ HOME: "/Users/me", PATH: "/usr/bin:/bin" }, "darwin");
-  assert.deepEqual(p, {
-    cli: "/Users/me/.spicetify/spicetify",
-    configDir: "/Users/me/.config/spicetify",
-    spotifyExe: "/Applications/Spotify.app",
-    appliedDir: "/Applications/Spotify.app/Contents/Resources/Apps/xpui/extensions",
-  });
-  assert.equal(defaultPaths({ HOME: "/Users/me", XDG_CONFIG_HOME: "/Users/me/cfg" }, "darwin").configDir, "/Users/me/cfg/spicetify");
-});
-
-test("Windows paths are unchanged", () => {
-  const p = defaultPaths({ LOCALAPPDATA: "C:\L", APPDATA: "C:\R", PATH: "" }, "win32");
-  assert.equal(p.cli, path.join("C:\L", "spicetify", "spicetify.exe"));
-  assert.equal(p.appliedDir, path.join("C:\R", "Spotify", "Apps", "xpui", "extensions"));
 });
