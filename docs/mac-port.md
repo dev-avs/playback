@@ -57,6 +57,21 @@ allows, without paying for an Apple Developer account. Started 2026-10-08.
   Phase 3 `extendInfo`; in dev, Electron.app may lack it, so test the helper
   from Terminal first.
 
+- **Phase 2 (written, never run on a Mac):** in `main.cjs` on darwin the
+  widget is on every Space and over full-screen apps
+  (`setVisibleOnAllWorkspaces`), no Dock icon (`app.dock.hide()`), an
+  app + Edit menu so Cmd+C/V/Q work (Windows keeps no menu); fonts through
+  JXA `NSFontManager`; no loopback capture handler, so the visualiser keeps
+  its CSS bars (already animated from the playing state). Setup gets
+  `platform` in its state and shows the curl install, "Terminal", the Mac
+  Spotify download link, no Microsoft Store line, and an App Management note
+  before Apply. Windows strings are unchanged.
+  `spotifyQuickOpen.cjs` stays Windows-only: its `Spotify.exe` path never
+  exists on a Mac, so `open()` returns false and nothing is started.
+  Unverified: whether `npm start` from Terminal gets the Automation prompt
+  (TCC should credit Terminal), and the dragging, transparency and resize code
+  on macOS.
+
 ## Phase 1: the Mac now-playing helper (plan, kept for reference)
 
 A small Swift command-line program, `electron/mac/media-helper.swift`, speaking
@@ -91,7 +106,7 @@ in `src/player.d.ts`): JSON lines out, one command per line in.
   Music are playing and controls them"). Without it macOS refuses the Apple
   Events silently.
 
-## Phase 2: the app on macOS
+## Phase 2: the app on macOS (plan, kept for reference)
 
 - Window: `win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true })`
   so it shows on every Space and over full-screen apps; `app.dock.hide()` (no
@@ -128,24 +143,38 @@ Browser extension, VLC, maybe mediaremote-adapter for every other app.
 
 ## Next session
 
-Phase 1 needs its first compile on the Mac (steps below). Phase 2 not started.
+Phases 1 and 2 are written but have never run on a Mac. Next: the friend
+runs the steps below; fix what they report; then Phase 3 (ask the user about
+the private repo first).
 
-## Steps for the friend (Phase 1 test)
+## Steps for the friend (Phases 1 and 2)
 
-1. `xcode-select --install` (once), and Node.js 20+.
-2. Get the repo (it is private: the user must add them or send a zip), then
-   `npm install` and `npm run build:mac-helper`. Send back any compile errors
-   verbatim.
-3. Start Spotify, play a song, then in Terminal: `./electron/mac/media-helper`.
-   Allow the Automation prompt. JSON lines should appear about every 5 s and on
-   every change. Type `playpause`, Enter; then `next`, `seek 30`,
-   `volume 0.5`, `shuffle`, `repeat`. Ctrl+D quits.
-4. Same with Music.
-5. Quit Spotify and Music, run the helper again for 10 s: neither must start;
-   it should print `{"type":"state","session":null}` once.
-6. `npm start`: the widget should show the song (there may be no Automation
-   prompt from inside Electron; report what happens).
-7. Report: macOS version, chip, and the output of each step.
+1. Once: `xcode-select --install`, and Node.js 20 or newer from nodejs.org.
+2. Get the code (the repo is private: the user adds them on GitHub, or sends
+   a zip), then in Terminal, in the project folder:
+   ```sh
+   npm install
+   npm run build:mac-helper
+   ```
+   Send back any errors exactly as printed.
+3. Helper alone. Play a song in Spotify, then run `./electron/mac/media-helper`.
+   Allow the Automation prompt. JSON lines should appear about every 5 s and at
+   every change (pause, skip). Type each of these and press Enter:
+   `playpause`, `next`, `seek 30`, `volume 0.5`, `shuffle`, `repeat`.
+   Ctrl+D quits. Then the same with Music.
+4. Quit Spotify and Music, run the helper for 10 s: neither may start, and it
+   should print `{"type":"state","session":null}` once.
+5. The app: `npm start` (from Terminal). Check:
+   - the widget shows the song and the controls work;
+   - it shows on every Space and over a full-screen app; no Dock icon;
+   - dragging, lyrics, the art-mode bars move while playing;
+   - Settings opens, the font list is filled, Cmd+C/Cmd+V work in its search;
+   - Setup: Spotify and Spicetify detected (if Spicetify is missing, its
+     install command is the curl one), Apply now works (any App Management
+     prompt?), Spicy Lyrics word timing appears.
+6. Also: `spicetify path all` and `ls ~/.config/spicetify ~/.spicetify`.
+7. Send back: macOS version, Apple Silicon or Intel, and what each step did
+   (Terminal output and screenshots).
 
 ## Checklist for the friend's Mac
 

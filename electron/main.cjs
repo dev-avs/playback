@@ -797,6 +797,11 @@ function createWindow() {
   });
 
   win.setAlwaysOnTop(true, "screen-saver");
+  if (process.platform === "darwin") {
+    // A widget: on every Space and over full-screen apps, and no Dock icon.
+    win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
+    app.dock?.hide();
+  }
 
   // Closing the widget from the taskbar closes only this window. An open
   // settings window would keep the app alive, and the SMTC feed would go on
@@ -1033,7 +1038,7 @@ function runSetup(allowApply) {
       for (const a of r.actions) console.log("[setup]", a);
       if (r.error) console.error("[setup]", r.error);
       else if (r.needsApply) console.log("[setup] the bridge waits on `spicetify apply`");
-      return { ...r, firstRun };
+      return { ...r, firstRun, platform: process.platform };
     });
   return setupWork;
 }
@@ -1080,23 +1085,33 @@ function openSetup() {
  * Installed font families, for the settings window's font list. Read through
  * .NET's GDI view of the system, which includes per-user installs, so a font
  * the user just installed by right-click shows up. One spawn, then cached.
+ * macOS asks AppKit's font manager instead, through JavaScript for Automation
+ * (unverified on a real Mac; see docs/mac-port.md).
  */
 let fontList = null;
 function listFonts() {
   if (fontList) return fontList;
   fontList = new Promise((resolve) => {
-    const ps = spawn(
-      "powershell.exe",
-      [
-        "-NoProfile",
-        "-NonInteractive",
-        "-Command",
-        "[Console]::OutputEncoding=[Text.Encoding]::UTF8;" +
-          "Add-Type -AssemblyName System.Drawing;" +
-          "(New-Object System.Drawing.Text.InstalledFontCollection).Families | ForEach-Object Name",
-      ],
-      { windowsHide: true },
-    );
+    const ps =
+      process.platform === "darwin"
+        ? spawn("osascript", [
+            "-l",
+            "JavaScript",
+            "-e",
+            "ObjC.import('AppKit'); $.NSFontManager.sharedFontManager.availableFontFamilies.js.map((f) => f.js).join('\\n')",
+          ])
+        : spawn(
+            "powershell.exe",
+            [
+              "-NoProfile",
+              "-NonInteractive",
+              "-Command",
+              "[Console]::OutputEncoding=[Text.Encoding]::UTF8;" +
+                "Add-Type -AssemblyName System.Drawing;" +
+                "(New-Object System.Drawing.Text.InstalledFontCollection).Families | ForEach-Object Name",
+            ],
+            { windowsHide: true },
+          );
     let out = "";
     ps.stdout.on("data", (d) => (out += d));
     ps.on("error", () => resolve([]));
@@ -1118,20 +1133,30 @@ function broadcastTokenChange() {
 }
 
 app.whenReady().then(() => {
-  Menu.setApplicationMenu(null); // also removes the default devtools accelerators
+  if (process.platform === "darwin") {
+    // macOS sends Cmd+C/V/X/A/Z and Cmd+Q through the app menu, so keep those
+    // two menus there (still no devtools accelerators). Unverified on a Mac.
+    Menu.setApplicationMenu(Menu.buildFromTemplate([{ role: "appMenu" }, { role: "editMenu" }]));
+  } else {
+    Menu.setApplicationMenu(null); // also removes the default devtools accelerators
+  }
 
   // Lets the renderer capture the system audio mix, so the visualiser reacts
   // to whatever is actually playing. Windows needs a video source in the
   // request for loopback to be granted; the renderer stops that track at once.
-  session.defaultSession.setDisplayMediaRequestHandler(
-    (_request, callback) => {
-      desktopCapturer
-        .getSources({ types: ["screen"] })
-        .then((sources) => callback({ video: sources[0], audio: "loopback" }))
-        .catch(() => callback({}));
-    },
-    { useSystemPicker: false },
-  );
+  // Not on macOS: there it needs Screen Recording permission, so the capture
+  // is refused and the visualiser keeps its CSS bars, animated while playing.
+  if (process.platform !== "darwin") {
+    session.defaultSession.setDisplayMediaRequestHandler(
+      (_request, callback) => {
+        desktopCapturer
+          .getSources({ types: ["screen"] })
+          .then((sources) => callback({ video: sources[0], audio: "loopback" }))
+          .catch(() => callback({}));
+      },
+      { useSystemPicker: false },
+    );
+  }
 
   lyricsCache.init(app.getPath("userData"));
   idCache = createIdCache(path.join(app.getPath("userData"), "spotify-ids.json"));

@@ -61,6 +61,8 @@ export interface SetupState {
   needsApply: boolean;
   actions: string[];
   error?: string;
+  /** process.platform of the main process, so Setup can show the Mac commands */
+  platform?: string;
   status: {
     spotify: boolean;
     spicetify: boolean;

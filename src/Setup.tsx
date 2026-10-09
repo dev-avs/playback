@@ -8,9 +8,11 @@ import type { SetupState } from "./player";
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
 const CLOSE_MS = 200;
-// Spicetify's own install command, from spicetify.app
+// Spicetify's own install commands, from spicetify.app
 const INSTALL_SPICETIFY = "iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1 | iex";
+const INSTALL_SPICETIFY_MAC = "curl -fsSL https://raw.githubusercontent.com/spicetify/cli/main/install.sh | sh";
 const GET_SPOTIFY = "https://www.spotify.com/download/windows/";
+const GET_SPOTIFY_MAC = "https://www.spotify.com/download/mac/";
 
 type Mark = "ok" | "todo" | "wait";
 
@@ -63,8 +65,11 @@ export default function Setup() {
       .finally(() => setBusy(null));
   };
 
+  const mac = state?.platform === "darwin";
+  const install = mac ? INSTALL_SPICETIFY_MAC : INSTALL_SPICETIFY;
+
   const copy = () => {
-    window.player?.copyText?.(INSTALL_SPICETIFY).then(() => {
+    window.player?.copyText?.(install).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
@@ -132,7 +137,9 @@ export default function Setup() {
   else if (state.needsApply)
     bridge = {
       mark: "todo",
-      text: "In place. Spotify loads it once Spicetify is applied, which restarts Spotify.",
+      text: mac
+        ? "In place. Spotify loads it once Spicetify is applied, which restarts Spotify. macOS may ask to let player change Spotify: allow it."
+        : "In place. Spotify loads it once Spicetify is applied, which restarts Spotify.",
     };
   else bridge = { mark: "todo", text: "Not set up yet." };
 
@@ -167,8 +174,14 @@ export default function Setup() {
               "Desktop app found."
             ) : (
               <>
-                Install the desktop app from spotify.com. The Microsoft Store version can't run Spicetify.{" "}
-                <button type="button" className="su-link" onClick={() => window.player?.openLink?.(GET_SPOTIFY)}>
+                {mac
+                  ? "Install the desktop app from spotify.com."
+                  : "Install the desktop app from spotify.com. The Microsoft Store version can't run Spicetify."}{" "}
+                <button
+                  type="button"
+                  className="su-link"
+                  onClick={() => window.player?.openLink?.(mac ? GET_SPOTIFY_MAC : GET_SPOTIFY)}
+                >
                   Get Spotify
                 </button>
               </>
@@ -181,9 +194,9 @@ export default function Setup() {
               "Installed."
             ) : (
               <>
-                Paste this into PowerShell, follow its prompts, then Check again:
+                Paste this into {mac ? "Terminal" : "PowerShell"}, follow its prompts, then Check again:
                 <span className="su-cmd">
-                  <code>{INSTALL_SPICETIFY}</code>
+                  <code>{install}</code>
                   <button type="button" className="su-copy" onClick={copy}>
                     {copied ? "Copied" : "Copy"}
                   </button>
