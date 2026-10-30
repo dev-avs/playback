@@ -20,6 +20,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.8",
+    date: "2026-10-30",
+    changes: {
+      qol: ["Nothing new: this version exists to try updating from inside player."],
+    },
+  },
+  {
     version: "1.3.7",
     date: "2026-10-30",
     changes: {
