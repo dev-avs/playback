@@ -9,7 +9,7 @@ const {
   session,
   desktopCapturer,
 } = require("electron");
-const { spawn } = require("child_process");
+const { spawn, execFile } = require("child_process");
 const spotify = require("./spotify.cjs");
 const spicy = require("./spicy.cjs");
 const { resolveSpicyLyrics } = require("./spicyResolver.cjs");
@@ -1387,18 +1387,33 @@ app.whenReady().then(() => {
       console.error("[uninstall] bridge:", e.message);
     }
     const quote = (p) => `'${p.replace(/'/g, "''")}'`;
-    const script = [
+    const cleanup = [
       `Wait-Process -Id ${process.pid} -ErrorAction SilentlyContinue`,
       // the app's helper processes let go of the data folder a moment later
       "Start-Sleep -Seconds 2",
+      `Get-Process player -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq ${quote(process.execPath)} } | Stop-Process -Force`,
       `Start-Process -FilePath ${quote(uninstaller)} -ArgumentList '/S' -Wait`,
       `Remove-Item -LiteralPath ${quote(app.getPath("userData"))} -Recurse -Force -ErrorAction SilentlyContinue`,
     ].join("; ");
-    spawn("powershell.exe", ["-NoProfile", "-WindowStyle", "Hidden", "-Command", script], {
-      detached: true,
-      stdio: "ignore",
-      windowsHide: true,
-    }).unref();
+    // A child of this app, detached or not, is killed when the app exits, so
+    // the cleanup is started through WMI instead: Windows owns that process,
+    // and it outlives us.
+    const encoded = Buffer.from(cleanup, "utf16le").toString("base64");
+    const launcher = [
+      "$si = New-CimInstance -ClassName Win32_ProcessStartup -ClientOnly -Property @{ ShowWindow = [uint16]0 }",
+      `$r = Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = 'powershell.exe -NoProfile -WindowStyle Hidden -EncodedCommand ${encoded}'; ProcessStartupInformation = $si }`,
+      "if ($r.ReturnValue -ne 0) { exit 1 }",
+    ].join("; ");
+    try {
+      await new Promise((resolve, reject) =>
+        execFile("powershell.exe", ["-NoProfile", "-NonInteractive", "-Command", launcher], { windowsHide: true }, (err) =>
+          err ? reject(err) : resolve(),
+        ),
+      );
+    } catch (e) {
+      console.error("[uninstall] could not start the cleanup:", e.message);
+      return { ok: false, error: "Could not start the uninstaller." };
+    }
     app.quit();
     return { ok: true };
   });
