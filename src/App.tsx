@@ -1555,6 +1555,7 @@ export default function App() {
     const lines = lyricsInnerRef.current?.querySelectorAll<HTMLElement>(".lyric-line");
     const index = currentIdx >= 0 ? currentIdx : firstLyricIdx;
     scrollToLine(lines?.[index] ?? null);
+    setOutOfSync(false);
   }, [currentIdx, firstLyricIdx, scrollToLine]);
 
   // Reposition after loading/replacing lyrics and reopening the panel too.
@@ -1562,7 +1563,6 @@ export default function App() {
   useEffect(() => {
     if (!isSynced || !lyricsOpen || artMode) return;
     syncToCurrentLine();
-    setOutOfSync(false);
   }, [syncToCurrentLine, isSynced, lyricsOpen, artMode, dynamicLyrics, lyricSize, lyricFont]);
 
   // After a wheel scroll, follow the song again once the wheel has rested for
@@ -1576,7 +1576,6 @@ export default function App() {
     if (!outOfSync || !autoSync || !isSynced) return;
     const id = setTimeout(() => {
       syncRef.current();
-      setOutOfSync(false);
     }, autoSync * 1000);
     return () => clearTimeout(id);
   }, [outOfSync, wheelNonce, autoSync, isSynced]);
@@ -2106,10 +2105,7 @@ export default function App() {
         {!artMode && showLyrics && outOfSync && (
           <button
             className="sync-btn"
-            onClick={() => {
-              syncToCurrentLine();
-              setOutOfSync(false);
-            }}
+            onClick={syncToCurrentLine}
             aria-label="Sync"
           >
             Sync

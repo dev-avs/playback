@@ -20,6 +20,17 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.0",
+    date: "2026-10-30",
+    changes: {
+      fixes: [
+        "Changing the display scale in Windows while player was open cut the widget off. It now resizes to fit.",
+        "After skipping an update, this window showed only the newest version. It now lists every version since the one you had.",
+        "Songwriter and producer credits from NetEase (“will.i.am, producer”, “Remix：…”) were sung as lyrics. They now come off the lyrics.",
+      ],
+    },
+  },
+  {
     version: "1.3.9",
     date: "2026-10-30",
     changes: {

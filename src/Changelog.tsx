@@ -72,9 +72,9 @@ function Entries({ entries, heads }: { entries: ChangelogEntry[]; heads: boolean
 }
 
 /**
- * The changelog windows. `#changelog` shows only the latest update: opened by
- * the main process on a version's first launch (with `?from=<old version>`)
- * or from Settings → What's new. `#changelog-past` is the separate window its
+ * The changelog windows. `#changelog` shows the latest update, or every one
+ * since `?from=<old version>` when the main process opens it on a version's
+ * first launch; Settings → What's new opens it without `from`. `#changelog-past` is the separate window its
  * Past changelogs button opens, listing every version before that one.
  * Behaves like Spicy Lyrics' notice dialog: content staggers in, Escape
  * closes, Tab stays inside, the primary button has focus.
@@ -96,7 +96,18 @@ export default function Changelog() {
   const to = version ?? CHANGELOG[0].version;
   // the newest entry this build knows about, at or below its own version
   const latest = CHANGELOG.find((e) => compareVersions(e.version, to) <= 0) ?? CHANGELOG[0];
-  const entries = past ? CHANGELOG.filter((e) => compareVersions(e.version, latest.version) < 0) : [latest];
+  // After an update, every version since the one you had (1.3.7 → 1.3.9 shows
+  // 1.3.8 and 1.3.9), never fewer than the latest.
+  const since = from
+    ? CHANGELOG.filter(
+        (e) => compareVersions(e.version, from) > 0 && compareVersions(e.version, latest.version) <= 0,
+      )
+    : [];
+  const entries = past
+    ? CHANGELOG.filter((e) => compareVersions(e.version, latest.version) < 0)
+    : since.length
+      ? since
+      : [latest];
 
   const close = () => {
     if (closing) return;
@@ -182,7 +193,7 @@ export default function Changelog() {
           )}
         </p>
         <div style={stagger(2)} className="cl-stagger">
-          <Entries entries={entries} heads={past} />
+          <Entries entries={entries} heads={past || entries.length > 1} />
         </div>
         <div className="cl-actions" style={stagger(3)}>
           {!past && (

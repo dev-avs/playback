@@ -33,9 +33,4 @@ The installer is a web installer (`nsis-web`): `player-setup-<version>.exe` is a
 - The Spicetify bridge is `spicetify/player-bridge.js` (it was `player-token.js` until 1.3.3). `electron/spicetifySetup.cjs` checks and installs it; its tests are in `tests/spicetifySetup.test.cjs`.
 
 ## In progress (update or remove this section as it moves)
-- **Bug to fix:** the changelog after an update shows only the newest version. Updating 1.3.7 → 1.3.9 should show every version after the one you had (1.3.8 and 1.3.9), but it shows the same as 1.3.8 → 1.3.9. See `showChangelogAfterUpdate` in `electron/main.cjs` (`?from=<version>`) and `src/Changelog.tsx`.
-- Auto-update (1.3.7) can only be fully proven from 1.3.7 to a later release; check the update window and Settings → Behavior → Updates on the next one.
-- Spicy Lyrics key (`electron/spicyKey.cjs`): each user creates an application on the dashboard. A catalog template ("player") was submitted for review; once approved, switch `KEY_PAGE_URL` to its catalog page and the toast/Setup/Settings wording to "click Add".
-- The Spicy API's rules: show attribution with the lyrics, cache for no more than 30 days (`REFRESH_AFTER_MS` in `lyricsCache.cjs`).
-- Possibly later: NetEase sometimes returns credits as lyric lines ("Estelle -- American Boy (Ft. Kanye West)", "…, songwriters", "…, producer"); the user said to leave this for now.
-- `npm run lint` fails on a setState-in-effect in `App.tsx` (`setOutOfSync(false)`), already in 1.3.2; not fixed yet.
+- The changelog after an update now lists every version since the one you had (`?from=<version>` in `src/Changelog.tsx`). It can only be fully proven by updating across two releases, e.g. 1.3.9 → 1.4.1.

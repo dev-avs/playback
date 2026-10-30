@@ -717,6 +717,23 @@ function stopDrag() {
 let wantedHeight = null;
 let wantedHovered = false;
 
+/**
+ * The size each window last set itself to, so a display scale change can put
+ * it back. Windows leaves a non-resizable window at its old pixel size when the
+ * scale changes, which at the new scale is the wrong size (the widget was cut
+ * off on the right), and nothing in the page changes size to ask again.
+ */
+const windowSizes = new WeakMap();
+
+function setWindowSize(w, width, height) {
+  windowSizes.set(w, [width, height]);
+  // Windows ignores setSize on a non-resizable window, so lift the flag
+  // for the call and put it straight back — no user drag-resize.
+  w.setResizable(true);
+  w.setSize(width, height);
+  w.setResizable(false);
+}
+
 function applyWindowHeight(h, hovered) {
   if (!win) return;
   // Cancel any pending shrink first, before the drag and jitter checks below
@@ -737,11 +754,7 @@ function applyWindowHeight(h, hovered) {
 
   const apply = () => {
     if (!win) return;
-    // Windows ignores setSize on a non-resizable window, so lift the flag
-    // for the call and put it straight back — no user drag-resize.
-    win.setResizable(true);
-    win.setSize(win.getSize()[0], h);
-    win.setResizable(false);
+    setWindowSize(win, win.getSize()[0], h);
   };
 
   if (h > current) {
@@ -1169,6 +1182,16 @@ function broadcastTokenChange() {
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null); // also removes the default devtools accelerators
 
+  // Display scale changed (Windows Settings → Display → Scale): put every
+  // window back to the size it asked for. See windowSizes.
+  screen.on("display-metrics-changed", (_e, _display, changed) => {
+    if (!changed.includes("scaleFactor")) return;
+    for (const w of BrowserWindow.getAllWindows()) {
+      const size = windowSizes.get(w);
+      if (size) setWindowSize(w, ...size);
+    }
+  });
+
   // Lets the renderer capture the system audio mix, so the visualiser reacts
   // to whatever is actually playing. Windows needs a video source in the
   // request for loopback to be granted; the renderer stops that track at once.
@@ -1256,10 +1279,7 @@ app.whenReady().then(() => {
     const h = Math.max(120, Math.min(1000, Math.ceil(height)));
     const [width, current] = w.getSize();
     if (Math.abs(current - h) < 2) return;
-    // same Windows quirk as applyWindowHeight: setSize needs resizable
-    w.setResizable(true);
-    w.setSize(width, h);
-    w.setResizable(false);
+    setWindowSize(w, width, h);
   });
   ipcMain.handle("setup:state", () => setupWork);
   ipcMain.handle("setup:recheck", () => runSetup(false));
@@ -1277,10 +1297,7 @@ app.whenReady().then(() => {
     widgetOuterW = w;
     const [cw, ch] = win.getSize();
     if (cw === w) return;
-    // same Windows quirk as applyWindowHeight: setSize needs resizable
-    win.setResizable(true);
-    win.setSize(w, ch);
-    win.setResizable(false);
+    setWindowSize(win, w, ch);
   });
   ipcMain.handle("win:setHidden", (_e, hidden) => {
     if (!win) return;
@@ -1292,10 +1309,7 @@ app.whenReady().then(() => {
     if (!settingsWin) return;
     const h = Math.max(120, Math.min(1000, Math.ceil(height)));
     if (Math.abs(settingsWin.getSize()[1] - h) < 2) return;
-    // same Windows quirk as applyWindowHeight: setSize needs resizable
-    settingsWin.setResizable(true);
-    settingsWin.setSize(SETTINGS_W, h);
-    settingsWin.setResizable(false);
+    setWindowSize(settingsWin, SETTINGS_W, h);
   });
 
   // The Spicetify extension pushes the Spotify client's own token in here, with

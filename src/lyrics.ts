@@ -51,7 +51,7 @@ function parseMmSs(min: string, sec: string): number {
 
 /** `Role : names` — the shape NetEase and most Asian providers use. */
 const CREDIT_ROLE =
-  /^\s*(?:作词|作曲|编曲|填词|制作人|制作|监制|出品人|出品|发行|策划|统筹|企划|录音师|录音室|录音|混音|母带后期处理工程师|母带|和声|吉他|贝斯|鼓|键盘|钢琴|弦乐|词|曲|演唱|OP|SP|Lyricist|Composer|Arranger|Producer|Mixing|Mastering|Recording|Vocals?|Guitar|Bass|Drums|Piano|Keyboards?|Strings)\s*[:：]/i;
+  /^\s*(?:作词|作曲|编曲|填词|制作人|制作|监制|出品人|出品|发行|策划|统筹|企划|录音师|录音室|录音|混音|母带后期处理工程师|母带|和声|吉他|贝斯|鼓|键盘|钢琴|弦乐|词|曲|演唱|OP|SP|Lyricist|Composer|Arranger|Producer|Mixing|Mastering|Recording|Vocals?|Guitar|Bass|Drums|Piano|Keyboards?|Strings|Remix)\s*[:：]/i;
 
 /** `Written by name` — the shape LrcLib entries and Western uploads use. */
 const CREDIT_BY =
@@ -71,10 +71,24 @@ const CREDIT_BY =
  */
 const CREDIT_CJK_LABEL = /^\s*[一-鿿]{1,8}\s*[:：]\s*\S/;
 
+/**
+ * `names, role` — NetEase's English credit rows, role last:
+ *
+ *   作曲 : Kanye West/Keith Harris/William Adams
+ *   Estelle -- American Boy (Ft. Kanye West)
+ *   will.i.am, Estelle, John Legend, …, songwriters
+ *   will.i.am, producer
+ *
+ * Catching the last two is what lets the header scan reach past the title row
+ * between them and the first credit, so all four come off.
+ */
+const CREDIT_ROLE_LAST =
+  /,\s*(?:songwriters?|writers?|lyricists?|composers?|producers?|co-producers?|arrangers?|engineers?|mixers?)\s*$/i;
+
 function isCreditLine(text: string): boolean {
   const t = text.trim();
   if (!t) return false;
-  return CREDIT_ROLE.test(t) || CREDIT_BY.test(t) || CREDIT_CJK_LABEL.test(t);
+  return CREDIT_ROLE.test(t) || CREDIT_BY.test(t) || CREDIT_CJK_LABEL.test(t) || CREDIT_ROLE_LAST.test(t);
 }
 
 /**
