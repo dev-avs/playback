@@ -20,6 +20,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.9",
+    date: "2026-10-30",
+    changes: {
+      fixes: ["Update failed with “no such file or directory … app-update.yml”. Updating from inside player works now."],
+    },
+  },
+  {
     version: "1.3.8",
     date: "2026-10-30",
     changes: {

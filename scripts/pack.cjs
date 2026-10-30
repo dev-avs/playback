@@ -5,11 +5,15 @@
 // package.json, and exactly the production dependencies npm reports. Packager's
 // own pruning dropped electron-updater, so it is turned off here.
 
+const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 const { packager } = require("@electron/packager");
 
 const root = path.resolve(__dirname, "..");
+
+// Matches build.publish in package.json.
+const APP_UPDATE_YML = "owner: dev-avs\nrepo: player\nprovider: github\nupdaterCacheDirName: player-updater\n";
 
 const prodModules = execSync("npm ls --omit=dev --all --parseable", { cwd: root, encoding: "utf8" })
   .split(/\r?\n/)
@@ -33,7 +37,15 @@ packager({
   prune: false,
   ignore: (p) => p !== "" && !keep(p.split(path.sep).join("/")),
 })
-  .then((paths) => console.log(`packaged ${paths.join(", ")} with ${prodModules.length} production modules`))
+  .then((paths) => {
+    // electron-builder writes this into resources when it packages the app
+    // itself; with --prepackaged it does not, and electron-updater needs it to
+    // download an update (electron/updater.cjs).
+    for (const dir of paths) {
+      fs.writeFileSync(path.join(dir, "resources", "app-update.yml"), APP_UPDATE_YML);
+    }
+    console.log(`packaged ${paths.join(", ")} with ${prodModules.length} production modules`);
+  })
   .catch((e) => {
     console.error(e);
     process.exit(1);
