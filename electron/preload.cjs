@@ -57,6 +57,17 @@ contextBridge.exposeInMainWorld("player", {
     return () => ipcRenderer.off("bridge:track", handler);
   },
 
+  // The user's own Spicy Lyrics API key (electron/spicyKey.cjs).
+  spicyKeyStatus: () => ipcRenderer.invoke("spicyKey:status"),
+  connectSpicyKey: () => ipcRenderer.invoke("spicyKey:connect"),
+  setSpicyKey: (raw) => ipcRenderer.invoke("spicyKey:set", raw),
+  clearSpicyKey: () => ipcRenderer.invoke("spicyKey:clear"),
+  onSpicyKeyChanged(cb) {
+    const handler = () => cb();
+    ipcRenderer.on("spicyKey:changed", handler);
+    return () => ipcRenderer.off("spicyKey:changed", handler);
+  },
+
   spotifyStatus: () => ipcRenderer.invoke("spotify:status"),
   spotifyLogin: () => ipcRenderer.invoke("spotify:login"),
   spotifySetToken: (token) => ipcRenderer.invoke("spotify:setToken", token),

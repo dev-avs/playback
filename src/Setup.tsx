@@ -49,10 +49,24 @@ export default function Setup() {
   const [closing, setClosing] = useState(false);
   const [art] = usePersisted<string | null>(KEYS.art, null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [hasKey, setHasKey] = useState<boolean | null>(null);
+  const [gettingKey, setGettingKey] = useState(false);
 
   useEffect(() => {
     window.player?.setupState?.().then(setState);
   }, []);
+
+  useEffect(() => {
+    const refresh = () => window.player?.spicyKeyStatus?.().then((k) => setHasKey(k.set));
+    refresh();
+    return window.player?.onSpicyKeyChanged?.(refresh);
+  }, []);
+
+  const getKey = () => {
+    if (gettingKey) return;
+    setGettingKey(true);
+    window.player?.connectSpicyKey?.().finally(() => setGettingKey(false));
+  };
 
   const run = (kind: "check" | "apply") => {
     const call = kind === "apply" ? window.player?.applySetup : window.player?.recheckSetup;
@@ -152,14 +166,30 @@ export default function Setup() {
         <div className="cl-heading" style={stagger(0)}>
           <p className="cl-brand">player</p>
           <h2 className="cl-title" id="su-title">
-            {state?.ready && !busy ? "You're all set" : "Set up Spotify"}
+            {state?.ready && hasKey && !busy ? "You're all set" : "Set up lyrics"}
           </h2>
         </div>
         <p className="cl-text" style={stagger(1)}>
-          Lyrics work with any player. With Spotify and Spicetify, the widget also gets Spotify's own track
-          and queue, and Spicy Lyrics' word timing.
+          Lyrics work with any player. A free Spicy Lyrics key gets word-by-word timing; Spotify and
+          Spicetify add Spotify's own track and queue.
         </p>
         <ul className="su-steps" style={stagger(2)}>
+          <Step mark={hasKey === null ? "wait" : hasKey ? "ok" : "todo"} name="Spicy Lyrics key">
+            {hasKey === null ? (
+              "Checking…"
+            ) : hasKey ? (
+              "Saved. Change it any time in Settings → Behavior."
+            ) : gettingKey ? (
+              "Sign in, create an application, then copy its key. player picks it up from the clipboard."
+            ) : (
+              <>
+                Your own free key for word-by-word lyrics.{" "}
+                <button type="button" className="su-link" onClick={getKey}>
+                  Get key
+                </button>
+              </>
+            )}
+          </Step>
           <Step mark={checking ? "wait" : s!.spotify ? "ok" : "todo"} name="Spotify">
             {checking ? (
               "Checking…"

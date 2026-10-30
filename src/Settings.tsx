@@ -156,7 +156,6 @@ const CATEGORIES = [
   { id: "album", name: "Album mode", icon: "◼" },
   { id: "fun", name: "Fun", icon: "✿" },
   { id: "behavior", name: "Behavior", icon: "⚙" },
-  { id: "spotify", name: "Spotify", icon: "●" },
 ] as const;
 type Category = (typeof CATEGORIES)[number]["id"];
 
@@ -414,6 +413,37 @@ export default function Settings() {
   }, [fontsOpen, cat, query, fonts]);
   const shownFonts = (fonts ?? []).filter((f) => f.toLowerCase().includes(fontQuery.trim().toLowerCase()));
   const customFont = s.lyricFont in LYRIC_FONTS ? null : s.lyricFont;
+
+  // ── Spicy Lyrics key ──
+  const [spicyKey, setSpicyKey] = useState<{ set: boolean; ending: string | null } | null>(null);
+  const [keyBusy, setKeyBusy] = useState(false);
+  const [pastingKey, setPastingKey] = useState(false);
+  const [keyError, setKeyError] = useState<string | null>(null);
+  useEffect(() => {
+    const refresh = () => window.player?.spicyKeyStatus?.().then(setSpicyKey).catch(() => {});
+    refresh();
+    return window.player?.onSpicyKeyChanged?.(refresh);
+  }, []);
+  const getKey = () => {
+    if (keyBusy) return;
+    setKeyBusy(true);
+    setKeyError(null);
+    window.player?.connectSpicyKey?.().finally(() => setKeyBusy(false));
+  };
+  const saveKey = async (raw: string) => {
+    const res = await window.player?.setSpicyKey?.(raw);
+    if (res?.ok) {
+      setPastingKey(false);
+      setKeyError(null);
+    } else {
+      setKeyError(res?.error ?? "could not save that key");
+    }
+  };
+  const keyStatus = keyBusy
+    ? "waiting for you to copy your key…"
+    : spicyKey?.set
+      ? `saved · ends in ${spicyKey.ending}`
+      : "none — word-by-word lyrics then need Spotify open";
 
   // ── Spotify token ──
   const [auth, setAuth] = useState<{ signedIn: boolean; tokenExpiresAt: number | null } | null>(null);
@@ -778,13 +808,69 @@ export default function Settings() {
     toggle("behavior", "showChangelog", "Show changelog after updates", "Open What's new on the first launch of each new version."),
     toggle("behavior", "alwaysOnTop", "Always on top", "Keep the widget above every other window."),
 
-    // Spotify
+    // Lyrics keys
+    {
+      id: "spicyKey",
+      cat: "behavior",
+      label: "Spicy Lyrics key",
+      hint: keyStatus,
+      desc: "Your own free key for word-by-word lyrics from Spicy Lyrics, with any player. Get key opens Spicy Lyrics: sign in, create an application, then copy its key.",
+      control: (
+        <span className="st-inline">
+          {spicyKey?.set && (
+            <button className="st-pill" onClick={() => window.player?.clearSpicyKey?.()}>
+              Clear
+            </button>
+          )}
+          <button
+            className="st-pill"
+            onClick={() => {
+              setKeyError(null);
+              setPastingKey((p) => !p);
+            }}
+          >
+            {pastingKey ? "Cancel" : "Paste"}
+          </button>
+          <button className="st-pill" disabled={keyBusy} onClick={getKey}>
+            {spicyKey?.set ? "Change" : "Get key"}
+          </button>
+        </span>
+      ),
+      below: (pastingKey || keyError) && (
+        <>
+          {pastingKey && (
+            <form
+              className="st-token"
+              onSubmit={(e) => {
+                e.preventDefault();
+                saveKey((e.currentTarget.elements.namedItem("spicyKey") as HTMLInputElement).value);
+              }}
+            >
+              <input
+                name="spicyKey"
+                type="password"
+                placeholder="Paste Spicy Lyrics key (sl_sk_…)"
+                autoFocus
+                spellCheck={false}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") setPastingKey(false);
+                }}
+              />
+              <button className="st-pill" type="submit">
+                Save
+              </button>
+            </form>
+          )}
+          {keyError && <div className="st-error">{keyError}</div>}
+        </>
+      ),
+    },
     {
       id: "token",
-      cat: "spotify",
-      label: "Token",
+      cat: "behavior",
+      label: "Spotify token",
       hint: tokenStatus,
-      desc: "Spotify's pass for word-by-word lyrics. Spotify sends it by itself while it is open.",
+      desc: "Spotify's pass for word-by-word lyrics when there is no Spicy Lyrics key, or it fails. Spotify sends it by itself while it is open.",
       control: (
         <span className="st-inline">
           {auth?.signedIn && (

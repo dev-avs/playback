@@ -43,6 +43,39 @@ interface SpicyLyrics {
   StartTime?: number;
   /** structured credits — never part of the lyric content */
   SongWriters?: string[];
+  /** which catalogue answered; only the public API (v1) sends it */
+  source?: "spicy_lyrics" | "apple_music" | "spotify" | "unknown" | string;
+  /** present only on community syncs */
+  UploadAttribution?: { Uploader?: SpicyContributor; Maker?: SpicyContributor };
+}
+
+interface SpicyContributor {
+  username?: string;
+  url?: string;
+}
+
+/** Who to credit for these lyrics, as the API's terms require on screen. */
+export interface SpicyAttribution {
+  provider: string;
+  uploader?: { name: string; url?: string };
+  maker?: { name: string; url?: string };
+}
+
+const PROVIDER_NAMES: Record<string, string> = {
+  spicy_lyrics: "Spicy Lyrics",
+  apple_music: "Apple Music",
+  spotify: "Spotify",
+};
+
+function attributionOf(data: SpicyLyrics): SpicyAttribution | null {
+  if (!data.source) return null;
+  const person = (c?: SpicyContributor) => (c?.username ? { name: c.username, url: c.url } : undefined);
+  const credit = data.source === "spicy_lyrics" ? data.UploadAttribution : undefined;
+  return {
+    provider: PROVIDER_NAMES[data.source] ?? "Spicy Lyrics",
+    uploader: person(credit?.Uploader),
+    maker: person(credit?.Maker),
+  };
 }
 
 export interface SpicyResult {
@@ -52,6 +85,8 @@ export interface SpicyResult {
   /** display-ready credit lines, rendered apart from the lyrics */
   credits: string[];
   synced: boolean;
+  /** present for answers from the public API, which must be credited on screen */
+  attribution: SpicyAttribution | null;
   /**
    * Finest timing this payload carries. Spicy is asked first because it is the
    * only source of syllable timing for most catalogue, but it does not win by
@@ -236,6 +271,7 @@ export async function loadSpicyLyrics(req: {
     romanized: romanized?.length ? romanized : null,
     credits: writers.length ? [`Written by: ${writers.join(", ")}`] : [],
     synced,
+    attribution: attributionOf(data),
     tier:
       data.Type === "Syllable"
         ? TIER.syllable

@@ -1,6 +1,17 @@
 // Refresh coarser cached lyrics when the request version changes. Keep the
 // previous payload available if authentication or the network is unavailable.
-async function resolveSpicyLyrics(trackId, clientLyrics, { spicy, cache, getAccessToken, enabled = true }) {
+//
+// With the user's own API key, the public API is asked first; the Spotify
+// token route through the Spicetify bridge is only the fallback for when the
+// key is missing, refused, rate limited or the API is down.
+
+// Stored as the cache entry's clientVersion, so an API answer is not asked for
+// again on every play.
+const API_VERSION = "v1";
+// Set from a 429's Retry-After; until then the API is skipped.
+let apiBlockedUntil = 0;
+
+async function resolveSpicyLyrics(trackId, clientLyrics, { spicy, cache, getAccessToken, apiKey, enabled = true }) {
   if (!trackId) return { status: "no-track" };
 
   const stored = cache.get(trackId);
@@ -16,6 +27,25 @@ async function resolveSpicyLyrics(trackId, clientLyrics, { spicy, cache, getAcce
   // The finest timing needs neither a network request nor a token.
   if (cached && spicy.timingTier(cached.data) === 2) return asResponse(cached);
   if (!enabled) return fallback({ status: "disabled" });
+
+  if (apiKey && Date.now() >= apiBlockedUntil) {
+    if (cached?.clientVersion === API_VERSION) return asResponse(cached);
+    try {
+      const r = await spicy.getLyrics(trackId, apiKey);
+      if (r.httpStatus === 200 && r.data) {
+        const tier = spicy.timingTier(r.data);
+        if (cached && tier < spicy.timingTier(cached.data)) return asResponse(cached);
+        if (tier > 0) cache.put(trackId, "lyrics", r.data, API_VERSION);
+        return { status: "ok", lyrics: r.data, trackId };
+      }
+      // The same catalogue the token route asks, so it has nothing either.
+      if (r.httpStatus === 404) return fallback({ status: "not-found", httpStatus: 404 });
+      if (r.retryAfter) apiBlockedUntil = Date.now() + r.retryAfter * 1000;
+      console.error(`[spicy] API answered ${r.httpStatus}${r.error ? ` (${r.error})` : ""}; trying the bridge`);
+    } catch (e) {
+      console.error("[spicy] API unreachable; trying the bridge:", e.message);
+    }
+  }
 
   try {
     const token = await getAccessToken();

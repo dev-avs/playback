@@ -19,6 +19,7 @@ const spicetifySetup = require("./spicetifySetup.cjs");
 const lyricsCache = require("./lyricsCache.cjs");
 const { pickTrack, createIdCache } = require("./spotifyLookup.cjs");
 const quickOpen = require("./spotifyQuickOpen.cjs");
+const spicyKey = require("./spicyKey.cjs");
 
 // One widget at a time. A second launch (a shortcut, the Start menu, the
 // installer's run-after-finish) would add a second widget fighting the first
@@ -137,6 +138,7 @@ function preloadNext(next) {
     spicy,
     cache: lyricsCache,
     getAccessToken: () => spotify.getAccessToken(),
+    apiKey: spicyKey.get(),
   })
     .then((r) => console.log(`[preload] ${next.name}: ${r.status}`))
     .catch(() => {});
@@ -1140,6 +1142,7 @@ app.whenReady().then(() => {
   );
 
   lyricsCache.init(app.getPath("userData"));
+  spicyKey.load();
   idCache = createIdCache(path.join(app.getPath("userData"), "spotify-ids.json"));
   // Keep the Spicetify bridge in place and current (spicetifySetup.cjs). Only
   // a first run (no version recorded yet) applies Spicetify on its own, which
@@ -1338,9 +1341,24 @@ app.whenReady().then(() => {
       spicy,
       cache: lyricsCache,
       getAccessToken: () => spotify.getAccessToken(),
+      apiKey: spicyKey.get(),
       enabled: SPICY_ENABLED,
     });
   });
+
+  // The user's own Spicy Lyrics key (spicyKey.cjs). Every change is broadcast,
+  // so Setup, Settings and the widget's lyrics follow along.
+  const spicyKeyChanged = (result) => {
+    if (result?.ok !== false) {
+      for (const w of BrowserWindow.getAllWindows()) w.webContents.send("spicyKey:changed");
+    }
+    return result;
+  };
+  ipcMain.handle("spicyKey:status", () => spicyKey.status());
+  ipcMain.handle("spicyKey:connect", (e) =>
+    spicyKey.connect(BrowserWindow.fromWebContents(e.sender)).then(spicyKeyChanged));
+  ipcMain.handle("spicyKey:set", (_e, raw) => spicyKey.set(raw).then(spicyKeyChanged));
+  ipcMain.handle("spicyKey:clear", () => spicyKeyChanged(spicyKey.clear()));
   ipcMain.handle("win:dragStart", () => startDrag());
   ipcMain.handle("win:dragEnd", () => stopDrag());
 

@@ -14,7 +14,7 @@ import {
   linesNeedRomanization,
   romanizeLines,
 } from "./romanize";
-import { loadSpicyLyrics } from "./spicy";
+import { loadSpicyLyrics, type SpicyAttribution } from "./spicy";
 import { BAR_COUNT, useAudioBars } from "./useAudioBars";
 import {
   collectLine,
@@ -279,6 +279,32 @@ function fmt(s: number, remaining = false): string {
 /* Rendered a touch larger than the 13px it replaced: this glyph fills 17 of
    the 24 units where the old outline one spanned nearly the whole box, so the
    bigger container is what keeps its *drawn* size unchanged beside repeat. */
+/** The provider, and for community syncs the people who made them, linked. */
+function LyricsAttribution({ credit }: { credit: SpicyAttribution }) {
+  const person = (p: { name: string; url?: string }) =>
+    p.url ? (
+      <button
+        className="lyrics-attribution-link"
+        data-nodrag
+        onClick={(e) => {
+          e.stopPropagation();
+          window.player?.openLink?.(p.url!);
+        }}
+      >
+        {p.name}
+      </button>
+    ) : (
+      p.name
+    );
+  return (
+    <div className="lyrics-attribution">
+      <span>Lyrics from {credit.provider}</span>
+      {credit.uploader && <span>Uploaded by {person(credit.uploader)}</span>}
+      {credit.maker && <span>Made by {person(credit.maker)}</span>}
+    </div>
+  );
+}
+
 const IconShuffle = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
     <path transform="matrix(0.0106 0 0 -0.0106 1.757 19.6007)" d="M1385 1303V868C1385 832 1408 809 1442 809C1460 809 1475 816 1488 827L1751 1038C1780 1063 1781 1106 1752 1131L1487 1346C1474 1356 1459 1361 1442 1361C1407 1361 1385 1339 1385 1303ZM1434 1010C1472 1010 1503 1041 1503 1079C1503 1118 1472 1149 1434 1149H1263C1146 1149 1074 1114 988 1014L574 528C515 457 471 434 400 434H239C197 434 165 404 165 365C165 325 195 296 239 296H398C515 296 587 331 673 430L1088 916C1146 986 1190 1010 1267 1010ZM1386 135C1386 100 1408 78 1443 78C1460 78 1475 83 1488 93L1753 308C1782 333 1781 376 1752 401L1489 612C1476 623 1461 630 1443 630C1409 630 1386 607 1386 571ZM1435 429H1268C1191 429 1148 453 1089 523L674 1009C588 1109 516 1143 399 1143H240C196 1143 166 1114 166 1074C166 1035 198 1005 240 1005H402C472 1005 516 982 575 911L989 425C1075 325 1147 290 1264 290H1435C1473 290 1504 321 1504 360C1504 398 1473 429 1435 429Z" />
@@ -665,6 +691,8 @@ export default function App() {
     synced?: boolean;
     /** songwriter credits, shown below the lyrics rather than sung as lines */
     credits?: string[];
+    /** who to credit for Spicy Lyrics API answers; always on screen with them */
+    attribution?: SpicyAttribution | null;
     /** true when the per-word timings were guessed, not supplied by the source */
     wordsEstimated?: boolean;
     source?: string;
@@ -921,6 +949,7 @@ export default function App() {
   const sourceLyrics = lyricsFor.key === np.trackKey ? lyricsFor.lines : EMPTY_LINES;
   const credits =
     lyricsFor.key === np.trackKey ? (lyricsFor.credits ?? EMPTY_CREDITS) : EMPTY_CREDITS;
+  const attribution = lyricsFor.key === np.trackKey ? (lyricsFor.attribution ?? null) : null;
   // No real word sync from this source — sweep the line rather than pretend to
   // follow words we only guessed at.
   const lineSweep = lyricsFor.key === np.trackKey && lyricsFor.wordsEstimated === true;
@@ -1065,6 +1094,7 @@ export default function App() {
           status: "ok",
           synced: r.synced,
           credits: r.credits,
+          attribution: r.attribution,
           source: "spicy",
           tier: r.tier,
         });
@@ -1205,6 +1235,11 @@ export default function App() {
   // often already showing a coarser source by then, so look again.
   useEffect(() => {
     return window.player?.onSpicyLyrics?.(() => setReloadNonce((n) => n + 1));
+  }, []);
+
+  // A new Spicy Lyrics key may have lyrics the bridge could not get.
+  useEffect(() => {
+    return window.player?.onSpicyKeyChanged?.(() => setReloadNonce((n) => n + 1));
   }, []);
 
   // Spotify's next track, from the Spicetify extension. Asked again whenever
@@ -1392,7 +1427,7 @@ export default function App() {
     // The spacers let the opening and closing lines reach the same position,
     // just below the panel's top edge, and no further: scrolling the spacers
     // themselves into view only shows an empty panel.
-    const rows = inner.querySelectorAll<HTMLElement>(".lyric-line, .lyrics-credits");
+    const rows = inner.querySelectorAll<HTMLElement>(".lyric-line, .lyrics-credits, .lyrics-attribution");
     if (!rows.length) return 0;
     const min = rows[0].offsetTop - LYRIC_ANCHOR;
     const max = rows[rows.length - 1].offsetTop - LYRIC_ANCHOR;
@@ -1417,7 +1452,7 @@ export default function App() {
     let idle = 0;
     let gliding: HTMLElement | null = null;
     const wheelMax = () => {
-      const rows = lyricsInnerRef.current?.querySelectorAll<HTMLElement>(".lyric-line, .lyrics-credits");
+      const rows = lyricsInnerRef.current?.querySelectorAll<HTMLElement>(".lyric-line, .lyrics-credits, .lyrics-attribution");
       const last = rows?.[rows.length - 1];
       return last ? last.offsetTop + last.offsetHeight - panelHeight * 0.6 : 0;
     };
@@ -2054,6 +2089,9 @@ export default function App() {
                     ))}
                   </div>
                 )}
+                {/* Required by the Spicy Lyrics API's terms wherever its
+                    lyrics show, so "hide credits" does not hide it. */}
+                {attribution && <LyricsAttribution credit={attribution} />}
                 {/* Enough trailing room to align even a one-line song near the top. */}
                 <div style={{ height: panelHeight }} />
               </div>

@@ -1,4 +1,9 @@
-import { $lyricsContainerExists, $minimalLyricsMode, $simpleLyricsMode } from "../../../../utils/stores.ts";
+import {
+  $joinSplitWords,
+  $lyricsContainerExists,
+  $minimalLyricsMode,
+  $simpleLyricsMode,
+} from "../../../../utils/stores.ts";
 import { PageContainer } from "../../../../components/Pages/PageView.ts";
 import { applyStyles, removeAllStyles } from "../../../CSS/Styles.ts";
 import {
@@ -24,12 +29,12 @@ import { CreateLyricsContainer, DestroyAllLyricsContainers } from "../CreateLyri
 import { StripZeroWidth } from "../Utils/StripZeroWidth.ts";
 import { PickDisplayText } from "../Utils/PickDisplayText.ts";
 import { initLyricsVirtualizer } from "../../LyricsVirtualizer.ts";
-import { ApplyIsByCommunity } from "../Credits/ApplyIsByCommunity.tsx";
-import { ApplyLyricsCredits } from "../Credits/ApplyLyricsCredits.ts";
+import { ApplySongCredits, MarkLastLineSide } from "../Credits/ApplyLyricsCredits.ts";
 import { EmitApply, EmitNotApplyed } from "../OnApply.ts";
 import Emphasize from "../Utils/Emphasize.ts";
-import { IsLetterCapable } from "../Utils/IsLetterCapable.ts";
-import { ApplyLyricsProvider } from "../Credits/ApplyProvider.ts";
+import { IsLetterCapable, MinLetterCapableDuration } from "../Utils/IsLetterCapable.ts";
+import { JoinSplitWords } from "../Utils/JoinSplitWords.ts";
+import { SplitLetters } from "../Utils/SplitLetters.ts";
 import { HasRenderableText, IsEmptySyllableGroup, RemoveEmptyLyricsLines } from "../../EmptyLines.ts";
 
 // Define the data structure for syllable lyrics
@@ -64,10 +69,17 @@ interface LyricsData {
   Content: LineData[];
   StartTime: number;
   SongWriters?: string[];
-  source?: "spt" | "spl" | "aml";
+  source?: "spt" | "spl" | "aml" | "uns";
   classes?: string;
   styles?: Record<string, string>;
 }
+
+// Joined before the empty parts are dropped, so a separator between two words
+// still ends the run and they aren't joined across it.
+const renderableSyllables = (syllables: SyllableData[]): SyllableData[] => {
+  const parts = $joinSplitWords.get() ? JoinSplitWords(syllables) : syllables;
+  return parts.filter(HasRenderableText);
+};
 
 export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = false): void {
   if (!$lyricsContainerExists.get()) return;
@@ -95,6 +107,12 @@ export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = fa
     line.Background?.some(bg => bg.Syllables.some(syllable => isRtl(syllable.Text))) === true
   );
   LyricsContainer.classList.toggle("HasRtlLines", hasRtlLines);
+  const lastLine = content[content.length - 1];
+  MarkLastLineSide(
+    LyricsContainer,
+    !!lastLine?.OppositeAligned,
+    !!lastLine?.Lead.Syllables.some(syllable => isRtl(syllable.Text))
+  );
 
   LyricsContainer.setAttribute("data-lyrics-type", "Syllable");
 
@@ -235,7 +253,7 @@ export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = fa
 
     let currentWordGroup: HTMLSpanElement | null = null;
 
-    line.Lead.Syllables.filter(HasRenderableText).forEach((lead, iL, aL) => {
+    renderableSyllables(line.Lead.Syllables).forEach((lead, iL, aL) => {
       let word = document.createElement("span");
 
       if (isRtl(lead.Text) && !lineElem.classList.contains("rtl")) {
@@ -248,15 +266,15 @@ export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = fa
         PickDisplayText(lead, UseRomanized)
       );
 
-      const letterLength = leadRenderText.split("").length;
+      // Too short to split whatever its letters: skip the grapheme split.
+      const letters = totalDuration >= MinLetterCapableDuration() ? SplitLetters(leadRenderText) : [];
+      const letterLength = letters.length;
 
       const IfLetterCapable =
         letterLength > 0 && IsLetterCapable(letterLength, totalDuration) && !isRtl(leadRenderText);
 
       if (IfLetterCapable) {
         word = document.createElement("div");
-        const letters = leadRenderText.split(""); // Split word into individual letters
-
         Emphasize(letters, word, lead);
 
         iL === aL.length - 1
@@ -344,7 +362,7 @@ export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = fa
 
         let currentBGWordGroup: HTMLSpanElement | null = null;
 
-        bg.Syllables.filter(HasRenderableText).forEach((bw, bI, bA) => {
+        renderableSyllables(bg.Syllables).forEach((bw, bI, bA) => {
           let bwE = document.createElement("span");
 
           if (isRtl(bw.Text) && !lineE.classList.contains("rtl")) {
@@ -357,15 +375,15 @@ export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = fa
             PickDisplayText(bw, UseRomanized)
           );
 
-          const letterLength = bgRenderText.split("").length;
+          // Too short to split whatever its letters: skip the grapheme split.
+          const letters = totalDuration >= MinLetterCapableDuration() ? SplitLetters(bgRenderText) : [];
+          const letterLength = letters.length;
 
           const IfLetterCapable =
             letterLength > 0 && IsLetterCapable(letterLength, totalDuration) && !isRtl(bgRenderText);
 
           if (IfLetterCapable) {
             bwE = document.createElement("div");
-            const letters = bgRenderText.split(""); // Split word into individual letters
-
             Emphasize(letters, bwE, bw, true);
 
             bI === bA.length - 1
@@ -532,9 +550,7 @@ export function ApplySyllableLyrics(data: LyricsData, UseRomanized: boolean = fa
     }
   });
 
-  ApplyLyricsCredits(data, LyricsContainer);
-  ApplyLyricsProvider(data, LyricsContainer);
-  ApplyIsByCommunity(data, LyricsContainer);
+  ApplySongCredits(data, LyricsContainer);
 
   if (LyricsContainerParent) {
     LyricsContainerInstance.Append(LyricsContainerParent);

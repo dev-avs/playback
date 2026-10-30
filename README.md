@@ -28,6 +28,10 @@ as usual; player just sits on top and follows along.
 2. player opens with a **Setup** window the first time. It's a checklist
    (see below). Lyrics already work with any player, so you can close it if you
    don't use Spotify.
+   Its first step, **Spicy Lyrics key**, gets you your own free key for
+   word-by-word lyrics: click **Get key**, sign in, create an application (name
+   and project are filled in) and copy the key. player picks it up by itself.
+   You can also get or paste one later in Settings → Behavior.
 3. Start some music and it shows up in the widget. Drag the widget anywhere.
 
 Windows 10 or 11 is required.
@@ -65,14 +69,14 @@ only comes back if something needs you.
 ### Settings
 
 Settings has a search box and these sections: Lyrics, Languages, Text,
-Highlight, Surface, Layout, Album mode, Fun, Behavior and Spotify. Every section
-has its own Reset. Useful ones:
+Highlight, Surface, Layout, Album mode, Fun and Behavior. Every section has its
+own Reset. Useful ones:
 
-- **Behavior:** always on top, hide when nothing plays, open with lyrics shown.
+- **Behavior:** always on top, hide when nothing plays, open with lyrics shown,
+  your Spicy Lyrics key for word-by-word lyrics, and the Spotify token used when
+  there is no key (Spicetify sends it by itself; you can also paste one).
 - **Lyrics:** pick a provider, or shift the timing if lyrics run early or late
   (for all songs or just this one).
-- **Spotify:** the token used for word-by-word lyrics. Spicetify sends it by
-  itself; you can also paste one.
 
 **What's new** in Settings shows the changelog. It also opens by itself after an
 update (you can turn that off in Behavior).
@@ -180,7 +184,7 @@ Syllable-timed lyrics with built-in transliteration, tried before the
 LrcLib/NetEase chain and silently skipped whenever it can't serve a track. It is
 keyed by **Spotify track id** and needs a **real user token**, neither of which
 SMTC provides. Both normally come from the Spicetify bridge; a token can also be
-pasted in Settings → Spotify.
+pasted in Settings → Behavior.
 
 There is also an optional Spotify login, which resolves tracks through the
 Search API:

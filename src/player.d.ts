@@ -114,6 +114,14 @@ export interface PlayerBridge {
    */
   onSpicyLyrics?(cb: () => void): () => void;
 
+  /** The user's Spicy Lyrics API key: whether one is saved, and its last four characters. */
+  spicyKeyStatus?(): Promise<{ set: boolean; ending: string | null }>;
+  /** Opens the Spicy Lyrics catalog to get a key; ok once one is checked and saved. */
+  connectSpicyKey?(): Promise<{ ok: boolean; error?: string }>;
+  setSpicyKey?(raw: string): Promise<{ ok: boolean; error?: string }>;
+  clearSpicyKey?(): Promise<void>;
+  onSpicyKeyChanged?(cb: () => void): () => void;
+
   /** The Spicetify extension reported a new track; Spotify's cover is now known. */
   onBridgedTrack?(cb: () => void): () => void;
 

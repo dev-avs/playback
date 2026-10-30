@@ -20,6 +20,22 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.4",
+    date: "2026-10-30",
+    changes: {
+      new: [
+        "Your own Spicy Lyrics key for word-by-word lyrics, no Spotify token needed. Get key opens Spicy Lyrics: sign in, create an application (the name and project are filled in for you) and copy the key. player picks it up from the clipboard.",
+        "Setup has a Spicy Lyrics key step, and Settings → Behavior lets you get, paste, change or clear the key.",
+        "Lyrics from Spicy Lyrics show where they came from under the lyrics, and who made community syncs, with links.",
+      ],
+      qol: [
+        "The Spotify section is gone from Settings; the Spotify token now sits in Behavior, next to the Spicy Lyrics key.",
+        "Without a key, or if it stops working, lyrics come through Spotify and the bridge as before.",
+      ],
+      fixes: ["Saved lyrics are fetched again after 30 days, as Spicy Lyrics' rules ask."],
+    },
+  },
+  {
     version: "1.3.3",
     date: "2026-10-08",
     changes: {

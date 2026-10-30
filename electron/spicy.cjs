@@ -205,4 +205,30 @@ async function queryLyrics(trackId, accessToken) {
   return { httpStatus: job.result.httpStatus, data: job.result.data, clientVersion: version };
 }
 
-module.exports = { queryLyrics, clientVersion, timingTier };
+/**
+ * The public API (developers.spicylyrics.org): `GET /v1/lyrics/{id}` with the
+ * user's own key. No Spotify token and no client version — the key alone
+ * decides access — and the body is already unpacked, in the same shape the
+ * Spicy Lyrics client caches (`Type`, `Content`, …) plus `source` and, for
+ * community syncs, `UploadAttribution`.
+ *
+ * @returns {Promise<{httpStatus: number, data?: object, error?: string,
+ *   message?: string, retryAfter?: number}>}
+ */
+async function getLyrics(trackId, apiKey) {
+  const res = await fetch(`${API_URL}/v1/lyrics/${encodeURIComponent(trackId)}`, {
+    headers: { Authorization: `Bearer ${apiKey}` },
+    signal: AbortSignal.timeout(15_000),
+  });
+  const body = await res.json().catch(() => null);
+  if (res.ok) return { httpStatus: res.status, data: body?.Body };
+  const retryAfter = Number(res.headers.get("Retry-After"));
+  return {
+    httpStatus: res.status,
+    error: body?.Body?.error,
+    message: body?.Body?.message,
+    retryAfter: Number.isFinite(retryAfter) && retryAfter > 0 ? retryAfter : undefined,
+  };
+}
+
+module.exports = { queryLyrics, clientVersion, timingTier, getLyrics };

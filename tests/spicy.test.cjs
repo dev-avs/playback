@@ -179,3 +179,97 @@ test("syllable cache works without a token or a version request", async (t) => {
   assert.deepEqual(result.packed, syllable);
   assert.equal(requests.length, 0);
 });
+
+// ── the public API with the user's own key ──
+
+function apiSetup(t, respond) {
+  const originalFetch = global.fetch;
+  const requests = [];
+  global.fetch = async (url, options = {}) => {
+    requests.push({ url: String(url), method: options.method ?? "GET", headers: options.headers ?? {} });
+    return respond(String(url), options);
+  };
+  delete require.cache[require.resolve("../electron/spicy.cjs")];
+  delete require.cache[require.resolve("../electron/spicyResolver.cjs")];
+  const spicy = require("../electron/spicy.cjs");
+  const { resolveSpicyLyrics } = require("../electron/spicyResolver.cjs");
+  t.after(() => { global.fetch = originalFetch; });
+  return { spicy, resolveSpicyLyrics, requests };
+}
+
+const apiSyllable = { Type: "Syllable", Content: [{ Type: "Vocal" }], id: "track", source: "spicy_lyrics" };
+const apiLine = { Type: "Line", Content: [{ Type: "Vocal" }], id: "track", source: "spotify" };
+const apiReply = (Body, status = 200, headers = {}) =>
+  Response.json({ Body, Status: status, Type: "object" }, { status, headers });
+const isApi = (url) => url.includes("/v1/lyrics/");
+
+test("with a key the API answers first, without a Spotify token", async (t) => {
+  const { spicy, resolveSpicyLyrics, requests } = apiSetup(t, () => apiReply(apiSyllable));
+  const cache = cacheSetup(t);
+  const result = await resolveSpicyLyrics("track", null, {
+    spicy, cache, apiKey: "sl_pk_test1234", getAccessToken: async () => { throw new Error("unexpected auth"); },
+  });
+  assert.deepEqual(result.lyrics, apiSyllable);
+  assert.equal(requests.length, 1);
+  assert.equal(requests[0].url, "https://api.spicylyrics.org/v1/lyrics/track");
+  assert.equal(requests[0].headers.Authorization, "Bearer sl_pk_test1234");
+  assert.equal(cache.get("track").kind, "lyrics");
+});
+
+test("a refused key falls back to the bridge's token route", async (t) => {
+  const { spicy, resolveSpicyLyrics, requests } = apiSetup(t, (url, options) => {
+    if (isApi(url)) return apiReply({ error: "key_revoked", message: "revoked" }, 401);
+    const body = JSON.parse(options.body);
+    return reply(body.queries[0].operation === "ext_version" ? "6.3.21" : syllable);
+  });
+  const cache = cacheSetup(t);
+  const result = await resolveSpicyLyrics("track", null, {
+    spicy, cache, apiKey: "sl_pk_test1234", getAccessToken: async () => "test-token",
+  });
+  assert.deepEqual(result.packed, syllable);
+  assert.equal(requests.filter((r) => isApi(r.url)).length, 1);
+});
+
+test("a 404 from the API does not ask the token route", async (t) => {
+  const { spicy, resolveSpicyLyrics, requests } = apiSetup(t, () =>
+    apiReply({ error: "lyrics_not_found", message: "none" }, 404));
+  const cache = cacheSetup(t);
+  const result = await resolveSpicyLyrics("track", null, {
+    spicy, cache, apiKey: "sl_pk_test1234", getAccessToken: async () => { throw new Error("unexpected auth"); },
+  });
+  assert.equal(result.status, "not-found");
+  assert.equal(requests.length, 1);
+});
+
+test("line lyrics from the API are cached and not asked for again", async (t) => {
+  const { spicy, resolveSpicyLyrics, requests } = apiSetup(t, () => apiReply(apiLine));
+  const cache = cacheSetup(t);
+  const options = { spicy, cache, apiKey: "sl_pk_test1234", getAccessToken: async () => null };
+  await resolveSpicyLyrics("track", null, options);
+  const again = await resolveSpicyLyrics("track", null, options);
+  assert.deepEqual(again.lyrics, apiLine);
+  assert.equal(requests.length, 1);
+});
+
+test("a rate-limited API is skipped until Retry-After passes", async (t) => {
+  const { spicy, resolveSpicyLyrics, requests } = apiSetup(t, (url) =>
+    isApi(url) ? apiReply({ error: "rate_limited", message: "slow down" }, 429, { "Retry-After": "60" }) : reply(null, 404));
+  const cache = cacheSetup(t);
+  const options = { spicy, cache, apiKey: "sl_pk_test1234", getAccessToken: async () => null };
+  await resolveSpicyLyrics("a", null, options);
+  await resolveSpicyLyrics("b", null, options);
+  assert.equal(requests.filter((r) => isApi(r.url)).length, 1);
+});
+
+test("cache entries older than 30 days are deleted and missed", (t) => {
+  const cache = cacheSetup(t);
+  cache.put("fresh", "lyrics", apiSyllable, "v1");
+  cache.put("stale", "lyrics", apiSyllable, "v1");
+  const realNow = Date.now;
+  t.after(() => { Date.now = realNow; });
+  Date.now = () => realNow() + 31 * 24 * 60 * 60_000;
+  assert.equal(cache.get("stale"), null);
+  Date.now = realNow;
+  assert.ok(cache.get("fresh"));
+  assert.equal(cache.get("stale"), null);
+});

@@ -3,11 +3,13 @@
 // Why this exists: a cached entry needs neither a Spotify token nor Spotify
 // itself. The token is minted by the Spotify client and lasts about an hour, so
 // without this the player can only show syllable lyrics while Spotify is open
-// and recently awake. With it, anything played once keeps working offline.
+// and recently awake. With it, anything played in the last 30 days keeps
+// working offline.
 //
 // Kept deliberately dumb: one gzipped file per Spotify track id, last-access
 // tracked by the file's own mtime, and a byte budget enforced by deleting the
-// least recently used files. No index file to corrupt, no expiry timer, and
+// least recently used files. No index file to corrupt, no expiry timer (an
+// old entry is dropped when it is next read), and
 // nothing that needs migrating — if the directory is deleted the player simply
 // refetches.
 //
@@ -20,7 +22,7 @@ const path = require("path");
 const zlib = require("zlib");
 
 /**
- * Byte budget. Nothing is evicted until it is exceeded — there is no expiry.
+ * Byte budget. Separate from the 30-day limit below.
  *
  * 10 GB is effectively unlimited for a person: a syllable payload is ~35 KB
  * raw and ~5 KB gzipped, so this is room for hundreds of thousands of tracks
@@ -30,11 +32,11 @@ const zlib = require("zlib");
 const MAX_BYTES = 10 * 1024 * 1024 * 1024;
 
 /**
- * Refetch an entry older than this even when it is a cache hit, so upstream
- * corrections eventually land. 0 disables it, which is the default: lyrics are
- * served from disk forever until evicted.
+ * Entries older than this are deleted when read, and the lyrics are fetched
+ * again. Spicy Lyrics' API rules: "Refetch or discard every stored response
+ * within 30 days."
  */
-const REFRESH_AFTER_MS = 0;
+const REFRESH_AFTER_MS = 30 * 24 * 60 * 60_000;
 
 const CACHE_VERSION = 1;
 
@@ -160,7 +162,16 @@ function get(trackId) {
   }
 
   if (!entry || entry.v !== CACHE_VERSION || !entry.kind) return null;
-  if (REFRESH_AFTER_MS > 0 && Date.now() - (entry.at ?? 0) > REFRESH_AFTER_MS) return null;
+  if (Date.now() - (entry.at ?? 0) > REFRESH_AFTER_MS) {
+    try {
+      const size = fs.statSync(file).size;
+      fs.unlinkSync(file);
+      totalBytes = Math.max(0, totalBytes - size);
+    } catch {
+      /* already gone */
+    }
+    return null;
+  }
 
   const now = new Date();
   try {
