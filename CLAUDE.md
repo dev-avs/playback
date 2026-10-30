@@ -33,6 +33,7 @@ The installer is a web installer (`nsis-web`): `player-setup-<version>.exe` is a
 - The Spicetify bridge is `spicetify/player-bridge.js` (it was `player-token.js` until 1.3.3). `electron/spicetifySetup.cjs` checks and installs it; its tests are in `tests/spicetifySetup.test.cjs`.
 
 ## In progress (update or remove this section as it moves)
+- **Bug to fix:** the changelog after an update shows only the newest version. Updating 1.3.7 → 1.3.9 should show every version after the one you had (1.3.8 and 1.3.9), but it shows the same as 1.3.8 → 1.3.9. See `showChangelogAfterUpdate` in `electron/main.cjs` (`?from=<version>`) and `src/Changelog.tsx`.
 - Auto-update (1.3.7) can only be fully proven from 1.3.7 to a later release; check the update window and Settings → Behavior → Updates on the next one.
 - Spicy Lyrics key (`electron/spicyKey.cjs`): each user creates an application on the dashboard. A catalog template ("player") was submitted for review; once approved, switch `KEY_PAGE_URL` to its catalog page and the toast/Setup/Settings wording to "click Add".
 - The Spicy API's rules: show attribution with the lyrics, cache for no more than 30 days (`REFRESH_AFTER_MS` in `lyricsCache.cjs`).
