@@ -31,7 +31,7 @@ The user runs the installed app, not the dev build. A fix is not done until it i
 - The Spicetify bridge is `spicetify/player-bridge.js` (it was `player-token.js` until 1.3.3). `electron/spicetifySetup.cjs` checks and installs it; its tests are in `tests/spicetifySetup.test.cjs`.
 
 ## In progress (update or remove this section as it moves)
-1.3.4 is released but deliberately not installed: on 2026-10-30 the user had the app uninstalled, `%APPDATA%\player` deleted (key, cookies, lyrics cache) and `player-bridge.js` taken out of Spicetify, to try a new-PC first run with `release/player-setup-1.3.4.exe`. Don't assume an installed version.
+- Auto-update from GitHub (electron-updater) is wanted once the repo, or a public releases repo, exists; the repo is private for now, so installed copies cannot reach its releases.
 - Spicy Lyrics key (`electron/spicyKey.cjs`): each user creates an application on the dashboard. A catalog template ("player") was submitted for review; once approved, switch `KEY_PAGE_URL` to its catalog page and the toast/Setup/Settings wording to "click Add".
 - The Spicy API's rules: show attribution with the lyrics, cache for no more than 30 days (`REFRESH_AFTER_MS` in `lyricsCache.cjs`).
 - Possibly later: NetEase sometimes returns credits as lyric lines ("Estelle -- American Boy (Ft. Kanye West)", "…, songwriters", "…, producer"); the user said to leave this for now.

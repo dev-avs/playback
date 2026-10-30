@@ -1372,6 +1372,36 @@ app.whenReady().then(() => {
     win?.setAlwaysOnTop(!!on, "screen-saver");
     settingsWin?.setAlwaysOnTop(!!on, "screen-saver");
   });
+  // Settings → Behavior → Uninstall: the bridge out of Spicetify (restarts
+  // Spotify), then, once this process has exited, the app and its data folder
+  // (settings, Spicy key and sign-in, lyrics cache). Only the installed app has
+  // an uninstaller; the dev build says so instead.
+  ipcMain.handle("app:uninstall", async () => {
+    const uninstaller = path.join(path.dirname(process.execPath), "Uninstall player.exe");
+    if (!fs.existsSync(uninstaller)) {
+      return { ok: false, error: "Only the installed app can uninstall itself." };
+    }
+    try {
+      for (const a of await spicetifySetup.remove()) console.log("[uninstall]", a);
+    } catch (e) {
+      console.error("[uninstall] bridge:", e.message);
+    }
+    const quote = (p) => `'${p.replace(/'/g, "''")}'`;
+    const script = [
+      `Wait-Process -Id ${process.pid} -ErrorAction SilentlyContinue`,
+      // the app's helper processes let go of the data folder a moment later
+      "Start-Sleep -Seconds 2",
+      `Start-Process -FilePath ${quote(uninstaller)} -ArgumentList '/S' -Wait`,
+      `Remove-Item -LiteralPath ${quote(app.getPath("userData"))} -Recurse -Force -ErrorAction SilentlyContinue`,
+    ].join("; ");
+    spawn("powershell.exe", ["-NoProfile", "-WindowStyle", "Hidden", "-Command", script], {
+      detached: true,
+      stdio: "ignore",
+      windowsHide: true,
+    }).unref();
+    app.quit();
+    return { ok: true };
+  });
   ipcMain.handle("win:close", () => app.quit());
   ipcMain.handle("win:minimize", () => win?.minimize());
 });

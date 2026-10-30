@@ -3,7 +3,7 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
-const { check, ensure, shouldShowSetup, BRIDGE } = require("../electron/spicetifySetup.cjs");
+const { check, ensure, remove, shouldShowSetup, BRIDGE } = require("../electron/spicetifySetup.cjs");
 
 const SOURCE = Buffer.from("// bridge v2\n");
 
@@ -168,4 +168,24 @@ test("Setup opens on the first run, and later only when there is something to do
   assert.equal(shouldShowSetup(missing, false), false);
   assert.equal(shouldShowSetup({ ...missing, needsApply: true }, false), true);
   assert.equal(shouldShowSetup({ ...missing, error: "spicetify apply: failed" }, false), true);
+});
+
+test("uninstall takes the bridge out of Spicetify and Spotify, and applies once", async (t) => {
+  const { paths, run, calls } = machine(t, {
+    extensions: ["other.js", BRIDGE],
+    files: { [BRIDGE]: SOURCE, "other.js": "x" },
+    appliedFiles: { [BRIDGE]: SOURCE },
+  });
+  await remove({ paths, run });
+  const s = check(SOURCE, paths);
+  assert.equal(s.registered, false);
+  assert.equal(s.bridgeCopied, false);
+  assert.equal(fs.existsSync(path.join(paths.configDir, "Extensions", "other.js")), true);
+  assert.deepEqual(calls, [`config extensions ${BRIDGE}-`, "apply"]);
+});
+
+test("uninstall with no bridge registered does not restart Spotify", async (t) => {
+  const { paths, run, calls } = machine(t, { extensions: ["other.js"] });
+  await remove({ paths, run });
+  assert.deepEqual(calls, []);
 });

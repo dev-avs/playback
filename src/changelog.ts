@@ -20,6 +20,15 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.5",
+    date: "2026-10-30",
+    changes: {
+      new: [
+        "Uninstall player from Settings → Behavior: click once, then hold to confirm. It removes the app, your settings, Spicy Lyrics key and saved lyrics, and takes the bridge out of Spotify (Spotify restarts once).",
+      ],
+    },
+  },
+  {
     version: "1.3.4",
     date: "2026-10-30",
     changes: {

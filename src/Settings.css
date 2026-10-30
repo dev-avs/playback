@@ -836,6 +836,23 @@
     background: rgba(255, 255, 255, 0.1);
 }
 
+.st-pill.st-danger.confirm {
+    color: #fff;
+    background: rgba(255, 90, 70, 0.35);
+}
+
+/* the hold fills the pill left to right; letting go empties it */
+.st-pill.st-danger.holding {
+    background: linear-gradient(90deg, rgba(255, 90, 70, 0.85) 50%, rgba(255, 90, 70, 0.35) 50%) right / 200% 100%;
+    animation: st-hold var(--hold-ms, 1500ms) linear forwards;
+}
+
+@keyframes st-hold {
+    to {
+        background-position: left;
+    }
+}
+
 .st-reset.confirm {
     color: #fff;
     background: rgba(255, 90, 70, 0.55);

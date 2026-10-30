@@ -103,7 +103,11 @@ apps can't seek or change volume from outside).
 
 ## Uninstall
 
-Windows Settings → Apps → player → Uninstall. Your settings stay in
+Settings → Behavior → **Uninstall player**: click it, then hold it to confirm.
+It removes player, its settings and saved lyrics, and takes the bridge out of
+Spotify (Spotify restarts once).
+
+Or: Windows Settings → Apps → player → Uninstall. Your settings stay in
 `%APPDATA%\player`; delete that folder too for a clean removal. To take the
 bridge out of Spotify, run `spicetify config extensions player-bridge.js-`
 and then `spicetify apply`.

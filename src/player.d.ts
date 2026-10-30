@@ -114,6 +114,9 @@ export interface PlayerBridge {
    */
   onSpicyLyrics?(cb: () => void): () => void;
 
+  /** Removes the bridge, the app and its data, then quits; not ok in the dev build. */
+  uninstall?(): Promise<{ ok: boolean; error?: string }>;
+
   /** The user's Spicy Lyrics API key: whether one is saved, and its last four characters. */
   spicyKeyStatus?(): Promise<{ set: boolean; ending: string | null }>;
   /** Opens the Spicy Lyrics catalog to get a key; ok once one is checked and saved. */

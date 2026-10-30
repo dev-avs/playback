@@ -445,6 +445,37 @@ export default function Settings() {
       ? `saved · ends in ${spicyKey.ending}`
       : "none — word-by-word lyrics then need Spotify open";
 
+  // ── Uninstall: one click arms it, then hold to confirm ──
+  const UNINSTALL_HOLD_MS = 1500;
+  const [uninstall, setUninstall] = useState<"idle" | "armed" | "holding" | "busy">("idle");
+  const [uninstallError, setUninstallError] = useState<string | null>(null);
+  const holdTimer = useRef<number | null>(null);
+  // disarms by itself if the hold never comes
+  useEffect(() => {
+    if (uninstall !== "armed") return;
+    const id = setTimeout(() => setUninstall("idle"), 4000);
+    return () => clearTimeout(id);
+  }, [uninstall]);
+  const runUninstall = async () => {
+    setUninstall("busy");
+    const res = await window.player?.uninstall?.();
+    if (!res?.ok) {
+      setUninstall("idle");
+      setUninstallError(res?.error ?? "could not uninstall");
+    }
+  };
+  const holdStart = () => {
+    if (uninstall !== "armed") return;
+    setUninstall("holding");
+    holdTimer.current = window.setTimeout(runUninstall, UNINSTALL_HOLD_MS);
+  };
+  const holdEnd = () => {
+    if (holdTimer.current == null) return;
+    clearTimeout(holdTimer.current);
+    holdTimer.current = null;
+    setUninstall((u) => (u === "holding" ? "armed" : u));
+  };
+
   // ── Spotify token ──
   const [auth, setAuth] = useState<{ signedIn: boolean; tokenExpiresAt: number | null } | null>(null);
   const [pasting, setPasting] = useState(false);
@@ -921,6 +952,39 @@ export default function Settings() {
           {tokenError && <div className="st-error">{tokenError}</div>}
         </>
       ),
+    },
+    {
+      id: "uninstall",
+      cat: "behavior",
+      label: "Uninstall player",
+      hint: uninstall === "busy" ? "removing the bridge, then closing…" : "removes everything, like it was never installed",
+      desc: "Removes player, its settings, your Spicy Lyrics key and sign-in, saved lyrics, and the bridge from Spotify (Spotify restarts once).",
+      control: (
+        <button
+          className={`st-pill st-danger${uninstall === "armed" || uninstall === "holding" ? " confirm" : ""}${
+            uninstall === "holding" ? " holding" : ""
+          }`}
+          style={{ "--hold-ms": `${UNINSTALL_HOLD_MS}ms` } as React.CSSProperties}
+          disabled={uninstall === "busy"}
+          onClick={() => {
+            if (uninstall !== "idle") return;
+            setUninstallError(null);
+            setUninstall("armed");
+          }}
+          onPointerDown={holdStart}
+          onPointerUp={holdEnd}
+          onPointerLeave={holdEnd}
+        >
+          {uninstall === "busy"
+            ? "Uninstalling…"
+            : uninstall === "holding"
+              ? "Keep holding…"
+              : uninstall === "armed"
+                ? "Hold to uninstall"
+                : "Uninstall"}
+        </button>
+      ),
+      below: uninstallError && <div className="st-error">{uninstallError}</div>,
     },
   ];
 

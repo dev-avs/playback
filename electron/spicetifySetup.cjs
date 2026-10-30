@@ -176,4 +176,33 @@ async function ensure(source, { allowApply = false, paths = defaultPaths(), run 
  */
 const shouldShowSetup = (result, firstRun) => firstRun || result.needsApply || !!result.error;
 
-module.exports = { BRIDGE, check, ensure, isReady, shouldShowSetup, defaultPaths };
+/**
+ * Takes the bridge (and any old name of it) back out of Spicetify and Spotify,
+ * for uninstalling. Applies only when something was registered, since that is
+ * what restarts Spotify.
+ * @returns {Promise<string[]>} what was done
+ */
+async function remove({ paths = defaultPaths(), run = runCli } = {}) {
+  const actions = [];
+  let changedList = false;
+  for (const name of [BRIDGE, ...LEGACY]) {
+    for (const file of [path.join(paths.configDir, "Extensions", name), path.join(paths.appliedDir, name)]) {
+      if (fs.existsSync(file)) {
+        fs.rmSync(file, { force: true });
+        actions.push(`Deleted ${file}`);
+      }
+    }
+    if (fs.existsSync(paths.cli) && registered(paths.configDir).includes(name)) {
+      await run(paths.cli, ["config", "extensions", `${name}-`]);
+      changedList = true;
+      actions.push(`Turned ${name} off in Spicetify`);
+    }
+  }
+  if (changedList) {
+    await run(paths.cli, ["apply"]);
+    actions.push("Applied Spicetify (Spotify restarted)");
+  }
+  return actions;
+}
+
+module.exports = { BRIDGE, check, ensure, remove, isReady, shouldShowSetup, defaultPaths };

@@ -57,6 +57,9 @@ contextBridge.exposeInMainWorld("player", {
     return () => ipcRenderer.off("bridge:track", handler);
   },
 
+  // Removes the bridge, the app and its data, then quits.
+  uninstall: () => ipcRenderer.invoke("app:uninstall"),
+
   // The user's own Spicy Lyrics API key (electron/spicyKey.cjs).
   spicyKeyStatus: () => ipcRenderer.invoke("spicyKey:status"),
   connectSpicyKey: () => ipcRenderer.invoke("spicyKey:connect"),
