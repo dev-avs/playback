@@ -24,6 +24,7 @@ import {
   type Settings as SettingsValues,
 } from "./settings";
 import { romanizeText } from "./romanize";
+import type { UpdateState } from "./player";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
@@ -444,6 +445,26 @@ export default function Settings() {
     : spicyKey?.set
       ? `saved · ends in ${spicyKey.ending}`
       : "none — word-by-word lyrics then need Spotify open";
+
+  // ── Updates from GitHub: Update installs at once, no confirmation ──
+  const [update, setUpdate] = useState<UpdateState | null>(null);
+  const [appVersion, setAppVersion] = useState("");
+  useEffect(() => {
+    window.player?.updateState?.().then(setUpdate);
+    window.player?.appVersion?.().then(setAppVersion);
+    return window.player?.onUpdateChanged?.(setUpdate);
+  }, []);
+  const updateHint = !update
+    ? "…"
+    : {
+        idle: `version ${appVersion}`,
+        checking: "checking…",
+        none: `up to date · ${appVersion}`,
+        available: `${update.version} is out · you have ${appVersion}`,
+        downloading: `downloading ${update.percent}%… restarts by itself`,
+        error: `couldn't update: ${update.error}`,
+        dev: "only the installed app updates",
+      }[update.status];
 
   // ── Uninstall: one click arms it, then hold to confirm ──
   const UNINSTALL_HOLD_MS = 1500;
@@ -951,6 +972,24 @@ export default function Settings() {
           </form>
           {tokenError && <div className="st-error">{tokenError}</div>}
         </>
+      ),
+    },
+    {
+      id: "updates",
+      cat: "behavior",
+      label: "Updates",
+      hint: updateHint,
+      desc: "New versions come from GitHub. player asks on launch when one is out; Update installs it and restarts player.",
+      control: (
+        <button
+          className="st-pill"
+          disabled={!update || ["checking", "downloading", "dev"].includes(update.status)}
+          onClick={() =>
+            update?.status === "available" ? window.player?.installUpdate?.() : window.player?.checkForUpdate?.()
+          }
+        >
+          {update?.status === "available" ? "Update" : update?.status === "downloading" ? "Updating…" : "Check"}
+        </button>
       ),
     },
     {

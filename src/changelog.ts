@@ -20,6 +20,18 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.7",
+    date: "2026-10-30",
+    changes: {
+      new: [
+        "Updates from GitHub: when a new version is out, player asks on launch (Later / Update). Settings → Behavior → Updates checks and updates any time. Nothing installs without a click.",
+      ],
+      performance: [
+        "Updates download only what changed instead of the whole app, and the installer is now a small file that downloads player while it installs.",
+      ],
+    },
+  },
+  {
     version: "1.3.6",
     date: "2026-10-30",
     changes: {

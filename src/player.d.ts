@@ -54,6 +54,16 @@ export interface LyricsResponse {
   source: "lrclib" | "netease" | "genius";
 }
 
+/** electron/updater.cjs */
+export interface UpdateState {
+  status: "idle" | "checking" | "none" | "available" | "downloading" | "error" | "dev";
+  /** the newest version on GitHub, once checked */
+  version: string | null;
+  /** download progress, 0..100 */
+  percent: number;
+  error: string | null;
+}
+
 /** Spicetify and the bridge, as electron/spicetifySetup.cjs reports them. */
 export interface SetupState {
   firstRun: boolean;
@@ -113,6 +123,15 @@ export interface PlayerBridge {
    * current track may now have a finer source than the one on screen.
    */
   onSpicyLyrics?(cb: () => void): () => void;
+
+  /** Updates from GitHub releases; "dev" in the dev build, which never updates. */
+  updateState?(): Promise<UpdateState>;
+  checkForUpdate?(): Promise<UpdateState>;
+  /** Downloads and restarts into the new version, no confirmation. */
+  installUpdate?(): Promise<UpdateState>;
+  onUpdateChanged?(cb: (state: UpdateState) => void): () => void;
+  closeUpdate?(): Promise<void>;
+  resizeUpdate?(height: number): Promise<void>;
 
   /** Removes the bridge, the app and its data, then quits; not ok in the dev build. */
   uninstall?(): Promise<{ ok: boolean; error?: string }>;

@@ -23,8 +23,13 @@ as usual; player just sits on top and follows along.
 
 ## Install
 
-1. Run the installer, `player-setup-<version>.exe`. It installs for you only
-   (no admin needed) and adds desktop and Start menu shortcuts.
+1. Download `player-setup-<version>.exe` from the
+   [latest release](https://github.com/dev-avs/player/releases/latest) and run
+   it. It's a small file that downloads player while it installs, for you only
+   (no admin needed), and adds desktop and Start menu shortcuts. Windows may
+   warn that it's unrecognised: More info → Run anyway.
+   After that, player tells you when a new version is out and updates with one
+   click (Settings → Behavior → Updates).
 2. player opens with a **Setup** window the first time. It's a checklist
    (see below). Lyrics already work with any player, so you can close it if you
    don't use Spotify.
@@ -121,7 +126,7 @@ npm install
 npm run app      # dev: Vite dev server + Electron with HMR
 npm start        # production build, then Electron
 npm test         # unit tests
-npm run package  # builds release/player-setup-<version>.exe
+npm run package  # builds release/nsis-web/: the web installer, its package, latest.yml
 ```
 
 Windows only. Project rules (release steps, settings conventions, the Spicy

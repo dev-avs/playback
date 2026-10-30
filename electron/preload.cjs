@@ -57,6 +57,18 @@ contextBridge.exposeInMainWorld("player", {
     return () => ipcRenderer.off("bridge:track", handler);
   },
 
+  // Updates from GitHub (electron/updater.cjs); nothing installs without a click.
+  updateState: () => ipcRenderer.invoke("update:state"),
+  checkForUpdate: () => ipcRenderer.invoke("update:check"),
+  installUpdate: () => ipcRenderer.invoke("update:install"),
+  onUpdateChanged(cb) {
+    const handler = (_e, state) => cb(state);
+    ipcRenderer.on("update:changed", handler);
+    return () => ipcRenderer.off("update:changed", handler);
+  },
+  closeUpdate: () => ipcRenderer.invoke("changelog:close"),
+  resizeUpdate: (height) => ipcRenderer.invoke("changelog:resize", height),
+
   // Removes the bridge, the app and its data, then quits.
   uninstall: () => ipcRenderer.invoke("app:uninstall"),
 

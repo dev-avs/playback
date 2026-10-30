@@ -1,20 +1,22 @@
 # Project rules
 
-## After any code change: rebuild, reinstall, restart Spotify if needed
-The user runs the installed app, not the dev build. A fix is not done until it is installed and running.
+## After any code change: rebuild, release, reinstall, restart Spotify if needed
+The user runs the installed app, not the dev build. A fix is not done until it is released, installed and running.
+
+The installer is a web installer (`nsis-web`): `player-setup-<version>.exe` is a ~1 MB stub that downloads `player-<version>-x64.nsis.7z` from the GitHub release while it installs. So the release has to be on GitHub **before** installing. The installed app updates itself from the same releases (`electron/updater.cjs`, electron-updater): it asks on launch (Later / Update), and Settings → Behavior → Updates checks and installs; nothing installs without a click. It reads `latest.yml` from the newest release, so every release must carry it.
 
 0. Refresh the Spicy Lyrics copy (see below).
 1. `npm test` — must pass.
 2. Bump the version in `package.json` by one step, each part a single digit: 1.2.8 → 1.2.9 → 1.3.0 (after .9 the next part goes up). Add the new version's entry at the top of `src/changelog.ts`, written for the user and filed under the sections in `CHANGE_KINDS` (New, Appearance, Quality of life, Performance, Fixes).
-3. `npm run package` — builds `release/player-setup-<version>.exe`.
-4. Delete every older installer in `release/`: old `player-setup-*.exe`, their `.blockmap`, and any old version folders (e.g. `release/1.0.1/`). Keep only the new installer, its blockmap, and `release/player-win32-x64/`.
-5. Reinstall: stop any running `player` process, then run the new installer silently and wait for it:
-   `Start-Process release/player-setup-<version>.exe -ArgumentList '/S' -Wait`
-   Then start `%LOCALAPPDATA%\Programs\player\player.exe` (the installer's run-after-finish does not fire in silent mode). Starting the app checks the Spicetify bridge (electron/spicetifySetup.cjs) and refreshes Spotify's copy of it.
-6. Restart Spotify **only if necessary**: when `spicetify/player-bridge.js` changed since the last install, because Spotify only loads the new extension copy on restart. Otherwise leave Spotify alone — restarting it interrupts the user's music. When needed: stop every `Spotify` process, then start `%APPDATA%\Spotify\Spotify.exe`. Do this after step 5, never before.
-7. Commit and tag the release in git (the repo starts at 1.3.0; earlier versions are not in it): `git add -A`, commit as `Release <version>` with the changelog entry's points as the body, then `git tag v<version>`. Then push both to GitHub (`origin` = https://github.com/dev-avs/player, private): `git push` and `git push --tags`. Check `git status` is clean and up to date with `origin/main` afterwards.
-8. Publish a GitHub release for the tag (pushing a tag does not make one, and `release/` is gitignored, so this is the only place the installer goes online): `gh release create v<version> release/player-setup-<version>.exe --title "player <version>" --notes-file <notes>`, where the notes are the changelog entry with one `### <section>` heading per `CHANGE_KINDS` section. Check it with `gh release view v<version>`.
-9. Tell the user the new version is installed and running, whether Spotify was restarted (and why), and link the release.
+3. `npm run package` — `scripts/pack.cjs` packages the app into `release/player-win32-x64/` (an allow-list: `dist`, `electron`, `spicetify`, `package.json` and the production dependencies from `npm ls --omit=dev`; electron-builder's own packaging fails on this machine, and packager's prune drops electron-updater), then electron-builder makes `release/nsis-web/`: `player-setup-<version>.exe`, `player-<version>-x64.nsis.7z` and `latest.yml`.
+4. Keep only the new build in `release/`: `release/nsis-web/` (just the new version's three files) and `release/player-win32-x64/`. Delete anything else (old installers, blockmaps, `builder-debug.yml`, old version folders).
+5. Commit and tag the release in git: `git add -A`, commit as `Release <version>` with the changelog entry's points as the body, then `git tag v<version>`. Push both to GitHub (`origin` = https://github.com/dev-avs/player, **public**): `git push` and `git push --tags`. Check `git status` is clean and up to date with `origin/main`.
+6. Publish the GitHub release with all three files (`release/` is gitignored, so this is the only place they go online, and the stub and the updater both download from it): `gh release create v<version> release/nsis-web/player-setup-<version>.exe release/nsis-web/player-<version>-x64.nsis.7z release/nsis-web/latest.yml --title "player <version>" --notes-file <notes>`, where the notes are the changelog entry with one `### <section>` heading per `CHANGE_KINDS` section. Check it with `gh release view v<version>`.
+7. Reinstall: stop any running `player` process, then run the new stub silently and wait for it (it downloads from the release just made):
+   `Start-Process release/nsis-web/player-setup-<version>.exe -ArgumentList '/S' -Wait`
+   Then start `%LOCALAPPDATA%\Programs\player\player.exe` (run-after-finish does not fire in silent mode). Starting the app checks the Spicetify bridge (electron/spicetifySetup.cjs) and refreshes Spotify's copy of it. If the preview ran since the last install, first set `%APPDATA%\player\last-version.json` back to the installed version so the changelog still pops up.
+8. Restart Spotify **only if necessary**: when `spicetify/player-bridge.js` changed since the last install, because Spotify only loads the new extension copy on restart. Otherwise leave Spotify alone — restarting it interrupts the user's music. When needed: stop every `Spotify` process, then start `%APPDATA%\Spotify\Spotify.exe`. Do this after step 7, never before.
+9. Tell the user the new version is released, installed and running, whether Spotify was restarted (and why), and link the release.
 
 ## Spicy Lyrics copy
 `vendor/spicy-lyrics/` is a full copy of https://github.com/Spikerko/spicy-lyrics, kept in this repo as plain files for reference. The app does not run it (`src/vendor/objpack.ts` is the one file taken from it), and ESLint skips it. Always update it by reinstalling with a fresh clone, never by editing it in place:
@@ -31,7 +33,7 @@ The user runs the installed app, not the dev build. A fix is not done until it i
 - The Spicetify bridge is `spicetify/player-bridge.js` (it was `player-token.js` until 1.3.3). `electron/spicetifySetup.cjs` checks and installs it; its tests are in `tests/spicetifySetup.test.cjs`.
 
 ## In progress (update or remove this section as it moves)
-- Auto-update from GitHub (electron-updater) is wanted once the repo, or a public releases repo, exists; the repo is private for now, so installed copies cannot reach its releases.
+- Auto-update (1.3.7) can only be fully proven from 1.3.7 to a later release; check the update window and Settings → Behavior → Updates on the next one.
 - Spicy Lyrics key (`electron/spicyKey.cjs`): each user creates an application on the dashboard. A catalog template ("player") was submitted for review; once approved, switch `KEY_PAGE_URL` to its catalog page and the toast/Setup/Settings wording to "click Add".
 - The Spicy API's rules: show attribution with the lyrics, cache for no more than 30 days (`REFRESH_AFTER_MS` in `lyricsCache.cjs`).
 - Possibly later: NetEase sometimes returns credits as lyric lines ("Estelle -- American Boy (Ft. Kanye West)", "…, songwriters", "…, producer"); the user said to leave this for now.

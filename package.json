@@ -1,7 +1,7 @@
 {
   "name": "player",
   "private": true,
-  "version": "1.3.6",
+  "version": "1.3.7",
   "description": "Now-playing overlay with synced lyrics",
   "author": "player",
   "type": "module",
@@ -16,8 +16,8 @@
     "app": "concurrently -k -n vite,electron -c cyan,magenta \"vite\" \"cross-env VITE_DEV_SERVER_URL=http://localhost:5173 electron .\"",
     "start": "npm run build && electron .",
     "icon": "electron scripts/make-icon.cjs",
-    "pack:app": "electron-packager . player --platform=win32 --arch=x64 --out=release --overwrite --icon=build/icon.ico --asar.unpackDir=electron --ignore=\"^/(?!(dist|electron|spicetify|package\\.json)(/|$))\"",
-    "package": "npm run build && npm run pack:app && electron-builder --win nsis --prepackaged release/player-win32-x64"
+    "pack:app": "node scripts/pack.cjs",
+    "package": "npm run build && npm run pack:app && electron-builder --win nsis-web --prepackaged release/player-win32-x64 --publish never"
   },
   "build": {
     "appId": "com.player.smtcwidget",
@@ -35,10 +35,17 @@
     "asarUnpack": [
       "electron/smtc.ps1"
     ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "dev-avs",
+        "repo": "player"
+      }
+    ],
     "win": {
-      "target": "nsis"
+      "target": "nsis-web"
     },
-    "nsis": {
+    "nsisWeb": {
       "oneClick": true,
       "perMachine": false,
       "createDesktopShortcut": true,
@@ -68,5 +75,8 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12"
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.11"
   }
 }

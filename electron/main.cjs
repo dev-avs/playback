@@ -20,6 +20,7 @@ const lyricsCache = require("./lyricsCache.cjs");
 const { pickTrack, createIdCache } = require("./spotifyLookup.cjs");
 const quickOpen = require("./spotifyQuickOpen.cjs");
 const spicyKey = require("./spicyKey.cjs");
+const updater = require("./updater.cjs");
 
 // One widget at a time. A second launch (a shortcut, the Start menu, the
 // installer's run-after-finish) would add a second widget fighting the first
@@ -989,6 +990,46 @@ function openChangelog(fromVersion = null) {
   else changelogWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash });
 }
 
+// The update window (#update): asks on launch when GitHub has a newer version.
+const UPDATE_W = 300 + STAGE_PAD * 2;
+let updateWin = null;
+
+function openUpdate() {
+  if (updateWin) {
+    updateWin.focus();
+    return;
+  }
+  const [wx, wy] = win ? win.getPosition() : [100, 100];
+  const area = screen.getDisplayNearestPoint({ x: wx, y: wy }).workArea;
+  updateWin = new BrowserWindow({
+    x: Math.round(area.x + (area.width - UPDATE_W) / 2),
+    y: Math.round(area.y + area.height * 0.2),
+    width: UPDATE_W,
+    height: 240,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    hasShadow: false,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
+      spellcheck: false,
+      contextIsolation: true,
+      nodeIntegration: false,
+      devTools: !!DEV_URL,
+    },
+  });
+  updateWin.setAlwaysOnTop(true, "screen-saver");
+  updateWin.once("ready-to-show", () => updateWin?.show());
+  updateWin.on("closed", () => {
+    updateWin = null;
+  });
+  if (DEV_URL) updateWin.loadURL(`${DEV_URL}#update`);
+  else updateWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash: "update" });
+}
+
 /**
  * Opens the changelog on the first run of each version, a fresh install
  * included, unless the user turned it off. The widget calls this once per
@@ -1162,6 +1203,18 @@ app.whenReady().then(() => {
     });
   createWindow();
   startSmtc();
+
+  updater.init((state) => {
+    for (const w of BrowserWindow.getAllWindows()) w.webContents.send("update:changed", state);
+  });
+  // Asked once per launch, after Setup is out of the way so the two never stack.
+  setupSettled.then(async () => {
+    const state = await updater.check();
+    if (state.status === "available") openUpdate();
+  });
+  ipcMain.handle("update:state", () => updater.getState());
+  ipcMain.handle("update:check", () => updater.check());
+  ipcMain.handle("update:install", () => updater.install());
 
   ipcMain.handle("player:command", (_e, cmd) => sendCommand(cmd));
   ipcMain.handle("lyrics:fetch", (_e, req) => fetchLyrics(req));
