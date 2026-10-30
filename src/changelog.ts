@@ -25,6 +25,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     changes: {
       fixes: [
         "Uninstall in Settings → Behavior only took the bridge out: player itself, its Start menu entry and your saved data stayed. It now removes all of it.",
+        "Right-click didn't open Settings while nothing was playing.",
       ],
     },
   },

@@ -1615,6 +1615,10 @@ export default function App() {
             .join(" ")}
           style={bgStyle}
           onPointerDown={startWindowDrag}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            window.player?.toggleSettings?.();
+          }}
         >
           <div className="top">
             <div className="art-wrap">
