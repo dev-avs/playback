@@ -43,15 +43,13 @@ import {
   COVER_SHAPES,
   LYRIC_WEIGHTS,
   cjkStack,
+  LOGO_ART,
 } from "./settings";
 
 const SPACER = 150;
 const LYRIC_ANCHOR = 6;
-const ART_FALLBACK =
-  "data:image/svg+xml;utf8," +
-  encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#2a2a2e"/><circle cx="60" cy="60" r="22" fill="none" stroke="#555" stroke-width="3"/><circle cx="60" cy="60" r="4" fill="#555"/></svg>`,
-  );
+// Playback's logo stands in for a missing cover (settings.ts)
+const ART_FALLBACK = LOGO_ART;
 
 // Optional: set VITE_GENIUS_KEY in a .env file to enable the Genius fallback.
 const GENIUS_KEY = import.meta.env.VITE_GENIUS_KEY as string | undefined;
@@ -1283,9 +1281,11 @@ export default function App() {
   useEffect(() => write(KEYS.canRomanize, canRomanize), [canRomanize]);
   // Only a real cover: on a song change the art is briefly null while the new
   // one loads, and handing that on left the settings window's blur black.
+  // Nothing playing clears it, so they go black and white too.
   useEffect(() => {
     if (np.art) write(KEYS.art, np.art);
-  }, [np.art]);
+    else if (!np.title) write(KEYS.art, null);
+  }, [np.art, np.title]);
 
   const signInToSpotify = useCallback(async () => {
     const res = await window.player?.spotifyLogin();
@@ -1597,9 +1597,9 @@ export default function App() {
   const showLyrics = lyricsOpen && !noLyrics;
 
   if (!hasTrack) {
-    // The player itself with its text drawn as placeholder marks, so the
-    // song simply fills in when one starts. No lyrics panel: there is nothing
-    // to sing. The marks pulse while Windows media is still connecting.
+    // Nothing playing: Playback's own card, the logo's middle line sweeping
+    // like a lyric being sung, over the same black and white glass as the
+    // installer. While Windows media is still connecting it says so instead.
     return (
       <div className="stage" onMouseEnter={enterHover} onMouseLeave={leaveHover}>
         <div
@@ -1619,53 +1619,23 @@ export default function App() {
             window.player?.toggleSettings?.();
           }}
         >
-          <div className="top">
-            <div className="art-wrap">
-              <img className="art" src={ART_FALLBACK} alt="" draggable={false} />
-            </div>
-            <div className="info">
-              <span className="title">
-                <i className="placeholder-mark" style={{ width: "58%" }} />
+          <div className="widget-bg widget-bg-mono" />
+          <div className="np-empty">
+            <svg className="np-mark" viewBox="0 0 64 64" aria-hidden="true">
+              <rect width="64" height="64" rx="15" fill="#0b0b0d" />
+              <rect x=".5" y=".5" width="63" height="63" rx="14.5" fill="none" stroke="#fff" strokeOpacity=".14" />
+              <g strokeLinecap="round" stroke="#fff">
+                <line x1="17" y1="18" x2="40" y2="18" strokeOpacity=".28" strokeWidth="5" />
+                <line x1="13" y1="32" x2="51" y2="32" strokeOpacity=".28" strokeWidth="9" />
+                <line className="np-sung" x1="13" y1="32" x2="51" y2="32" strokeWidth="9" pathLength={100} />
+                <line x1="17" y1="46" x2="34" y2="46" strokeOpacity=".28" strokeWidth="5" />
+              </g>
+            </svg>
+            <div className="np-empty-text">
+              <span className="np-empty-title">
+                {!connected && window.player ? "Connecting…" : "Nothing playing"}
               </span>
-              <span className="artist">
-                <i className="placeholder-mark" style={{ width: "34%" }} />
-              </span>
-            </div>
-          </div>
-          <div className="scrubber">
-            <input type="range" className="scrub" disabled defaultValue={0} aria-label="Seek" />
-          </div>
-          <div className="times">
-            <span className="time-el">-:--</span>
-            <span className="time-rem">-:--</span>
-          </div>
-          <div className="controls">
-            <div className="ctrl-vol-btn-wrap ctrl-edge">
-              <button className="ctrl-btn" aria-label="Volume" disabled>
-                <IconVolume />
-              </button>
-            </div>
-            <div className="ctrl-center">
-              <button className="ctrl-btn" aria-label="Shuffle" disabled>
-                <IconShuffle />
-              </button>
-              <button className="ctrl-btn" aria-label="Previous" disabled>
-                <IconPrev />
-              </button>
-              <button className="ctrl-btn ctrl-play" aria-label="Play" disabled>
-                <IconPlay />
-              </button>
-              <button className="ctrl-btn" aria-label="Next" disabled>
-                <IconNext />
-              </button>
-              <button className="ctrl-btn" aria-label="Repeat" disabled>
-                <IconRepeat />
-              </button>
-            </div>
-            <div className="ctrl-right">
-              <button className="ctrl-btn ctrl-aa" aria-label="Lyrics" disabled>
-                Aa
-              </button>
+              <span className="np-empty-sub">Play something in Spotify, your browser or any app.</span>
             </div>
           </div>
         </div>
@@ -1709,7 +1679,11 @@ export default function App() {
           window.player?.toggleSettings?.();
         }}
       >
-        <div className="widget-bg" style={{ backgroundImage: `url(${art})` }} />
+        {np.art ? (
+          <div className="widget-bg" style={{ backgroundImage: `url(${art})` }} />
+        ) : (
+          <div className="widget-bg widget-bg-mono" />
+        )}
         <div className="top">
           <div
             className="art-wrap"

@@ -7,33 +7,16 @@ import { KEYS, usePersisted } from "./settings";
 const STAGE_PAD = 22;
 const CLOSE_MS = 200;
 
-/** The app icon (public/logo.svg) at mark size: glass tile and visualizer bars. */
+/** The app icon (public/logo.svg) at mark size: three lyric lines, the middle one being sung. */
 export const AppMark = () => (
   <svg viewBox="0 0 64 64" aria-hidden="true">
-    <defs>
-      <radialGradient id="cl-p" cx="18" cy="16" r="36" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#e0408f" />
-        <stop offset="1" stopColor="#e0408f" stopOpacity="0" />
-      </radialGradient>
-      <radialGradient id="cl-b" cx="50" cy="52" r="40" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#3f6bff" />
-        <stop offset="1" stopColor="#3f6bff" stopOpacity="0" />
-      </radialGradient>
-      <clipPath id="cl-c">
-        <rect x="2" y="2" width="60" height="60" rx="14" />
-      </clipPath>
-    </defs>
-    <g clipPath="url(#cl-c)">
-      <rect width="64" height="64" fill="#18181b" />
-      <rect width="64" height="64" fill="url(#cl-p)" opacity=".9" />
-      <rect width="64" height="64" fill="url(#cl-b)" opacity=".9" />
-    </g>
-    <rect x="2.5" y="2.5" width="59" height="59" rx="13.5" fill="none" stroke="#fff" strokeOpacity=".14" />
-    <g fill="#fff">
-      <rect x="14" y="35" width="6" height="12" rx="3" />
-      <rect x="24" y="23" width="6" height="24" rx="3" />
-      <rect x="34" y="29" width="6" height="18" rx="3" />
-      <rect x="44" y="17" width="6" height="30" rx="3" />
+    <rect width="64" height="64" rx="15" fill="#0b0b0d" />
+    <rect x=".5" y=".5" width="63" height="63" rx="14.5" fill="none" stroke="#fff" strokeOpacity=".14" />
+    <g strokeLinecap="round">
+      <line x1="17" y1="18" x2="40" y2="18" stroke="#fff" strokeOpacity=".28" strokeWidth="5" />
+      <line x1="13" y1="32" x2="51" y2="32" stroke="#fff" strokeOpacity=".28" strokeWidth="9" />
+      <line x1="13" y1="32" x2="37" y2="32" stroke="#fff" strokeWidth="9" />
+      <line x1="17" y1="46" x2="34" y2="46" stroke="#fff" strokeOpacity=".28" strokeWidth="5" />
     </g>
   </svg>
 );
@@ -169,12 +152,16 @@ export default function Changelog() {
         aria-modal="true"
         aria-labelledby="cl-title"
       >
-        {art && <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />}
+        {art ? (
+          <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />
+        ) : (
+          <div className="cl-bg cl-bg-mono" />
+        )}
         <div className="cl-mark">
           <AppMark />
         </div>
         <div className="cl-heading" style={stagger(0)}>
-          <p className="cl-brand">player</p>
+          <p className="cl-brand">Playback</p>
           <h2 className="cl-title" id="cl-title">
             {past ? "Past changelogs" : from ? `Updated to ${latest.version}` : "What's new"}
           </h2>

@@ -9,6 +9,31 @@ const {
   session,
   desktopCapturer,
 } = require("electron");
+// The app was called player up to 1.4.2, and kept its settings, Spicy key,
+// sign-in and lyrics cache in %APPDATA%\player. Playback's folder is
+// %APPDATA%\Playback: on the first launch after the rename the old folder is
+// copied across, so nothing is lost. Copied, not moved: Version control can
+// revert to a release from before the rename, which still reads the old folder.
+// Before anything else reads userData.
+const LEGACY_DATA = "player";
+{
+  const fs = require("fs");
+  const path = require("path");
+  app.setName("Playback");
+  const appData = app.getPath("appData");
+  const now = path.join(appData, "Playback");
+  const before = path.join(appData, LEGACY_DATA);
+  if (!fs.existsSync(now) && fs.existsSync(before)) {
+    try {
+      // the lock of a run that never quit cleanly cannot be copied, and is not needed
+      fs.cpSync(before, now, { recursive: true, filter: (f) => path.basename(f) !== "lockfile" });
+    } catch (e) {
+      console.error("[rename] could not copy the old settings:", e.message);
+    }
+  }
+  app.setPath("userData", now);
+}
+
 const { spawn, execFile } = require("child_process");
 const spotify = require("./spotify.cjs");
 const spicy = require("./spicy.cjs");
@@ -30,7 +55,8 @@ if (!app.requestSingleInstanceLock()) {
   app.exit(0);
 }
 app.on("second-instance", () => {
-  if (!win) return;
+  // Setup comes before the widget; while it is up, bring it forward instead.
+  if (!win) return setupWin?.focus();
   if (win.isMinimized()) win.restore();
   win.show();
   win.focus();
@@ -969,12 +995,25 @@ function openChangelog(fromVersion = null) {
     changelogWin.focus();
     return;
   }
-  // Centred on the widget's screen: it is read once, so it can sit apart.
+  // Centred on the widget's screen: it is read once, so it can sit apart. If
+  // that would cover the widget, it goes beside it instead.
   const [wx, wy] = win ? win.getPosition() : [100, 100];
   const area = screen.getDisplayNearestPoint({ x: wx, y: wy }).workArea;
+  let x = Math.round(area.x + (area.width - CHANGELOG_W) / 2);
+  let y = Math.round(area.y + area.height * 0.2);
+  if (win) {
+    const b = win.getBounds();
+    const h = 480;
+    const overlaps = x < b.x + b.width && x + CHANGELOG_W > b.x && y < b.y + b.height && y + h > b.y;
+    if (overlaps) {
+      const right = b.x + b.width - STAGE_PAD;
+      x = right + CHANGELOG_W <= area.x + area.width ? right : Math.max(area.x, b.x - CHANGELOG_W + STAGE_PAD);
+      y = Math.min(Math.max(area.y, b.y), area.y + area.height - h);
+    }
+  }
   changelogWin = new BrowserWindow({
-    x: Math.round(area.x + (area.width - CHANGELOG_W) / 2),
-    y: Math.round(area.y + area.height * 0.2),
+    x,
+    y,
     width: CHANGELOG_W,
     height: 480,
     frame: false,
@@ -1103,7 +1142,8 @@ function showChangelogAfterUpdate(enabled) {
     console.error("[changelog] could not record the version:", e.message);
   }
   // after the Setup window, when it is up, so the two never stack
-  if (enabled && previous !== current) setupSettled.then(() => openChangelog(previous));
+  // Not on a first run (nothing recorded yet): a fresh install has nothing new to show.
+  if (enabled && previous && previous !== current) setupSettled.then(() => openChangelog(previous));
 }
 
 // ── Setup window ───────────────────────────────────────────────
@@ -1120,9 +1160,46 @@ let setupWork = null;
 let setupDone;
 const setupSettled = new Promise((resolve) => (setupDone = resolve));
 
+/**
+ * Whether the Spotify bridge is wanted. The installer (installer/) writes
+ * install-options.json with "bridge": false when it is turned off there; then
+ * player leaves Spicetify alone until Setup's Turn on. No file means wanted, as
+ * for every install made before the installer had the option.
+ */
+const optionsFile = () => path.join(app.getPath("userData"), "install-options.json");
+
+function bridgeWanted() {
+  try {
+    return JSON.parse(fs.readFileSync(optionsFile(), "utf8")).bridge !== false;
+  } catch {
+    return true;
+  }
+}
+
+function wantBridge() {
+  try {
+    fs.writeFileSync(optionsFile(), JSON.stringify({ bridge: true }));
+  } catch (e) {
+    console.error("[setup] could not record the bridge choice:", e.message);
+  }
+}
+
 /** Puts the bridge in place; `allowApply` lets it run `spicetify apply`, which restarts Spotify. */
 function runSetup(allowApply) {
   const source = fs.readFileSync(path.join(app.getAppPath(), "spicetify", spicetifySetup.BRIDGE));
+  if (!bridgeWanted()) {
+    // turned off in the installer: only report, never touch Spicetify
+    const status = spicetifySetup.check(source);
+    setupWork = Promise.resolve({
+      status,
+      ready: spicetifySetup.isReady(status),
+      actions: [],
+      needsApply: false,
+      bridgeOff: true,
+      firstRun,
+    });
+    return setupWork;
+  }
   setupWork = spicetifySetup
     .ensure(source, { allowApply })
     .catch((e) => {
@@ -1264,7 +1341,9 @@ app.whenReady().then(() => {
       console.error("[setup]", e.message);
       setupDone();
     });
-  createWindow();
+  // The widget waits for Setup: on a first run (or when Setup has something
+  // to ask) its Done is what opens the widget, rather than both at once.
+  setupSettled.then(createWindow);
   startSmtc();
 
   updater.init((state) => {
@@ -1336,7 +1415,10 @@ app.whenReady().then(() => {
   });
   ipcMain.handle("setup:state", () => setupWork);
   ipcMain.handle("setup:recheck", () => runSetup(false));
-  ipcMain.handle("setup:apply", () => runSetup(true));
+  ipcMain.handle("setup:apply", () => {
+    wantBridge(); // Setup's Turn on, for a bridge left off in the installer
+    return runSetup(true);
+  });
   ipcMain.handle("setup:copy", (_e, text) => clipboard.writeText(String(text)));
   ipcMain.handle("setup:openLink", (_e, url) => {
     if (/^https:\/\//.test(url)) shell.openExternal(url);
@@ -1497,7 +1579,9 @@ app.whenReady().then(() => {
   // (settings, Spicy key and sign-in, lyrics cache). Only the installed app has
   // an uninstaller; the dev build says so instead.
   ipcMain.handle("app:uninstall", async () => {
-    const uninstaller = path.join(path.dirname(process.execPath), "Uninstall player.exe");
+    // named after the exe: "Uninstall Playback.exe" (it was "Uninstall player.exe")
+    const exe = path.parse(process.execPath).name;
+    const uninstaller = path.join(path.dirname(process.execPath), `Uninstall ${exe}.exe`);
     if (!fs.existsSync(uninstaller)) {
       return { ok: false, error: "Only the installed app can uninstall itself." };
     }
@@ -1511,9 +1595,11 @@ app.whenReady().then(() => {
       `Wait-Process -Id ${process.pid} -ErrorAction SilentlyContinue`,
       // the app's helper processes let go of the data folder a moment later
       "Start-Sleep -Seconds 2",
-      `Get-Process player -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq ${quote(process.execPath)} } | Stop-Process -Force`,
+      `Get-Process ${quote(exe)} -ErrorAction SilentlyContinue | Where-Object { $_.Path -eq ${quote(process.execPath)} } | Stop-Process -Force`,
       `Start-Process -FilePath ${quote(uninstaller)} -ArgumentList '/S' -Wait`,
       `Remove-Item -LiteralPath ${quote(app.getPath("userData"))} -Recurse -Force -ErrorAction SilentlyContinue`,
+      // and the copy from before the rename (see LEGACY_DATA)
+      `Remove-Item -LiteralPath ${quote(path.join(app.getPath("appData"), LEGACY_DATA))} -Recurse -Force -ErrorAction SilentlyContinue`,
     ].join("; ");
     // A child of this app, detached or not, is killed when the app exits, so
     // the cleanup is started through WMI instead: Windows owns that process,
@@ -1549,4 +1635,8 @@ app.on("before-quit", () => {
   ps?.kill();
 });
 
-app.on("window-all-closed", () => app.quit());
+// Closing the widget quits by itself (its "closed" handler). Before the widget
+// exists, the last window closing is Setup's Done, which opens the widget.
+app.on("window-all-closed", () => {
+  if (win) app.quit();
+});

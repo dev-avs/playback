@@ -142,6 +142,13 @@ export default function Setup() {
   if (busy === "apply") bridge = { mark: "wait", text: "Applying Spicetify. Spotify restarts…" };
   else if (checking) bridge = { mark: "wait", text: "Checking…" };
   else if (state.ready) bridge = { mark: "ok", text: "Running in Spotify." };
+  else if (state.bridgeOff)
+    bridge = {
+      mark: "todo",
+      text: s!.spicetify
+        ? "Off, as you chose in the installer. Turn it on for Up next and word-by-word lyrics."
+        : "Off, as you chose in the installer. Needs Spicetify to turn on.",
+    };
   else if (!s!.spicetify) bridge = { mark: "wait", text: "Set up once Spicetify is installed." };
   else if (state.needsApply)
     bridge = {
@@ -159,12 +166,16 @@ export default function Setup() {
         aria-modal="true"
         aria-labelledby="su-title"
       >
-        {art && <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />}
+        {art ? (
+          <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />
+        ) : (
+          <div className="cl-bg cl-bg-mono" />
+        )}
         <div className="cl-mark">
           <AppMark />
         </div>
         <div className="cl-heading" style={stagger(0)}>
-          <p className="cl-brand">player</p>
+          <p className="cl-brand">Playback</p>
           <h2 className="cl-title" id="su-title">
             {state?.ready && hasKey && !busy ? "You're all set" : "Set up lyrics"}
           </h2>
@@ -180,7 +191,7 @@ export default function Setup() {
             ) : hasKey ? (
               "Saved. Change it any time in Settings → Behavior."
             ) : gettingKey ? (
-              "Sign in, create an application, then copy its key. player picks it up from the clipboard."
+              "Sign in, create an application, then copy its key. Playback picks it up from the clipboard."
             ) : (
               <>
                 Your own free key for word-by-word lyrics.{" "}
@@ -233,7 +244,21 @@ export default function Setup() {
               Check again
             </button>
           )}
-          {state?.needsApply ? (
+          {state?.bridgeOff && !state.ready && s?.spicetify ? (
+            <>
+              <button type="button" className="cl-button cl-button--quiet" disabled={!!busy} onClick={close}>
+                Not now
+              </button>
+              <button
+                type="button"
+                className="cl-button cl-button--primary"
+                disabled={!!busy}
+                onClick={() => run("apply")}
+              >
+                {busy === "apply" ? "Turning on…" : "Turn on (restarts Spotify)"}
+              </button>
+            </>
+          ) : state?.needsApply ? (
             <>
               <button type="button" className="cl-button cl-button--quiet" disabled={!!busy} onClick={close}>
                 Later

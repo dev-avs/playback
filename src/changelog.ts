@@ -22,6 +22,25 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.3",
+    date: "2026-10-30",
+    changes: {
+      new: [
+        "player is now Playback, with a new logo. Your settings, Spicy Lyrics key and saved lyrics come along.",
+        "A new installer: pick where Playback goes, whether to set up the Spotify bridge and a desktop shortcut, and watch it download. Hold to cancel.",
+      ],
+      appearance: [
+        "Nothing playing now shows a proper “Nothing playing” card instead of an empty player.",
+        "Songs without a cover get black and white glass and the Playback logo instead of a grey disc. Settings and the other windows turn black and white when nothing is playing.",
+      ],
+      qol: [
+        "On a fresh install, Setup comes first and Done opens the widget, instead of both at once.",
+        "What's new no longer opens on a fresh install, and after an update it opens beside the widget instead of on top of it.",
+        "The Spotify bridge can be left off in the installer and turned on later in Setup.",
+      ],
+    },
+  },
+  {
     version: "1.4.2",
     date: "2026-10-30",
     changes: {

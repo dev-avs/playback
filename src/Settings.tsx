@@ -7,6 +7,7 @@ import {
   GLASS_TINTS,
   HIGHLIGHTS,
   KEYS,
+  LOGO_ART,
   LYRIC_FONTS,
   LYRIC_WEIGHTS,
   PROVIDER_NAMES,
@@ -288,7 +289,11 @@ function Preview(props: {
                 alt=""
               />
             ) : (
-              <span className={["st-pv-art", s.spinCover && "spin"].filter(Boolean).join(" ")} />
+              <img
+                className={["st-pv-art", s.spinCover && "spin", s.floatingCover && "float"].filter(Boolean).join(" ")}
+                src={LOGO_ART}
+                alt=""
+              />
             ))}
           <span className="st-pv-info">
             <span className="st-pv-title">{props.track?.title ?? "Song title"}</span>
@@ -374,9 +379,10 @@ export default function Settings() {
   const [lyricSource] = usePersisted<{ provider: string; tier: number } | null>(KEYS.lyricSource, null);
 
   // The cover behind the card, cross-faded: the new one fades in over the one
-  // before, so a song change never shows the bare card in between.
+  // before, so a song change never shows the bare card in between. With nothing
+  // playing (art cleared) the last one fades out to the black and white glass.
   const [cover, setCover] = useState<{ cur: string | null; prev: string | null }>({ cur: art, prev: null });
-  if (art && art !== cover.cur) setCover({ cur: art, prev: cover.cur });
+  if (art !== cover.cur) setCover({ cur: art, prev: cover.cur });
 
   const [cat, setCat] = useState<Category>("lyrics");
   const [query, setQuery] = useState("");
@@ -980,7 +986,7 @@ export default function Settings() {
       cat: "behavior",
       label: "Updates",
       hint: updateHint,
-      desc: "New versions come from GitHub. player asks on launch when one is out; Update installs it and restarts player.",
+      desc: "New versions come from GitHub. Playback asks on launch when one is out; Update installs it and restarts Playback.",
       control: (
         <button
           className="st-pill"
@@ -997,7 +1003,7 @@ export default function Settings() {
       id: "versions",
       cat: "behavior",
       label: "Version control",
-      desc: "Every version of player, newest first, with what changed in each. Update or revert to any of them; player restarts on it.",
+      desc: "Every version of Playback, newest first, with what changed in each. Update or revert to any of them; Playback restarts on it.",
       control: (
         <button className="st-pill" onClick={() => window.player?.openVersions?.()}>
           Open
@@ -1007,9 +1013,9 @@ export default function Settings() {
     {
       id: "uninstall",
       cat: "behavior",
-      label: "Uninstall player",
+      label: "Uninstall Playback",
       hint: uninstall === "busy" ? "removing the bridge, then closing…" : "removes everything, like it was never installed",
-      desc: "Removes player, its settings, your Spicy Lyrics key and sign-in, saved lyrics, and the bridge from Spotify (Spotify restarts once).",
+      desc: "Removes Playback, its settings, your Spicy Lyrics key and sign-in, saved lyrics, and the bridge from Spotify (Spotify restarts once).",
       control: (
         <button
           className={`st-pill st-danger${uninstall === "armed" || uninstall === "holding" ? " confirm" : ""}${
@@ -1078,7 +1084,14 @@ export default function Settings() {
       }}
     >
       <div className="st-card" ref={cardRef}>
-        {cover.prev && <div className="st-bg" style={{ backgroundImage: `url(${cover.prev})` }} />}
+        <div className="st-bg st-bg-mono" />
+        {cover.prev && (
+          <div
+            key={`out-${cover.prev}`}
+            className={`st-bg${cover.cur ? "" : " st-bg-out"}`}
+            style={{ backgroundImage: `url(${cover.prev})` }}
+          />
+        )}
         {cover.cur && <div key={cover.cur} className="st-bg st-bg-in" style={{ backgroundImage: `url(${cover.cur})` }} />}
 
         <header className="st-head">

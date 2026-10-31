@@ -1,4 +1,6 @@
-# player
+# Playback
+
+*Called player up to 1.4.2.*
 
 A small floating music widget for Windows. It shows what's playing, lets you
 control it, and scrolls the lyrics along with the song, highlighting each word
@@ -6,7 +8,7 @@ as it's sung.
 
 It works with Spotify, Apple Music, your browser, VLC and anything else that
 shows up in Windows' own media controls. The music keeps playing from your app
-as usual; player just sits on top and follows along.
+as usual; Playback just sits on top and follows along.
 
 ## What you get
 
@@ -23,19 +25,19 @@ as usual; player just sits on top and follows along.
 
 ## Install
 
-1. Download `player-setup-<version>.exe` from the
-   [latest release](https://github.com/dev-avs/player/releases/latest) and run
-   it. It's a small file that downloads player while it installs, for you only
-   (no admin needed), and adds desktop and Start menu shortcuts. Windows may
-   warn that it's unrecognised: More info → Run anyway.
-   After that, player tells you when a new version is out and updates with one
+1. Download [`playback-installer.exe`](https://github.com/dev-avs/playback/releases/latest/download/playback-installer.exe)
+   and run it. Pick where Playback goes and whether to set up the Spotify bridge
+   and a desktop shortcut; it downloads the newest version while it installs,
+   for you only (no admin needed). Windows may warn that it's unrecognised:
+   More info → Run anyway.
+   After that, Playback tells you when a new version is out and updates with one
    click (Settings → Behavior → Updates).
-2. player opens with a **Setup** window the first time. It's a checklist
-   (see below). Lyrics already work with any player, so you can close it if you
+2. Playback opens with a **Setup** window the first time. It's a checklist
+   (see below). Lyrics already work with any music app, so you can close it if you
    don't use Spotify.
    Its first step, **Spicy Lyrics key**, gets you your own free key for
    word-by-word lyrics: click **Get key**, sign in, create an application (name
-   and project are filled in) and copy the key. player picks it up by itself.
+   and project are filled in) and copy the key. Playback picks it up by itself.
    You can also get or paste one later in Settings → Behavior.
 3. Start some music and it shows up in the widget. Drag the widget anywhere.
 
@@ -43,7 +45,7 @@ Windows 10 or 11 is required.
 
 ## Getting the most out of Spotify
 
-player works with any music app, but with Spotify it can do more: Spotify's own
+Playback works with any music app, but with Spotify it can do more: Spotify's own
 track and queue (for the right cover and **Up next**), and **word-by-word
 lyrics** from Spicy Lyrics.
 
@@ -55,9 +57,9 @@ it:
 | --- | --- |
 | **Spotify** | Use the desktop app from [spotify.com](https://www.spotify.com/download/windows/). The Microsoft Store version can't run Spicetify. |
 | **Spicetify** | If it's missing, Setup shows the install command. Click **Copy**, paste it into PowerShell, follow its prompts, then click **Check again**. |
-| **Bridge** | player's small helper inside Spotify. Setup puts it in place for you. Spotify has to restart once to load it; on the first launch that happens on its own, otherwise click **Apply now (restarts Spotify)**. |
+| **Bridge** | Playback's small helper inside Spotify. Setup puts it in place for you. Spotify has to restart once to load it; on the first launch that happens on its own, otherwise click **Apply now (restarts Spotify)**. |
 
-After that there's nothing to do: player keeps the bridge up to date, and Setup
+After that there's nothing to do: Playback keeps the bridge up to date, and Setup
 only comes back if something needs you.
 
 ## Using it
@@ -95,12 +97,12 @@ try another provider, or choose one in Settings → Lyrics.
 songs.
 
 **No word-by-word lyrics or Up next with Spotify.** Make sure Spicetify is
-installed, then restart player: Setup opens by itself if the bridge still needs
+installed, then restart Playback: Setup opens by itself if the bridge still needs
 applying. If Spotify updated itself, Spicetify needs re-applying: run
 `spicetify backup apply` in PowerShell.
 
 **The widget is gone.** If "Hide when nothing plays" is on, it comes back when
-music starts. Otherwise open player from the Start menu; only one copy runs at a
+music starts. Otherwise open Playback from the Start menu; only one copy runs at a
 time.
 
 **Buttons are greyed out.** The music app doesn't support that control (some
@@ -108,12 +110,12 @@ apps can't seek or change volume from outside).
 
 ## Uninstall
 
-Settings → Behavior → **Uninstall player**: click it, then hold it to confirm.
-It removes player, its settings and saved lyrics, and takes the bridge out of
+Settings → Behavior → **Uninstall Playback**: click it, then hold it to confirm.
+It removes Playback, its settings and saved lyrics, and takes the bridge out of
 Spotify (Spotify restarts once).
 
-Or: Windows Settings → Apps → player → Uninstall. Your settings stay in
-`%APPDATA%\player`; delete that folder too for a clean removal. To take the
+Or: Windows Settings → Apps → Playback → Uninstall. Your settings stay in
+`%APPDATA%\Playback` (and `%APPDATA%\player` if you used it before it was renamed); delete those too for a clean removal. To take the
 bridge out of Spotify, run `spicetify config extensions player-bridge.js-`
 and then `spicetify apply`.
 
@@ -220,7 +222,7 @@ since the usual prose description gets two details wrong:
 `httpStatus` 200 = found, 404 = none, 503 = queued server-side. Times in the
 payload are already in **seconds**, matching `LyricLine.t`.
 
-The player discovers the current request version through `ext_version` and
+Playback discovers the current request version through `ext_version` and
 checks it again on the next lookup after 15 minutes. A line-only or untimed
 response also triggers a version check, with one retry if the version changed.
 Cached line lyrics record their request version and refresh when it changes;

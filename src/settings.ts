@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
+/** Playback's logo as an image: what shows where a cover would, when there is none. */
+export const LOGO_ART =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 64 64"><rect width="64" height="64" fill="#0b0b0d"/><g stroke-linecap="round" stroke="#fff"><line x1="17" y1="18" x2="40" y2="18" stroke-opacity=".28" stroke-width="5"/><line x1="13" y1="32" x2="51" y2="32" stroke-opacity=".28" stroke-width="9"/><line x1="13" y1="32" x2="37" y2="32" stroke-width="9"/><line x1="17" y1="46" x2="34" y2="46" stroke-opacity=".28" stroke-width="5"/></g></svg>`,
+  );
+
 /**
  * Settings live in localStorage, which both windows share. A write in one
  * window fires a `storage` event in the other, so the widget follows the

@@ -1,9 +1,9 @@
 {
-  "name": "player",
+  "name": "playback",
   "private": true,
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Now-playing overlay with synced lyrics",
-  "author": "player",
+  "author": "Playback",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -17,11 +17,12 @@
     "start": "npm run build && electron .",
     "icon": "electron scripts/make-icon.cjs",
     "pack:app": "node scripts/pack.cjs",
-    "package": "npm run build && npm run pack:app && electron-builder --win nsis-web --prepackaged release/player-win32-x64 --publish never"
+    "package": "npm run build && npm run pack:app && electron-builder --win nsis-web --prepackaged release/Playback-win32-x64 --publish never",
+    "installer": "npm --prefix installer run build"
   },
   "build": {
     "appId": "com.player.smtcwidget",
-    "productName": "player",
+    "productName": "Playback",
     "icon": "build/icon.ico",
     "directories": {
       "output": "release"
@@ -39,7 +40,7 @@
       {
         "provider": "github",
         "owner": "dev-avs",
-        "repo": "player"
+        "repo": "playback"
       }
     ],
     "win": {
@@ -51,7 +52,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "runAfterFinish": true,
-      "artifactName": "player-setup-${version}.exe"
+      "artifactName": "playback-setup-${version}.exe"
     }
   },
   "devDependencies": {

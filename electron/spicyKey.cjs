@@ -125,7 +125,7 @@ const toastScript = (text) => `(() => {
 
 // Filled into the dashboard's "New application" form. The terms checkbox is
 // left alone: agreeing is the user's to do.
-const APP_NAME = "player";
+const APP_NAME = "Playback";
 const PROJECT_URL = "https://github.com/dev-avs";
 
 // Fills each field once, when it appears empty, so anything the user types

@@ -83,6 +83,8 @@ export interface SetupState {
   firstRun: boolean;
   ready: boolean;
   needsApply: boolean;
+  /** the bridge was turned off in the installer; Setup can turn it on */
+  bridgeOff?: boolean;
   actions: string[];
   error?: string;
   status: {

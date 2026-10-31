@@ -1,0 +1,23 @@
+{
+  "name": "playback-installer",
+  "private": true,
+  "version": "1.0.0",
+  "description": "The installer people download: picks a folder and options, then installs the newest player release",
+  "type": "module",
+  "scripts": {
+    "dev:web": "vite --port 5174 --strictPort",
+    "build:web": "vite build",
+    "dev": "tauri dev",
+    "build": "tauri build --no-bundle"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@tauri-apps/api": "^2.12.4",
+    "@tauri-apps/plugin-dialog": "^2.8.4"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.12.4",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.12"
+  }
+}

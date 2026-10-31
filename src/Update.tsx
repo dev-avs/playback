@@ -66,10 +66,10 @@ export default function Update() {
   const stagger = (i: number) => ({ "--cl-i": i }) as React.CSSProperties;
   const text =
     state?.status === "downloading"
-      ? `Downloading ${progressText(state)}… player restarts by itself when it's done.`
+      ? `Downloading ${progressText(state)}… Playback restarts by itself when it's done.`
       : state?.status === "error"
         ? `The update failed: ${state.error}`
-        : `player ${state?.version ?? ""} is out. You have ${version}.`;
+        : `Playback ${state?.version ?? ""} is out. You have ${version}.`;
 
   return (
     <div className="stage" onContextMenu={(e) => e.preventDefault()}>
@@ -80,12 +80,16 @@ export default function Update() {
         aria-modal="true"
         aria-labelledby="up-title"
       >
-        {art && <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />}
+        {art ? (
+          <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />
+        ) : (
+          <div className="cl-bg cl-bg-mono" />
+        )}
         <div className="cl-mark">
           <AppMark />
         </div>
         <div className="cl-heading" style={stagger(0)}>
-          <p className="cl-brand">player</p>
+          <p className="cl-brand">Playback</p>
           <h2 className="cl-title" id="up-title">
             Update available
           </h2>

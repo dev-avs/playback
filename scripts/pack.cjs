@@ -1,4 +1,4 @@
-// Packages the app into release/player-win32-x64 for electron-builder's
+// Packages the app into release/Playback-win32-x64 for electron-builder's
 // --prepackaged step (electron-builder's own packaging fails on this machine).
 //
 // What goes in is an allow-list: the built UI, the main process, the bridge,
@@ -13,7 +13,7 @@ const { packager } = require("@electron/packager");
 const root = path.resolve(__dirname, "..");
 
 // Matches build.publish in package.json.
-const APP_UPDATE_YML = "owner: dev-avs\nrepo: player\nprovider: github\nupdaterCacheDirName: player-updater\n";
+const APP_UPDATE_YML = "owner: dev-avs\nrepo: playback\nprovider: github\nupdaterCacheDirName: playback-updater\n";
 
 const prodModules = execSync("npm ls --omit=dev --all --parseable", { cwd: root, encoding: "utf8" })
   .split(/\r?\n/)
@@ -27,7 +27,8 @@ const keep = (p) => allowed.some((a) => p === a || p.startsWith(`${a}/`) || a.st
 
 packager({
   dir: root,
-  name: "player",
+  // the exe is Playback.exe; electron-builder looks for <productName>.exe
+  name: "Playback",
   platform: "win32",
   arch: "x64",
   out: path.join(root, "release"),

@@ -2083,42 +2083,82 @@ svg {
     color: #fff;
 }
 
-/* ── Nothing playing: the player with its text drawn as placeholders ── */
-.widget-empty .info span,
-.widget-empty .time-el,
-.widget-empty .time-rem {
-    color: rgba(255, 255, 255, 0.3);
+/* No cover: the installer's black and white glass instead of a blur. Shared
+   by the widget, Settings and the card windows (.cl-bg-mono, .st-bg-mono). */
+.widget-bg.widget-bg-mono {
+    filter: none;
+    opacity: var(--bg-k, 1);
+    background:
+        radial-gradient(45% 40% at 22% 18%, rgba(255, 255, 255, 0.16), transparent 70%),
+        radial-gradient(45% 45% at 82% 88%, rgba(255, 255, 255, 0.08), transparent 70%),
+        linear-gradient(160deg, #1d1d21, #0b0b0d);
 }
 
-/* Our own mark rather than a font's dash: a rounded line sitting where the
-   text's x-height would be, sized per field like the text it stands in for.
-   The row keeps its text line height, so nothing moves when a song arrives. */
-.placeholder-mark {
-    display: inline-block;
-    vertical-align: middle;
-    height: 4px;
-    border-radius: 2px;
-    background: currentColor;
+/* ── Nothing playing ── */
+.np-empty {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 6px 4px 4px;
 }
 
-.widget-empty .artist .placeholder-mark {
-    height: 3px;
+.np-mark {
+    flex: none;
+    width: 42px;
+    height: 42px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
 }
 
-/* with no text to size it, the column would shrink to nothing and take the
-   percentage-wide marks with it */
-.widget-empty .info {
-    flex: 1;
+/* the logo's middle line, sung across and faded out, over and over */
+.np-sung {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation: np-sing 3.2s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+@keyframes np-sing {
+    0% {
+        stroke-dashoffset: 100;
+    }
+    70%,
+    85% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+    100% {
+        stroke-dashoffset: 0;
+        opacity: 0;
+    }
+}
+
+.np-empty-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.np-empty-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.np-empty-sub {
+    font-size: 11.5px;
+    color: rgba(255, 255, 255, 0.55);
 }
 
 /* only pulse while actually waiting on something */
-.widget-empty.connecting .info span {
+.widget-empty.connecting .np-empty-title {
     animation: empty-pulse 1.4s ease-in-out infinite alternate;
 }
 
 @keyframes empty-pulse {
     from { opacity: 1; }
-    to   { opacity: 0.3; }
+    to   { opacity: 0.4; }
 }
 
 /* ── Instrumental gap marker ──

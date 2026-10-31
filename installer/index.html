@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Install Playback</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div class="stage">
+      <main class="card" id="card" data-page="welcome">
+        <!-- the glass: drifting colour behind a dark wash, like the widget -->
+        <div class="bg" aria-hidden="true">
+          <span class="blob b1"></span>
+          <span class="blob b2"></span>
+          <span class="blob b3"></span>
+        </div>
+        <div class="sheen" aria-hidden="true"></div>
+
+        <header class="bar" data-tauri-drag-region>
+          <span class="bar-title" data-tauri-drag-region>Playback installer</span>
+          <button class="bar-btn" id="minimize" aria-label="Minimise">
+            <svg viewBox="0 0 12 12"><path d="M2.5 6h7" /></svg>
+          </button>
+          <button class="bar-btn" id="close" aria-label="Close">
+            <svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" /></svg>
+          </button>
+        </header>
+
+        <div class="pages">
+          <!-- Welcome -->
+          <section class="page" data-page="welcome">
+            <div class="logo-wrap" style="--i: 0">
+              <span class="logo-ring"></span>
+              <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+                <rect width="64" height="64" rx="15" fill="#0b0b0d" />
+                <rect x=".5" y=".5" width="63" height="63" rx="14.5" fill="none" stroke="#fff" stroke-opacity=".16" />
+                <g stroke-linecap="round" stroke="#fff">
+                  <line x1="17" y1="18" x2="40" y2="18" stroke-opacity=".28" stroke-width="5" />
+                  <line x1="13" y1="32" x2="51" y2="32" stroke-opacity=".28" stroke-width="9" />
+                  <line class="sung" x1="13" y1="32" x2="51" y2="32" stroke-width="9" pathLength="100" />
+                  <line x1="17" y1="46" x2="34" y2="46" stroke-opacity=".28" stroke-width="5" />
+                </g>
+              </svg>
+            </div>
+            <h1 class="title" style="--i: 1" id="hello"></h1>
+            <p class="lead" style="--i: 2">
+              A floating music widget with lyrics that follow along, word by word.
+            </p>
+            <div class="grow"></div>
+            <!-- the widget in miniature, singing along -->
+            <div class="demo" style="--i: 3" aria-hidden="true">
+              <div class="demo-head">
+                <span class="demo-meta"><b>Your song</b><small>Any artist</small></span>
+                <span class="demo-eq"><i></i><i></i><i></i></span>
+              </div>
+              <p class="demo-line" id="demo-line"></p>
+              <p class="demo-next" id="demo-next"></p>
+            </div>
+            <div class="grow"></div>
+            <div class="actions" style="--i: 4">
+              <button class="btn primary wide" id="start" disabled>
+                <span id="start-label">Install</span>
+              </button>
+            </div>
+            <p class="caption" style="--i: 5" id="release">
+              <span class="skeleton">Looking up the newest version…</span>
+            </p>
+          </section>
+
+          <!-- Folder and options -->
+          <section class="page" data-page="options">
+            <p class="step" style="--i: 0">Step 1 of 2</p>
+            <h2 class="heading" style="--i: 1">Make it yours</h2>
+
+            <label class="label" style="--i: 2">Install to</label>
+            <div class="path" style="--i: 2">
+              <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 4.5A1.5 1.5 0 0 1 3.5 3H6l1.5 1.5h5A1.5 1.5 0 0 1 14 6v5.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5z" /></svg>
+              <span class="path-text" id="dir"></span>
+              <button class="btn quiet small" id="browse">Browse</button>
+            </div>
+            <p class="error" id="dir-error" role="alert"></p>
+
+            <div class="option" style="--i: 3">
+              <div class="option-text">
+                <span class="option-name">Spotify bridge</span>
+                <span class="option-desc">
+                  Up next, Spotify's own cover and word-by-word lyrics. Uses Spicetify, and Spotify restarts once. You
+                  can turn it on later in Setup.
+                </span>
+              </div>
+              <button class="switch on" id="bridge" role="switch" aria-checked="true" aria-label="Spotify bridge">
+                <span class="knob"></span>
+              </button>
+            </div>
+            <div class="option" style="--i: 4">
+              <div class="option-text">
+                <span class="option-name">Desktop shortcut</span>
+                <span class="option-desc">Playback is in the Start menu either way.</span>
+              </div>
+              <button class="switch on" id="desktop" role="switch" aria-checked="true" aria-label="Desktop shortcut">
+                <span class="knob"></span>
+              </button>
+            </div>
+
+            <div class="grow"></div>
+            <div class="actions split" style="--i: 5">
+              <button class="btn quiet" id="back">Back</button>
+              <button class="btn primary" id="install">Install</button>
+            </div>
+          </section>
+
+          <!-- Installing -->
+          <section class="page" data-page="progress">
+            <p class="step" style="--i: 0">Step 2 of 2</p>
+            <h2 class="heading" style="--i: 1" id="progress-title">Installing Playback</h2>
+            <div class="grow"></div>
+            <!-- the logo's lines, big, singing while it installs -->
+            <svg class="lines" style="--i: 2" viewBox="0 0 64 40" aria-hidden="true">
+              <g stroke-linecap="round" stroke="#fff">
+                <line x1="8" y1="6" x2="34" y2="6" stroke-opacity=".22" stroke-width="5" />
+                <line x1="4" y1="20" x2="58" y2="20" stroke-opacity=".22" stroke-width="9" />
+                <line class="sung" x1="4" y1="20" x2="58" y2="20" stroke-width="9" pathLength="100" />
+                <line x1="8" y1="34" x2="28" y2="34" stroke-opacity=".22" stroke-width="5" />
+              </g>
+            </svg>
+            <div class="meter" style="--i: 3">
+              <div class="percent"><span id="percent">0</span><small>%</small></div>
+              <div class="track" id="track">
+                <div class="fill" id="fill"></div>
+              </div>
+              <p class="meter-text" id="meter-text">Starting…</p>
+            </div>
+            <div class="grow"></div>
+            <div class="actions center" style="--i: 4">
+              <button class="btn quiet hold" id="cancel" style="--hold-ms: 1200ms">
+                <span id="cancel-label">Hold to cancel</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- Done -->
+          <section class="page" data-page="done">
+            <div class="grow"></div>
+            <div class="check-wrap" style="--i: 0">
+              <span class="burst" id="burst"></span>
+              <svg class="check" viewBox="0 0 64 64" aria-hidden="true">
+                <circle cx="32" cy="32" r="28" />
+                <path d="M20 33l8 8 16-17" />
+              </svg>
+            </div>
+            <h2 class="heading center" style="--i: 1">Playback is ready</h2>
+            <p class="lead center" style="--i: 2" id="done-text"></p>
+            <div class="grow"></div>
+            <div class="actions split" style="--i: 3">
+              <button class="btn quiet" id="finish">Close</button>
+              <button class="btn primary" id="open">Open Playback</button>
+            </div>
+          </section>
+
+          <!-- Error -->
+          <section class="page" data-page="error">
+            <div class="grow"></div>
+            <div class="oops" style="--i: 0" aria-hidden="true">!</div>
+            <h2 class="heading center" style="--i: 1">That didn't work</h2>
+            <p class="lead center" style="--i: 2" id="error-text"></p>
+            <div class="grow"></div>
+            <div class="actions split" style="--i: 3">
+              <button class="btn quiet" id="quit">Close</button>
+              <button class="btn primary" id="retry">Try again</button>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

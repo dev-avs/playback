@@ -31,3 +31,7 @@ release
 .claude/
 .env*
 
+
+# The installer (installer/): Rust build output and generated schemas
+installer/src-tauri/target
+installer/src-tauri/gen

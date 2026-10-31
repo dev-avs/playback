@@ -35,6 +35,29 @@
     font-family: inherit;
 }
 
+/* Under every cover: the black and white glass, all there is when nothing
+   plays (like the installer, and the widget's .widget-bg-mono). */
+.st-bg.st-bg-mono {
+    inset: 0;
+    filter: none;
+    opacity: 1;
+    background:
+        radial-gradient(50% 35% at 18% 8%, rgba(255, 255, 255, 0.14), transparent 70%),
+        radial-gradient(45% 40% at 88% 96%, rgba(255, 255, 255, 0.07), transparent 70%),
+        linear-gradient(160deg, #1d1d21, #0b0b0d);
+}
+
+/* the last cover, fading away when the music stops */
+.st-bg-out {
+    animation: st-bg-out 600ms ease forwards;
+}
+
+@keyframes st-bg-out {
+    to {
+        opacity: 0;
+    }
+}
+
 /* the newest cover fades in over the one before (see the cover state) */
 .st-bg-in {
     animation: st-bg-in 500ms ease;

@@ -146,12 +146,12 @@ export default function Versions() {
   const stagger = (i: number) => ({ "--cl-i": i }) as React.CSSProperties;
   const text =
     state?.status === "downloading"
-      ? `Downloading ${state.version} · ${progressText(state)}… player restarts by itself when it's done.`
+      ? `Downloading ${state.version} · ${progressText(state)}… Playback restarts by itself when it's done.`
       : state?.status === "error"
         ? `That didn't work: ${state.error}`
         : state?.status === "dev"
           ? "Only the installed app can switch versions."
-          : `You have ${version}. Update or revert to any version; player restarts on it.`;
+          : `You have ${version}. Update or revert to any version; Playback restarts on it.`;
 
   return (
     <div className="stage" onContextMenu={(e) => e.preventDefault()}>
@@ -162,12 +162,16 @@ export default function Versions() {
         aria-modal="true"
         aria-labelledby="vc-title"
       >
-        {art && <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />}
+        {art ? (
+          <div className="cl-bg" style={{ backgroundImage: `url(${art})` }} />
+        ) : (
+          <div className="cl-bg cl-bg-mono" />
+        )}
         <div className="cl-mark">
           <AppMark />
         </div>
         <div className="cl-heading" style={stagger(0)}>
-          <p className="cl-brand">player</p>
+          <p className="cl-brand">Playback</p>
           <h2 className="cl-title" id="vc-title">
             Version control
           </h2>
@@ -246,11 +250,11 @@ export default function Versions() {
                 Revert to {warn.version}?
               </h3>
               <p className="cl-text">
-                {warn.version} is from before player could update itself. Once you're on it, there's no Update, no
+                {warn.version} is from before Playback could update itself (it was still called player then). Once you're on it, there's no Update, no
                 Version control and no way back from inside player: to get a newer version again, download the
                 installer from GitHub and run it yourself.
               </p>
-              <p className="cl-text">Your settings stay. player closes, and its installer opens it again on {warn.version}.</p>
+              <p className="cl-text">It uses your settings as they were when you first opened Playback. Playback closes, and the installer opens player {warn.version}.</p>
               <div className="cl-actions">
                 <button
                   type="button"

@@ -50,6 +50,17 @@
     z-index: 0;
 }
 
+/* no cover (nothing playing): black and white glass, like the installer */
+.cl-bg.cl-bg-mono {
+    inset: 0;
+    filter: none;
+    opacity: 1;
+    background:
+        radial-gradient(55% 40% at 20% 10%, rgba(255, 255, 255, 0.14), transparent 70%),
+        radial-gradient(50% 45% at 85% 95%, rgba(255, 255, 255, 0.07), transparent 70%),
+        linear-gradient(160deg, #1d1d21, #0b0b0d);
+}
+
 .cl-card > :not(.cl-bg) {
     position: relative;
     z-index: 1;

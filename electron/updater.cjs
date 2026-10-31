@@ -1,4 +1,4 @@
-// Updates from the GitHub releases of dev-avs/player, never without a click:
+// Updates from the GitHub releases of dev-avs/playback, never without a click:
 // on launch the update window asks (Later / Update), and Settings → Behavior
 // has Check and Update. Update downloads only what changed (the release's
 // blockmap) and restarts player on the new version.
@@ -21,7 +21,9 @@ const { app } = require("electron");
 const { autoUpdater } = require("electron-updater");
 
 const OWNER = "dev-avs";
-const REPO = "player";
+// Was dev-avs/player up to 1.4.2; GitHub redirects the old name, which is
+// how installs from before the rename still find their updates.
+const REPO = "playback";
 const GITHUB_FEED = { provider: "github", owner: OWNER, repo: REPO };
 
 /**

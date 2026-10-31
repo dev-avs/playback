@@ -278,7 +278,7 @@ function login() {
             code_verifier: verifier,
           }),
         );
-        reply("Signed in. You can close this tab and go back to the player.");
+        reply("Signed in. You can close this tab and go back to Playback.");
         resolve(true);
       } catch (e) {
         reply(`Sign-in failed: ${e.message}`);
