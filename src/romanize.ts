@@ -264,9 +264,20 @@ export function alignRomanizedToWords(
  * lines up with playback.
  */
 export function romanizeLines(lines: LyricLine[]): LyricLine[] {
-  return lines.map((line) => ({
-    ...line,
-    text: romanizeText(line.text),
-    words: line.words?.map((w) => ({ ...w, text: romanizeText(w.text) })),
-  }));
+  return lines.map((line) => {
+    if (!line.words?.length) return { ...line, text: romanizeText(line.text) };
+    // Each romanized CJK unit stands apart (一二三 → "ichi ni san"); glued, they
+    // ran together into one unreadable word.
+    const words = line.words.map((w) => ({
+      ...w,
+      text: romanizeText(w.text),
+      joinNext: w.joinNext && !hasNonLatinScript(w.text),
+    }));
+    let text = "";
+    for (let i = 0; i < words.length; i++) {
+      text += words[i].text;
+      if (i < words.length - 1 && !words[i].joinNext) text += " ";
+    }
+    return { ...line, text, words };
+  });
 }

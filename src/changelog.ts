@@ -22,6 +22,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.5",
+    date: "2026-10-31",
+    changes: {
+      qol: [
+        "Romanized Japanese, Chinese and Korean lyrics space out each syllable (ichi ni san shi go) instead of running them together.",
+        "Paused, scrolled lyrics stay where you put them, and jump back to the current line as soon as you press play.",
+      ],
+    },
+  },
+  {
     version: "1.4.4",
     date: "2026-10-30",
     changes: {

@@ -1844,14 +1844,22 @@ export default function App() {
 
   // After a wheel scroll, follow the song again once the wheel has rested for
   // the chosen delay (Settings → Auto sync; 0 = never). The sync is read
-  // through a ref so a line change mid-countdown does not restart it.
+  // through a ref so a line change mid-countdown does not restart it. Paused,
+  // the view stays put; on resume it follows the song again straight away.
   useEffect(() => {
-    if (!outOfSync || !autoSync || !isSynced) return;
+    if (!outOfSync || !autoSync || !isSynced || !np.playing) return;
     const id = setTimeout(() => {
       syncRef.current();
     }, autoSync * 1000);
     return () => clearTimeout(id);
-  }, [outOfSync, wheelNonce, autoSync, isSynced]);
+  }, [outOfSync, wheelNonce, autoSync, isSynced, np.playing]);
+
+  const wasPlayingRef = useRef(np.playing);
+  useEffect(() => {
+    const resumed = np.playing && !wasPlayingRef.current;
+    wasPlayingRef.current = np.playing;
+    if (resumed && autoSync && isSynced && outOfSyncRef.current) syncRef.current();
+  }, [np.playing, autoSync, isSynced]);
 
   const seekToLine = (t: number) => {
     if (!clickToJump || !np.caps.seek) return;

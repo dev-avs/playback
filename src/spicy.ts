@@ -1,5 +1,6 @@
 import { SLObjPack } from "./vendor/objpack";
 import { TIER, type LyricLine, type LyricWord, type Tier } from "./lyrics";
+import { hasNonLatinScript } from "./romanize";
 
 // Shapes as used by spicy-lyrics' own applyers (Synced/Syllable.ts,
 // Synced/Line.ts). Times are already in seconds — their ConvertTime()
@@ -121,7 +122,10 @@ function syllablesToWords(
       t: s.StartTime,
       end: s.EndTime,
       text,
-      joinNext: s.IsPartOfWord === true,
+      // Romanized CJK syllables stand apart (一二三 → "ichi ni san"); glued
+      // they ran together into one unreadable word.
+      joinNext:
+        s.IsPartOfWord === true && !(transliterate && hasNonLatinScript(s.Text ?? "")),
     });
   }
   return words;

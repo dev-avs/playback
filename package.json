@@ -1,7 +1,7 @@
 {
   "name": "playback",
   "private": true,
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Now-playing overlay with synced lyrics",
   "author": "Playback",
   "license": "AGPL-3.0-only",
