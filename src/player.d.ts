@@ -64,6 +64,17 @@ export interface UpdateState {
   error: string | null;
 }
 
+/** A GitHub release, as electron/updater.cjs lists it for version control. */
+export interface Release {
+  version: string;
+  /** ISO time it was published */
+  date: string;
+  /** the release body: `### Section` headings and `- ` points */
+  notes: string;
+  /** before 1.3.7: installed with its full installer, and has no updater of its own */
+  legacy: boolean;
+}
+
 /** Spicetify and the bridge, as electron/spicetifySetup.cjs reports them. */
 export interface SetupState {
   firstRun: boolean;
@@ -129,6 +140,14 @@ export interface PlayerBridge {
   checkForUpdate?(): Promise<UpdateState>;
   /** Downloads and restarts into the new version, no confirmation. */
   installUpdate?(): Promise<UpdateState>;
+  /** Update window → Skip this version: launch stops asking about it. */
+  skipUpdate?(): Promise<void>;
+  /** Releases version control can install (1.3.7 on), newest first. */
+  listReleases?(): Promise<{ ok: true; list: Release[] } | { ok: false; error: string }>;
+  /** Installs that release, newer or older, and restarts into it. */
+  bumpTo?(version: string): Promise<UpdateState>;
+  /** Opens the version control window (#versions). */
+  openVersions?(): Promise<void>;
   onUpdateChanged?(cb: (state: UpdateState) => void): () => void;
   closeUpdate?(): Promise<void>;
   resizeUpdate?(height: number): Promise<void>;

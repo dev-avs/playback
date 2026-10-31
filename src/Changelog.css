@@ -239,6 +239,11 @@
     background: rgba(255, 255, 255, 0.16);
 }
 
+/* pushed to the left edge, away from the main choices */
+.cl-button--start {
+    margin-right: auto;
+}
+
 .cl-button--primary {
     background: #fff;
     color: #141416;
@@ -251,4 +256,132 @@
 .cl-button:focus-visible {
     outline: 2px solid rgba(255, 255, 255, 0.6);
     outline-offset: 2px;
+}
+
+/* ── Version control (#versions): every release, newest first ── */
+.vc-list {
+    max-height: 380px;
+    overflow-x: hidden;
+}
+
+/* each version its own tile */
+.vc-entry {
+    padding: 7px 9px 6px;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.07);
+}
+
+.cl-entry.vc-entry + .cl-entry.vc-entry {
+    margin-top: 6px;
+}
+
+.vc-entry.is-current {
+    background: rgba(255, 255, 255, 0.11);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.22);
+}
+
+.vc-entry .cl-entry-head {
+    margin-bottom: 3px;
+}
+
+/* notes in smaller type than the changelog's */
+.vc-entry .cl-kind + .cl-kind {
+    margin-top: 4px;
+}
+
+.vc-entry .cl-kind-name {
+    font-size: 8.5px;
+}
+
+.vc-entry ul {
+    margin-top: 1px;
+}
+
+.vc-entry li {
+    font-size: 10.5px;
+    line-height: 1.35;
+    color: rgba(255, 255, 255, 0.72);
+}
+
+/* collapsed: the first point, cut to two lines */
+.vc-entry.is-collapsed li {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+.vc-go {
+    margin-left: auto;
+    padding: 3px 9px;
+    font-size: 10px;
+}
+
+.vc-go:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.vc-more {
+    -webkit-app-region: no-drag;
+    border: none;
+    background: none;
+    padding: 2px 0 0;
+    font: inherit;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+}
+
+.vc-more:hover {
+    color: #fff;
+}
+
+/* The warning before reverting to a version with no updater: over the whole
+   card, with a Revert that has to be held, like Uninstall in Settings. */
+.cl-card > .vc-warn {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: rgba(12, 12, 14, 0.62);
+    backdrop-filter: blur(6px);
+    -webkit-app-region: no-drag;
+}
+
+.vc-warn-box {
+    width: 100%;
+    padding: 14px 14px 10px;
+    border-radius: 11px;
+    background: rgba(32, 32, 36, 0.92);
+    box-shadow:
+        0 0 0 0.5px rgba(255, 90, 70, 0.35),
+        0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+.vc-warn-title {
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.vc-hold {
+    color: #fff;
+    background: rgba(255, 90, 70, 0.35);
+}
+
+/* the hold fills the button left to right; letting go empties it */
+.vc-hold.holding {
+    background: linear-gradient(90deg, rgba(255, 90, 70, 0.85) 50%, rgba(255, 90, 70, 0.35) 50%) right / 200% 100%;
+    animation: vc-hold var(--hold-ms, 1500ms) linear forwards;
+}
+
+@keyframes vc-hold {
+    to {
+        background-position: left;
+    }
 }

@@ -1,7 +1,7 @@
 # Project rules
 
-## After any code change: rebuild, release, reinstall, restart Spotify if needed
-The user runs the installed app, not the dev build. A fix is not done until it is released, installed and running.
+## After any code change: rebuild, release; the user updates
+The user runs the installed app, not the dev build. A fix is not done until it is released. Never install it for them: they update through the app's own updater, which is how that path gets tested.
 
 The installer is a web installer (`nsis-web`): `player-setup-<version>.exe` is a ~1 MB stub that downloads `player-<version>-x64.nsis.7z` from the GitHub release while it installs. So the release has to be on GitHub **before** installing. The installed app updates itself from the same releases (`electron/updater.cjs`, electron-updater): it asks on launch (Later / Update), and Settings → Behavior → Updates checks and installs; nothing installs without a click. It reads `latest.yml` from the newest release, so every release must carry it.
 
@@ -12,11 +12,9 @@ The installer is a web installer (`nsis-web`): `player-setup-<version>.exe` is a
 4. Keep only the new build in `release/`: `release/nsis-web/` (just the new version's three files) and `release/player-win32-x64/`. Delete anything else (old installers, blockmaps, `builder-debug.yml`, old version folders).
 5. Commit and tag the release in git: `git add -A`, commit as `Release <version>` with the changelog entry's points as the body, then `git tag v<version>`. Push both to GitHub (`origin` = https://github.com/dev-avs/player, **public**): `git push` and `git push --tags`. Check `git status` is clean and up to date with `origin/main`.
 6. Publish the GitHub release with all three files (`release/` is gitignored, so this is the only place they go online, and the stub and the updater both download from it): `gh release create v<version> release/nsis-web/player-setup-<version>.exe release/nsis-web/player-<version>-x64.nsis.7z release/nsis-web/latest.yml --title "player <version>" --notes-file <notes>`, where the notes are the changelog entry with one `### <section>` heading per `CHANGE_KINDS` section. Check it with `gh release view v<version>`.
-7. Reinstall: stop any running `player` process, then run the new stub silently and wait for it (it downloads from the release just made):
-   `Start-Process release/nsis-web/player-setup-<version>.exe -ArgumentList '/S' -Wait`
-   Then start `%LOCALAPPDATA%\Programs\player\player.exe` (run-after-finish does not fire in silent mode). Starting the app checks the Spicetify bridge (electron/spicetifySetup.cjs) and refreshes Spotify's copy of it. If the preview ran since the last install, first set `%APPDATA%\player\last-version.json` back to the installed version so the changelog still pops up.
-8. Restart Spotify **only if necessary**: when `spicetify/player-bridge.js` changed since the last install, because Spotify only loads the new extension copy on restart. Otherwise leave Spotify alone — restarting it interrupts the user's music. When needed: stop every `Spotify` process, then start `%APPDATA%\Spotify\Spotify.exe`. Do this after step 7, never before.
-9. Tell the user the new version is released, installed and running, whether Spotify was restarted (and why), and link the release.
+7. Do not install. If the installed app was stopped for the preview, start `%LOCALAPPDATA%\Programs\player\player.exe` again so it offers the update on launch. If the preview ran, first set `%APPDATA%\player\last-version.json` back to the installed version so the changelog still pops up after the update.
+8. Never restart Spotify yourself. If `spicetify/player-bridge.js` changed in this release, tell the user Spotify needs one restart after they update (Spotify only loads the new extension copy on restart).
+9. Tell the user the new version is released, link the release, and say to update from the prompt or Settings → Behavior → Updates.
 
 ## Spicy Lyrics copy
 `vendor/spicy-lyrics/` is a full copy of https://github.com/Spikerko/spicy-lyrics, kept in this repo as plain files for reference. The app does not run it (`src/vendor/objpack.ts` is the one file taken from it), and ESLint skips it. Always update it by reinstalling with a fresh clone, never by editing it in place:
@@ -26,10 +24,10 @@ The installer is a web installer (`nsis-web`): `player-setup-<version>.exe` is a
 4. If `git status` shows changes under `vendor/spicy-lyrics/`, they go into the release commit; mention their commit in its body (e.g. `Spicy Lyrics reference: e1d49d8 (2026-10-05)`).
 
 ## How we work
-- **Preview before install.** After building a change, run it for the user to try before packaging: stop the installed `player` process, then start `node_modules/electron/dist/electron.exe .` from the project folder (it loads `dist/`). Package and install only once they approve ("ship it" / "push it"), unless they say to just ship. The preview shares the installed app's data folder, so it records its version in `%APPDATA%\player\last-version.json`; before installing, set that back to the installed version so the changelog still pops up.
+- **Preview before install.** After building a change, run it for the user to try before packaging: stop the installed `player` process, then start `node_modules/electron/dist/electron.exe .` from the project folder (it loads `dist/`). Package and release only once they approve ("ship it" / "push it"), unless they say to just ship. The preview shares the installed app's data folder, so it records its version in `%APPDATA%\player\last-version.json`; before releasing, set that back to the installed version so the changelog still pops up after the update.
 - **Defaults never change the look.** New settings default to today's appearance. Check it: capture the widget offscreen with default settings before and after (Electron `capturePage`, fixed fake player state), and diff the images — they must be identical.
 - **Settings live in one list.** `src/settings.ts` holds every setting's default (`DEFAULTS`) and storage key (`KEYS`); the widget reads them with `usePersisted`. The settings window (`src/Settings.tsx`) is built from the `items` list (category, label, explanation, control) on top of `useSettingsStore()`, which gives search, Reset per section and hold-to-reset for free. A new setting = a `DEFAULTS`/`KEYS` entry, its effect in `App.tsx`/`App.css` (usually a CSS variable or class whose fallback is today's value), and an item in `Settings.tsx`.
-- **Windows:** widget (`App.tsx`), settings (`#settings`), changelog (`#changelog`, `#changelog-past`); one bundle, routed in `src/main.tsx`. Each frameless window sizes itself to its card through a resize IPC.
+- **Windows:** widget (`App.tsx`), settings (`#settings`), changelog (`#changelog`, `#changelog-past`), setup (`#setup`), update prompt (`#update`), version control (`#versions`); one bundle, routed in `src/main.tsx`. Each frameless window sizes itself to its card through a resize IPC.
 - The Spicetify bridge is `spicetify/player-bridge.js` (it was `player-token.js` until 1.3.3). `electron/spicetifySetup.cjs` checks and installs it; its tests are in `tests/spicetifySetup.test.cjs`.
 
 ## In progress (update or remove this section as it moves)

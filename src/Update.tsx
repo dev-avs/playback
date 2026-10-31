@@ -10,8 +10,9 @@ const CLOSE_MS = 200;
 
 /**
  * The update window (#update): opened on launch when GitHub has a newer
- * version. Later closes it; Update downloads and restarts into it. Same card
- * and manners as the changelog and Setup.
+ * version. Later closes it; Skip this version closes it and stops launch from
+ * asking about this one; Update downloads and restarts into it. Same card and
+ * manners as the changelog and Setup.
  */
 export default function Update() {
   const [state, setState] = useState<UpdateState | null>(null);
@@ -92,6 +93,17 @@ export default function Update() {
           {text}
         </p>
         <div className="cl-actions" style={stagger(2)}>
+          <button
+            type="button"
+            className="cl-button cl-button--quiet cl-button--start"
+            disabled={busy}
+            onClick={() => {
+              window.player?.skipUpdate?.();
+              close();
+            }}
+          >
+            Skip this version
+          </button>
           <button type="button" className="cl-button cl-button--quiet" disabled={busy} onClick={close}>
             Later
           </button>

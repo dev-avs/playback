@@ -20,6 +20,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.1",
+    date: "2026-10-30",
+    changes: {
+      new: [
+        "Version control in Settings → Behavior: every version of player with what changed in each. Update or revert to any of them and player restarts on it.",
+        "Skip this version in the update window: player stops asking about that version on launch, and asks again when a newer one is out.",
+      ],
+    },
+  },
+  {
     version: "1.4.0",
     date: "2026-10-30",
     changes: {

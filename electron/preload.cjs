@@ -61,6 +61,10 @@ contextBridge.exposeInMainWorld("player", {
   updateState: () => ipcRenderer.invoke("update:state"),
   checkForUpdate: () => ipcRenderer.invoke("update:check"),
   installUpdate: () => ipcRenderer.invoke("update:install"),
+  skipUpdate: () => ipcRenderer.invoke("update:skip"),
+  listReleases: () => ipcRenderer.invoke("update:releases"),
+  bumpTo: (version) => ipcRenderer.invoke("update:bump", version),
+  openVersions: () => ipcRenderer.invoke("versions:open"),
   onUpdateChanged(cb) {
     const handler = (_e, state) => cb(state);
     ipcRenderer.on("update:changed", handler);

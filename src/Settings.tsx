@@ -461,7 +461,7 @@ export default function Settings() {
         checking: "checking…",
         none: `up to date · ${appVersion}`,
         available: `${update.version} is out · you have ${appVersion}`,
-        downloading: `downloading ${update.percent}%… restarts by itself`,
+        downloading: `downloading ${update.version} · ${update.percent}%… restarts by itself`,
         error: `couldn't update: ${update.error}`,
         dev: "only the installed app updates",
       }[update.status];
@@ -989,6 +989,17 @@ export default function Settings() {
           }
         >
           {update?.status === "available" ? "Update" : update?.status === "downloading" ? "Updating…" : "Check"}
+        </button>
+      ),
+    },
+    {
+      id: "versions",
+      cat: "behavior",
+      label: "Version control",
+      desc: "Every version of player, newest first, with what changed in each. Update or revert to any of them; player restarts on it.",
+      control: (
+        <button className="st-pill" onClick={() => window.player?.openVersions?.()}>
+          Open
         </button>
       ),
     },

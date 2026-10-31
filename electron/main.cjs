@@ -1003,6 +1003,46 @@ function openChangelog(fromVersion = null) {
   else changelogWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash });
 }
 
+// Version control (#versions), from Settings → Behavior: every release, to
+// update or revert to. Centred on the widget's screen, like the changelog.
+let versionsWin = null;
+
+function openVersions() {
+  if (versionsWin) {
+    versionsWin.focus();
+    return;
+  }
+  const [wx, wy] = win ? win.getPosition() : [100, 100];
+  const area = screen.getDisplayNearestPoint({ x: wx, y: wy }).workArea;
+  versionsWin = new BrowserWindow({
+    x: Math.round(area.x + (area.width - CHANGELOG_W) / 2),
+    y: Math.round(area.y + area.height * 0.12),
+    width: CHANGELOG_W,
+    height: 560,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    alwaysOnTop: true,
+    skipTaskbar: true,
+    hasShadow: false,
+    show: false,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.cjs"),
+      spellcheck: false,
+      contextIsolation: true,
+      nodeIntegration: false,
+      devTools: !!DEV_URL,
+    },
+  });
+  versionsWin.setAlwaysOnTop(true, "screen-saver");
+  versionsWin.once("ready-to-show", () => versionsWin?.show());
+  versionsWin.on("closed", () => {
+    versionsWin = null;
+  });
+  if (DEV_URL) versionsWin.loadURL(`${DEV_URL}#versions`);
+  else versionsWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash: "versions" });
+}
+
 // The update window (#update): asks on launch when GitHub has a newer version.
 const UPDATE_W = 300 + STAGE_PAD * 2;
 let updateWin = null;
@@ -1230,14 +1270,27 @@ app.whenReady().then(() => {
   updater.init((state) => {
     for (const w of BrowserWindow.getAllWindows()) w.webContents.send("update:changed", state);
   });
-  // Asked once per launch, after Setup is out of the way so the two never stack.
+  // Asked once per launch, after Setup is out of the way so the two never stack,
+  // unless the user said to skip this version.
   setupSettled.then(async () => {
     const state = await updater.check();
-    if (state.status === "available") openUpdate();
+    if (state.status === "available" && !updater.isSkipped(state.version)) openUpdate();
   });
   ipcMain.handle("update:state", () => updater.getState());
   ipcMain.handle("update:check", () => updater.check());
   ipcMain.handle("update:install", () => updater.install());
+  ipcMain.handle("update:skip", () => {
+    const { version } = updater.getState();
+    if (version) updater.skip(version);
+  });
+  ipcMain.handle("update:releases", () =>
+    updater.releases().then(
+      (list) => ({ ok: true, list }),
+      (e) => ({ ok: false, error: e.message }),
+    ),
+  );
+  ipcMain.handle("update:bump", (_e, version) => updater.bump(String(version)));
+  ipcMain.handle("versions:open", () => openVersions());
 
   ipcMain.handle("player:command", (_e, cmd) => sendCommand(cmd));
   ipcMain.handle("lyrics:fetch", (_e, req) => fetchLyrics(req));
