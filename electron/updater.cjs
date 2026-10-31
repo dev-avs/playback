@@ -26,9 +26,10 @@ const GITHUB_FEED = { provider: "github", owner: OWNER, repo: REPO };
 
 /**
  * status: idle | checking | none | available | downloading | error | dev
- * @type {{status: string, version: string|null, percent: number, error: string|null}}
+ * downloaded: bytes so far; total: the whole download's size, when known
+ * @type {{status: string, version: string|null, downloaded: number, total: number|null, error: string|null}}
  */
-let state = { status: app.isPackaged ? "idle" : "dev", version: null, percent: 0, error: null };
+let state = { status: app.isPackaged ? "idle" : "dev", version: null, downloaded: 0, total: null, error: null };
 let onChange = () => {};
 
 function set(next) {
@@ -44,11 +45,38 @@ function init(notify) {
   autoUpdater.autoInstallOnAppQuit = false;
   autoUpdater.logger = null;
   autoUpdater.setFeedURL(GITHUB_FEED);
-  autoUpdater.on("download-progress", (p) => set({ percent: Math.round(p.percent ?? 0) }));
+  autoUpdater.on("download-progress", onProgress);
   autoUpdater.on("error", (e) => set({ status: "error", error: e?.message ?? String(e) }));
 }
 
 const getState = () => state;
+
+/**
+ * electron-updater's progress, added up into one running byte count.
+ *
+ * Its own percent is per part, not per update: the installer stub goes 0→100,
+ * then the package's changed blocks arrive in batches that each go 0→100 of
+ * their own size, so the shown percent kept starting over. Nothing reports
+ * the size of the whole download, so the bytes are counted instead. A part
+ * ends where its count drops or its total changes.
+ */
+let partsDone = 0;
+let part = { total: 0, transferred: 0 };
+
+function startDownload(version) {
+  partsDone = 0;
+  part = { total: 0, transferred: 0 };
+  set({ status: "downloading", version, downloaded: 0, total: null, error: null });
+}
+
+function onProgress(p) {
+  if (p.total !== part.total || p.transferred < part.transferred) {
+    partsDone += part.transferred;
+    part = { total: p.total, transferred: 0 };
+  }
+  part.transferred = p.transferred;
+  set({ downloaded: partsDone + p.transferred });
+}
 
 async function check() {
   if (state.status === "dev" || state.status === "checking" || state.status === "downloading") return state;
@@ -68,7 +96,7 @@ async function install() {
   if (state.status === "dev" || state.status === "downloading") return state;
   if (state.status !== "available") await check();
   if (state.status !== "available") return state;
-  set({ status: "downloading", percent: 0 });
+  startDownload(state.version);
   try {
     await autoUpdater.downloadUpdate();
     // silent install, then start the new version
@@ -119,7 +147,7 @@ async function installLegacy(version, url) {
   const body = Readable.fromWeb(res.body);
   body.on("data", (chunk) => {
     got += chunk.length;
-    if (total) set({ percent: Math.round((got / total) * 100) });
+    set({ downloaded: got, total: total || null });
   });
   await pipeline(body, fs.createWriteStream(file));
   spawn(file, [], { detached: true, stdio: "ignore" }).unref();
@@ -134,7 +162,7 @@ async function installLegacy(version, url) {
 async function bump(version) {
   if (state.status === "dev" || state.status === "checking" || state.status === "downloading") return state;
   if (version === app.getVersion()) return state;
-  set({ status: "downloading", version, percent: 0, error: null });
+  startDownload(version);
   const legacy = legacyInstallers.get(version);
   if (legacy) {
     try {

@@ -1,7 +1,7 @@
 {
   "name": "player",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Now-playing overlay with synced lyrics",
   "author": "player",
   "type": "module",

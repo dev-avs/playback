@@ -60,7 +60,10 @@ export interface UpdateState {
   /** the newest version on GitHub, once checked */
   version: string | null;
   /** download progress, 0..100 */
-  percent: number;
+  /** bytes downloaded so far */
+  downloaded: number;
+  /** the whole download's size, when known (only for old versions' full installers) */
+  total: number | null;
   error: string | null;
 }
 

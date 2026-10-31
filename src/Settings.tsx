@@ -25,6 +25,7 @@ import {
 } from "./settings";
 import { romanizeText } from "./romanize";
 import type { UpdateState } from "./player";
+import { progressText } from "./changelog";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
@@ -461,7 +462,7 @@ export default function Settings() {
         checking: "checking…",
         none: `up to date · ${appVersion}`,
         available: `${update.version} is out · you have ${appVersion}`,
-        downloading: `downloading ${update.version} · ${update.percent}%… restarts by itself`,
+        downloading: `downloading ${update.version} · ${progressText(update)}… restarts by itself`,
         error: `couldn't update: ${update.error}`,
         dev: "only the installed app updates",
       }[update.status];

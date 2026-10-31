@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
 import { AppMark } from "./Changelog.tsx";
-import { CHANGE_KINDS, compareVersions, type ChangeKind } from "./changelog";
+import { CHANGE_KINDS, compareVersions, progressText, type ChangeKind } from "./changelog";
 import { KEYS, usePersisted } from "./settings";
 import type { Release, UpdateState } from "./player";
 
@@ -146,7 +146,7 @@ export default function Versions() {
   const stagger = (i: number) => ({ "--cl-i": i }) as React.CSSProperties;
   const text =
     state?.status === "downloading"
-      ? `Downloading ${state.version} · ${state.percent}%… player restarts by itself when it's done.`
+      ? `Downloading ${state.version} · ${progressText(state)}… player restarts by itself when it's done.`
       : state?.status === "error"
         ? `That didn't work: ${state.error}`
         : state?.status === "dev"

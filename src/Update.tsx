@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
 import { AppMark } from "./Changelog.tsx";
 import { KEYS, usePersisted } from "./settings";
+import { progressText } from "./changelog";
 import type { UpdateState } from "./player";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
@@ -65,7 +66,7 @@ export default function Update() {
   const stagger = (i: number) => ({ "--cl-i": i }) as React.CSSProperties;
   const text =
     state?.status === "downloading"
-      ? `Downloading ${state.percent}%… player restarts by itself when it's done.`
+      ? `Downloading ${progressText(state)}… player restarts by itself when it's done.`
       : state?.status === "error"
         ? `The update failed: ${state.error}`
         : `player ${state?.version ?? ""} is out. You have ${version}.`;

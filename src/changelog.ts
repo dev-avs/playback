@@ -1,3 +1,5 @@
+import type { UpdateState } from "./player";
+
 // What changed in each version, newest first, shown by the changelog window
 // after an update and from Settings → What's new. Written for the person using
 // the widget, not for whoever reads the code: what they will notice.
@@ -19,6 +21,15 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.4.2",
+    date: "2026-10-30",
+    changes: {
+      fixes: [
+        "Download progress jumped around (0 → 40 → 100 → 0 → 80…) while updating. It now shows how much has downloaded so far, and only goes up.",
+      ],
+    },
+  },
   {
     version: "1.4.1",
     date: "2026-10-30",
@@ -294,6 +305,10 @@ export const CHANGELOG: ChangelogEntry[] = [
 ];
 
 /** -1, 0 or 1, comparing dotted version numbers part by part. */
+/** How far a download is: a percent when its size is known, else the MB so far. */
+export const progressText = (s: UpdateState) =>
+  s.total ? `${Math.round((s.downloaded / s.total) * 100)}%` : `${(s.downloaded / 1048576).toFixed(1)} MB`;
+
 export function compareVersions(a: string, b: string): number {
   const pa = a.split(".").map(Number);
   const pb = b.split(".").map(Number);
