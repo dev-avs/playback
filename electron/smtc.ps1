@@ -39,7 +39,38 @@ $TMediaProps = [Windows.Media.Control.GlobalSystemMediaTransportControlsSessionM
 
 $mgr = Await ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager]::RequestAsync()) ([Windows.Media.Control.GlobalSystemMediaTransportControlsSessionManager])
 
+# Music apps win: the widget follows one of these over anything else (a TikTok
+# or YouTube video in the browser), playing first, then paused with a song
+# loaded. The one exception is the Spotify the player starts hidden for
+# lookups (see Hide-Spotify): while that is settling it is passed over unless
+# it actually plays.
+$MusicApps = 'spotify|cider|applemusic|itunes'
+
 function Get-Session {
+  $music = @($mgr.GetSessions() | Where-Object {
+      $_.SourceAppUserModelId -match $MusicApps -and
+      "$($_.GetPlaybackInfo().PlaybackStatus)" -eq 'Playing'
+    })
+  if ($music.Count) {
+    $cur = $mgr.GetCurrentSession()
+    # several playing: keep the one Windows considers current, if it is one of them
+    if ($null -ne $cur -and $cur.SourceAppUserModelId -match $MusicApps -and
+        "$($cur.GetPlaybackInfo().PlaybackStatus)" -eq 'Playing') { return $cur }
+    return $music[0]
+  }
+
+  # none playing: a paused one, unless it is the hidden Spotify settling in
+  $paused = @($mgr.GetSessions() | Where-Object {
+      $_.SourceAppUserModelId -match $MusicApps -and
+      "$($_.GetPlaybackInfo().PlaybackStatus)" -eq 'Paused' -and
+      -not ((Get-Date) -lt $hideSpotifyUntil -and $_.SourceAppUserModelId -match 'spotify')
+    })
+  if ($paused.Count) {
+    $cur = $mgr.GetCurrentSession()
+    if ($null -ne $cur -and ($paused | Where-Object { $_.SourceAppUserModelId -eq $cur.SourceAppUserModelId })) { return $cur }
+    return $paused[0]
+  }
+
   $cur = $mgr.GetCurrentSession()
   # A Spotify started hidden by the player (see Hide-Spotify) registers a
   # paused session that Windows can make the current one. Look past it to what

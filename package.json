@@ -1,9 +1,10 @@
 {
   "name": "playback",
   "private": true,
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Now-playing overlay with synced lyrics",
   "author": "Playback",
+  "license": "AGPL-3.0-only",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -64,6 +65,7 @@
     "@vitejs/plugin-react": "^6.0.1",
     "concurrently": "^10.0.4",
     "cross-env": "^10.1.0",
+    "cubic-spline": "^3.0.3",
     "electron": "^43.2.0",
     "electron-builder": "^26.15.3",
     "eslint": "^10.3.0",

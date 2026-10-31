@@ -8,6 +8,7 @@ const {
   screen,
   session,
   desktopCapturer,
+  globalShortcut,
 } = require("electron");
 // The app was called player up to 1.4.2, and kept its settings, Spicy key,
 // sign-in and lyrics cache in %APPDATA%\player. Playback's folder is
@@ -433,6 +434,69 @@ async function neteaseLyric(id) {
   return await lRes.json();
 }
 
+// ── LRCMux ─────────────────────────────────────────────────────
+// lrcmux.dev: a free public service that gathers lyrics from KuGou, LrcLib,
+// YouTube Music and Genius and answers with the best timing it found. What it
+// adds is KuGou's per-word timing, which NetEase and LrcLib often lack (e.g.
+// "cherry flavoured love inside your heart": line-timed everywhere else).
+// Word timing comes back in NetEase's yrc layout, as `wordLyrics`: the same
+// timing detail as NetEase's own, so it ranks the same (●●●) and src/lyrics.ts
+// reads it with the same parser.
+
+// The answer names its own recording. One whose length differs from the
+// playing one by more than this is another edit, and its timings would drift.
+const LRCMUX_MAX_MISMATCH_S = 8;
+
+const lrcTime = (ms) => {
+  const t = Math.max(0, ms) / 1000;
+  const m = Math.floor(t / 60);
+  return `${String(m).padStart(2, "0")}:${(t - m * 60).toFixed(2).padStart(5, "0")}`;
+};
+
+async function lrcmux(artist, track, album, duration) {
+  const qs = new URLSearchParams({ artist, title: track, level: "word", format: "json" });
+  if (album) qs.set("album", album);
+  if (duration) qs.set("duration", String(Math.round(duration)));
+  const res = await fetch(`https://api.lrcmux.dev/get?${qs}`, { signal: AbortSignal.timeout(8000) });
+  if (!res.ok) return null; // 404 = nothing found
+  const body = await res.json();
+  const lines = body?.lines;
+  if (body?.meta?.instrumental || !Array.isArray(lines) || !lines.length) return null;
+  const theirs = body.track?.duration;
+  if (duration && theirs && Math.abs(theirs - duration) > LRCMUX_MAX_MISMATCH_S) {
+    console.log(`[lrcmux] skipped: ${theirs}s recording, playing ${Math.round(duration)}s`);
+    return null;
+  }
+
+  if (body.meta?.level === "word") {
+    // [lineStart,lineDur](wordStart,wordDur,0)word… in ms; a line without word
+    // data becomes one word spanning the line
+    const yrc = lines
+      .map((l) => {
+        const words = (l.words ?? []).filter((w) => w.text && Number.isFinite(w.start) && Number.isFinite(w.end));
+        if (!words.length) {
+          if (!Number.isFinite(l.start) || !Number.isFinite(l.end) || l.end <= l.start) return null;
+          words.push({ text: l.text, start: l.start, end: l.end });
+        }
+        const start = words[0].start;
+        const end = Math.max(...words.map((w) => w.end));
+        return `[${start},${end - start}]` + words.map((w) => `(${w.start},${Math.max(1, w.end - w.start)},0)${w.text}`).join("");
+      })
+      .filter(Boolean)
+      .join("\n");
+    if (yrc) return { wordLyrics: yrc, source: "lrcmux" };
+  }
+
+  if (body.meta?.level === "line" || body.meta?.level === "word") {
+    const lrc = lines
+      .filter((l) => Number.isFinite(l.start) && l.text)
+      .map((l) => `[${lrcTime(l.start)}]${l.text}`)
+      .join("\n");
+    if (lrc) return { syncedLyrics: lrc, source: "lrcmux" };
+  }
+  return null;
+}
+
 async function netease(artist, track, duration) {
   const id = await neteaseSearch(artist, track, duration);
   if (!id) return null;
@@ -529,7 +593,7 @@ async function fetchLyrics({ artist, title, album, duration, geniusKey, only }) 
   // every provider has been asked. Syllable and word are ranked apart because
   // they are genuinely different: a syllable track knows when each *part* of a
   // word is sung, which is what drives the per-letter wave.
-  //   3 = per-syllable  (NetEase yrc)
+  //   3 = per-syllable  (NetEase yrc, LRCMux's word timing in the same layout)
   //   2 = per-word      (enhanced LRC's <mm:ss.xx> tags)
   //   1 = per-line      (ordinary LRC — word timings get calculated from it)
   //   0 = untimed       (plain text — reported as no lyrics found)
@@ -561,6 +625,11 @@ async function fetchLyrics({ artist, title, album, duration, geniusKey, only }) 
   for (const [a, t] of candidates) {
     if (!a || !t) continue;
     providers.push(["netease", () => netease(a, t, duration)]);
+  }
+  // LRCMux before LrcLib: it carries word timing where LrcLib has lines.
+  for (const [a, t] of candidates) {
+    if (!a || !t) continue;
+    providers.push(["lrcmux", () => lrcmux(a, t, album, duration)]);
   }
   for (const [a, t] of candidates) {
     if (!a || !t) continue;
@@ -705,6 +774,7 @@ let dragOrigin = null;
 const DRAG_INTERVAL_MS = 8; // ~120 Hz, comfortably above any display refresh
 
 function startDrag() {
+  if (fullscreenFrom) return;
   stopDrag();
   if (!win) return;
   const cursor = screen.getCursorScreenPoint();
@@ -751,6 +821,34 @@ let wantedHovered = false;
  */
 const windowSizes = new WeakMap();
 
+/**
+ * Fullscreen (App.tsx's fullscreen layout): the widget's own window covers the
+ * screen it is on, so the lyrics, clock and settings carry on as they are. The
+ * bounds it had are kept to go back to; while fullscreen, the widget's size
+ * requests, dragging and the display-scale replay leave the window alone.
+ */
+let fullscreenFrom = null;
+
+function setFullscreen(on) {
+  if (!win) return false;
+  if (on && !fullscreenFrom) {
+    fullscreenFrom = win.getBounds();
+    const area = screen.getDisplayMatching(fullscreenFrom).bounds;
+    win.setResizable(true);
+    win.setBounds(area);
+    win.setResizable(false);
+  } else if (!on && fullscreenFrom) {
+    const back = fullscreenFrom;
+    fullscreenFrom = null;
+    win.setResizable(true);
+    win.setBounds(back);
+    win.setResizable(false);
+    // the widget may have grown or shrunk while fullscreen
+    replayWantedHeight();
+  }
+  return !!fullscreenFrom;
+}
+
 function setWindowSize(w, width, height) {
   windowSizes.set(w, [width, height]);
   // Windows ignores setSize on a non-resizable window, so lift the flag
@@ -761,7 +859,7 @@ function setWindowSize(w, width, height) {
 }
 
 function applyWindowHeight(h, hovered) {
-  if (!win) return;
+  if (!win || fullscreenFrom) return;
   // Cancel any pending shrink first, before the drag and jitter checks below
   // can return: a widget that collapses then re-expands within the debounce
   // would otherwise leave the old shrink armed, and it would fire and clip the
@@ -1305,6 +1403,7 @@ app.whenReady().then(() => {
     if (!changed.includes("scaleFactor")) return;
     for (const w of BrowserWindow.getAllWindows()) {
       const size = windowSizes.get(w);
+      if (w === win && fullscreenFrom) continue;
       if (size) setWindowSize(w, ...size);
     }
   });
@@ -1430,6 +1529,11 @@ app.whenReady().then(() => {
     if (!win) return;
     const w = Math.max(280, Math.min(600, Math.round(width))) + STAGE_PAD * 2;
     widgetOuterW = w;
+    // applied on the way back from fullscreen instead
+    if (fullscreenFrom) {
+      fullscreenFrom.width = w;
+      return;
+    }
     const [cw, ch] = win.getSize();
     if (cw === w) return;
     setWindowSize(win, w, ch);
@@ -1562,6 +1666,9 @@ app.whenReady().then(() => {
   ipcMain.handle("spicyKey:set", (_e, raw) => spicyKey.set(raw).then(spicyKeyChanged));
   ipcMain.handle("spicyKey:clear", () => spicyKeyChanged(spicyKey.clear()));
   ipcMain.handle("win:dragStart", () => startDrag());
+  ipcMain.handle("win:fullscreen", (_e, on) => setFullscreen(!!on));
+  // Ctrl+Alt+F from anywhere; the widget owns the layout, so it decides.
+  globalShortcut.register("CommandOrControl+Alt+F", () => win?.webContents.send("fullscreen:toggle"));
   ipcMain.handle("win:dragEnd", () => stopDrag());
 
   ipcMain.handle("win:resize", (_e, height, hovered) => {
@@ -1629,6 +1736,7 @@ app.whenReady().then(() => {
 
 app.on("before-quit", () => {
   app.isQuittingApp = true;
+  globalShortcut.unregisterAll();
   quickOpen.close();
   clearTimeout(psRestartTimer);
   ps?.stdin.end();

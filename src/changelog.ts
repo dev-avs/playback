@@ -22,6 +22,30 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.4",
+    date: "2026-10-30",
+    changes: {
+      new: [
+        "Fullscreen mode: the button next to volume, or Ctrl+Alt+F from anywhere (Esc to leave). Cover and lyrics side by side or lyrics up front, with a moving background. The controls fade while the mouse rests. Settings → Fullscreen has the rest.",
+        "LRCMux as a lyrics source, with word-timed lyrics for more songs.",
+        "Word animation in Settings → Highlight: Playback, or Spicy (letters pop only on long, held words).",
+      ],
+      appearance: [
+        "The progress bar is thicker, and grows more on hover and while dragging.",
+      ],
+      qol: [
+        "Music apps come first: a playing (or paused) Spotify, Cider or Apple Music wins over a video in the browser.",
+        "Long titles slide across once per song and again while hovered, at a speed you can set (Settings → Text → Long title speed).",
+      ],
+      fixes: [
+        "Lyrics could stay stuck at the bottom when the next song started.",
+        "Scrolling the lyrics no longer snaps back on its own.",
+        "A lyric line stayed highlighted after it scrolled out from under the mouse.",
+        "The Settings list header no longer covers the rows under it while scrolling.",
+      ],
+    },
+  },
+  {
     version: "1.4.3",
     date: "2026-10-30",
     changes: {

@@ -199,6 +199,14 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.45);
+    transition: opacity 160ms ease;
+}
+
+/* It has no background, so the rows would show through it: gone while scrolled,
+   back at the top. */
+.st-list.scrolled .st-list-head {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .st-result-cat {
@@ -387,7 +395,7 @@
 }
 
 .st-pv-bar {
-    height: var(--pv-bar-h, 2px);
+    height: calc(var(--pv-bar-h, 2px) + 2px);
     border-radius: 3px;
     background: rgba(255, 255, 255, 0.22);
     overflow: hidden;

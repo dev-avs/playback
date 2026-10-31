@@ -3,6 +3,7 @@ name = "playback-installer"
 version = "1.0.0"
 description = "Installs Playback: picks a folder and options, then runs the newest release's own installer"
 edition = "2021"
+license = "AGPL-3.0-only"
 
 [build-dependencies]
 tauri-build = { version = "2", features = [] }

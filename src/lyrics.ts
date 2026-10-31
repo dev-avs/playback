@@ -575,7 +575,7 @@ export async function loadLyrics(req: {
   album?: string;
   duration?: number;
   geniusKey?: string;
-  /** ask just this provider ("netease" | "lrclib") instead of the whole chain */
+  /** ask just this provider ("netease" | "lrcmux" | "lrclib") instead of the whole chain */
   only?: string;
 }): Promise<LoadedLyrics | null> {
   const bridge = window.player;

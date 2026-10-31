@@ -195,6 +195,9 @@ body {
     flex-direction: column;
     gap: 1px;
     min-width: 0;
+    /* the free width of the row: the title and artist measure themselves
+       against it to pan (.pan), so they cannot size it from their text */
+    flex: 1;
     transition: margin-top 300ms ease;
 }
 
@@ -211,6 +214,19 @@ body {
         font-size 300ms ease,
         font-weight 300ms ease,
         white-space 300ms ease;
+}
+
+/* Too long to fit: slides instead of cutting off (PanText in App.tsx drives
+   it). The row takes its width from the widget, not from its text, so the
+   text can be measured against it. */
+.pan {
+    display: block;
+    width: 100%;
+    text-overflow: clip;
+}
+
+.pan-inner {
+    display: inline-block;
 }
 
 .artist {
@@ -358,7 +374,7 @@ body {
     );
 }
 
-.lyric-line:hover::before {
+.lyric-line.hover::before {
     opacity: 1;
 }
 
@@ -378,7 +394,7 @@ body {
     white-space: nowrap;
 }
 
-.lyric-line:hover .lyric-ts {
+.lyric-line.hover .lyric-ts {
     opacity: 1;
 }
 
@@ -407,7 +423,7 @@ body {
 }
 
 /* declared last so it wins at equal specificity against .past / .current */
-.lyric-line:hover {
+.lyric-line.hover {
     --line-opacity: 1;
     --BlurAmount: 0px;
 }
@@ -547,6 +563,9 @@ body {
     outline: none;
     cursor: pointer;
     display: block;
+    /* track height: 2px over the thickness setting at rest, more on hover and
+       while dragging; the thumb centres on it */
+    --track-h: calc(var(--bar-h, 2px) + 2px);
 }
 
 .scrub:disabled {
@@ -555,7 +574,7 @@ body {
 }
 
 .scrub::-webkit-slider-runnable-track {
-    height: var(--bar-h, 2px);
+    height: var(--track-h);
     border-radius: 3px;
     background: linear-gradient(
         to right,
@@ -565,12 +584,12 @@ body {
     transition: height 130ms ease;
 }
 
-.widget.hovered .scrub::-webkit-slider-runnable-track {
-    height: calc(var(--bar-h, 2px) + 1px);
+.widget.hovered .scrub {
+    --track-h: calc(var(--bar-h, 2px) + 3px);
 }
 
-.widget.dragging .scrub::-webkit-slider-runnable-track {
-    height: 6px;
+.widget.dragging .scrub {
+    --track-h: 8px;
 }
 
 /* Art-mode variant: sits between the two time labels in the mini bar. */
@@ -581,12 +600,8 @@ body {
     height: 10px;
 }
 
-.scrub-mini::-webkit-slider-runnable-track {
-    height: var(--bar-h, 2px);
-}
-
-.widget.dragging .scrub-mini::-webkit-slider-runnable-track {
-    height: 5px;
+.widget.dragging .scrub-mini {
+    --track-h: 7px;
 }
 
 .scrub::-webkit-slider-thumb {
@@ -596,7 +611,7 @@ body {
     height: 14px;
     background: transparent;
     border: none;
-    margin-top: -6px;
+    margin-top: calc((var(--track-h) - 14px) / 2);
 }
 
 /* ── Times ── */
@@ -2416,4 +2431,471 @@ svg {
     font-size: 6.5px;
     letter-spacing: 1px;
     vertical-align: 1.5px;
+}
+
+/* ── Fullscreen ──
+   The window covers the screen (main.cjs setFullscreen) and the widget spreads
+   across it: cover, title, progress and controls in one column, the lyrics in
+   the other at the screen's height (App.tsx sizes and anchors them). Swap puts
+   the column on the right, hiding the lyrics centres it, hiding the cover
+   leaves the rest of the column. */
+.stage.fullscreen {
+    padding: 0;
+}
+
+.widget.fullscreen {
+    --fs-side: minmax(260px, 30vw);
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    padding: 6vh 6vw;
+    box-sizing: border-box;
+    display: grid;
+    column-gap: 5vw;
+    grid-template-columns: var(--fs-side) 1fr;
+    grid-template-rows: 1fr auto auto auto auto 1fr;
+    grid-template-areas:
+        ".        lyrics"
+        "top      lyrics"
+        "scrubber lyrics"
+        "times    lyrics"
+        "controls lyrics"
+        ".        lyrics";
+    cursor: default;
+    /* solid: the screen behind should not show through, only the cover's glow */
+    background: rgb(var(--tint, 20, 20, 22));
+}
+
+.widget.fullscreen > .widget-bg {
+    filter: blur(90px) saturate(var(--cover-sat, 1.4)) brightness(var(--cover-bright, 1));
+    opacity: calc(0.7 * var(--bg-k, 1));
+}
+
+.widget.fullscreen.fs-swap {
+    grid-template-columns: 1fr var(--fs-side);
+    grid-template-areas:
+        "lyrics .       "
+        "lyrics top     "
+        "lyrics scrubber"
+        "lyrics times   "
+        "lyrics controls"
+        "lyrics .       ";
+}
+
+/* no lyrics: just the column, centred, and bigger (sized by the screen height
+   so the cover, title and controls still fit) */
+.widget.fullscreen:not(.lyrics-open) {
+    grid-template-columns: min(56vh, 80vw);
+    justify-content: center;
+    grid-template-areas: "." "top" "scrubber" "times" "controls" ".";
+}
+
+.widget.fullscreen:not(.lyrics-open) > .lyrics-panel {
+    display: none;
+}
+
+.widget.fullscreen > .top {
+    grid-area: top;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2.4vh;
+    margin-bottom: 2vh;
+    --meta-k: 1.7;
+}
+
+.widget.fullscreen .art-wrap {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
+    border-radius: 14px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+}
+
+.widget.fullscreen.fs-no-cover .art-wrap {
+    display: none;
+}
+
+.widget.fullscreen > .scrubber {
+    grid-area: scrubber;
+}
+
+.widget.fullscreen > .times {
+    grid-area: times;
+}
+
+/* the widget's progress, times and controls, at the screen's scale */
+.widget.fullscreen > .scrubber,
+.widget.fullscreen > .times,
+.widget.fullscreen > .controls {
+    zoom: 1.5;
+}
+
+/* always shown, so the column does not jump when the pointer moves */
+.widget.fullscreen > .controls {
+    grid-area: controls;
+    max-height: none;
+    opacity: 1;
+    margin-top: 1.4vh;
+    overflow: visible;
+}
+
+.widget.fullscreen > .lyrics-panel {
+    grid-area: lyrics;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    align-self: stretch;
+    transition: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%);
+}
+
+/* the layout switches and the way out, top right, shown with the pointer */
+.fs-bar {
+    position: absolute;
+    top: 2vh;
+    right: 2vw;
+    z-index: 5;
+    display: flex;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+
+.widget.fullscreen.fs-active .fs-bar {
+    opacity: 1;
+}
+
+.fs-bar .ctrl-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.fs-bar .ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+.fs-bar .ctrl-btn.active {
+    color: #fff;
+}
+
+/* Cover off (split): the title, progress and controls sit at the bottom of
+   their column over the background, much bigger, the lyrics beside them. */
+.widget.fullscreen.fs-no-cover:not(.fs-dominant) {
+    --fs-side: minmax(320px, 38vw);
+    grid-template-rows: 1fr auto auto auto auto 2vh;
+}
+
+.widget.fullscreen.fs-no-cover:not(.fs-dominant) > .top {
+    --meta-k: 2.8;
+}
+
+.widget.fullscreen.fs-no-cover:not(.fs-dominant) > .scrubber,
+.widget.fullscreen.fs-no-cover:not(.fs-dominant) > .times,
+.widget.fullscreen.fs-no-cover:not(.fs-dominant) > .controls {
+    zoom: 2.1;
+}
+
+/* Lyrics off: the column's title and controls grow with it */
+.widget.fullscreen:not(.lyrics-open):not(.fs-dominant) > .top {
+    --meta-k: 2.2;
+}
+
+.widget.fullscreen:not(.lyrics-open):not(.fs-dominant) > .scrubber,
+.widget.fullscreen:not(.lyrics-open):not(.fs-dominant) > .times,
+.widget.fullscreen:not(.lyrics-open):not(.fs-dominant) > .controls {
+    zoom: 1.8;
+}
+
+/* ── Layout changes, animated ──
+   Each block is named, so a swap, cover or lyrics toggle (App.tsx morph) moves
+   and resizes it from its old place to its new one; a block that appears or
+   leaves fades. */
+.widget.fullscreen .art-wrap {
+    view-transition-name: fs-art;
+}
+
+.widget.fullscreen .info {
+    view-transition-name: fs-info;
+}
+
+.widget.fullscreen > .lyrics-panel {
+    view-transition-name: fs-lyrics;
+}
+
+.widget.fullscreen > .scrubber {
+    view-transition-name: fs-scrubber;
+}
+
+.widget.fullscreen > .times {
+    view-transition-name: fs-times;
+}
+
+.widget.fullscreen > .controls {
+    view-transition-name: fs-controls;
+}
+
+.widget.fullscreen .next-up {
+    view-transition-name: fs-next;
+}
+
+::view-transition-group(*) {
+    animation-duration: 480ms;
+    animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-old(*),
+::view-transition-new(*) {
+    animation-duration: 300ms;
+}
+
+/* ── Hovered lyric line, fullscreen ──
+   A thicker outline, and the line grows a little toward the reader. */
+.widget.fullscreen .lyric-line {
+    transform-origin: left center;
+    transition: scale 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.widget.fullscreen.fs-swap:not(.fs-dominant) .lyric-line {
+    transform-origin: left center;
+}
+
+.widget.fullscreen .lyric-line::before {
+    border-width: 2.5px;
+    border-radius: 10px;
+}
+
+.widget.fullscreen .lyric-line.hover {
+    scale: 1.04;
+}
+
+/* ── Lyrics dominant ──
+   One centred column: a small cover with the title beside it as a header, the
+   lyrics big below, the progress under them. */
+.widget.fullscreen.fs-dominant,
+.widget.fullscreen.fs-dominant.fs-swap {
+    grid-template-columns: min(1300px, 84vw);
+    justify-content: center;
+    grid-template-rows: auto 1fr auto auto auto;
+    grid-template-areas: "top" "lyrics" "scrubber" "times" "controls";
+    padding: 5vh 6vw 3vh;
+}
+
+.widget.fullscreen.fs-dominant:not(.lyrics-open) {
+    grid-template-rows: 1fr auto 1fr auto auto auto;
+    grid-template-areas: "." "top" "." "scrubber" "times" "controls";
+}
+
+.widget.fullscreen.fs-dominant > .top {
+    flex-direction: row;
+    align-items: center;
+    gap: 2.2vw;
+    margin-bottom: 1vh;
+    --meta-k: 2;
+}
+
+.widget.fullscreen.fs-dominant .art-wrap {
+    width: clamp(90px, 15vh, 190px);
+    flex: none;
+}
+
+/* ── Animated background ──
+   The cover three times, blurred and turning slowly at different speeds and
+   sizes, so the colour drifts behind everything rather than sitting still. */
+.widget.fullscreen > .fs-anim-bg {
+    inset: 0;
+    overflow: hidden;
+    filter: none;
+    opacity: 1;
+}
+
+.fs-anim-bg i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 120vmax;
+    height: 120vmax;
+    margin: -60vmax 0 0 -60vmax;
+    background-size: cover;
+    background-position: center;
+    filter: blur(80px) saturate(var(--cover-sat, 1.4)) brightness(var(--cover-bright, 1));
+    opacity: 0.55;
+    border-radius: 50%;
+    animation: fs-drift 60s linear infinite;
+    will-change: transform;
+}
+
+.fs-anim-bg i:nth-child(2) {
+    width: 90vmax;
+    height: 90vmax;
+    margin: -45vmax 0 0 -45vmax;
+    translate: -22vw 18vh;
+    animation-duration: 46s;
+    animation-direction: reverse;
+    opacity: 0.5;
+}
+
+.fs-anim-bg i:nth-child(3) {
+    width: 70vmax;
+    height: 70vmax;
+    margin: -35vmax 0 0 -35vmax;
+    translate: 26vw -20vh;
+    animation-duration: 38s;
+    opacity: 0.45;
+}
+
+@keyframes fs-drift {
+    to {
+        rotate: 360deg;
+    }
+}
+
+/* ── Fullscreen, at rest ──
+   The music controls and the corner buttons show while the mouse moves and fade
+   once it rests (App.tsx fsActive), and the cursor goes with them. The controls
+   also give up their row, so what sits above them slides down into it. */
+.widget.fullscreen > .controls {
+    opacity: 0;
+    max-height: 0;
+    margin-top: 0;
+    overflow: hidden;
+    transition:
+        opacity 300ms ease,
+        max-height 500ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin-top 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.widget.fullscreen.fs-active > .controls {
+    opacity: 1;
+    max-height: 40px;
+    margin-top: 1.4vh;
+    overflow: visible;
+    transition:
+        opacity 200ms ease 120ms,
+        max-height 400ms cubic-bezier(0.22, 1, 0.36, 1),
+        margin-top 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.widget.fullscreen:not(.fs-active),
+.widget.fullscreen:not(.fs-active) * {
+    cursor: none !important;
+}
+
+/* Lyrics dominant without lyrics: the cover takes the screen's height */
+.widget.fullscreen.fs-dominant:not(.lyrics-open) > .top {
+    gap: 3vw;
+    --meta-k: 2.6;
+}
+
+.widget.fullscreen.fs-dominant:not(.lyrics-open) .art-wrap {
+    width: min(52vh, 40vw);
+}
+
+/* Up next, in fullscreen: under the title in the split column, at the end of
+   the header in lyrics dominant */
+.widget.fullscreen .next-up {
+    display: flex;
+    margin-left: 0;
+    align-self: flex-start;
+    zoom: 1.4;
+}
+
+.widget.fullscreen.fs-dominant .next-up {
+    margin-left: auto;
+    align-self: center;
+}
+
+/* Room either side, so a hovered line (which grows from its left edge) and its
+   outline stay inside the panel instead of running off its edge. */
+.widget.fullscreen .lyrics-inner {
+    padding-left: 14px;
+    padding-right: 6%;
+}
+
+/* ── Fullscreen details ── */
+
+/* Sync sits at the foot of the lyrics, bigger. (A grid child with no area of
+   its own would otherwise land in the first empty cell, top left.) */
+.widget.fullscreen > .sync-btn {
+    grid-area: lyrics;
+    align-self: end;
+    justify-self: center;
+    margin: 0 0 4vh;
+    font-size: 15px;
+    padding: 9px 26px;
+    z-index: 4;
+}
+
+/* Up next at the end of the title row, in the split column */
+.widget.fullscreen:not(.fs-dominant) > .top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 1.2vw;
+    row-gap: 2.4vh;
+    align-items: center;
+}
+
+.widget.fullscreen:not(.fs-dominant) > .top .art-wrap {
+    grid-column: 1 / -1;
+}
+
+.widget.fullscreen:not(.fs-dominant) .next-up {
+    justify-self: end;
+    align-self: center;
+}
+
+/* Volume, opened from the button by it, scaled for the screen */
+.widget.fullscreen > .vol-pill {
+    position: relative;
+    grid-area: controls;
+    align-self: start;
+    justify-self: start;
+    left: auto;
+    bottom: auto;
+    transform: translateY(calc(-100% - 10px));
+    zoom: 1.6;
+}
+
+/* the time on a hovered line, readable at fullscreen size */
+.widget.fullscreen .lyric-ts {
+    font-size: 13px;
+    top: -8px;
+}
+
+.widget.fullscreen .lyric-line::before {
+    clip-path: polygon(
+        0% 0%,
+        calc(100% - 18px - var(--ts-w, 48px) - 8px) 0%,
+        calc(100% - 18px - var(--ts-w, 48px) - 8px) 12px,
+        calc(100% - 10px) 12px,
+        calc(100% - 10px) 0%,
+        100% 0%,
+        100% 100%,
+        0% 100%
+    );
+}
+
+/* Lyrics loading: bars the size and spacing of fullscreen lines, starting where
+   the lyrics will */
+.widget.fullscreen .lyrics-empty {
+    align-items: flex-start;
+    padding-top: 10vh;
+}
+
+.widget.fullscreen.fs-dominant .lyrics-empty {
+    padding-top: 3vh;
+}
+
+.widget.fullscreen .lyrics-skeleton {
+    gap: calc(var(--fs-lyric, 40px) * 0.62);
+    padding: 0 6% 0 14px;
+}
+
+.widget.fullscreen .lyrics-skeleton span {
+    height: calc(var(--fs-lyric, 40px) * 0.62);
+    border-radius: calc(var(--fs-lyric, 40px) * 0.31);
 }

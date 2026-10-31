@@ -47,11 +47,11 @@ export interface LyricsRequest {
 }
 
 export interface LyricsResponse {
-  /** NetEase `yrc` — word-by-word karaoke timing */
+  /** NetEase `yrc` (or LRCMux's word timing in the same layout) — word-by-word karaoke timing */
   wordLyrics?: string;
   syncedLyrics?: string;
   plainLyrics?: string;
-  source: "lrclib" | "netease" | "genius";
+  source: "lrclib" | "netease" | "lrcmux" | "genius";
 }
 
 /** electron/updater.cjs */
@@ -189,6 +189,10 @@ export interface PlayerBridge {
    */
   dragStart(): Promise<void>;
   dragEnd(): Promise<void>;
+  /** fullscreen: the window covers its screen (true) or goes back (false) */
+  setFullscreen?(on: boolean): Promise<boolean>;
+  /** Ctrl+Alt+F, from anywhere */
+  onFullscreenToggle?(cb: () => void): () => void;
   resizeTo(height: number, hovered?: boolean): Promise<void>;
   setAlwaysOnTop(on: boolean): Promise<void>;
 

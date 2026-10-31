@@ -1,3 +1,4 @@
+import { flushSync } from "react-dom";
 import { useState, useEffect, useRef, useCallback, useMemo, Fragment } from "react";
 import "./App.css";
 import {
@@ -19,6 +20,8 @@ import { BAR_COUNT, useAudioBars } from "./useAudioBars";
 import {
   collectLine,
   letterWindows,
+  setAnimationStyle,
+  type AnimationStyle,
   resetLine,
   stepLine,
   type WordUnit,
@@ -231,6 +234,102 @@ interface ActiveLines {
  * together. The anchor prefers the lead: a backing vocal should never pull the
  * view onto itself.
  */
+/** How long a panning title rests at the start, and (twice over) at the end. */
+const PAN_REST_MS = 1500;
+
+/**
+ * A title or artist too long for its row slides to show the rest, like Spicy
+ * Lyrics' title marquee: it rests, slides until the last letter is at the
+ * edge, rests, and slides back. At a steady speed (Settings → Text → Long
+ * title speed), so a little overflow is over quickly and a lot takes longer;
+ * text that fits stays still. Measured by a ResizeObserver (it also fires once
+ * on observe), so a resized widget or a new song re-measures by itself.
+ *
+ * Once there and back when a song starts, then it rests at the start; while
+ * the widget is hovered it keeps going, and when the pointer leaves it finishes
+ * the pass it is on and stops at the start rather than snapping back.
+ */
+function PanText({
+  className,
+  text,
+  hovered,
+  speed,
+}: {
+  className: string;
+  text: string;
+  hovered: boolean;
+  /** px per second */
+  speed: number;
+}) {
+  const outer = useRef<HTMLSpanElement>(null);
+  const inner = useRef<HTMLSpanElement>(null);
+  const anim = useRef<Animation | null>(null);
+  const hoveredRef = useRef(hovered);
+  const [pan, setPan] = useState(0);
+
+  useEffect(() => {
+    hoveredRef.current = hovered;
+  }, [hovered]);
+
+  useEffect(() => {
+    const o = outer.current;
+    const i = inner.current;
+    if (!o || !i) return;
+    const ro = new ResizeObserver(() => setPan(Math.max(0, Math.ceil(i.scrollWidth - o.clientWidth))));
+    ro.observe(o);
+    ro.observe(i);
+    return () => ro.disconnect();
+  }, [text]);
+
+  // One pass there and back: rest, slide, rest twice as long, slide back, rest.
+  useEffect(() => {
+    const i = inner.current;
+    if (!i || pan <= 0) return;
+    const travel = (pan / Math.max(1, speed)) * 1000;
+    const pass = 4 * PAN_REST_MS + 2 * travel;
+    const at = (ms: number) => ms / pass;
+    const start = "translateX(0)";
+    const end = `translateX(-${pan}px)`;
+    const a = i.animate(
+      [
+        { transform: start, offset: 0 },
+        { transform: start, offset: at(PAN_REST_MS) },
+        { transform: end, offset: at(PAN_REST_MS + travel) },
+        { transform: end, offset: at(3 * PAN_REST_MS + travel) },
+        { transform: start, offset: at(3 * PAN_REST_MS + 2 * travel) },
+        { transform: start, offset: 1 },
+      ],
+      { duration: pass, iterations: hoveredRef.current ? Infinity : 1 },
+    );
+    anim.current = a;
+    return () => {
+      a.cancel();
+      anim.current = null;
+    };
+  }, [pan, speed, text]);
+
+  useEffect(() => {
+    const a = anim.current;
+    if (!a?.effect) return;
+    if (hovered) {
+      a.effect.updateTiming({ iterations: Infinity });
+      if (a.playState === "finished") a.play();
+    } else {
+      // finish the pass it is on: each pass ends back at the start
+      a.effect.updateTiming({ iterations: (a.effect.getComputedTiming().currentIteration ?? 0) + 1 });
+    }
+  }, [hovered]);
+
+  return (
+    <span ref={outer} className={`${className} pan`}>
+      {/* keyed on the text: a new song gets its own element and its own run */}
+      <span key={text} ref={inner} className="pan-inner">
+        {text}
+      </span>
+    </span>
+  );
+}
+
 function resolveActive(lines: LyricLine[], t: number): ActiveLines {
   const active: number[] = [];
   for (let i = 0; i < lines.length; i++) {
@@ -252,12 +351,6 @@ function resolveActive(lines: LyricLine[], t: number): ActiveLines {
 /** Interlude dots clear out shortly before the next line lands. */
 function isGapHiding(line: LyricLine | undefined, t: number): boolean {
   return !!line?.gap && line.hideAt != null && t >= line.hideAt;
-}
-
-function wordTrunc(text: string, maxChars: number): string {
-  if (text.length <= maxChars) return text;
-  const cut = text.lastIndexOf(" ", maxChars);
-  return (cut > 0 ? text.slice(0, cut) : text.slice(0, maxChars)) + "…";
 }
 
 /** Writes text only when it differs, so an unchanged label costs no layout. */
@@ -384,6 +477,20 @@ const IconVolume = ({ level }: { level?: number }) => {
     </svg>
   );
 };
+// Fullscreen controls: outward arrows to open, inward to close, and the layout
+// switches. Same 24-unit box and stroke as IconLyrics.
+const strokeIcon = (d: string) => () => (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d={d} />
+  </svg>
+);
+// 14 units tall, centred on 12: the speaker's optical box, so the two sit level
+const IconExpand = strokeIcon("M14 5h5v5M10 19H5v-5M19 5l-6 6M5 19l6-6");
+const IconCollapse = strokeIcon("M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7");
+const IconSwap = strokeIcon("M7 7h13M16 3l4 4-4 4M17 17H4M8 13l-4 4 4 4");
+const IconDominant = strokeIcon("M4 4h4v4H4zM11 5h9M11 8h6M4 13h16M4 17h16M4 21h11");
+const IconCover = strokeIcon("M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zM8.5 10a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM21 15l-5-5L5 21");
+
 const IconLyrics = () => (
   <svg
     width="14"
@@ -445,7 +552,16 @@ function splitForWave(text: string): string[] | null {
  *
  * Interlude markers get .dot units instead, which have their own curves.
  */
-function Units({ line, sweep = false }: { line: LyricLine; sweep?: boolean }) {
+function Units({
+  line,
+  sweep = false,
+  animation,
+}: {
+  line: LyricLine;
+  sweep?: boolean;
+  /** Settings → Highlight → Word animation: which syllables wave letter by letter */
+  animation: AnimationStyle;
+}) {
   // A line with no word timings at all gets swept too — otherwise it would
   // render as static text with no animation whatsoever, which is what happened
   // to Chinese lines falling back to a source-supplied romanization.
@@ -501,11 +617,11 @@ function Units({ line, sweep = false }: { line: LyricLine; sweep?: boolean }) {
         // glued syllables scale toward their joint, see .partOfWord in App.css
         const part = w.joinNext ? " partOfWord" : "";
 
-        // Every word waves. The animator decides whether a given syllable has
-        // room for one; only scripts that cannot be split, and windows too
-        // short to hold a letter for a frame, fall back to a single unit.
+        // Syllables long enough for the chosen style wave letter by letter
+        // (letterWindows); the rest, and scripts that cannot be split, pop as
+        // a single unit.
         const letters = splitForWave(w.text);
-        const win = letters ? letterWindows(start, end, letters.length) : null;
+        const win = letters ? letterWindows(start, end, letters.length, animation) : null;
 
         if (!letters || !win) {
           return (
@@ -556,6 +672,10 @@ export default function App() {
 
   // ── settings — edited in the settings window (right-click the widget) ──
   const [lyricSize] = usePersisted(KEYS.lyricSize, DEFAULTS.lyricSize);
+  const [panSpeed] = usePersisted(KEYS.panSpeed, DEFAULTS.panSpeed);
+  const [animationStyle] = usePersisted(KEYS.animationStyle, DEFAULTS.animationStyle);
+  // the animator reads it every frame; the letter split reads it as a prop
+  useEffect(() => setAnimationStyle(animationStyle), [animationStyle]);
   const [lyricFont] = usePersisted(KEYS.lyricFont, DEFAULTS.lyricFont);
   const [alwaysOnTop] = usePersisted(KEYS.alwaysOnTop, DEFAULTS.alwaysOnTop);
   const [blurLines] = usePersisted(KEYS.blurLines, DEFAULTS.blurLines);
@@ -601,6 +721,42 @@ export default function App() {
   const [hideBackingVocals] = usePersisted(KEYS.hideBackingVocals, DEFAULTS.hideBackingVocals);
   const [hideCredits] = usePersisted(KEYS.hideCredits, DEFAULTS.hideCredits);
   const [panelHeight] = usePersisted(KEYS.panelHeight, DEFAULTS.panelHeight);
+
+  // ── Fullscreen ──
+  // The widget's window covers its screen (main.cjs setFullscreen) and the
+  // widget lays itself out across it: cover and controls on one side, the
+  // lyrics on the other, at the screen's height. Swap and hide cover are
+  // remembered; hiding the lyrics is the ordinary lyrics switch.
+  const [fullscreen, setFullscreenState] = useState(false);
+  const [fsLayout, setFsLayout] = usePersisted(KEYS.fsLayout, DEFAULTS.fsLayout);
+  const [fsSwap, setFsSwap] = usePersisted(KEYS.fsSwap, DEFAULTS.fsSwap);
+  const [fsHideCover, setFsHideCover] = usePersisted(KEYS.fsHideCover, DEFAULTS.fsHideCover);
+  const [fsShowLyrics] = usePersisted(KEYS.fsShowLyrics, DEFAULTS.fsShowLyrics);
+  const [fsAnimatedBg] = usePersisted(KEYS.fsAnimatedBg, DEFAULTS.fsAnimatedBg);
+  const [fsLyricScale] = usePersisted(KEYS.fsLyricScale, DEFAULTS.fsLyricScale);
+  const [fsPinControls] = usePersisted(KEYS.fsPinControls, DEFAULTS.fsPinControls);
+  const fsDominant = fullscreen && fsLayout === "lyrics";
+  const [viewH, setViewH] = useState(() => window.innerHeight);
+  useEffect(() => {
+    const onResize = () => setViewH(window.innerHeight);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+  // Fullscreen lyrics scale with the screen, so a handful of lines show
+  // whatever its size (Settings → Fullscreen → Lyrics size).
+  const fsLyricSize = Math.round(viewH * 0.045 * (fsLyricScale / 100));
+  // the lyrics panel's height: the setting, or the screen's in fullscreen
+  const lyricsH = fullscreen ? viewH : panelHeight;
+  // where the line being sung sits: just under the top in the widget, a third
+  // of the way down fullscreen (higher under the lyrics-dominant header)
+  const anchorRef = useRef(LYRIC_ANCHOR);
+  // The opening lines sit near the top until the song reaches the anchor;
+  // holding them at the anchor too left an empty "forehead" above them.
+  const anchorTopRef = useRef(LYRIC_ANCHOR);
+  useEffect(() => {
+    anchorRef.current = !fullscreen ? LYRIC_ANCHOR : Math.round(viewH * (fsDominant ? 0.2 : 0.32));
+    anchorTopRef.current = !fullscreen ? LYRIC_ANCHOR : Math.round(viewH * (fsDominant ? 0.03 : 0.1));
+  }, [fullscreen, viewH, fsDominant]);
   const [widgetWidth] = usePersisted(KEYS.widgetWidth, DEFAULTS.widgetWidth);
   const [showCover] = usePersisted(KEYS.showCover, DEFAULTS.showCover);
   const [showArtist] = usePersisted(KEYS.showArtist, DEFAULTS.showArtist);
@@ -659,7 +815,8 @@ export default function App() {
     "--shadow-k": shadowStrength / 100,
     "--rest-opacity": restOpacity / 100,
     "--widget-w": `${widgetWidth}px`,
-    "--panel-h": `${panelHeight}px`,
+    "--panel-h": `${lyricsH}px`,
+    "--fs-lyric": `${fsLyricSize}px`,
     "--bar-h": `${barThickness}px`,
     "--bubble-a": bubbleOpacity / 100,
     "--album-lyric-size": `${albumLyricSize}px`,
@@ -831,6 +988,74 @@ export default function App() {
 
   // The volume pill is rendered outside the art-mode branch, so it has to be
   // dismissed whenever the mode changes or it is left stranded on screen.
+  // Fullscreen controls show while the mouse moves and fade after it rests
+  // (with the cursor). The pointer never leaves a fullscreen window, so hover
+  // alone would keep them up for good.
+  const FS_IDLE_MS = 2500;
+  const [fsActive, setFsActive] = useState(false);
+  const fsIdleTimer = useRef(0);
+  const wakeFs = useCallback(() => {
+    setFsActive(true);
+    clearTimeout(fsIdleTimer.current);
+    fsIdleTimer.current = window.setTimeout(() => setFsActive(false), FS_IDLE_MS);
+  }, []);
+  useEffect(() => {
+    if (!fullscreen) return;
+    window.addEventListener("mousemove", wakeFs);
+    window.addEventListener("pointerdown", wakeFs);
+    return () => {
+      window.removeEventListener("mousemove", wakeFs);
+      window.removeEventListener("pointerdown", wakeFs);
+      clearTimeout(fsIdleTimer.current);
+    };
+  }, [fullscreen, wakeFs]);
+
+  // A fullscreen layout change (swap, cover, lyrics, layout), animated: the
+  // browser morphs each named block (App.css, view-transition-name) from where
+  // it was to where it goes, and fades what appears or leaves.
+  const morph = useCallback(
+    (update: () => void) => {
+      if (!fullscreen || !document.startViewTransition) return update();
+      document.startViewTransition(() => flushSync(update));
+    },
+    [fullscreen],
+  );
+
+  // Into and out of fullscreen. The lyrics show on the way in (and go back to
+  // how they were on the way out); album mode has no place there.
+  const lyricsBeforeFs = useRef<boolean | null>(null);
+  const fullscreenRef = useRef(false);
+  const toggleFullscreen = useCallback((on?: boolean) => {
+    const next = on ?? !fullscreenRef.current;
+    if (next === fullscreenRef.current) return;
+    fullscreenRef.current = next;
+    if (next) {
+      lyricsBeforeFs.current = lyricsOpen;
+      setLyricsOpen(fsShowLyrics);
+      setArtMode(false);
+    } else if (lyricsBeforeFs.current != null) {
+      setLyricsOpen(lyricsBeforeFs.current);
+      lyricsBeforeFs.current = null;
+    }
+    setFullscreenState(next);
+    if (next) wakeFs();
+    window.player?.setFullscreen?.(next);
+  }, [lyricsOpen, fsShowLyrics, wakeFs]);
+  // Ctrl+Alt+F from anywhere (main.cjs), Esc to leave
+  const toggleRef = useRef(toggleFullscreen);
+  useEffect(() => {
+    toggleRef.current = toggleFullscreen;
+  }, [toggleFullscreen]);
+  useEffect(() => window.player?.onFullscreenToggle?.(() => toggleRef.current()), []);
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") toggleRef.current(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [fullscreen]);
+
   const setArtModeSafely = useCallback((on: boolean) => {
     setArtMode(on);
     if (!on) setArtCompact(false);
@@ -1037,7 +1262,7 @@ export default function App() {
     reloadNonceRef.current = reloadNonce;
   }, [reloadNonce]);
   const askProvider = useCallback(
-    (p: "spicy" | "netease" | "lrclib" | "chain"): Promise<ProviderResult> => {
+    (p: "spicy" | "netease" | "lrcmux" | "lrclib" | "chain"): Promise<ProviderResult> => {
       const cache = providerCache.current;
       if (cache.track !== np.trackKey) {
         cache.track = np.trackKey;
@@ -1298,6 +1523,30 @@ export default function App() {
     }
   }, []);
 
+  // ── hovered lyric line ──
+  // Marked with .hover by hand rather than CSS :hover. The lyrics move by
+  // transform, and the browser only re-checks :hover when the pointer moves, so
+  // a line kept its hover look after sliding out from under a still pointer.
+  // While the pointer is over the panel, the line under it is found again every
+  // frame (the clock below calls this). A re-render rewrites className, so a
+  // missing class on the same line is put back too.
+  const hoverPoint = useRef<{ x: number; y: number } | null>(null);
+  const hoveredLine = useRef<HTMLElement | null>(null);
+  const updateLineHover = useCallback(() => {
+    const pt = hoverPoint.current;
+    const under = pt ? document.elementFromPoint(pt.x, pt.y) : null;
+    const line = (under?.closest(".lyric-line") as HTMLElement | null) ?? null;
+    if (line === hoveredLine.current && (!line || line.classList.contains("hover"))) return;
+    hoveredLine.current?.classList.remove("hover");
+    hoveredLine.current = line;
+    if (!line) return;
+    line.classList.add("hover");
+    // the outline's cut-out for the time label is sized to the label
+    const ts = line.querySelector<HTMLElement>(".lyric-ts");
+    if (ts) line.style.setProperty("--ts-w", `${ts.getBoundingClientRect().width}px`);
+  }, []);
+  const updateLineHoverRef = useRef(updateLineHover);
+
   // ── smooth clock — DOM-direct for scrubber/times, React only on line change ──
   useEffect(() => {
     let raf = 0;
@@ -1311,6 +1560,7 @@ export default function App() {
     let animLyrics = lyricsRef.current;
 
     const tick = () => {
+      updateLineHoverRef.current();
       const now = performance.now();
       const dt = (now - lastFrame) / 1000;
       lastFrame = now;
@@ -1333,12 +1583,16 @@ export default function App() {
 
       const { active, anchor } = resolveActive(lyricsRef.current, lyricTime);
 
-      // Re-render only when the *set* of current lines changes, or when a gap
-      // marker crosses into its fade-out. Word-level changes no longer need
-      // React at all — the animator owns every visual property per frame.
+      // Re-render only when the *set* of current lines changes, the line the
+      // view holds on changes, or a gap marker crosses into its fade-out.
+      // Word-level changes no longer need React at all — the animator owns
+      // every visual property per frame. The anchor counts on its own: on a
+      // song change the old song's position briefly anchors the new lyrics on
+      // their last line, and once the clock resets nothing is being sung either
+      // way, so the set alone kept the view at the bottom until the first line.
       const key = active.join(",");
       const hiding = isGapHiding(lyricsRef.current[anchor], lyricTime);
-      if (key !== activeKeyRef.current || hiding !== gapHidingRef.current) {
+      if (key !== activeKeyRef.current || anchor !== currentIdxRef.current || hiding !== gapHidingRef.current) {
         activeKeyRef.current = key;
         gapHidingRef.current = hiding;
         currentIdxRef.current = anchor;
@@ -1429,8 +1683,8 @@ export default function App() {
     // themselves into view only shows an empty panel.
     const rows = inner.querySelectorAll<HTMLElement>(".lyric-line, .lyrics-credits, .lyrics-attribution");
     if (!rows.length) return 0;
-    const min = rows[0].offsetTop - LYRIC_ANCHOR;
-    const max = rows[rows.length - 1].offsetTop - LYRIC_ANCHOR;
+    const min = rows[0].offsetTop - anchorTopRef.current;
+    const max = rows[rows.length - 1].offsetTop - anchorRef.current;
     if (max <= min) return min;
     return Math.max(min, Math.min(max, val));
   }, []);
@@ -1454,7 +1708,7 @@ export default function App() {
     const wheelMax = () => {
       const rows = lyricsInnerRef.current?.querySelectorAll<HTMLElement>(".lyric-line, .lyrics-credits, .lyrics-attribution");
       const last = rows?.[rows.length - 1];
-      return last ? last.offsetTop + last.offsetHeight - panelHeight * 0.6 : 0;
+      return last ? last.offsetTop + last.offsetHeight - lyricsH * 0.6 : 0;
     };
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
@@ -1468,7 +1722,7 @@ export default function App() {
       }
       // line and page modes (some mice, some settings) report in other units
       pending +=
-        (e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * panelHeight : e.deltaY) *
+        (e.deltaMode === 1 ? e.deltaY * 16 : e.deltaMode === 2 ? e.deltaY * lyricsH : e.deltaY) *
         scrollSpeedRef.current;
       if (!raf) {
         raf = requestAnimationFrame(() => {
@@ -1502,12 +1756,12 @@ export default function App() {
       clearTimeout(idle);
       gliding?.classList.remove("wheel");
     };
-  }, [clamp, lyricsOpen, panelMounted, panelHeight]);
+  }, [clamp, lyricsOpen, panelMounted, lyricsH]);
 
   const scrollToLine = useCallback(
     (el: HTMLElement | null) => {
       if (!el) return;
-      const target = el.offsetTop - LYRIC_ANCHOR;
+      const target = el.offsetTop - anchorRef.current;
       setLyricScroll(clamp(target));
     },
     [clamp],
@@ -1551,6 +1805,8 @@ export default function App() {
   // badly out of time, so leave them static instead of faking it.
   const isSynced = lyricsFor.synced !== false;
 
+
+
   const syncToCurrentLine = useCallback(() => {
     const lines = lyricsInnerRef.current?.querySelectorAll<HTMLElement>(".lyric-line");
     const index = currentIdx >= 0 ? currentIdx : firstLyricIdx;
@@ -1558,20 +1814,37 @@ export default function App() {
     setOutOfSync(false);
   }, [currentIdx, firstLyricIdx, scrollToLine]);
 
-  // Reposition after loading/replacing lyrics and reopening the panel too.
-  // Resolve from the committed DOM instead of sharing a ref across changing rows.
-  useEffect(() => {
-    if (!isSynced || !lyricsOpen || artMode) return;
-    syncToCurrentLine();
-  }, [syncToCurrentLine, isSynced, lyricsOpen, artMode, dynamicLyrics, lyricSize, lyricFont]);
-
-  // After a wheel scroll, follow the song again once the wheel has rested for
-  // the chosen delay (Settings → Auto sync; 0 = never). The sync is read
-  // through a ref so a line change mid-countdown does not restart it.
+  // The sync and the scrolled-away state, read through refs so each effect
+  // below runs on its own triggers rather than on every line change.
   const syncRef = useRef(syncToCurrentLine);
   useEffect(() => {
     syncRef.current = syncToCurrentLine;
   }, [syncToCurrentLine]);
+  const outOfSyncRef = useRef(outOfSync);
+  useEffect(() => {
+    outOfSyncRef.current = outOfSync;
+  }, [outOfSync]);
+
+  // Reposition after loading/replacing lyrics and reopening the panel too, even
+  // when scrolled away: the lyrics that were scrolled are gone. Resolve from the
+  // committed DOM instead of sharing a ref across changing rows.
+  useEffect(() => {
+    if (!isSynced || !lyricsOpen || artMode) return;
+    syncRef.current();
+  }, [isSynced, lyricsOpen, artMode, dynamicLyrics, lyricSize, lyricFont, fullscreen, viewH, fsLayout, fsLyricScale]);
+
+  // Follow the song line by line, but not while the user has scrolled away:
+  // the view stays where they put it until Auto sync or the Sync button. It
+  // used to follow every line change regardless, which snapped a scroll back
+  // as soon as the next line started.
+  useEffect(() => {
+    if (!isSynced || !lyricsOpen || artMode || outOfSyncRef.current) return;
+    syncRef.current();
+  }, [currentIdx, firstLyricIdx, isSynced, lyricsOpen, artMode]);
+
+  // After a wheel scroll, follow the song again once the wheel has rested for
+  // the chosen delay (Settings → Auto sync; 0 = never). The sync is read
+  // through a ref so a line change mid-countdown does not restart it.
   useEffect(() => {
     if (!outOfSync || !autoSync || !isSynced) return;
     const id = setTimeout(() => {
@@ -1646,11 +1919,22 @@ export default function App() {
   return (
     // hover is tracked on the stage, not the widget: the stage fills the
     // window, so growing the widget can never move the pointer out of it
-    <div className="stage" onMouseEnter={enterHover} onMouseLeave={leaveHover}>
+    <div
+      className={`stage${fullscreen ? " fullscreen" : ""}`}
+      onMouseEnter={enterHover}
+      onMouseLeave={leaveHover}
+    >
       <div
         ref={widgetRef}
         className={[
           "widget",
+          fullscreen && "fullscreen",
+          fullscreen && fsSwap && "fs-swap",
+          fullscreen && fsHideCover && "fs-no-cover",
+          fsDominant && "fs-dominant",
+          // pinned controls behave as if the mouse never rests
+          fullscreen && (fsActive || fsPinControls) && "fs-active",
+          fullscreen && fsAnimatedBg && "fs-animated",
           hovered && "hovered",
           showLyrics && "lyrics-open",
           artMode && "art-mode",
@@ -1679,7 +1963,15 @@ export default function App() {
           window.player?.toggleSettings?.();
         }}
       >
-        {np.art ? (
+        {fullscreen && fsAnimatedBg && np.art ? (
+          // the cover three times over, blurred and turning at different
+          // speeds, so the colour drifts rather than sitting still
+          <div className="widget-bg fs-anim-bg">
+            {[0, 1, 2].map((i) => (
+              <i key={i} style={{ backgroundImage: `url(${art})` }} />
+            ))}
+          </div>
+        ) : np.art ? (
           <div className="widget-bg" style={{ backgroundImage: `url(${art})` }} />
         ) : (
           <div className="widget-bg widget-bg-mono" />
@@ -1687,10 +1979,12 @@ export default function App() {
         <div className="top">
           <div
             className="art-wrap"
-            onClick={() =>
-              artMode ? setArtCompact((o) => !o) : setArtModeSafely(true)
-            }
-            style={{ cursor: "pointer" }}
+            onClick={() => {
+              if (fullscreen) return; // no album mode in fullscreen
+              if (artMode) setArtCompact((o) => !o);
+              else setArtModeSafely(true);
+            }}
+            style={{ cursor: fullscreen ? "default" : "pointer" }}
           >
             <img
               className="art"
@@ -1766,8 +2060,8 @@ export default function App() {
                 >
                   <div className="art-mini-row">
                     <div className="art-mini-info">
-                      <span className="art-mini-title">{wordTrunc(np.title, 30)}</span>
-                      <span className="art-mini-artist">{wordTrunc(np.artist, 28)}</span>
+                      <PanText className="art-mini-title" text={np.title} hovered={hovered} speed={panSpeed} />
+                      <PanText className="art-mini-artist" text={np.artist} hovered={hovered} speed={panSpeed} />
                     </div>
                     <div
                       className={[
@@ -1904,8 +2198,8 @@ export default function App() {
           </div>
           {!artMode && (
             <div className="info">
-              <span className="title">{np.title}</span>
-              <span className="artist">{np.artist}</span>
+              <PanText className="title" text={np.title} hovered={hovered} speed={panSpeed} />
+              <PanText className="artist" text={np.artist} hovered={hovered} speed={panSpeed} />
             </div>
           )}
           {!artMode && showNext && nextUp && (
@@ -1926,7 +2220,18 @@ export default function App() {
 
         {/* lyrics panel */}
         {!artMode && (
-          <div className="lyrics-panel" ref={lyricsPanelRef}>
+          <div
+            className="lyrics-panel"
+            ref={lyricsPanelRef}
+            onPointerMove={(e) => {
+              hoverPoint.current = { x: e.clientX, y: e.clientY };
+              updateLineHover();
+            }}
+            onPointerLeave={() => {
+              hoverPoint.current = null;
+              updateLineHover();
+            }}
+          >
             {lyricsStatus !== "ok" ? (
               <div className="lyrics-empty">
                 {lyricsStatus === "loading" ? (
@@ -1982,7 +2287,7 @@ export default function App() {
                     "--lit-k": highlightStrength,
                     "--glow-k": glowStrength,
                     transform: `translateY(${-lyricScroll}px)`,
-                    "--lyric-size": `${lyricSize}px`,
+                    "--lyric-size": `${fullscreen ? fsLyricSize : lyricSize}px`,
                     ...(fontStack(lyricFont) ? { "--latin-stack": fontStack(lyricFont) } : {}),
                   } as React.CSSProperties
                 }
@@ -2024,16 +2329,6 @@ export default function App() {
                         { "--BlurAmount": `${blur.toFixed(2)}px` } as React.CSSProperties
                       }
                       onClick={() => seekToLine(line.t)}
-                      onMouseEnter={(e) => {
-                        const span = e.currentTarget.querySelector(
-                          ".lyric-ts",
-                        ) as HTMLElement;
-                        if (span)
-                          e.currentTarget.style.setProperty(
-                            "--ts-w",
-                            `${span.getBoundingClientRect().width}px`,
-                          );
-                      }}
                     >
                       {/* Only current lines need per-syllable spans; rendering
                           them for every line re-flowed the whole list on each
@@ -2048,7 +2343,7 @@ export default function App() {
                           text instead left every interlude in the song showing
                           a permanent "• • •". */}
                       {isCurrent || line.gap ? (
-                        <Units line={line} sweep={lineSweep} />
+                        <Units line={line} sweep={lineSweep} animation={animationStyle} />
                       ) : (
                         line.text
                       )}
@@ -2070,7 +2365,7 @@ export default function App() {
                     lyrics show, so "hide credits" does not hide it. */}
                 {attribution && <LyricsAttribution credit={attribution} />}
                 {/* Enough trailing room to align even a one-line song near the top. */}
-                <div style={{ height: panelHeight }} />
+                <div style={{ height: lyricsH }} />
               </div>
             )}
           </div>
@@ -2150,6 +2445,16 @@ export default function App() {
                 >
                   <IconVolume level={volume} />
                 </button>
+                {!fullscreen && (
+                  <button
+                    className="ctrl-btn ctrl-fs"
+                    aria-label="Fullscreen"
+                    title="Fullscreen (Ctrl+Alt+F)"
+                    onClick={() => toggleFullscreen(true)}
+                  >
+                    <IconExpand />
+                  </button>
+                )}
               </div>
               <div className="ctrl-center">
                 <button
@@ -2210,13 +2515,60 @@ export default function App() {
                   aria-label="Lyrics"
                   title="Lyrics"
                   disabled={noLyrics}
-                  onClick={() => setLyricsOpen((o) => !o)}
+                  // animated in fullscreen, like the button at the top right
+                  onClick={() => morph(() => setLyricsOpen((o) => !o))}
                 >
                   Aa
                 </button>
               </div>
             </div>
           </>
+        )}
+
+        {fullscreen && (
+          <div className="fs-bar" data-nodrag>
+            <button
+              className={`ctrl-btn${fsDominant ? " active" : ""}`}
+              aria-label={fsDominant ? "Split layout" : "Lyrics dominant"}
+              title={fsDominant ? "Split layout" : "Lyrics dominant"}
+              onClick={() => morph(() => setFsLayout((v) => (v === "lyrics" ? "split" : "lyrics")))}
+            >
+              <IconDominant />
+            </button>
+            <button
+              className={`ctrl-btn${fsSwap ? " active" : ""}`}
+              aria-label="Swap sides"
+              title="Swap sides"
+              onClick={() => morph(() => setFsSwap((v) => !v))}
+            >
+              <IconSwap />
+            </button>
+            <button
+              className={`ctrl-btn${showLyrics ? " active" : ""}`}
+              aria-label={showLyrics ? "Hide lyrics" : "Show lyrics"}
+              title={showLyrics ? "Hide lyrics" : "Show lyrics"}
+              disabled={noLyrics}
+              onClick={() => morph(() => setLyricsOpen((o) => !o))}
+            >
+              <IconLyrics />
+            </button>
+            <button
+              className={`ctrl-btn${fsHideCover ? "" : " active"}`}
+              aria-label={fsHideCover ? "Show cover" : "Hide cover"}
+              title={fsHideCover ? "Show cover" : "Hide cover"}
+              onClick={() => morph(() => setFsHideCover((v) => !v))}
+            >
+              <IconCover />
+            </button>
+            <button
+              className="ctrl-btn"
+              aria-label="Exit fullscreen"
+              title="Exit fullscreen (Esc)"
+              onClick={() => toggleFullscreen(false)}
+            >
+              <IconCollapse />
+            </button>
+          </div>
         )}
 
         {offsetToast && (

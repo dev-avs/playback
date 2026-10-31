@@ -38,6 +38,24 @@ export function fontStack(name: string): string | null {
 export const DEFAULTS = {
   romanizeDefault: false,
   lyricSize: 17,
+  /** px per second a too-long title or artist slides at (PanText) */
+  panSpeed: 8,
+  /** fullscreen: cover and controls beside the lyrics, or a small header above them */
+  fsLayout: "split" as "split" | "lyrics",
+  /** fullscreen: cover and controls on the right instead of the left */
+  fsSwap: false,
+  /** fullscreen: without the big cover */
+  fsHideCover: false,
+  /** fullscreen opens with the lyrics showing */
+  fsShowLyrics: true,
+  /** fullscreen: the cover, blurred, drifting slowly behind everything */
+  fsAnimatedBg: true,
+  /** fullscreen lyric size, % of the screen-height default */
+  fsLyricScale: 100,
+  /** fullscreen: the controls stay instead of fading at rest */
+  fsPinControls: false,
+  /** how sung words move: Playback's own, or spicy's (lyricAnimator.ts) */
+  animationStyle: "playback" as "playback" | "spicy",
   lyricFont: "Default",
   lyricOffset: 0,
   alwaysOnTop: true,
@@ -173,7 +191,7 @@ export const DEFAULTS = {
   songProviders: {} as Record<string, Provider>,
 };
 
-export type Provider = "auto" | "spicy" | "netease" | "lrclib";
+export type Provider = "auto" | "spicy" | "netease" | "lrcmux" | "lrclib";
 
 export type LyricAlign = "left" | "center";
 
@@ -252,11 +270,12 @@ export function cjkStack(lang: CjkLang, font: string): string {
 export const MOTIONS = { calm: 0, normal: 1, bouncy: 1.8 } as const;
 export type LyricMotion = keyof typeof MOTIONS;
 /** The providers that can be picked, in cycle order. */
-export const PROVIDERS: Exclude<Provider, "auto">[] = ["spicy", "netease", "lrclib"];
+export const PROVIDERS: Exclude<Provider, "auto">[] = ["spicy", "netease", "lrcmux", "lrclib"];
 export const PROVIDER_NAMES: Record<Provider, string> = {
   auto: "Auto",
   spicy: "Spicy",
   netease: "NetEase",
+  lrcmux: "LRCMux",
   lrclib: "LrcLib",
 };
 
@@ -278,6 +297,15 @@ export function songKey(artist: string, title: string) {
 export const KEYS = {
   romanizeDefault: "set.romanizeDefault",
   lyricSize: "set.lyricSize",
+  panSpeed: "set.panSpeed",
+  animationStyle: "set.animationStyle",
+  fsLayout: "set.fsLayout",
+  fsSwap: "set.fsSwap",
+  fsHideCover: "set.fsHideCover",
+  fsShowLyrics: "set.fsShowLyrics",
+  fsAnimatedBg: "set.fsAnimatedBg",
+  fsLyricScale: "set.fsLyricScale",
+  fsPinControls: "set.fsPinControls",
   lyricFont: "set.lyricFont",
   // predates the settings window; kept so saved offsets survive
   lyricOffset: "lyricOffset",

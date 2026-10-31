@@ -19,22 +19,44 @@
  * frame; the DOM is the only mutable state.
  */
 
-// ── cubic hermite spline (monotone) ──
-// spicy uses `cubic-spline` (natural cubic), which overshoots between control
-// points. Monotone Hermite matches the same keyframes without ever punching
-// past them, which matters for scale (never above 1.175) and glow (never
-// negative). On the flat GLOW plateau (0.15..0.6) both agree exactly.
+// ── animation style (Settings → Highlight → Word animation) ──
+// "playback": Playback's own motion. Curves through a monotone spline that
+// never overshoots, and every word long enough to hold a letter for a frame
+// waves letter by letter, its letter springs sped up to fit short words.
+// "spicy": spicy's motion. The natural cubic spline spicy uses (the
+// `cubic-spline` package), whose small overshoot between keyframes is the
+// "pop", and the letter wave only on syllables held a second or longer, at
+// spicy's own spring tuning.
+import NaturalSpline from "cubic-spline";
+
+export type AnimationStyle = "playback" | "spicy";
+
+let style: AnimationStyle = "playback";
+
+/** Set from the widget whenever the setting changes. */
+export function setAnimationStyle(next: AnimationStyle): void {
+  style = next;
+}
+
 type Point = readonly [number, number];
 
+/**
+ * One keyframed curve, evaluated the way the current style wants: monotone
+ * cubic Hermite (Fritsch–Carlson) for Playback, natural cubic for spicy. On
+ * the flat GLOW plateau (0.15..0.6) both agree exactly. Outside the keyframes
+ * both hold at the end values.
+ */
 class Spline {
   private xs: number[];
   private ys: number[];
   private ms: number[];
+  private natural: NaturalSpline;
 
   constructor(points: readonly Point[]) {
     const n = points.length;
     this.xs = points.map((p) => p[0]);
     this.ys = points.map((p) => p[1]);
+    this.natural = new NaturalSpline(this.xs, this.ys);
 
     // finite differences
     const d: number[] = new Array(n - 1);
@@ -73,6 +95,7 @@ class Spline {
     if (x <= xs[0]) return this.ys[0];
     const last = xs.length - 1;
     if (x >= xs[last]) return this.ys[last];
+    if (style === "spicy") return this.natural.at(x);
 
     let i = 0;
     for (; i < last; i++) if (x < xs[i + 1]) break;
@@ -184,15 +207,14 @@ const GRAD_UNSUNG = -20;
 const GRAD_SUNG = 100;
 const GRAD_SPAN = 120;
 
+/** spicy only waves syllables held at least this long (IsLetterCapable: 1000 ms). */
+const SPICY_LETTER_MIN_S = 1;
+
 /**
- * Letter windows stop short of the syllable's real end (spicy's Emphasize
- * `Substractions.EndTime = 250`), so the wave locks to idle before the next
- * syllable rises. The group shares the shortened window with its letters.
- *
- * Taken as a *fraction* rather than the reference's flat 250 ms. That constant
- * only ever met syllables held 1 s or longer, where it is a quarter of the
- * window; applied to a 400 ms word it would swallow two thirds of it and the
- * wave would be over before it read. At 1000 ms the two rules agree exactly.
+ * How long before the syllable's end the wave finishes. spicy uses a flat
+ * 250 ms (it only ever waves syllables of 1 s or longer). Playback waves short
+ * syllables too, so it takes a quarter of the syllable when that is less: a
+ * flat 250 ms would swallow two thirds of a 400 ms word. At 1 s they agree.
  */
 const LETTER_TAIL_S = 0.25;
 const LETTER_TAIL_FRACTION = 0.25;
@@ -201,27 +223,17 @@ const LETTER_TAIL_FRACTION = 0.25;
 const MIN_LETTER_MS = 30;
 
 /**
- * Per-letter window the spring tuning assumes, derived from the reference's own
- * numbers: a 1 s syllable, less the 250 ms tail, over ~6 letters ≈ 125 ms.
+ * Playback style only: how much faster a letter's springs run to keep the
+ * wave's shape in a short window. spicy's tuning assumes ~125 ms per letter (a
+ * 1 s syllable, less the tail, over ~6 letters); a 40 ms letter on the same
+ * springs would barely move. Clamped at 1, so nothing held long deviates from
+ * spicy's tuning, and at 3 so a very fast syllable stays a wave.
  */
 const WAVE_REF_LETTER_MS = 125;
 const MAX_FREQ_SCALE = 3;
 
-/**
- * How much faster this letter's springs need to run to keep the wave's shape.
- *
- * The reference only ever waved syllables held 1 s or longer, so its
- * frequencies are tuned for a leisurely bump. Run the same 0.88 Hz spring
- * against a 40 ms letter window and the goal has come and gone long before the
- * spring has meaningfully moved — the wave survives as a faint shimmer, which
- * is precisely the mush the letter wave used to produce.
- *
- * Scaling frequency with the window preserves the *shape* of the motion at any
- * speed. Clamped at 1 so nothing held long ever deviates from spicy's tuning,
- * and at 3 so a very fast syllable stays a wave rather than becoming a twitch.
- */
 function letterFreqScale(windowMs: number): number {
-  if (!(windowMs > 0)) return 1;
+  if (style === "spicy" || !(windowMs > 0)) return 1;
   return Math.min(MAX_FREQ_SCALE, Math.max(1, WAVE_REF_LETTER_MS / windowMs));
 }
 
@@ -235,11 +247,14 @@ export function letterWindows(
   start: number,
   end: number,
   count: number,
+  animation: AnimationStyle,
 ): { groupEnd: number; per: number } | null {
   const dur = end - start;
   if (count < 2 || dur <= 0) return null;
+  if (animation === "spicy" && dur < SPICY_LETTER_MIN_S) return null;
 
-  const groupEnd = end - Math.min(LETTER_TAIL_S, dur * LETTER_TAIL_FRACTION);
+  const groupEnd =
+    end - (animation === "spicy" ? LETTER_TAIL_S : Math.min(LETTER_TAIL_S, dur * LETTER_TAIL_FRACTION));
   const per = (groupEnd - start) / count;
   if (per * 1000 < MIN_LETTER_MS) return null;
 
@@ -382,9 +397,8 @@ function makeLetter(el: HTMLElement): LetterUnit {
   promoteToGPU(el);
   const s = Number(el.dataset.s ?? 0);
   const e = Number(el.dataset.e ?? 0);
-  // Only the letter springs are rescaled. Word-level motion still runs at the
-  // reference's tuning against the syllable's own window, exactly as in spicy —
-  // it is the letters that got handed short windows by lowering the threshold.
+  // Only the letter springs are rescaled (Playback style); word-level motion
+  // runs at the reference's tuning against the syllable's own window.
   const k = letterFreqScale((e - s) * 1000);
   return {
     el,

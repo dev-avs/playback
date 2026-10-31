@@ -2,6 +2,7 @@
   "name": "playback-installer",
   "private": true,
   "version": "1.0.0",
+  "license": "AGPL-3.0-only",
   "description": "The installer people download: picks a folder and options, then installs the newest player release",
   "type": "module",
   "scripts": {

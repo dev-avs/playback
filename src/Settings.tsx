@@ -158,6 +158,7 @@ const CATEGORIES = [
   { id: "layout", name: "Layout", icon: "▤" },
   { id: "album", name: "Album mode", icon: "◼" },
   { id: "fun", name: "Fun", icon: "✿" },
+  { id: "fullscreen", name: "Fullscreen", icon: "⛶" },
   { id: "behavior", name: "Behavior", icon: "⚙" },
 ] as const;
 type Category = (typeof CATEGORIES)[number]["id"];
@@ -385,6 +386,8 @@ export default function Settings() {
   if (art !== cover.cur) setCover({ cur: art, prev: cover.cur });
 
   const [cat, setCat] = useState<Category>("lyrics");
+  // the section name pins to the top of the list; it fades once the list scrolls
+  const [listScrolled, setListScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const [explained, setExplained] = useState<string | null>(null);
   const [peek, setPeek] = useState<Peek>({});
@@ -780,11 +783,29 @@ export default function Settings() {
       { value: "center", label: "Center" },
     ]),
     toggle("text", "italicLyrics", "Italic", "Slanted lyrics.", { preview: true }),
+    slider("text", "panSpeed", "Long title speed", "How fast a title or artist too long for the widget slides to show the rest.", {
+      min: 2, max: 40, step: 1, fmt: (v) => `${v} px/s`,
+    }),
     slider("text", "titleScale", "Title size", "Size of the song title and artist.", { min: 0.8, max: 1.6, step: 0.05, fmt: times }),
 
     // Highlight: how the line being sung lights up
     slider("highlight", "highlightStrength", "Highlight strength", "How bright the sung part of the line is.", { min: 0.5, max: 1.2, step: 0.05, fmt: times }),
     slider("highlight", "glowStrength", "Glow", "The soft glow around letters as they are sung.", { min: 0, max: 3, step: 0.1, fmt: times }),
+    // Fullscreen: how it opens (Ctrl+Alt+F or the button by the volume)
+    chips("fullscreen", "fsLayout", "Layout", "Split: the cover, title and controls beside the lyrics. Lyrics dominant: a small cover and title above big lyrics.", [
+      { value: "split", label: "Split" },
+      { value: "lyrics", label: "Lyrics dominant" },
+    ], { preview: false }),
+    toggle("fullscreen", "fsShowLyrics", "Show lyrics", "Open fullscreen with the lyrics showing. The button at the top still hides them."),
+    toggle("fullscreen", "fsHideCover", "Hide cover", "Leave out the big cover; the title and controls sit at the bottom."),
+    toggle("fullscreen", "fsSwap", "Cover on the right", "Put the cover and controls on the right and the lyrics on the left."),
+    toggle("fullscreen", "fsAnimatedBg", "Animated background", "The cover, blurred, drifting slowly behind everything. Off: a still blur."),
+    toggle("fullscreen", "fsPinControls", "Keep controls showing", "The controls stay instead of fading when the mouse rests."),
+    slider("fullscreen", "fsLyricScale", "Lyrics size", "How big the lyrics are, scaled with the screen so only a few lines show.", { min: 60, max: 160, step: 5, fmt: pct }),
+    chips("highlight", "animationStyle", "Word animation", "How sung words move. Spicy: Spicy Lyrics' pop, a little bouncier, with the letter wave only on words held a second or longer.", [
+      { value: "playback", label: "Playback" },
+      { value: "spicy", label: "Spicy" },
+    ], { preview: false }),
     chips("highlight", "sweepDirection", "Sweep direction", "The fill runs along the line as it is sung, or top to bottom over each word.", [
       { value: "across", label: "Along the line" },
       { value: "down", label: "Top to bottom" },
@@ -822,7 +843,7 @@ export default function Settings() {
     toggle("layout", "showSource", "Show source label", "The player and lyrics source under the progress bar, e.g. Spotify · spicy ●●●."),
     toggle("layout", "showTimes", "Show times", "The elapsed and remaining times.", { preview: true }),
     toggle("layout", "showProgress", "Show progress bar", "The bar showing how far into the song you are.", { preview: true }),
-    slider("layout", "barThickness", "Progress bar thickness", "How thick the progress bar is.", { min: 1, max: 6, step: 1, fmt: (v) => `${v}px` }),
+    slider("layout", "barThickness", "Progress bar thickness", "How thick the progress bar is.", { min: 1, max: 6, step: 1, fmt: (v) => `${v + 2}px` }),
     toggle("layout", "tintBar", "Colour the progress bar", "Light the progress bar in the Highlight colour.", { preview: true }),
     toggle("layout", "showShuffleRepeat", "Show shuffle & repeat", "The shuffle and repeat buttons."),
     toggle("layout", "showVolume", "Show volume", "The volume button."),
@@ -1149,7 +1170,10 @@ export default function Settings() {
                 peekLang={peekLang}
                 caption={explained ?? "Point at a setting to try it here · hold its name 1 s to reset it"}
               />
-              <div className="st-list">
+              <div
+                className={`st-list${listScrolled ? " scrolled" : ""}`}
+                onScroll={(e) => setListScrolled(e.currentTarget.scrollTop > 2)}
+              >
                 <div className="st-list-head">
                   {q ? `${shown.length} result${shown.length === 1 ? "" : "s"} for “${query.trim()}”` : catName(cat)}
                 </div>

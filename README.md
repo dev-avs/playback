@@ -231,10 +231,12 @@ authentication or the network fails, and syllable lyrics can be served offline.
 
 ### Licensing
 
-`src/vendor/objpack.ts` is copied from spicy-lyrics, which is **AGPL-3.0**. That
-is fine for private personal use, but if this app is ever distributed or made
-reachable by other people over a network, AGPL section 13 requires offering the
-complete source of the combined work under AGPL.
+Playback is licensed under the **GNU Affero General Public License v3.0**
+([LICENSE](LICENSE)). It includes code from
+[Spicy Lyrics](https://github.com/Spikerko/spicy-lyrics) (AGPL-3.0):
+`src/vendor/objpack.ts` is copied from it, and the word animation in
+`src/lyricAnimator.ts` follows its LyricsAnimator. The installer (`installer/`)
+is under the same licence.
 
 ### Genius (optional)
 

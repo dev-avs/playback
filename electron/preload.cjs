@@ -97,6 +97,14 @@ contextBridge.exposeInMainWorld("player", {
   // a round trip while the window is moving.
   dragStart: () => ipcRenderer.invoke("win:dragStart"),
   dragEnd: () => ipcRenderer.invoke("win:dragEnd"),
+  // Fullscreen: the window covers its screen (true) or goes back (false).
+  setFullscreen: (on) => ipcRenderer.invoke("win:fullscreen", on),
+  // Ctrl+Alt+F, from anywhere
+  onFullscreenToggle(cb) {
+    const handler = () => cb();
+    ipcRenderer.on("fullscreen:toggle", handler);
+    return () => ipcRenderer.off("fullscreen:toggle", handler);
+  },
 
   resizeTo: (height, hovered) => ipcRenderer.invoke("win:resize", height, hovered),
   setAlwaysOnTop: (on) => ipcRenderer.invoke("win:setAlwaysOnTop", on),
