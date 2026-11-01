@@ -1,7 +1,7 @@
 {
   "name": "playback",
   "private": true,
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "Now-playing overlay with synced lyrics",
   "author": "Playback",
   "license": "AGPL-3.0-only",
@@ -19,7 +19,8 @@
     "icon": "electron scripts/make-icon.cjs",
     "pack:app": "node scripts/pack.cjs",
     "package": "npm run build && npm run pack:app && electron-builder --win nsis-web --prepackaged release/Playback-win32-x64 --publish never",
-    "installer": "npm --prefix installer run build"
+    "installer": "npm --prefix installer run build",
+    "thumb": "cargo build --release --manifest-path native/smtc-thumb/Cargo.toml && node -e \"require('fs').copyFileSync('native/smtc-thumb/target/release/smtc-thumb.exe','electron/smtc-thumb.exe')\""
   },
   "build": {
     "appId": "com.player.smtcwidget",

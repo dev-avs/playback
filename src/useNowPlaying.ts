@@ -254,7 +254,7 @@ export function useNowPlaying() {
     let cancelled = false;
     const key = np.trackKey;
     window.player
-      .fetchArt({ artist: np.artist, title: np.title, album: np.album })
+      .fetchArt({ artist: np.artist, title: np.title, album: np.album, appId: np.appId })
       .then((url) => {
         if (cancelled || !url) return;
         setNp((prev) => (prev.trackKey === key ? { ...prev, art: url } : prev));

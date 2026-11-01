@@ -1,0 +1,14 @@
+[package]
+name = "smtc-thumb"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+base64 = "0.22"
+windows = { version = "0.62", features = ["Media_Control", "Storage_Streams", "Foundation"] }
+
+[profile.release]
+opt-level = "s"
+lto = true
+strip = true
+panic = "abort"

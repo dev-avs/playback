@@ -111,7 +111,7 @@ export interface PlayerBridge {
   shuffle(): Promise<boolean>;
   repeat(): Promise<boolean>;
   fetchLyrics(req: LyricsRequest): Promise<LyricsResponse | null>;
-  fetchArt(req: { artist: string; title: string; album?: string }): Promise<string | null>;
+  fetchArt(req: { artist: string; title: string; album?: string; appId?: string }): Promise<string | null>;
   /** romanized LRC for the track, or null when the source has none */
   fetchRomanized(req: { artist: string; title: string }): Promise<string | null>;
 

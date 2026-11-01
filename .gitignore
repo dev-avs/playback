@@ -35,3 +35,6 @@ release
 # The installer (installer/): Rust build output and generated schemas
 installer/src-tauri/target
 installer/src-tauri/gen
+
+# The thumbnail helper (native/smtc-thumb): `npm run thumb` copies the exe to electron/
+native/smtc-thumb/target

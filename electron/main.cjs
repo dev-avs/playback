@@ -616,10 +616,39 @@ async function fetchLyrics({ artist, title, album, duration, only }) {
 }
 
 // ── Album art ──────────────────────────────────────────────────
-// SMTC does expose a thumbnail, but PowerShell cannot read it (its WinRT
-// projection breaks on IAsyncOperation<interface>), and the thumbnail is low
-// resolution anyway. iTunes/Deezer give 600px+ artwork with no API key.
+// iTunes/Deezer give 600px+ artwork with no API key. SMTC's own thumbnail is
+// smaller (a browser hands over ~150px) but it is the picture the app itself
+// shows, so it comes first for anything that is not a music app (a YouTube
+// video's thumbnail) and last for music apps. PowerShell cannot read it (its
+// WinRT projection breaks on IAsyncOperation<interface>), so a small helper,
+// native/smtc-thumb, does. A YouTube video's is swapped for YouTube's own
+// full-size image (youtubeArt).
 const artCache = new Map();
+const MUSIC_APPS = /spotify|cider|applemusic|itunes/i;
+
+const THUMB_EXE = app.isPackaged
+  ? path.join(process.resourcesPath, "app.asar.unpacked", "electron", "smtc-thumb.exe")
+  : path.join(__dirname, "smtc-thumb.exe");
+
+const runThumb = (appId, title) =>
+  new Promise((resolve) => {
+    execFile(THUMB_EXE, [appId, title], { windowsHide: true, timeout: 5000, maxBuffer: 16 << 20 }, (err, stdout) =>
+      resolve({ code: err ? (typeof err.code === "number" ? err.code : 1) : 0, url: stdout || null }),
+    );
+  });
+
+/** The session's thumbnail as a data: URL. A browser often sets it a moment
+ *  after the title, so a missing one is asked for again a few times. */
+async function smtcThumb(appId, title) {
+  if (!appId || !title) return null;
+  for (let i = 0; i < 4; i++) {
+    const { code, url } = await runThumb(appId, title);
+    if (code === 0 && url?.startsWith("data:image/")) return url;
+    if (code !== 2) return null; // gone, another song, or failed
+    await new Promise((r) => setTimeout(r, 400));
+  }
+  return null;
+}
 
 async function itunesArt(artist, title, album) {
   const term = `${artist} ${album || title}`.trim();
@@ -688,26 +717,82 @@ async function spotifyOEmbedArt(trackId) {
   }
 }
 
-async function fetchArt({ artist, title, album }) {
-  if (!artist && !title) return null;
-  const bridged = await bridgedArtFor({ title });
-  if (bridged) return bridged;
-  const key = `${artist}|${album}|${title}`;
-  if (artCache.has(key)) return artCache.get(key);
-
-  let url = null;
+/**
+ * A browser's thumbnail is tiny, so for a YouTube video find the video itself
+ * and take YouTube's full-size image. Only an exact title from the same channel
+ * counts (SMTC reports the channel as the artist), so a video from another site
+ * is never matched to a lookalike.
+ */
+const ytText = (s) => {
   try {
-    url = await itunesArt(artist, title, album);
+    return JSON.parse(`"${s}"`);
+  } catch {
+    return s;
+  }
+};
+const sameText = (a, b) => a.toLowerCase().replace(/\s+/g, " ").trim() === b.toLowerCase().replace(/\s+/g, " ").trim();
+
+async function youtubeArt(title, channel) {
+  const res = await fetch(
+    "https://www.youtube.com/results?" + new URLSearchParams({ search_query: `${title} ${channel}` }),
+    {
+      headers: { "User-Agent": "Mozilla/5.0", "Accept-Language": "en", Cookie: "CONSENT=YES+" },
+      signal: AbortSignal.timeout(6000),
+    },
+  );
+  if (!res.ok) return null;
+  const html = await res.text();
+  for (const chunk of html.split('"videoRenderer":{"videoId":"').slice(1, 8)) {
+    const id = chunk.slice(0, 11);
+    const t = chunk.match(/"title":\{"runs":\[\{"text":"((?:[^"\\]|\\.)*)"/)?.[1];
+    const o = chunk.match(/"ownerText":\{"runs":\[\{"text":"((?:[^"\\]|\\.)*)"/)?.[1];
+    if (!t || !sameText(ytText(t), title)) continue;
+    if (channel && !looseMatch(ytText(o ?? ""), channel)) continue;
+    // 1280px when the uploader made one; 320px (still twice the thumbnail, and
+    // without the black bars of the 480px size) otherwise
+    const max = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+    const head = await fetch(max, { method: "HEAD" }).catch(() => null);
+    return head?.ok ? max : `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
+  }
+  return null;
+}
+
+async function videoArt(appId, artist, title) {
+  const thumb = await smtcThumb(appId, title);
+  if (!thumb) return null;
+  try {
+    return (await youtubeArt(title, artist)) ?? thumb;
+  } catch (e) {
+    console.error("[art:youtube]", e.message);
+    return thumb;
+  }
+}
+
+async function lookupArt(artist, title, album) {
+  try {
+    const url = await itunesArt(artist, title, album);
+    if (url) return url;
   } catch (e) {
     console.error("[art:itunes]", e.message);
   }
-  if (!url) {
-    try {
-      url = await deezerArt(artist, title);
-    } catch (e) {
-      console.error("[art:deezer]", e.message);
-    }
+  try {
+    return await deezerArt(artist, title);
+  } catch (e) {
+    console.error("[art:deezer]", e.message);
+    return null;
   }
+}
+
+async function fetchArt({ artist, title, album, appId }) {
+  if (!artist && !title) return null;
+  const bridged = await bridgedArtFor({ title });
+  if (bridged) return bridged;
+  const key = `${appId}|${artist}|${album}|${title}`;
+  if (artCache.has(key)) return artCache.get(key);
+
+  const url = MUSIC_APPS.test(appId ?? "")
+    ? ((await lookupArt(artist, title, album)) ?? (await smtcThumb(appId, title)))
+    : ((await videoArt(appId, artist, title)) ?? (await lookupArt(artist, title, album)));
 
   if (!url) console.error(`[art] no artwork found for ${key}`);
   artCache.set(key, url);

@@ -22,6 +22,18 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.7",
+    date: "2026-10-31",
+    changes: {
+      new: [
+        "Videos and other apps get a cover too: a YouTube video in your browser shows its own full-size thumbnail, and anything else shows the picture the app gives Windows.",
+      ],
+      qol: [
+        "Music apps fall back to that picture when no cover can be found online.",
+      ],
+    },
+  },
+  {
     version: "1.4.6",
     date: "2026-10-31",
     changes: {
