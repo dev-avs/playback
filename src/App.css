@@ -2192,7 +2192,9 @@ svg {
    item defaults to min-height:auto, which refuses to shrink below its content
    and would keep the row at full height however small height is set. */
 .lyric-line.lyric-gap {
-    cursor: pointer;
+    /* Not a line you can hover or click, as in spicy: no outline, no seek. The
+       hover tracking finds lines with elementFromPoint, which skips it too. */
+    pointer-events: none;
     height: 0;
     min-height: 0;
     line-height: 0;

@@ -574,7 +574,6 @@ export async function loadLyrics(req: {
   title: string;
   album?: string;
   duration?: number;
-  geniusKey?: string;
   /** ask just this provider ("netease" | "lrcmux" | "lrclib") instead of the whole chain */
   only?: string;
 }): Promise<LoadedLyrics | null> {

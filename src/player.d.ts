@@ -41,7 +41,6 @@ export interface LyricsRequest {
   title: string;
   album?: string;
   duration?: number;
-  geniusKey?: string;
   /** ask just this provider instead of the whole chain */
   only?: string;
 }
@@ -51,7 +50,7 @@ export interface LyricsResponse {
   wordLyrics?: string;
   syncedLyrics?: string;
   plainLyrics?: string;
-  source: "lrclib" | "netease" | "lrcmux" | "genius";
+  source: "lrclib" | "netease" | "lrcmux";
 }
 
 /** electron/updater.cjs */

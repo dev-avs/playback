@@ -178,9 +178,8 @@ Lyrics already fetched to a loopback server (`electron/tokenBridge.cjs`).
 Setup window (`src/Setup.tsx`) is its front end.
 
 **Lyrics** are looked up in order: Spicy Lyrics (when a Spotify token is
-available), LrcLib (exact match, then fuzzy search), NetEase, then Genius if a
-key is provided. Word-level timing is used when available; plain lyrics are
-spread evenly across the track duration. Titles are normalised first, since
+available), LRCMux, NetEase, then LrcLib (exact match, then fuzzy search).
+The best-timed result wins; untimed lyrics count as none. Titles are normalised first, since
 Spotify reports things like `Song (feat. X) - Remastered` that lyric databases
 do not carry.
 
@@ -237,17 +236,6 @@ Playback is licensed under the **GNU Affero General Public License v3.0**
 `src/vendor/objpack.ts` is copied from it, and the word animation in
 `src/lyricAnimator.ts` follows its LyricsAnimator. The installer (`installer/`)
 is under the same licence.
-
-### Genius (optional)
-
-Genius is only consulted if you supply a key (free at
-<https://genius.com/api-clients>). Create `.env`:
-
-```
-VITE_GENIUS_KEY=your_key_here
-```
-
-Genius has no timestamps, so those lyrics scroll on an estimated schedule.
 
 ### Debugging
 

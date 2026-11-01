@@ -22,6 +22,19 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.6",
+    date: "2026-10-31",
+    changes: {
+      qol: [
+        "Lyrics are looked for in a new order: Spicy Lyrics, LRCMux, NetEase, then LrcLib. Clicking the source under the progress bar steps through them in the same order.",
+      ],
+      fixes: [
+        "The dots shown during an instrumental break no longer get a broken outline on hover. Like in Spicy Lyrics, they can't be hovered or clicked.",
+        "Genius is gone: it only gave untimed lyrics, which Playback never shows.",
+      ],
+    },
+  },
+  {
     version: "1.4.5",
     date: "2026-10-31",
     changes: {

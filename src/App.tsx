@@ -54,9 +54,6 @@ const LYRIC_ANCHOR = 6;
 // Playback's logo stands in for a missing cover (settings.ts)
 const ART_FALLBACK = LOGO_ART;
 
-// Optional: set VITE_GENIUS_KEY in a .env file to enable the Genius fallback.
-const GENIUS_KEY = import.meta.env.VITE_GENIUS_KEY as string | undefined;
-
 // stable identity so the "lyrics for another track" case does not re-render
 const EMPTY_LINES: LyricLine[] = [];
 const EMPTY_CREDITS: string[] = [];
@@ -1275,7 +1272,7 @@ export default function App() {
         hit = (
           p === "spicy"
             ? loadSpicyLyrics(req)
-            : loadLyrics({ ...req, geniusKey: GENIUS_KEY, only: p === "chain" ? undefined : p })
+            : loadLyrics({ ...req, only: p === "chain" ? undefined : p })
         ).catch((e) => {
           console.error(`[lyrics] ${p} failed`, e);
           return null;

@@ -436,7 +436,7 @@ async function neteaseLyric(id) {
 
 // ── LRCMux ─────────────────────────────────────────────────────
 // lrcmux.dev: a free public service that gathers lyrics from KuGou, LrcLib,
-// YouTube Music and Genius and answers with the best timing it found. What it
+// YouTube Music and more, and answers with the best timing it found. What it
 // adds is KuGou's per-word timing, which NetEase and LrcLib often lack (e.g.
 // "cherry flavoured love inside your heart": line-timed everywhere else).
 // Word timing comes back in NetEase's yrc layout, as `wordLyrics`: the same
@@ -537,43 +537,6 @@ async function fetchRomanized({ artist, title }) {
   return lrc;
 }
 
-async function genius(artist, track, apiKey) {
-  const q = encodeURIComponent(`${track} ${artist}`);
-  const res = await fetch(`https://api.genius.com/search?q=${q}`, {
-    headers: { Authorization: `Bearer ${apiKey}` },
-  });
-  if (!res.ok) return null;
-  const hits = (await res.json())?.response?.hits;
-  if (!hits?.length) return null;
-
-  const tl = track.toLowerCase();
-  const al = artist.toLowerCase();
-  const hit =
-    hits.find(
-      (h) =>
-        h.type === "song" &&
-        h.result.title.toLowerCase().includes(tl) &&
-        h.result.primary_artist.name.toLowerCase().includes(al),
-    ) ?? hits[0];
-
-  const page = await fetch(hit.result.url, { headers: { "User-Agent": "Mozilla/5.0" } });
-  if (!page.ok) return null;
-  const html = await page.text();
-  const blocks = [...html.matchAll(/data-lyrics-container="true"[^>]*>([\s\S]*?)<\/div>/g)];
-  const text = blocks
-    .map(([, inner]) =>
-      inner
-        .replace(/<br\s*\/?>/gi, "\n")
-        .replace(/<[^>]+>/g, "")
-        .replace(/&amp;/g, "&")
-        .replace(/&apos;|&#x27;/g, "'")
-        .replace(/&quot;/g, '"'),
-    )
-    .join("\n")
-    .trim();
-  return text ? { plainLyrics: text, source: "genius" } : null;
-}
-
 // Spotify decorates titles in ways lyrics databases do not carry.
 function cleanTitle(title) {
   return title
@@ -582,7 +545,7 @@ function cleanTitle(title) {
     .trim();
 }
 
-async function fetchLyrics({ artist, title, album, duration, geniusKey, only }) {
+async function fetchLyrics({ artist, title, album, duration, only }) {
   const primaryArtist = artist.split(/,|&|\sfeat\.?\s|\sft\.?\s/i)[0].trim();
   const candidates = [
     [artist, title],
@@ -618,28 +581,22 @@ async function fetchLyrics({ artist, title, album, duration, geniusKey, only }) 
     return tier === TIER.syllable ? r : null;
   };
 
-  // NetEase before LrcLib: NetEase is the only one of the two that carries a
-  // syllable track, so asking it first is what makes the early exit above pay
-  // off. At equal tier the earlier provider keeps the result.
+  // LRCMux, then NetEase, then LrcLib (Spicy is asked before all of them, in
+  // the renderer). LRCMux and NetEase both carry syllable tracks, so asking them
+  // first is what makes the early exit above pay off. At equal tier the earlier
+  // provider keeps the result.
   const providers = [];
-  for (const [a, t] of candidates) {
-    if (!a || !t) continue;
-    providers.push(["netease", () => netease(a, t, duration)]);
-  }
-  // LRCMux before LrcLib: it carries word timing where LrcLib has lines.
   for (const [a, t] of candidates) {
     if (!a || !t) continue;
     providers.push(["lrcmux", () => lrcmux(a, t, album, duration)]);
   }
   for (const [a, t] of candidates) {
     if (!a || !t) continue;
-    providers.push(["lrclib", () => lrclib(a, t, album, duration)]);
+    providers.push(["netease", () => netease(a, t, duration)]);
   }
-  if (geniusKey) {
-    providers.push([
-      "genius",
-      () => genius(primaryArtist, cleanTitle(title), geniusKey),
-    ]);
+  for (const [a, t] of candidates) {
+    if (!a || !t) continue;
+    providers.push(["lrclib", () => lrclib(a, t, album, duration)]);
   }
 
   // `only` asks one provider by itself — the user picked it for this song.

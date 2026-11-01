@@ -191,7 +191,7 @@ export const DEFAULTS = {
   songProviders: {} as Record<string, Provider>,
 };
 
-export type Provider = "auto" | "spicy" | "netease" | "lrcmux" | "lrclib";
+export type Provider = "auto" | "spicy" | "lrcmux" | "netease" | "lrclib";
 
 export type LyricAlign = "left" | "center";
 
@@ -270,12 +270,12 @@ export function cjkStack(lang: CjkLang, font: string): string {
 export const MOTIONS = { calm: 0, normal: 1, bouncy: 1.8 } as const;
 export type LyricMotion = keyof typeof MOTIONS;
 /** The providers that can be picked, in cycle order. */
-export const PROVIDERS: Exclude<Provider, "auto">[] = ["spicy", "netease", "lrcmux", "lrclib"];
+export const PROVIDERS: Exclude<Provider, "auto">[] = ["spicy", "lrcmux", "netease", "lrclib"];
 export const PROVIDER_NAMES: Record<Provider, string> = {
   auto: "Auto",
   spicy: "Spicy",
-  netease: "NetEase",
   lrcmux: "LRCMux",
+  netease: "NetEase",
   lrclib: "LrcLib",
 };
 
