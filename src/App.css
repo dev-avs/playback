@@ -447,6 +447,40 @@ body {
     text-align: right;
 }
 
+/* Right-to-left lines (dir="auto" picks them out): the fill travels the way
+   they are read, duets answer from the left, and glued syllables shrink
+   toward the joint on the mirrored side. */
+.lyric-line:dir(rtl) {
+    --sweep-angle: var(--sweep-angle-rtl, 270deg);
+}
+
+/* Arabic and Hebrew carry vowel marks well above and below the letters. The
+   fill is painted with background-clip: text, so it only reaches as far as the
+   unit's box; marks outside it stayed unlit. Pad the box to take them in, and
+   pull the margin back by the same amount so the line keeps its height. */
+.lyric-line:dir(rtl) :is(.word, .letter) {
+    padding-top: 0.16em;
+    padding-bottom: 0.18em;
+    margin-top: -0.16em;
+    margin-bottom: -0.18em;
+}
+
+.lyric-line.opposite:dir(rtl) {
+    text-align: left;
+}
+
+.lyric-line:dir(rtl) .partOfWord {
+    transform-origin: 0% 85%;
+}
+
+.lyric-line:dir(rtl) .partOfWord + .partOfWord {
+    transform-origin: 50% 85%;
+}
+
+.lyric-line:dir(rtl) .partOfWord + :is(.word, .wordGroup):not(.partOfWord) {
+    transform-origin: 100% 85%;
+}
+
 /* Per-language faces. The lang attribute comes from detectLyricLang(), which
    reads the lines actually on screen — so a romanized song drops back to the
    Latin stack instead of holding on to a CJK face it no longer needs. */

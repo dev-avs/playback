@@ -22,6 +22,19 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.8",
+    date: "2026-11-01",
+    changes: {
+      new: [
+        "Romanize now works for many more languages: Arabic, Hebrew, Russian and other Cyrillic, Greek, Thai, Hindi, Bengali, Tamil, Georgian, Armenian and more (using uroman, the universal romanizer by Ulf Hermjakob, USC ISI).",
+      ],
+      fixes: [
+        "Arabic and Hebrew lyrics read right to left: right-aligned, words in the right order, and the highlight fills from right to left like in Spicy Lyrics, vowel marks included.",
+        "Scrolled lyrics stay put while paused in the normal widget too, not just in fullscreen: showing the controls on hover no longer snaps them back to the current line.",
+      ],
+    },
+  },
+  {
     version: "1.4.7",
     date: "2026-10-31",
     changes: {

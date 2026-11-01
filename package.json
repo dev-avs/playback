@@ -1,7 +1,7 @@
 {
   "name": "playback",
   "private": true,
-  "version": "1.4.7",
+  "version": "1.4.8",
   "description": "Now-playing overlay with synced lyrics",
   "author": "Playback",
   "license": "AGPL-3.0-only",
@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "test": "node --test tests/spicy.test.cjs tests/spotifyLookup.test.cjs tests/spicetifySetup.test.cjs",
+    "test": "node --test tests/uroman.test.mts tests/spicy.test.cjs tests/spotifyLookup.test.cjs tests/spicetifySetup.test.cjs",
     "test:layout": "npm run build && electron --in-process-gpu --disable-gpu tests/lyrics-layout.cjs",
     "lint": "eslint .",
     "preview": "vite preview",

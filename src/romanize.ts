@@ -1,4 +1,5 @@
 import type { LyricLine } from "./lyrics";
+import { hasUromanScript, uromanize, uromanizeParts } from "./uroman.ts";
 
 // ── Script detection ──────────────────────────────────────────
 const HIRAGANA = /[぀-ゟ]/;
@@ -23,7 +24,7 @@ export function hasHanScript(text: string): boolean {
 
 export function linesNeedRomanization(lines: LyricLine[]): boolean {
   // sample the start rather than scanning an entire song
-  return lines.slice(0, 30).some((l) => hasNonLatinScript(l.text));
+  return lines.slice(0, 30).some((l) => hasNonLatinScript(l.text) || hasUromanScript(l.text));
 }
 
 /**
@@ -190,11 +191,16 @@ function romanizeKorean(text: string): string {
 }
 
 // ── Entry points ──────────────────────────────────────────────
-export function romanizeText(text: string): string {
+function romanizeKanaHangul(text: string): string {
   let out = text;
   if (HANGUL.test(out)) out = romanizeKorean(out);
   if (HIRAGANA.test(out) || KATAKANA.test(out)) out = romanizeJapanese(out);
   return out;
+}
+
+export function romanizeText(text: string): string {
+  // every other non-Latin script (Arabic, Hebrew, Cyrillic, Thai, Devanagari…)
+  return uromanize(romanizeKanaHangul(text));
 }
 
 /**
@@ -268,9 +274,17 @@ export function romanizeLines(lines: LyricLine[]): LyricLine[] {
     if (!line.words?.length) return { ...line, text: romanizeText(line.text) };
     // Each romanized CJK unit stands apart (一二三 → "ichi ni san"); glued, they
     // ran together into one unreadable word.
-    const words = line.words.map((w) => ({
+    const texts = line.words.map((w) => romanizeKanaHangul(w.text));
+    // uroman's rules look at whole words, so glued syllables go in together
+    for (let a = 0; a < texts.length; ) {
+      let b = a + 1;
+      while (b < texts.length && line.words[b - 1].joinNext) b++;
+      texts.splice(a, b - a, ...uromanizeParts(texts.slice(a, b)));
+      a = b;
+    }
+    const words = line.words.map((w, i) => ({
       ...w,
-      text: romanizeText(w.text),
+      text: texts[i],
       joinNext: w.joinNext && !hasNonLatinScript(w.text),
     }));
     let text = "";

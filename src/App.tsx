@@ -43,6 +43,7 @@ import {
   highlightVars,
   GLASS_TINTS,
   SWEEP_ANGLES,
+  SWEEP_ANGLES_RTL,
   COVER_SHAPES,
   LYRIC_WEIGHTS,
   cjkStack,
@@ -1825,10 +1826,14 @@ export default function App() {
   // Reposition after loading/replacing lyrics and reopening the panel too, even
   // when scrolled away: the lyrics that were scrolled are gone. Resolve from the
   // committed DOM instead of sharing a ref across changing rows.
+  // The window height only moves the anchor in fullscreen. The normal widget's
+  // window resizes to its card whenever the controls show or hide, and reacting
+  // to that snapped a paused, scrolled-away view back to the current line.
+  const fsViewH = fullscreen ? viewH : 0;
   useEffect(() => {
     if (!isSynced || !lyricsOpen || artMode) return;
     syncRef.current();
-  }, [isSynced, lyricsOpen, artMode, dynamicLyrics, lyricSize, lyricFont, fullscreen, viewH, fsLayout, fsLyricScale]);
+  }, [isSynced, lyricsOpen, artMode, dynamicLyrics, lyricSize, lyricFont, fullscreen, fsViewH, fsLayout, fsLyricScale]);
 
   // Follow the song line by line, but not while the user has scrolled away:
   // the view stays where they put it until Auto sync or the Sync button. It
@@ -2049,7 +2054,7 @@ export default function App() {
                 {/* Album mode shows the line as a whole — no per-word
                     highlight, no letter wave. Keyed so each new line
                     remounts and fades in. */}
-                <span className="art-lyric-text" key={currentIdx}>
+                <span className="art-lyric-text" key={currentIdx} dir="auto">
                   {dynamicLyrics[currentIdx].text}
                 </span>
               </div>
@@ -2281,6 +2286,7 @@ export default function App() {
                   {
                     "--row-gap": `${lineSpacing}px`,
                     "--sweep-angle": SWEEP_ANGLES[sweepDirection] ?? "90deg",
+                    "--sweep-angle-rtl": SWEEP_ANGLES_RTL[sweepDirection] ?? "270deg",
                     "--sweep-soft": `${sweepSoftness}%`,
                     "--follow-ms": `${followSpeed}ms`,
                     "--lyric-lh": lineHeight,
@@ -2317,6 +2323,10 @@ export default function App() {
                   return (
                     <div
                       key={i}
+                      // Arabic and Hebrew lines run right to left: the words
+                      // are separate boxes, which an LTR line lays out in
+                      // reverse. auto picks the side from the line's own text.
+                      dir="auto"
                       className={[
                         "lyric-line",
                         line.gap && "lyric-gap",
@@ -2352,7 +2362,7 @@ export default function App() {
                       ) : (
                         line.text
                       )}
-                      <span className="lyric-ts">• {fmt(line.t)}</span>
+                      <span className="lyric-ts" dir="ltr">• {fmt(line.t)}</span>
                     </div>
                   );
                 })}

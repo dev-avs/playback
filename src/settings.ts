@@ -219,6 +219,8 @@ export function highlightVars(h: Highlight): Record<string, string | number> {
 export type SweepDirection = "across" | "down";
 /** The fill's travel: along the line as it is sung, or top to bottom (spicy's). */
 export const SWEEP_ANGLES: Record<SweepDirection, string> = { across: "90deg", down: "180deg" };
+/** Right-to-left lines (Arabic, Hebrew) sweep across the other way. */
+export const SWEEP_ANGLES_RTL: Record<SweepDirection, string> = { across: "270deg", down: "180deg" };
 
 /** Glass colours, as the RGB of the widget's tint (alpha is Background). */
 export const GLASS_TINTS = {
