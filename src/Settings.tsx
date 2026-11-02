@@ -801,6 +801,7 @@ export default function Settings() {
     toggle("fullscreen", "fsSwap", "Cover on the right", "Put the cover and controls on the right and the lyrics on the left."),
     toggle("fullscreen", "fsAnimatedBg", "Animated background", "The cover, blurred, drifting slowly behind everything. Off: a still blur."),
     toggle("fullscreen", "fsPinControls", "Keep controls showing", "The controls stay instead of fading when the mouse rests."),
+    toggle("fullscreen", "fsOnTop", "Always on top", "Keep fullscreen above every other window. The small widget follows Behavior → Always on top."),
     slider("fullscreen", "fsLyricScale", "Lyrics size", "How big the lyrics are, scaled with the screen so only a few lines show.", { min: 60, max: 160, step: 5, fmt: pct }),
     chips("highlight", "animationStyle", "Word animation", "How sung words move. Spicy: Spicy Lyrics' pop, a little bouncier, with the letter wave only on words held a second or longer.", [
       { value: "playback", label: "Playback" },

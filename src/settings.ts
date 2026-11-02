@@ -54,6 +54,8 @@ export const DEFAULTS = {
   fsLyricScale: 100,
   /** fullscreen: the controls stay instead of fading at rest */
   fsPinControls: false,
+  /** fullscreen above other windows; outside fullscreen alwaysOnTop decides */
+  fsOnTop: true,
   /** how sung words move: Playback's own, or spicy's (lyricAnimator.ts) */
   animationStyle: "playback" as "playback" | "spicy",
   lyricFont: "Default",
@@ -308,6 +310,7 @@ export const KEYS = {
   fsAnimatedBg: "set.fsAnimatedBg",
   fsLyricScale: "set.fsLyricScale",
   fsPinControls: "set.fsPinControls",
+  fsOnTop: "set.fsOnTop",
   lyricFont: "set.lyricFont",
   // predates the settings window; kept so saved offsets survive
   lyricOffset: "lyricOffset",

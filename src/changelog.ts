@@ -22,6 +22,18 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.9",
+    date: "2026-11-01",
+    changes: {
+      new: [
+        "Settings → Fullscreen → Always on top: fullscreen has its own setting, separate from the small widget's (Behavior → Always on top).",
+      ],
+      fixes: [
+        "Fullscreen no longer flashes back to the small widget for a moment when the song changes. The \"Nothing playing\" card no longer blinks between songs in the normal widget either.",
+      ],
+    },
+  },
+  {
     version: "1.4.8",
     date: "2026-11-01",
     changes: {

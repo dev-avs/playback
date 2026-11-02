@@ -733,6 +733,7 @@ export default function App() {
   const [fsAnimatedBg] = usePersisted(KEYS.fsAnimatedBg, DEFAULTS.fsAnimatedBg);
   const [fsLyricScale] = usePersisted(KEYS.fsLyricScale, DEFAULTS.fsLyricScale);
   const [fsPinControls] = usePersisted(KEYS.fsPinControls, DEFAULTS.fsPinControls);
+  const [fsOnTop] = usePersisted(KEYS.fsOnTop, DEFAULTS.fsOnTop);
   const fsDominant = fullscreen && fsLayout === "lyrics";
   const [viewH, setViewH] = useState(() => window.innerHeight);
   useEffect(() => {
@@ -931,9 +932,11 @@ export default function App() {
     draggingRef.current = dragging;
   }, [dragging]);
 
+  // fullscreen has its own Always on top (Settings → Fullscreen)
+  const onTop = fullscreen ? fsOnTop : alwaysOnTop;
   useEffect(() => {
-    window.player?.setAlwaysOnTop?.(alwaysOnTop);
-  }, [alwaysOnTop]);
+    window.player?.setAlwaysOnTop?.(onTop);
+  }, [onTop]);
 
   // This song's own offset rides on top of the global one.
   const thisSong = songKey(np.artist, np.title);

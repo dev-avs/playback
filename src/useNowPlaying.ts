@@ -158,6 +158,19 @@ export function useNowPlaying() {
     const bridge = window.player;
     if (!bridge) return;
 
+    const clear = () => {
+      playingRef.current = false;
+      durationRef.current = 0;
+      prevTrackRef.current = "";
+      snapAnchor(0);
+      setNp(EMPTY);
+    };
+    // A track change reports an empty title for about half a second while the
+    // session stays open. Clearing on it flashed the "Nothing playing" card
+    // (and dropped fullscreen's layout for that moment), so the old track stays
+    // until the next one arrives, unless the title stays empty.
+    let clearTimer: ReturnType<typeof setTimeout> | undefined;
+
     const off = bridge.onEvent((msg: SmtcEvent) => {
       if (msg.type === "error") {
         console.error("[smtc]", msg.message);
@@ -167,14 +180,18 @@ export function useNowPlaying() {
       const s = msg as SmtcState;
       setConnected(true);
 
-      if (s.session === null || !s.title) {
-        playingRef.current = false;
-        durationRef.current = 0;
-        prevTrackRef.current = "";
-        snapAnchor(0);
-        setNp(EMPTY);
+      if (s.session === null) {
+        clearTimeout(clearTimer);
+        clearTimer = undefined;
+        clear();
         return;
       }
+      if (!s.title) {
+        clearTimer ??= setTimeout(clear, 1500);
+        return;
+      }
+      clearTimeout(clearTimer);
+      clearTimer = undefined;
 
       // `position` is only valid as of `updatedAt`, and players like Spotify
       // refresh their timeline just every few seconds. Measure the staleness
@@ -221,7 +238,10 @@ export function useNowPlaying() {
       }));
     });
 
-    return off;
+    return () => {
+      clearTimeout(clearTimer);
+      off();
+    };
   }, [foldAnchor, snapAnchor]);
 
   // Optimistic seek: move the local anchor now so the scrubber does not snap
