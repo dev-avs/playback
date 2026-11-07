@@ -1324,6 +1324,11 @@ body {
     transform-origin: 0% 85%;
 }
 
+/* One word's syllables, kept on one row (Units in App.tsx) */
+.word-glue {
+    white-space: nowrap;
+}
+
 /* A held syllable carries its own rise while its letters ripple inside it, so
    the two transforms compound exactly as they do in the reference. */
 .wordGroup {
@@ -2721,11 +2726,6 @@ svg {
     padding: 5vh 6vw 3vh;
 }
 
-.widget.fullscreen.fs-dominant:not(.lyrics-open) {
-    grid-template-rows: 1fr auto 1fr auto auto auto;
-    grid-template-areas: "." "top" "." "scrubber" "times" "controls";
-}
-
 .widget.fullscreen.fs-dominant > .top {
     flex-direction: row;
     align-items: center;
@@ -2819,16 +2819,6 @@ svg {
 .widget.fullscreen:not(.fs-active),
 .widget.fullscreen:not(.fs-active) * {
     cursor: none !important;
-}
-
-/* Lyrics dominant without lyrics: the cover takes the screen's height */
-.widget.fullscreen.fs-dominant:not(.lyrics-open) > .top {
-    gap: 3vw;
-    --meta-k: 2.6;
-}
-
-.widget.fullscreen.fs-dominant:not(.lyrics-open) .art-wrap {
-    width: min(52vh, 40vw);
 }
 
 /* Up next, in fullscreen: under the title in the split column, at the end of

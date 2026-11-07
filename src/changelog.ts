@@ -22,6 +22,22 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.0",
+    date: "2026-11-06",
+    changes: {
+      appearance: [
+        "The repeat button shows which mode it is in: a slash through it when off, white for repeat all, and a 1 for repeat one song, like in Spotify.",
+        "Fullscreen without lyrics looks the same in both layouts, using the split layout's lyrics-off look. Turn lyrics back on and it returns to the layout you picked.",
+      ],
+      qol: [
+        "Shuffle and repeat change the moment you click them, then check with Spotify and go back if it did not take.",
+      ],
+      fixes: [
+        "A word sung in syllables no longer splits across two rows (\"Ron\" on one, \"nie\" on the next).",
+      ],
+    },
+  },
+  {
     version: "1.4.9",
     date: "2026-11-01",
     changes: {

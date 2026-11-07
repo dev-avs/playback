@@ -5,8 +5,10 @@ import {
   loadLyrics,
   markParentheticalBackingVocals,
   parseLrc,
+  SELF_DELIMITING,
   TIER,
   type LyricLine,
+  type LyricWord,
 } from "./lyrics";
 import {
   alignRomanizedToWords,
@@ -434,7 +436,11 @@ const IconNext = () => (
     <path transform="matrix(0.0138 0 0 -0.0138 1.8282 21.9714)" d="M1307 293C1307 241 1279 215 1229 215H1087C1036 215 1009 241 1009 293V682C1001 664 986 649 963 636L316 255C294 242 272 234 249 234C203 234 165 267 165 333V1107C165 1172 203 1205 249 1205C272 1205 294 1198 316 1184L963 804C986 791 1001 775 1009 758V1151C1009 1204 1036 1228 1087 1228H1229C1279 1228 1307 1203 1307 1151Z" />
   </svg>
 );
-const IconRepeat = () => (
+/**
+ * `off` strikes it through, so repeat off reads at a glance, not only by its grey.
+ * `one`: repeat the current track (SMTC "Track"), marked with a 1 as Spotify does.
+ */
+const IconRepeat = ({ off = false, one = false }: { off?: boolean; one?: boolean }) => (
   <svg
     width="13"
     height="13"
@@ -449,6 +455,12 @@ const IconRepeat = () => (
     <path d="M3 11V9a4 4 0 0 1 4-4h14" />
     <polyline points="7 23 3 19 7 15" />
     <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+    {off && <line x1="6" y1="6" x2="18" y2="18" strokeWidth="1.8" />}
+    {one && (
+      <text x="12" y="14.6" fontSize="7.5" fontWeight="700" textAnchor="middle" fill="currentColor" stroke="none">
+        1
+      </text>
+    )}
   </svg>
 );
 // The speaker sits left of centre to leave room for its sound waves, which
@@ -602,67 +614,83 @@ function Units({
     );
   }
 
-  return (
-    <>
-      {words.map((w, i) => {
-        const next = words[i + 1];
-        const start = w.t;
-        // real end where the source gave one, else the next syllable, else the line
-        const end = w.end ?? next?.t ?? line.end ?? start + 0.5;
-        // the separating space sits outside the unit, so a scaled syllable
-        // never drags its whitespace around with it
-        const sep = i < words.length - 1 && !w.joinNext ? " " : null;
-        // glued syllables scale toward their joint, see .partOfWord in App.css
-        const part = w.joinNext ? " partOfWord" : "";
+  const unit = (w: LyricWord, i: number) => {
+    const next = words[i + 1];
+    const start = w.t;
+    // real end where the source gave one, else the next syllable, else the line
+    const end = w.end ?? next?.t ?? line.end ?? start + 0.5;
+    // glued syllables scale toward their joint, see .partOfWord in App.css
+    const part = w.joinNext ? " partOfWord" : "";
 
-        // Syllables long enough for the chosen style wave letter by letter
-        // (letterWindows); the rest, and scripts that cannot be split, pop as
-        // a single unit.
-        const letters = splitForWave(w.text);
-        const win = letters ? letterWindows(start, end, letters.length, animation) : null;
+    // Syllables long enough for the chosen style wave letter by letter
+    // (letterWindows); the rest, and scripts that cannot be split, pop as
+    // a single unit.
+    const letters = splitForWave(w.text);
+    const win = letters ? letterWindows(start, end, letters.length, animation) : null;
 
-        if (!letters || !win) {
-          return (
-            <Fragment key={i}>
-              <span className={`word${part}`} data-s={start.toFixed(3)} data-e={end.toFixed(3)}>
-                {w.text}
-              </span>
-              {sep}
-            </Fragment>
-          );
-        }
+    if (!letters || !win) {
+      return (
+        <span key={i} className={`word${part}`} data-s={start.toFixed(3)} data-e={end.toFixed(3)}>
+          {w.text}
+        </span>
+      );
+    }
 
-        // The group shares its letters' shortened window, so the wave locks
-        // into idle before the syllable's raw end and the next syllable's rise
-        // reads as a continuation rather than a fresh start.
-        return (
-          <Fragment key={i}>
-            <span
-              className={`wordGroup${part}`}
-              data-s={start.toFixed(3)}
-              data-e={win.groupEnd.toFixed(3)}
-            >
-              {letters.map((ch, li) => (
-                <span
-                  className="letter"
-                  key={li}
-                  data-s={(start + li * win.per).toFixed(3)}
-                  data-e={(start + (li + 1) * win.per).toFixed(3)}
-                >
-                  {ch}
-                </span>
-              ))}
-            </span>
-            {sep}
-          </Fragment>
-        );
-      })}
-    </>
-  );
+    // The group shares its letters' shortened window, so the wave locks
+    // into idle before the syllable's raw end and the next syllable's rise
+    // reads as a continuation rather than a fresh start.
+    return (
+      <span
+        key={i}
+        className={`wordGroup${part}`}
+        data-s={start.toFixed(3)}
+        data-e={win.groupEnd.toFixed(3)}
+      >
+        {letters.map((ch, li) => (
+          <span
+            className="letter"
+            key={li}
+            data-s={(start + li * win.per).toFixed(3)}
+            data-e={(start + (li + 1) * win.per).toFixed(3)}
+          >
+            {ch}
+          </span>
+        ))}
+      </span>
+    );
+  };
+
+  // A word's syllables ("Ron" + "nie") are separate inline-blocks, and the
+  // browser may wrap between any two, splitting the word across rows. Each
+  // glued run is held together in a no-wrap span; kana, Han and Hangul runs
+  // are left free, since their whole line is one run.
+  const out: React.ReactNode[] = [];
+  for (let i = 0; i < words.length; ) {
+    let k = i;
+    while (k < words.length - 1 && words[k].joinNext) k++;
+    const run = words.slice(i, k + 1);
+    const units = run.map((w, n) => unit(w, i + n));
+    const glue = k > i && !SELF_DELIMITING.test(run.map((w) => w.text).join(""));
+    out.push(
+      glue ? (
+        <span className="word-glue" key={i}>
+          {units}
+        </span>
+      ) : (
+        <Fragment key={i}>{units}</Fragment>
+      ),
+    );
+    // the separating space sits outside the unit, so a scaled syllable
+    // never drags its whitespace around with it
+    if (k < words.length - 1) out.push(" ");
+    i = k + 1;
+  }
+  return <>{out}</>;
 }
 
 export default function App() {
-  const { np, connected, getPosition, seek, togglePlay, setVolume } = useNowPlaying();
+  const { np, connected, getPosition, seek, togglePlay, setVolume, toggleShuffle, cycleRepeat } =
+    useNowPlaying();
 
   const [elapsed, setElapsed] = useState(0);
   const [dragging, setDragging] = useState(false);
@@ -1944,7 +1972,9 @@ export default function App() {
           fullscreen && "fullscreen",
           fullscreen && fsSwap && "fs-swap",
           fullscreen && fsHideCover && "fs-no-cover",
-          fsDominant && "fs-dominant",
+          // Without lyrics every layout shows as split does; the choice is
+          // kept, so lyrics coming back return to it.
+          fsDominant && showLyrics && "fs-dominant",
           // pinned controls behave as if the mouse never rests
           fullscreen && (fsActive || fsPinControls) && "fs-active",
           fullscreen && fsAnimatedBg && "fs-animated",
@@ -2157,7 +2187,7 @@ export default function App() {
                       className={`art-mini-btn${np.shuffle ? " active" : ""}`}
                       aria-label="Shuffle"
                       disabled={!np.caps.shuffle}
-                      onClick={() => window.player?.shuffle()}
+                      onClick={toggleShuffle}
                     >
                       <IconShuffle />
                     </button>
@@ -2188,9 +2218,9 @@ export default function App() {
                       className={`art-mini-btn${np.repeat !== "None" ? " active" : ""}`}
                       aria-label="Repeat"
                       disabled={!np.caps.repeat}
-                      onClick={() => window.player?.repeat()}
+                      onClick={cycleRepeat}
                     >
-                      <IconRepeat />
+                      <IconRepeat off={np.repeat === "None"} one={np.repeat === "Track"} />
                     </button>
                   </div>
                   <div className="art-mini-spacer" />
@@ -2479,7 +2509,7 @@ export default function App() {
                   className={`ctrl-btn${np.shuffle ? " active" : ""}`}
                   aria-label="Shuffle"
                   disabled={!np.caps.shuffle}
-                  onClick={() => window.player?.shuffle()}
+                  onClick={toggleShuffle}
                 >
                   <IconShuffle />
                 </button>
@@ -2510,9 +2540,9 @@ export default function App() {
                   className={`ctrl-btn${np.repeat !== "None" ? " active" : ""}`}
                   aria-label="Repeat"
                   disabled={!np.caps.repeat}
-                  onClick={() => window.player?.repeat()}
+                  onClick={cycleRepeat}
                 >
-                  <IconRepeat />
+                  <IconRepeat off={np.repeat === "None"} one={np.repeat === "Track"} />
                 </button>
               </div>
               <div className="ctrl-right">

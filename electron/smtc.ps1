@@ -308,6 +308,7 @@ function Handle-Command($line) {
 
 $lastKey = ''
 $lastStatus = ''
+$lastModes = ''      # shuffle|repeat at the last emitted state
 $anchorPos = -1.0      # position at the last emitted state
 $anchorAt = 0.0        # local ms when that state was emitted
 $lastEmit = 0.0        # local ms of last emit, for the drift-correcting heartbeat
@@ -340,11 +341,13 @@ while ($true) {
       $artist = "$($props.Artist)"
       $key    = "$appId|$title|$artist|$($props.AlbumTitle)"
       $status = "$($pb.PlaybackStatus)"
+      $modes  = "$($pb.IsShuffleActive)|$($pb.AutoRepeatMode)"
       $pos    = $tl.Position.TotalSeconds
       $end    = $tl.EndTime.TotalSeconds
 
-      # Emit on track change, status flip, a genuine seek, or every 5 s as a
-      # drift-correcting heartbeat.
+      # Emit on track change, status flip, a shuffle/repeat change, a genuine
+      # seek, or every 5 s as a drift-correcting heartbeat. Shuffle and repeat
+      # count on their own: otherwise their buttons waited for the heartbeat.
       #
       # Spotify only refreshes its timeline every few seconds, so `Position` on
       # its own goes stale between refreshes. Correcting it by the age of
@@ -360,7 +363,7 @@ while ($true) {
       $expected = if ($status -eq 'Playing') { $anchorPos + ($nowMs - $anchorAt) / 1000.0 } else { $anchorPos }
       $seeked = $anchorPos -ge 0 -and [Math]::Abs($actual - $expected) -gt 1.5
 
-      if ($key -ne $lastKey -or $status -ne $lastStatus -or $seeked -or ($nowMs - $lastEmit) -gt 5000) {
+      if ($key -ne $lastKey -or $status -ne $lastStatus -or $modes -ne $lastModes -or $seeked -or ($nowMs - $lastEmit) -gt 5000) {
         $state = @{
           type       = 'state'
           appId      = $appId
@@ -393,6 +396,7 @@ while ($true) {
 
         $lastKey = $key
         $lastStatus = $status
+        $lastModes = $modes
         $anchorPos = $actual
         $anchorAt = $nowMs
         $lastEmit = $nowMs

@@ -75,6 +75,9 @@ export function appLabel(appId: string): string {
  * (track/status/seek plus a 5 s heartbeat), so the smooth clock is derived from
  * an anchor and read imperatively by the caller's rAF loop.
  */
+/** How long a clicked shuffle/repeat state is shown before SMTC must agree. */
+const MODES_HOLD_MS = 3000;
+
 export function useNowPlaying() {
   const [np, setNp] = useState<NowPlaying>(EMPTY);
   const [connected, setConnected] = useState(false);
@@ -91,6 +94,9 @@ export function useNowPlaying() {
   const playingRef = useRef(false);
   const durationRef = useRef(0);
   const volumeSetAt = useRef(0);
+  // Shuffle/repeat as just clicked, shown until SMTC reports the same (or
+  // MODES_HOLD_MS passes, and then SMTC's word stands: verified, not assumed).
+  const expectedModes = useRef<{ shuffle: boolean; repeat: string; at: number } | null>(null);
   const prevTrackRef = useRef<string>("");
 
   const predictedNow = useCallback(() => {
@@ -221,6 +227,16 @@ export function useNowPlaying() {
       const vol = typeof s.volume === "number" && s.volume >= 0 ? s.volume : null;
       const fresh = performance.now() - volumeSetAt.current > 1500;
 
+      let shuffle = !!s.shuffle;
+      let repeat = s.repeat ?? "None";
+      const exp = expectedModes.current;
+      if (exp && performance.now() - exp.at < MODES_HOLD_MS && (exp.shuffle !== shuffle || exp.repeat !== repeat)) {
+        shuffle = exp.shuffle;
+        repeat = exp.repeat;
+      } else {
+        expectedModes.current = null;
+      }
+
       setNp((prev) => ({
         appId: s.appId ?? "",
         title: s.title ?? "",
@@ -229,8 +245,8 @@ export function useNowPlaying() {
         trackKey: s.trackKey ?? "",
         playing: !!s.playing,
         duration: s.duration ?? 0,
-        shuffle: !!s.shuffle,
-        repeat: s.repeat ?? "None",
+        shuffle,
+        repeat,
         caps: s.caps ?? NO_CAPS,
         // keep existing art until the new track's art arrives
         art: prev.trackKey === s.trackKey ? prev.art : null,
@@ -294,5 +310,25 @@ export function useNowPlaying() {
     window.player?.setVolume(v);
   }, []);
 
-  return { np, connected, getPosition, seek, togglePlay, setVolume };
+  // Optimistic shuffle/repeat: the button flips on click, the next SMTC emit
+  // confirms it (see expectedModes).
+  const toggleShuffle = useCallback(() => {
+    setNp((prev) => {
+      expectedModes.current = { shuffle: !prev.shuffle, repeat: prev.repeat, at: performance.now() };
+      return { ...prev, shuffle: !prev.shuffle };
+    });
+    window.player?.shuffle();
+  }, []);
+
+  // Same order as smtc.ps1's 'repeat' command: None → List → Track → None
+  const cycleRepeat = useCallback(() => {
+    setNp((prev) => {
+      const repeat = prev.repeat === "None" ? "List" : prev.repeat === "List" ? "Track" : "None";
+      expectedModes.current = { shuffle: prev.shuffle, repeat, at: performance.now() };
+      return { ...prev, repeat };
+    });
+    window.player?.repeat();
+  }, []);
+
+  return { np, connected, getPosition, seek, togglePlay, setVolume, toggleShuffle, cycleRepeat };
 }

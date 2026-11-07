@@ -391,7 +391,7 @@ export function parseLrc(lrc: string): LyricLine[] {
  * opposite: NetEase splits a single word across several tokens, which is why
  * they have to be fused.
  */
-const SELF_DELIMITING =
+export const SELF_DELIMITING =
   /[぀-ゟ゠-ヿ㐀-䶿一-鿿豈-﫿가-힯]/;
 
 /**
