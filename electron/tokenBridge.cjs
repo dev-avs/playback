@@ -55,6 +55,13 @@ function startTokenBridge(onToken, onSpicyCapture, lookups) {
       res.writeHead(404).end();
       return;
     }
+    // A browser names the page a request comes from. Only Spotify's own page
+    // may post here, so no website can push a token, a track or lyrics. A
+    // request with no Origin is not from a web page (scripts/test-bridge.mjs).
+    if (req.headers.origin && req.headers.origin !== SPOTIFY_ORIGIN) {
+      res.writeHead(403).end();
+      return;
+    }
 
     let body = "";
     let aborted = false;

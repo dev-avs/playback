@@ -95,6 +95,15 @@ export function useAudioBars(active: boolean) {
       const written = new Array(BAR_COUNT).fill(-1);
 
       setLive(true);
+      // The capture ends when the output device goes away. Hand the bars back
+      // to the CSS fallback rather than leave them frozen at their last height.
+      audio[0].onended = () => {
+        cancelAnimationFrame(raf);
+        setLive(false);
+        for (const el of bars) {
+          if (el) el.style.height = "";
+        }
+      };
 
       const draw = () => {
         analyser.getByteFrequencyData(bins);

@@ -284,12 +284,14 @@ function login() {
         reply(`Sign-in failed: ${e.message}`);
         reject(e);
       } finally {
+        clearTimeout(giveUp);
         server.close();
         authInFlight = null;
       }
     });
 
     server.on("error", (e) => {
+      clearTimeout(giveUp);
       authInFlight = null;
       reject(e);
     });
@@ -309,8 +311,9 @@ function login() {
       shell.openExternal(authUrl);
     });
 
-    // don't leave the loopback listener open forever
-    setTimeout(
+    // don't leave the loopback listener open forever. Cleared once this
+    // sign-in settles, or it would cancel a later one started within 5 minutes.
+    const giveUp = setTimeout(
       () => {
         if (authInFlight) {
           server.close();

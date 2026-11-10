@@ -22,6 +22,29 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.1",
+    date: "2026-11-09",
+    changes: {
+      qol: [
+        "Keys on the widget: Space plays or pauses, the left and right arrows go to the previous and next song.",
+        "Searching the settings also matches a section's name, so \"fullscreen\" lists that whole section.",
+        "Ctrl+F in the settings window jumps to the search box.",
+      ],
+      performance: [
+        "Covers for songs playing outside Spotify no longer wait two seconds while Spotify is open.",
+      ],
+      fixes: [
+        "A cover or romanization that could not be fetched (offline, for example) is looked up again, instead of staying missing until a restart.",
+        "Lookups for lyrics and covers give up after a few seconds instead of hanging when a service does not answer.",
+        "Lyrics with a line timed for several moments (a repeated chorus) show it each time, without a stray timestamp in the text.",
+        "The sound bars go back to their idle animation when the audio device goes away, instead of freezing.",
+        "Signing in to Spotify a second time within five minutes is no longer cancelled by the first attempt's timeout.",
+        "Only Spotify itself can send songs, lyrics and tokens to Playback; a website open in a browser cannot.",
+        "The widget keeps running if its link to Windows' media controls fails to start, and tries again.",
+      ],
+    },
+  },
+  {
     version: "1.5.0",
     date: "2026-11-06",
     changes: {

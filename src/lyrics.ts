@@ -335,12 +335,16 @@ export function parseLrc(lrc: string): LyricLine[] {
   const endMarks: number[] = [];
 
   for (const raw of lrc.split("\n")) {
-    const lineM = raw.match(/\[(\d+):(\d+(?:\.\d+)?)\](.*)/);
+    const lineM = raw.match(/((?:\[\d+:\d+(?:\.\d+)?\]\s*)+)(.*)/);
     if (!lineM) continue;
-    const t = parseMmSs(lineM[1], lineM[2]);
-    const body = lineM[3].trim();
+    // A repeated line carries every time it is sung: [00:12.00][00:45.00]text.
+    const times = [...lineM[1].matchAll(/\[(\d+):(\d+(?:\.\d+)?)\]/g)].map((m) =>
+      parseMmSs(m[1], m[2]),
+    );
+    const t = times[0];
+    const body = lineM[2].trim();
     if (!body) {
-      endMarks.push(t);
+      endMarks.push(...times);
       continue;
     }
 
@@ -357,7 +361,7 @@ export function parseLrc(lrc: string): LyricLine[] {
     } else {
       // strip any stray <...> tags (malformed enhanced LRC)
       const text = body.replace(/<[^>]+>/g, "").trim();
-      if (text) lines.push({ t, text });
+      if (text) for (const at of times) lines.push({ t: at, text });
     }
   }
 

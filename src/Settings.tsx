@@ -1072,8 +1072,24 @@ export default function Settings() {
 
   const q = query.trim().toLowerCase();
   const shown = q
-    ? items.filter((it) => `${it.label} ${it.desc}`.toLowerCase().includes(q))
+    ? items.filter((it) =>
+        // the section's name counts too, so "fullscreen" lists that whole section
+        `${it.label} ${it.desc} ${CATEGORIES.find((c) => c.id === it.cat)?.name ?? ""}`.toLowerCase().includes(q),
+      )
     : items.filter((it) => it.cat === cat);
+
+  // Ctrl+F goes to the search box.
+  const searchRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.ctrlKey || e.code !== "KeyF") return;
+      e.preventDefault();
+      searchRef.current?.focus();
+      searchRef.current?.select();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   // Two clicks, so a stray one cannot wipe everything.
   const [confirmReset, setConfirmReset] = useState<"section" | "all" | null>(null);
@@ -1123,8 +1139,9 @@ export default function Settings() {
           </div>
           <input
             className="st-search"
+            ref={searchRef}
             type="search"
-            placeholder={`Search ${items.length} settings`}
+            placeholder={`Search ${items.length} settings (Ctrl+F)`}
             spellCheck={false}
             value={query}
             onChange={(e) => setQuery(e.target.value)}

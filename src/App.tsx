@@ -981,6 +981,22 @@ export default function App() {
     write(KEYS.track, np.title ? { key: thisSong, title: np.title, artist: np.artist } : null);
   }, [thisSong, np.title, np.artist]);
 
+  // Space plays or pauses, the arrows go to the previous and next song. Left to
+  // the control itself when a button or a field has the focus.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.altKey || e.metaKey || e.repeat) return;
+      if ((e.target as HTMLElement | null)?.closest?.("button, input, textarea")) return;
+      if (e.code === "Space") window.player?.playPause();
+      else if (e.code === "ArrowRight") window.player?.next();
+      else if (e.code === "ArrowLeft") window.player?.prev();
+      else return;
+      e.preventDefault();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
   // [ and ] nudge the lyric timing by 100 ms; \ resets it. With Shift they
   // nudge this song's own offset instead. Matched on e.code so Shift (which
   // turns [ into { on most layouts) does not change which key it is.
@@ -989,6 +1005,8 @@ export default function App() {
       const step =
         e.code === "BracketRight" ? 0.1 : e.code === "BracketLeft" ? -0.1 : e.code === "Backslash" ? 0 : null;
       if (step === null) return;
+      // typing those characters into a field is not a nudge
+      if ((e.target as HTMLElement | null)?.closest?.("input, textarea")) return;
       e.preventDefault();
       const nudge = (prev: number) =>
         step === 0 ? 0 : Math.max(-5, Math.min(5, Math.round((prev + step) * 10) / 10));

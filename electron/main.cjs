@@ -290,12 +290,22 @@ function startSmtc() {
   });
 
   ps.stderr.on("data", (d) => console.error("[smtc:stderr]", d.toString().trim()));
+  // a command written as the process dies (EPIPE) must not take the app down
+  ps.stdin.on("error", (e) => console.error("[smtc:stdin]", e.message));
 
-  ps.on("exit", (code) => {
-    console.error(`[smtc] exited (${code}) — restarting in 2s`);
-    ps = null;
+  // "error" (powershell.exe could not start) comes without "exit", and both
+  // can follow a kill: restart once, whichever arrives first.
+  const child = ps;
+  let ended = false;
+  const onEnd = (why) => {
+    if (ended) return;
+    ended = true;
+    console.error(`[smtc] ${why} — restarting in 2s`);
+    if (ps === child) ps = null;
     if (!app.isQuittingApp) psRestartTimer = setTimeout(startSmtc, 2000);
-  });
+  };
+  ps.on("error", (e) => onEnd(`could not run (${e.message})`));
+  ps.on("exit", (code) => onEnd(`exited (${code})`));
 }
 
 function sendCommand(cmd) {
@@ -357,7 +367,7 @@ async function lrclib(artist, track, album, duration) {
 
   // Exact match first; fall back to fuzzy search, which tolerates the
   // "Song (feat. X) - Remastered" shapes Spotify reports.
-  const res = await fetch(`https://lrclib.net/api/get?${qs}`);
+  const res = await fetch(`https://lrclib.net/api/get?${qs}`, { signal: AbortSignal.timeout(8000) });
   if (res.ok) {
     const d = await res.json();
     if (
@@ -371,6 +381,7 @@ async function lrclib(artist, track, album, duration) {
 
   const sRes = await fetch(
     `https://lrclib.net/api/search?${new URLSearchParams({ artist_name: artist, track_name: track })}`,
+    { signal: AbortSignal.timeout(8000) },
   );
   if (!sRes.ok) return null;
   const list = await sRes.json();
@@ -407,7 +418,7 @@ async function neteaseSearch(artist, track, duration) {
   // picker needs to see it before it can choose it.
   const sRes = await fetch(
     `https://music.163.com/api/search/get?s=${q}&type=1&limit=10`,
-    { headers: NETEASE_HEADERS },
+    { headers: NETEASE_HEADERS, signal: AbortSignal.timeout(8000) },
   );
   if (!sRes.ok) return null;
   const songs = (await sRes.json())?.result?.songs;
@@ -428,7 +439,7 @@ async function neteaseSearch(artist, track, duration) {
 async function neteaseLyric(id) {
   const lRes = await fetch(
     `https://music.163.com/api/song/lyric?id=${id}&lv=1&kv=1&tv=-1&rv=-1&yv=1`,
-    { headers: NETEASE_HEADERS },
+    { headers: NETEASE_HEADERS, signal: AbortSignal.timeout(8000) },
   );
   if (!lRes.ok) return null;
   return await lRes.json();
@@ -530,6 +541,7 @@ async function fetchRomanized({ artist, title }) {
     }
   } catch (e) {
     console.error("[roma:netease]", e.message);
+    return null; // a failed lookup is not an answer: ask again next time
   }
 
   romaCache.set(key, lrc);
@@ -545,7 +557,7 @@ function cleanTitle(title) {
     .trim();
 }
 
-async function fetchLyrics({ artist, title, album, duration, only }) {
+async function fetchLyrics({ artist = "", title = "", album, duration, only }) {
   const primaryArtist = artist.split(/,|&|\sfeat\.?\s|\sft\.?\s/i)[0].trim();
   const candidates = [
     [artist, title],
@@ -655,7 +667,7 @@ async function itunesArt(artist, title, album) {
   const url =
     "https://itunes.apple.com/search?" +
     new URLSearchParams({ term, entity: album ? "album" : "song", limit: "5" });
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
   if (!res.ok) return null;
   const { results } = await res.json();
   // results[0] is often another artist's album of the same name. A wrong cover
@@ -671,7 +683,7 @@ async function deezerArt(artist, title) {
   const url =
     "https://api.deezer.com/search?" +
     new URLSearchParams({ q: `artist:"${artist}" track:"${title}"`, limit: "1" });
-  const res = await fetch(url);
+  const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
   if (!res.ok) return null;
   const { data } = await res.json();
   return data?.[0]?.album?.cover_xl ?? data?.[0]?.album?.cover_big ?? null;
@@ -683,7 +695,11 @@ async function deezerArt(artist, title) {
  * lands, so give the push a short window to catch up when the bridge is live.
  */
 async function bridgedArtFor(req) {
-  for (let i = 0; i < 10; i++) {
+  // Only Spotify's own songs are worth waiting for. Another app's song never
+  // matches, and waiting out the window held its cover back two seconds
+  // whenever Spotify was open too.
+  const tries = /spotify/i.test(req?.appId ?? "") ? 10 : 1;
+  for (let i = 0; i < tries; i++) {
     if (!bridgedTrack || Date.now() - bridgedTrack.at > BRIDGED_TRACK_TTL_MS) return null;
     if (looseMatch(bridgedTrack.name, req?.title)) {
       return bridgedTrack.image ?? (await spotifyOEmbedArt(bridgedTrack.id));
@@ -706,6 +722,7 @@ async function spotifyOEmbedArt(trackId) {
   try {
     const res = await fetch(
       `https://open.spotify.com/oembed?url=spotify:track:${encodeURIComponent(trackId)}`,
+      { signal: AbortSignal.timeout(6000) },
     );
     if (!res.ok) return null;
     const url = (await res.json())?.thumbnail_url;
@@ -751,7 +768,7 @@ async function youtubeArt(title, channel) {
     // 1280px when the uploader made one; 320px (still twice the thumbnail, and
     // without the black bars of the 480px size) otherwise
     const max = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
-    const head = await fetch(max, { method: "HEAD" }).catch(() => null);
+    const head = await fetch(max, { method: "HEAD", signal: AbortSignal.timeout(4000) }).catch(() => null);
     return head?.ok ? max : `https://i.ytimg.com/vi/${id}/mqdefault.jpg`;
   }
   return null;
@@ -785,7 +802,7 @@ async function lookupArt(artist, title, album) {
 
 async function fetchArt({ artist, title, album, appId }) {
   if (!artist && !title) return null;
-  const bridged = await bridgedArtFor({ title });
+  const bridged = await bridgedArtFor({ title, appId });
   if (bridged) return bridged;
   const key = `${appId}|${artist}|${album}|${title}`;
   if (artCache.has(key)) return artCache.get(key);
@@ -794,7 +811,11 @@ async function fetchArt({ artist, title, album, appId }) {
     ? ((await lookupArt(artist, title, album)) ?? (await smtcThumb(appId, title)))
     : ((await videoArt(appId, artist, title)) ?? (await lookupArt(artist, title, album)));
 
-  if (!url) console.error(`[art] no artwork found for ${key}`);
+  if (!url) {
+    // not remembered: it may only have been offline, and the widget asks again
+    console.error(`[art] no artwork found for ${key}`);
+    return null;
+  }
   artCache.set(key, url);
   if (artCache.size > 200) artCache.delete(artCache.keys().next().value);
   return url;
