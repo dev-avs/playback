@@ -451,15 +451,27 @@ const IconRepeat = ({ off = false, one = false }: { off?: boolean; one?: boolean
     strokeLinecap="round"
     strokeLinejoin="round"
   >
-    <polyline points="17 1 21 5 17 9" />
-    <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-    <polyline points="7 23 3 19 7 15" />
-    <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-    {off && <line x1="6" y1="6" x2="18" y2="18" strokeWidth="1.8" />}
     {one && (
-      <text x="12" y="14.6" fontSize="7.5" fontWeight="700" textAnchor="middle" fill="currentColor" stroke="none">
-        1
-      </text>
+      <mask id="repeat-one-cut" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">
+        <rect x="-2" y="-2" width="28" height="28" fill="white" stroke="none" />
+        <circle cx="16.5" cy="16.5" r="9.5" fill="black" stroke="none" />
+      </mask>
+    )}
+    <g transform={one ? "translate(-1.5 -1.5) scale(0.88)" : undefined} mask={one ? "url(#repeat-one-cut)" : undefined}>
+      <polyline points="18 4 21 7 18 10" />
+      <path d="M3 12v-1a4 4 0 0 1 4-4h14" />
+      <polyline points="6 20 3 17 6 14" />
+      <path d="M21 12v1a4 4 0 0 1-4 4H3" />
+    </g>
+    {off && <line x1="2.5" y1="3" x2="21.5" y2="22" strokeWidth="1.8" />}
+    {one && (
+      <>
+        <mask id="repeat-one-badge" maskUnits="userSpaceOnUse" x="-2" y="-2" width="28" height="28">
+          <rect x="-2" y="-2" width="28" height="28" fill="white" stroke="none" />
+          <path d="M14 14l2.8-1.8v9.3" stroke="black" strokeWidth="2.4" />
+        </mask>
+        <circle cx="16.5" cy="16.5" r="7.5" fill="currentColor" stroke="none" mask="url(#repeat-one-badge)" />
+      </>
     )}
   </svg>
 );

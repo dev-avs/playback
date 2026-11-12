@@ -22,6 +22,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.2",
+    date: "2026-11-11",
+    changes: {
+      appearance: [
+        "A new repeat icon: shorter, so it sits level with the other buttons, and the \"off\" slash is shorter and reaches past the arrows.",
+        "Repeat one now shows a solid badge with a 1 in the corner instead of a number inside the arrows.",
+      ],
+    },
+  },
+  {
     version: "1.5.1",
     date: "2026-11-09",
     changes: {
