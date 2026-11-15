@@ -15,6 +15,8 @@ export interface LyricWord {
   end?: number;
   /** syllable-level unit that glues to the next without a separating space */
   joinNext?: boolean;
+  /** joinNext comes from Japanese word boundaries (applyReadings), so romanizing keeps it */
+  readJoin?: boolean;
 }
 
 export interface LyricLine {
@@ -23,6 +25,8 @@ export interface LyricLine {
   words?: LyricWord[];
   /** when the line stops being sung, when the source tells us */
   end?: number;
+  /** Romanize "both": the line in Latin letters, with its own word timings, shown under it */
+  roma?: LyricLine;
   /** synthetic instrumental-gap marker rather than a real line */
   gap?: boolean;
   /** gap markers fade out shortly before the next line lands */

@@ -35,8 +35,20 @@ export function fontStack(name: string): string | null {
   return name ? `"${name.replace(/["\\]/g, "")}"` : null;
 }
 
+/**
+ * Romanize: off, Latin only (the lyrics replaced), or both (each line with its
+ * romanization under it). Up to 1.5.2 this was on/off, stored as a boolean.
+ */
+export type RomaMode = "off" | "latin" | "dual";
+export const ROMA_MODES: RomaMode[] = ["off", "latin", "dual"];
+export const ROMA_LABELS: Record<RomaMode, string> = { off: "Off", latin: "Latin only", dual: "Both" };
+export function romaMode(v: unknown): RomaMode {
+  if (v === true) return "latin";
+  return ROMA_MODES.includes(v as RomaMode) ? (v as RomaMode) : "off";
+}
+
 export const DEFAULTS = {
-  romanizeDefault: false,
+  romanizeDefault: "off" as RomaMode,
   lyricSize: 17,
   /** px per second a too-long title or artist slides at (PanText) */
   panSpeed: 8,
@@ -387,7 +399,7 @@ export const KEYS = {
   lyricSource: "state.lyricSource",
   /** written by the widget: { key, title, artist } of the song playing */
   track: "state.track",
-  /** romanize on/off right now, as opposed to the launch default */
+  /** romanize mode right now (RomaMode; a boolean up to 1.5.2), as opposed to the launch default */
   romanized: "state.romanized",
   /** written by the widget so the settings window can show it */
   canRomanize: "state.canRomanize",

@@ -9,6 +9,7 @@ const {
   session,
   desktopCapturer,
   globalShortcut,
+  utilityProcess,
 } = require("electron");
 // The app was called player up to 1.4.2, and kept its settings, Spicy key,
 // sign-in and lyrics cache in %APPDATA%\player. Playback's folder is
@@ -547,6 +548,41 @@ async function fetchRomanized({ artist, title }) {
   romaCache.set(key, lrc);
   if (romaCache.size > 100) romaCache.delete(romaCache.keys().next().value);
   return lrc;
+}
+
+// Kanji readings come from a dictionary that is too big to keep loaded, so
+// each lookup runs electron/readings.cjs in a utility process that exits once
+// it has answered. Null on failure: the lyrics then romanize without them.
+const readingsCache = new Map();
+
+function fetchReadings(texts) {
+  const key = texts.join("\n");
+  if (readingsCache.has(key)) return Promise.resolve(readingsCache.get(key));
+  return new Promise((resolve) => {
+    const child = utilityProcess.fork(path.join(__dirname, "readings.cjs"), [], { serviceName: "Playback readings" });
+    let done = false;
+    const finish = (tokens) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      child.kill();
+      if (tokens) {
+        readingsCache.set(key, tokens);
+        if (readingsCache.size > 20) readingsCache.delete(readingsCache.keys().next().value);
+      }
+      resolve(tokens);
+    };
+    const timer = setTimeout(() => {
+      console.error("[readings] timed out");
+      finish(null);
+    }, 20000);
+    child.once("message", (msg) => {
+      if (msg?.error) console.error("[readings]", msg.error);
+      finish(msg?.tokens ?? null);
+    });
+    child.once("exit", () => finish(null));
+    child.postMessage({ texts });
+  });
 }
 
 // Spotify decorates titles in ways lyrics databases do not carry.
@@ -1537,6 +1573,7 @@ app.whenReady().then(() => {
   ipcMain.handle("lyrics:fetch", (_e, req) => fetchLyrics(req));
   ipcMain.handle("art:fetch", (_e, req) => fetchArt(req));
   ipcMain.handle("lyrics:romanized", (_e, req) => fetchRomanized(req));
+  ipcMain.handle("lyrics:readings", (_e, texts) => fetchReadings(texts));
 
   // ── Spotify / Spicy Lyrics ──
   ipcMain.handle("spotify:status", () => ({

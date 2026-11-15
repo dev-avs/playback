@@ -22,6 +22,24 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.3",
+    date: "2026-11-14",
+    changes: {
+      new: [
+        "Added 3 romanize modes on the あ button: Off, Latin only, Both (romanization under each line, synced)",
+        "Added kanji romanization (女の子 → onnanoko) and pinyin for Chinese",
+      ],
+      qol: [
+        "Spaced romaji by word (onegai ii desu ka)",
+        "Smoother fade when switching romanization",
+        "Added all 3 modes to Romanize at launch",
+      ],
+      fixes: [
+        "Fixed raw kanji left in romanized lines",
+      ],
+    },
+  },
+  {
     version: "1.5.2",
     date: "2026-11-11",
     changes: {

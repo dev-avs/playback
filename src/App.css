@@ -405,6 +405,19 @@ body {
     --line-opacity: calc(0.497 * var(--sung-k, 1));
 }
 
+/* Romanize "Both": the line's romanization right under it, smaller and in the
+   Latin face. Held close to its own line (a hair of margin, tight leading) so
+   each pair reads as one line, not two lines of the same weight. */
+.lyric-roma {
+    display: block;
+    margin-top: 0.06em;
+    font-family: var(--latin-stack), sans-serif;
+    font-size: 0.6em;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: normal;
+}
+
 /* No size or weight change: the emphasis belongs to the syllable being sung,
    which the animator scales and lights per frame. */
 .lyric-line.current {

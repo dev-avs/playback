@@ -1,4 +1,5 @@
 import type { LyricLine } from "./lyrics";
+import { pinyin } from "pinyin-pro";
 import { hasUromanScript, uromanize, uromanizeParts } from "./uroman.ts";
 
 // ── Script detection ──────────────────────────────────────────
@@ -53,7 +54,7 @@ export function detectLyricLang(lines: LyricLine[]): "ja" | "ko" | "zh" | undefi
 
 // ── Japanese kana → romaji (modified Hepburn) ─────────────────
 // Kana only. Kanji has no algorithmic reading — it needs a dictionary, so it
-// is passed through untouched; the NetEase `romalrc` source covers that case.
+// is passed through untouched here; applyReadings swaps it for kana first.
 
 const DIGRAPHS: Record<string, string> = {
   きゃ: "kya", きゅ: "kyu", きょ: "kyo",
@@ -190,6 +191,199 @@ function romanizeKorean(text: string): string {
   return out;
 }
 
+// ── Han readings (dictionary) ─────────────────────────────────
+// Kanji and hanzi have no algorithmic reading, so they are looked up: Japanese
+// through kuromoji in a utility process (electron/readings.cjs), Chinese through
+// pinyin-pro here. Both read the whole line, since a character's reading depends
+// on its neighbours, and the result is shared back out per character so every
+// word keeps its own timing.
+
+/**
+ * One word of a line as electron/readings.cjs gives it: surface, reading in
+ * katakana, part of speech, its first detail, base form (kuromoji's IPADIC).
+ */
+export type ReadingToken = { s: string; r?: string; p?: string; d?: string; b?: string };
+
+/**
+ * Whether a word joins the one before it in romaji, with no space: verb
+ * endings and conjugation (naritai, noserarete, daseba, hanashichaou) and
+ * punctuation do; particles and words do not (onnanoko ni, yuuki o).
+ * です and だ stand apart (ii desu ka), as do いる and ある (akogarete iru).
+ */
+function attaches(tok: ReadingToken): boolean {
+  switch (tok.p) {
+    case "助動詞":
+      return tok.b !== "です" && tok.b !== "だ";
+    case "動詞":
+      return tok.d === "接尾" || (tok.d === "非自立" && tok.b !== "いる" && tok.b !== "ある");
+    case "助詞":
+      return tok.d === "接続助詞";
+    case "名詞":
+      return tok.d === "接尾";
+    case "記号":
+      return true;
+    default:
+      return false;
+  }
+}
+
+const isSpace = (s: string) => /^\s+$/.test(s);
+
+const JA_KANJI = /[一-鿿㐀-䶿々]/;
+const JA_KANJI_RUNS = /[一-鿿㐀-䶿々]+|[^一-鿿㐀-䶿々]+/g;
+
+/** The text a line's readings are looked up for: its words run together, so each character lines up with one. */
+function lineChars(line: LyricLine): string {
+  return line.words?.length ? line.words.map((w) => w.text).join("") : line.text;
+}
+
+/** Texts to ask electron/readings.cjs about, one per line. */
+export function readingTexts(lines: LyricLine[]): string[] {
+  return lines.map(lineChars);
+}
+
+/** True for Japanese lyrics: readings give kanji their sound and the romaji its word breaks. */
+export function linesNeedReadings(lines: LyricLine[]): boolean {
+  return detectLyricLang(lines) === "ja";
+}
+
+/** Kana split into morae: small kana and ー join the one before, っ the one after. */
+function morae(kana: string): string[] {
+  const out: string[] = [];
+  let carry = "";
+  for (const ch of kana) {
+    if (/[ゃゅょぁぃぅぇぉゎー]/.test(ch) && out.length && !carry) out[out.length - 1] += ch;
+    else if (ch === "っ") carry += ch;
+    else {
+      out.push(carry + ch);
+      carry = "";
+    }
+  }
+  if (carry) {
+    if (out.length) out[out.length - 1] += carry;
+    else out.push(carry);
+  }
+  return out;
+}
+
+/** A reading shared across n characters by morae (馬車 ばしゃ → ば, しゃ). */
+function spread(reading: string, n: number): string[] {
+  if (n <= 1) return [reading];
+  const m = morae(reading);
+  if (m.length < n) return [reading, ...Array<string>(n - 1).fill("")];
+  return Array.from({ length: n }, (_, i) =>
+    m.slice(Math.round((i * m.length) / n), Math.round(((i + 1) * m.length) / n)).join(""),
+  );
+}
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/**
+ * One reading per character of a word. The kana around the kanji anchor it
+ * (憧れ あこがれ → 憧 あこが, れ れ), so only the kanji take the dictionary's
+ * reading; kana keep their own spelling, which already romanizes.
+ */
+function tokenChars(tok: ReadingToken): string[] {
+  const chars = Array.from(tok.s);
+  if (!tok.r || !JA_KANJI.test(tok.s)) return chars;
+  const reading = katakanaToHiragana(tok.r);
+  const parts = katakanaToHiragana(tok.s).match(JA_KANJI_RUNS) ?? [];
+  const m = reading.match(
+    new RegExp(`^${parts.map((p) => (JA_KANJI.test(p) ? "(.+)" : escapeRe(p))).join("")}$`),
+  );
+  if (!m) return spread(reading, chars.length);
+  const out: string[] = [];
+  let g = 1;
+  for (const p of parts) {
+    const pc = Array.from(p);
+    out.push(...(JA_KANJI.test(p) ? spread(m[g++], pc.length) : pc));
+  }
+  return out;
+}
+
+/**
+ * Each character's text, joined: romanized hanzi stand apart from each other
+ * and from Latin, and `sp` puts a space before a character that starts a word.
+ */
+type CharText = { t: string; roma: boolean; sp?: boolean };
+
+function joinChars(chars: CharText[]): string {
+  let out = "";
+  chars.forEach((c, i) => {
+    const prev = chars[i - 1];
+    if (c.sp && out && !/\s$/.test(out)) out += " ";
+    if (prev && prev.t && c.t && (prev.roma || c.roma)) {
+      const a = prev.roma ? "a" : prev.t.slice(-1);
+      const b = c.roma ? "a" : c.t[0];
+      if (/[A-Za-z0-9]/.test(a) && /[A-Za-z0-9]/.test(b)) out += " ";
+    }
+    out += c.t;
+  });
+  return out;
+}
+
+/** Puts per-character text back into the line, word by word, keeping each word's timing. */
+function withChars(line: LyricLine, chars: CharText[]): LyricLine {
+  if (!line.words?.length) return { ...line, text: joinChars(chars) };
+  // Word breaks known (Japanese): a unit glues to the next unless a word starts there.
+  const known = chars.some((c) => c.sp !== undefined);
+  let i = 0;
+  const words = line.words
+    .map((w) => {
+      const n = Array.from(w.text).length;
+      const own = chars.slice(i, i + n);
+      // a space at the unit's own start is the gap between units, not inside it
+      const text = joinChars(own.map((c, k) => (k === 0 ? { ...c, sp: false } : c)));
+      i += n;
+      if (!known) return { ...w, text };
+      const next = chars[i];
+      return { ...w, text, joinNext: !!next && !next.sp && !/^\s*$/.test(text) && !/^\s/.test(next.t), readJoin: true };
+    })
+    // a kanji whose reading went to its neighbour (too few morae to share)
+    .filter((w) => w.text);
+  return { ...line, words };
+}
+
+/**
+ * Japanese lines with kanji swapped for their readings in hiragana, from
+ * electron/readings.cjs, and spaces where words start, so the romaji reads
+ * "onegai ii desu ka" rather than "onegaiiidesuka".
+ */
+export function applyReadings(lines: LyricLine[], tokens: ReadingToken[][]): LyricLine[] {
+  return lines.map((line, i) => {
+    const toks = tokens[i];
+    const text = lineChars(line);
+    if (!toks?.length) return line;
+    // anything off (a dropped character) and the line is left as it was
+    if (toks.map((t) => t.s).join("") !== text) return line;
+    const chars: CharText[] = [];
+    toks.forEach((tok, k) => {
+      const prev = toks[k - 1];
+      const sp = !!prev && !isSpace(prev.s) && !isSpace(tok.s) && !attaches(tok);
+      // the topic and direction particles are said wa and e
+      const particle = tok.p === "助詞" && (tok.s === "は" ? "わ" : tok.s === "へ" ? "え" : null);
+      const own = particle ? [particle] : isSpace(tok.s) ? Array.from(tok.s, () => " ") : tokenChars(tok);
+      own.forEach((t, n) => chars.push({ t, roma: false, sp: n === 0 && sp }));
+    });
+    if (chars.length !== Array.from(text).length) return line;
+    return withChars(line, chars);
+  });
+}
+
+/** Chinese lines with hanzi swapped for pinyin (no tone marks). */
+export function applyPinyin(lines: LyricLine[]): LyricLine[] {
+  return lines.map((line) => {
+    const text = lineChars(line);
+    if (!HAN.test(text)) return line;
+    const all = pinyin(text, { type: "all", toneType: "none" });
+    if (all.length !== Array.from(text).length) return line;
+    return withChars(
+      line,
+      all.map((c) => (c.isZh && c.pinyin ? { t: c.pinyin, roma: true } : { t: c.origin, roma: false })),
+    );
+  });
+}
+
 // ── Entry points ──────────────────────────────────────────────
 function romanizeKanaHangul(text: string): string {
   let out = text;
@@ -266,6 +460,28 @@ export function alignRomanizedToWords(
 }
 
 /**
+ * Romanize "both": each line keeps its own text and timing, and carries its
+ * romanization (from `roman`, the same lyrics romanized) to show under it.
+ * Paired by position when the two match line for line, else by start time.
+ * Lines that romanize to themselves (already Latin) get none.
+ */
+export function withRomaLines(lines: LyricLine[], roman: LyricLine[], toleranceS = 0.6): LyricLine[] {
+  const same = roman.length === lines.length && roman.every((r, i) => r.t === lines[i].t);
+  let j = 0;
+  return lines.map((line, i) => {
+    if (line.gap) return line;
+    let m: LyricLine | undefined;
+    if (same) m = roman[i];
+    else {
+      while (j < roman.length && roman[j].t < line.t - toleranceS) j++;
+      if (j < roman.length && Math.abs(roman[j].t - line.t) <= toleranceS) m = roman[j++];
+    }
+    const text = m?.text.trim();
+    return m && text && text !== line.text.trim() ? { ...line, roma: m } : line;
+  });
+}
+
+/**
  * Romanize in place, keeping every timestamp so word-level highlighting still
  * lines up with playback.
  */
@@ -285,7 +501,7 @@ export function romanizeLines(lines: LyricLine[]): LyricLine[] {
     const words = line.words.map((w, i) => ({
       ...w,
       text: texts[i],
-      joinNext: w.joinNext && !hasNonLatinScript(w.text),
+      joinNext: w.joinNext && (w.readJoin || !hasNonLatinScript(w.text)),
     }));
     let text = "";
     for (let i = 0; i < words.length; i++) {

@@ -114,6 +114,8 @@ export interface PlayerBridge {
   fetchArt(req: { artist: string; title: string; album?: string; appId?: string }): Promise<string | null>;
   /** romanized LRC for the track, or null when the source has none */
   fetchRomanized(req: { artist: string; title: string }): Promise<string | null>;
+  /** Japanese words with their readings (katakana), one list per text; null on failure */
+  fetchReadings(texts: string[]): Promise<{ s: string; r?: string; p?: string; d?: string; b?: string }[][] | null>;
 
   /** Spicy Lyrics payload, still binary-packed; unpacked in src/spicy.ts */
   fetchSpicyLyrics(req: {

@@ -30,6 +30,7 @@ contextBridge.exposeInMainWorld("player", {
   fetchLyrics: (req) => ipcRenderer.invoke("lyrics:fetch", req),
   fetchArt: (req) => ipcRenderer.invoke("art:fetch", req),
   fetchRomanized: (req) => ipcRenderer.invoke("lyrics:romanized", req),
+  fetchReadings: (texts) => ipcRenderer.invoke("lyrics:readings", texts),
   fetchSpicyLyrics: (req) => ipcRenderer.invoke("spicy:lyrics", req),
 
   // Fires when the Spicetify extension hands us a fresh token, so the lyrics

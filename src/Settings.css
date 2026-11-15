@@ -519,6 +519,20 @@
     text-shadow: 0 0 var(--pv-blur, 0px) rgba(255, 255, 255, 0.35);
 }
 
+/* Romanize "Both", as .lyric-roma in App.css */
+.st-pv-line .lyric-roma {
+    display: block;
+    margin-top: 0.06em;
+    font-family: var(--pv-font), sans-serif;
+    font-size: 0.6em;
+    font-weight: 600;
+    line-height: 1.15;
+}
+
+.st-pv-line.current .lyric-roma {
+    color: rgba(255, 255, 255, 0.75);
+}
+
 /* per-language faces, as the widget's :lang() rules (App.css) */
 .st-pv-lyrics:lang(ja) {
     font-family: var(--pv-font), var(--pv-ja), sans-serif;

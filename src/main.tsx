@@ -7,7 +7,7 @@ import Changelog from './Changelog.tsx'
 import Setup from './Setup.tsx'
 import Update from './Update.tsx'
 import Versions from './Versions.tsx'
-import { DEFAULTS, KEYS } from './settings.ts'
+import { DEFAULTS, KEYS, romaMode } from './settings.ts'
 
 // One bundle, six windows: settings loads this page with #settings, the
 // changelog with #changelog (plus ?from=<version> after an update), setup with
@@ -23,7 +23,7 @@ if (!isSettings && !isChangelog && !isSetup && !isUpdate && !isVersions) {
   // it afterwards. Seeded before the first render so the widget never flashes.
   let initial = DEFAULTS.romanizeDefault
   try {
-    initial = JSON.parse(localStorage.getItem(KEYS.romanizeDefault) ?? 'null') ?? initial
+    initial = romaMode(JSON.parse(localStorage.getItem(KEYS.romanizeDefault) ?? 'null') ?? initial)
   } catch {
     /* keep the default */
   }

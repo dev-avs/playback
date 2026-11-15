@@ -12,10 +12,16 @@ import {
 } from "./lyrics";
 import {
   alignRomanizedToWords,
+  applyPinyin,
+  applyReadings,
   detectLyricLang,
   hasHanScript,
+  linesNeedReadings,
   linesNeedRomanization,
+  readingTexts,
   romanizeLines,
+  withRomaLines,
+  type ReadingToken,
 } from "./romanize";
 import { loadSpicyLyrics, type SpicyAttribution } from "./spicy";
 import { BAR_COUNT, useAudioBars } from "./useAudioBars";
@@ -34,6 +40,9 @@ import {
   DEFAULTS,
   KEYS,
   PROVIDERS,
+  ROMA_LABELS,
+  ROMA_MODES,
+  romaMode,
   fontStack,
   providerOf,
   songKey,
@@ -904,7 +913,9 @@ export default function App() {
   const [volOpen, setVolOpen] = useState(false);
   const [volDragging, setVolDragging] = useState(false);
   // main.tsx seeds this from the launch default before the first render
-  const [romanized, setRomanized] = usePersisted(KEYS.romanized, false);
+  const [romaStored, setRomaStored] = usePersisted<unknown>(KEYS.romanized, "off");
+  const roma = romaMode(romaStored);
+  const romanized = roma !== "off";
   const [spotifyAuth, setSpotifyAuth] = useState<{
     configured: boolean;
     signedIn: boolean;
@@ -923,6 +934,8 @@ export default function App() {
     key: "",
     lines: [],
   });
+  // Kanji readings for the lyrics they were looked up for (see electron/readings.cjs).
+  const [readings, setReadings] = useState<{ lines: LyricLine[]; tokens: ReadingToken[][] } | null>(null);
 
   // read inside the ResizeObserver, which is created once
   const hoveredRef = useRef(false);
@@ -1247,31 +1260,43 @@ export default function App() {
   const dynamicLyrics = useMemo(() => {
     let base = sourceLyrics;
     if (romanized && canRomanize) {
+      let roman: LyricLine[];
       // Transliterating in place keeps every timestamp, so word sync survives.
       // The source's own romanized track does not — NetEase ships it as plain
       // line-timed LRC — so it is only worth taking when we genuinely cannot do
       // the job ourselves, i.e. when Han characters are left over. Korean and
       // kana romanize algorithmically, and preferring the source track for them
       // was silently throwing away per-word timing for no gain.
-      const inline = romanizeLines(sourceLyrics);
+      // Han goes to its dictionary reading first, so romanizing leaves none behind:
+      // kanji to kana once electron/readings.cjs has answered, hanzi to pinyin.
+      const lang = detectLyricLang(sourceLyrics);
+      const read =
+        lang === "zh"
+          ? applyPinyin(sourceLyrics)
+          : lang === "ja" && readings?.lines === sourceLyrics
+            ? applyReadings(sourceLyrics, readings.tokens)
+            : sourceLyrics;
+      const inline = romanizeLines(read);
       const sourceHasWordSync = sourceLyrics.some((l) => l.words?.length);
       const inlineIsComplete = !inline.some((l) => hasHanScript(l.text));
       const sourceTrack =
         romaLines.key === np.trackKey && romaLines.lines.length ? romaLines.lines : null;
 
       if (sourceHasWordSync && inlineIsComplete) {
-        base = inline;
+        roman = inline;
       } else if (sourceTrack) {
         // Spicy's own transliteration is already per syllable, so it is taken
         // as-is. NetEase's romalrc is line-timed, and swapping it in wholesale
         // used to discard the source's word timings — lay its text over those
         // windows instead. See alignRomanizedToWords.
-        base = sourceTrack.some((l) => l.words?.length)
+        roman = sourceTrack.some((l) => l.words?.length)
           ? sourceTrack
           : alignRomanizedToWords(sourceLyrics, sourceTrack);
       } else {
-        base = inline;
+        roman = inline;
       }
+      // "both" keeps the lyrics as sung and puts the romanization under each line
+      base = roma === "dual" ? withRomaLines(sourceLyrics, roman) : roman;
     }
 
     // gaps only make sense against real timings
@@ -1286,9 +1311,11 @@ export default function App() {
     );
   }, [
     romanized,
+    roma,
     canRomanize,
     sourceLyrics,
     romaLines,
+    readings,
     np.trackKey,
     lyricsFor.synced,
     lineSweep,
@@ -1473,6 +1500,33 @@ export default function App() {
 
   // Pull the source's romanized lyrics the first time they are asked for on a
   // given track. Failure is fine — we fall back to transliterating locally.
+  // Look up kanji readings for Japanese lyrics as soon as they load, romanized
+  // or not, so the あ button swaps once and at once instead of showing raw kanji
+  // for the second the dictionary takes. The lookup's process exits after it.
+  useEffect(() => {
+    if (!window.player?.fetchReadings) return;
+    if (readings?.lines === sourceLyrics || !linesNeedReadings(sourceLyrics)) return;
+    let cancelled = false;
+    const lines = sourceLyrics;
+    window.player
+      .fetchReadings(readingTexts(lines))
+      .then((tokens) => {
+        if (!cancelled && tokens) setReadings({ lines, tokens });
+      })
+      .catch((e) => console.error("[readings]", e));
+    return () => {
+      cancelled = true;
+    };
+  }, [sourceLyrics, readings]);
+
+  // A short fade as the button swaps the lyrics, rather than a hard cut.
+  const lastRoma = useRef(roma);
+  useEffect(() => {
+    if (lastRoma.current === roma) return;
+    lastRoma.current = roma;
+    lyricsInnerRef.current?.animate([{ opacity: 0.4 }, { opacity: 1 }], { duration: 220, easing: "ease-out" });
+  }, [roma]);
+
   useEffect(() => {
     if (!romanized || !canRomanize) return;
     if (romaLines.key === np.trackKey) return;
@@ -1675,9 +1729,14 @@ export default function App() {
         nodes.length === anims.length &&
         nodes.every((n, i) => n === anims[i].node);
       if (!unchanged) {
+        // Same moment, new lyrics (the romanize button, or a source upgrading
+        // mid-line): the new units start where the old ones were, not from
+        // unsung, so a toggle does not un-light the line and pop it back.
+        const swapped = animLyrics !== lyricsRef.current;
         for (const a of anims) resetLine(a.words);
         anims = nodes.map((node) => ({ node, words: collectLine(node) }));
         animLyrics = lyricsRef.current;
+        if (swapped) for (const a of anims) for (let k = 0; k < 40; k++) stepLine(a.words, lyricTime, 0.1);
       }
       for (const a of anims) stepLine(a.words, lyricTime, dt);
 
@@ -2119,6 +2178,9 @@ export default function App() {
                     remounts and fades in. */}
                 <span className="art-lyric-text" key={currentIdx} dir="auto">
                   {dynamicLyrics[currentIdx].text}
+                  {dynamicLyrics[currentIdx].roma && (
+                    <span className="lyric-roma" lang="en">{dynamicLyrics[currentIdx].roma.text}</span>
+                  )}
                 </span>
               </div>
             )}
@@ -2425,6 +2487,22 @@ export default function App() {
                       ) : (
                         line.text
                       )}
+                      {/* Romanize "Both": synced like the line above it — the
+                          animator drives every unit inside a current line. It
+                          ends with its line, which sealEnds gave an end. */}
+                      {line.roma && (
+                        <span className="lyric-roma" lang="en" dir="auto">
+                          {isCurrent ? (
+                            <Units
+                              line={{ ...line.roma, end: line.roma.end ?? line.end }}
+                              sweep={lineSweep}
+                              animation={animationStyle}
+                            />
+                          ) : (
+                            line.roma.text
+                          )}
+                        </span>
+                      )}
                       <span className="lyric-ts" dir="ltr">• {fmt(line.t)}</span>
                     </div>
                   );
@@ -2582,10 +2660,11 @@ export default function App() {
                   <button
                     className={`ctrl-btn ctrl-aa${romanized ? " active" : ""}`}
                     aria-label="Romanize"
-                    title="Romanize"
-                    onClick={() => setRomanized((r) => !r)}
+                    title={`Romanize: ${ROMA_LABELS[roma]}`}
+                    // off → Latin only → both → off
+                    onClick={() => setRomaStored(ROMA_MODES[(ROMA_MODES.indexOf(roma) + 1) % ROMA_MODES.length])}
                   >
-                    あ
+                    {roma === "dual" ? "あa" : "あ"}
                   </button>
                 )}
                 <button

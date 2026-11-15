@@ -23,6 +23,10 @@ import {
   type Provider,
   type SettingKey,
   type Settings as SettingsValues,
+  type RomaMode,
+  ROMA_LABELS,
+  ROMA_MODES,
+  romaMode,
 } from "./settings";
 import { romanizeText } from "./romanize";
 import type { UpdateState } from "./player";
@@ -39,7 +43,7 @@ const HOLD_MS = 1000;
  * any settings, overridden, plus a romanize try-out (romanize is not one of
  * the stored settings — it is the per-launch state the あ button flips).
  */
-type Peek = Partial<SettingsValues> & { romanize?: boolean };
+type Peek = Partial<SettingsValues> & { romanize?: RomaMode };
 
 // While the pointer is on a setting: its explanation under the preview, and a
 // try-out of what using it would do.
@@ -223,8 +227,8 @@ function Preview(props: {
   s: SettingsValues;
   art: string | null;
   track: { title: string; artist: string } | null;
-  romanized: boolean;
-  peekRomanize?: boolean;
+  romanized: RomaMode;
+  peekRomanize?: RomaMode;
   peekLang?: CjkLang;
   caption: string;
 }) {
@@ -232,10 +236,11 @@ function Preview(props: {
   const [chosenLang, setLang] = useState<PreviewLang>("en");
   // starts from the real Romanize state, then flips here without touching it
   const [roma, setRoma] = useState(props.romanized);
+  const mode = props.peekRomanize ?? roma;
   // English has nothing to romanize, so a romanize try-out borrows Japanese
-  const lang = props.peekLang ?? (props.peekRomanize && chosenLang === "en" ? "ja" : chosenLang);
+  const lang = props.peekLang ?? (props.peekRomanize && props.peekRomanize !== "off" && chosenLang === "en" ? "ja" : chosenLang);
   const canRoma = lang === "ja" || lang === "ko";
-  const romanizing = (roma || !!props.peekRomanize) && canRoma;
+  const romanizing = mode !== "off" && canRoma;
   const k = Math.min(1, s.bgAlpha / DEFAULTS.bgAlpha);
   const style = {
     "--bg-a": s.bgAlpha / 100,
@@ -315,11 +320,11 @@ function Preview(props: {
             <button
               className={`st-pv-chip st-pv-roma${romanizing ? " on" : ""}`}
               aria-pressed={romanizing}
-              title="Romanize the preview"
+              title={`Romanize the preview: ${ROMA_LABELS[mode]}`}
               disabled={!canRoma}
-              onClick={() => setRoma((r) => !r)}
+              onClick={() => setRoma((r) => ROMA_MODES[(ROMA_MODES.indexOf(r) + 1) % ROMA_MODES.length])}
             >
-              あ
+              {mode === "dual" ? "あa" : "あ"}
             </button>
           </span>
         </div>
@@ -330,7 +335,7 @@ function Preview(props: {
           lang={lang}
         >
           {PREVIEW_SAMPLES[lang].lines.map((source, i) => {
-            const text = romanizing ? romanizeText(source) : source;
+            const text = romanizing && mode === "latin" ? romanizeText(source) : source;
             const distance = Math.abs(i - PREVIEW_CURRENT);
             // BLUR_STEP 0.55px per line away, capped at BLUR_MAX 2.2px
             const blur = s.blurLines ? Math.min(2.2, distance * 0.55) : 0;
@@ -344,6 +349,7 @@ function Preview(props: {
                 style={{ "--pv-blur": `${blur}px`, opacity } as React.CSSProperties}
               >
                 {text}
+                {romanizing && mode === "dual" && <span className="lyric-roma">{romanizeText(source)}</span>}
               </div>
             );
           })}
@@ -369,11 +375,15 @@ function Preview(props: {
   );
 }
 
+const ROMA_DESC =
+  "Japanese, Korean, Chinese and other scripts in Latin letters. Latin only replaces the lyrics; Both shows each line with its romanization under it. Same as the あ button, which cycles through them.";
+
 // ─────────────────────────── the window ───────────────────────────
 
 export default function Settings() {
   const [s, set] = useSettingsStore();
-  const [romanized, setRomanized] = usePersisted(KEYS.romanized, false);
+  const [romaStored, setRomanized] = usePersisted<unknown>(KEYS.romanized, "off");
+  const romanized = romaMode(romaStored);
   const [canRomanize] = usePersisted(KEYS.canRomanize, false);
   const [art] = usePersisted<string | null>(KEYS.art, null);
   const [track] = usePersisted<{ key: string; title: string; artist: string } | null>(KEYS.track, null);
@@ -689,12 +699,36 @@ export default function Settings() {
       cat: "languages",
       label: "Romanize",
       hint: canRomanize ? undefined : "nothing to romanize in this song",
-      desc: "Show Japanese, Korean or Chinese lyrics in Latin letters. Same as the あ button.",
-      reset: () => setRomanized(s.romanizeDefault),
-      control: <Toggle on={romanized} onChange={setRomanized} disabled={!canRomanize} />,
-      peek: { romanize: true },
+      desc: ROMA_DESC,
+      reset: () => setRomanized(romaMode(s.romanizeDefault)),
+      below: (
+        <Chips
+          label="Romanize"
+          options={ROMA_MODES.map((m) => ({ value: m, label: ROMA_LABELS[m] }))}
+          value={romanized}
+          onChange={setRomanized}
+          desc={ROMA_DESC}
+          peek={(v) => ({ romanize: v })}
+        />
+      ),
     },
-    { ...toggle("languages", "romanizeDefault", "Romanize by default", "Start every launch with Romanize already on."), peek: { romanize: true } },
+    {
+      id: "romanizeDefault",
+      cat: "languages",
+      key: "romanizeDefault",
+      label: "Romanize at launch",
+      desc: "What Romanize starts every launch on.",
+      below: (
+        <Chips
+          label="Romanize at launch"
+          options={ROMA_MODES.map((m) => ({ value: m, label: ROMA_LABELS[m] }))}
+          value={romaMode(s.romanizeDefault)}
+          onChange={(v) => set("romanizeDefault", v)}
+          desc="What Romanize starts every launch on."
+          peek={(v) => ({ romanize: v })}
+        />
+      ),
+    },
     cjkChips("fontJa", "ja"),
     cjkChips("fontKo", "ko"),
     cjkChips("fontZh", "zh"),
