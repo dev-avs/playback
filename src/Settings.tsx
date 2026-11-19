@@ -34,7 +34,7 @@ import { progressText } from "./changelog";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
-const HOLD_MS = 1000;
+const HOLD_MS = 800;
 
 // ─────────────────────────── building blocks ───────────────────────────
 
@@ -118,34 +118,71 @@ function Chips<T extends string>(props: {
 }
 
 /**
- * A setting's name. Held down for HOLD_MS it resets that setting, and while
- * held it fills left to right the way a sung syllable does (see .st-holdable).
- * Only the name takes the hold, so dragging a slider can never reset it.
+ * A setting's name, and its reset. Click the name and it turns into a "Hold to
+ * reset" pill (the way Uninstall arms); hold that for HOLD_MS and the setting
+ * goes back to its default. Letting go early springs it back; leaving it alone
+ * for a few seconds, or moving off the row, puts the name back. Only the name
+ * takes the click, so dragging a slider can never reset it.
+ *
+ * There is no haptics API for a mouse on Windows, so the feel is drawn: the
+ * pill squeezes under the press, fills while held, and pops with a tick when
+ * it lands.
  */
 function SettingLabel({ label, hint, onReset }: { label: string; hint?: string; onReset?: () => void }) {
-  const [holding, setHolding] = useState(false);
+  const [state, setState] = useState<"idle" | "armed" | "holding" | "done">("idle");
   const timer = useRef(0);
-  const stop = () => {
-    clearTimeout(timer.current);
-    setHolding(false);
-  };
   useEffect(() => () => clearTimeout(timer.current), []);
+  // armed or done falls back to the name by itself
+  useEffect(() => {
+    if (state !== "armed" && state !== "done") return;
+    const id = window.setTimeout(() => setState("idle"), state === "armed" ? 3000 : 900);
+    return () => clearTimeout(id);
+  }, [state]);
+
+  if (!onReset)
+    return (
+      <span className="st-label">
+        <span className="st-label-text">{label}</span>
+        {hint && <span className="st-hint">{hint}</span>}
+      </span>
+    );
+
+  const release = () => {
+    if (state !== "holding") return;
+    clearTimeout(timer.current);
+    setState("armed");
+  };
   return (
     <span
-      className={["st-label", onReset && "st-holdable", holding && "holding"].filter(Boolean).join(" ")}
+      className={`st-label st-holdable st-reset-${state}`}
+      style={{ "--hold-ms": `${HOLD_MS}ms` } as React.CSSProperties}
       onPointerDown={(e) => {
-        if (!onReset || e.button !== 0) return;
-        setHolding(true);
+        if (e.button !== 0) return;
+        if (state === "idle") return setState("armed");
+        if (state !== "armed") return;
+        setState("holding");
         timer.current = window.setTimeout(() => {
-          setHolding(false);
           onReset();
+          setState("done");
         }, HOLD_MS);
       }}
-      onPointerUp={stop}
-      onPointerLeave={stop}
-      onPointerCancel={stop}
+      onPointerUp={release}
+      onPointerCancel={release}
+      onPointerLeave={() => {
+        release();
+        setState((st) => (st === "armed" || st === "holding" ? "idle" : st));
+      }}
     >
-      <span className="st-label-text">{label}</span>
+      {state === "idle" ? (
+        <span className="st-label-text">{label}</span>
+      ) : (
+        <span className="st-reset-pill" role="button" aria-label={`Hold to reset ${label}`}>
+          <span className="st-reset-fill" />
+          <span className="st-reset-text">
+            {state === "done" ? "Reset ✓" : state === "holding" ? "Keep holding…" : "Hold to reset"}
+          </span>
+        </span>
+      )}
       {hint && <span className="st-hint">{hint}</span>}
     </span>
   );
@@ -155,15 +192,17 @@ function SettingLabel({ label, hint, onReset }: { label: string; hint?: string; 
 
 const CATEGORIES = [
   { id: "lyrics", name: "Lyrics", icon: "♪" },
+  { id: "text", name: "Lyric text", icon: "Aa" },
   { id: "languages", name: "Languages", icon: "あ" },
-  { id: "text", name: "Text", icon: "Aa" },
   { id: "highlight", name: "Highlight", icon: "✦" },
-  { id: "surface", name: "Surface", icon: "◐" },
-  { id: "layout", name: "Layout", icon: "▤" },
+  { id: "surface", name: "Glass", icon: "◐" },
+  { id: "header", name: "Header", icon: "▤" },
+  { id: "controls", name: "Controls", icon: "▸" },
   { id: "album", name: "Album mode", icon: "◼" },
   { id: "fun", name: "Fun", icon: "✿" },
   { id: "fullscreen", name: "Fullscreen", icon: "⛶" },
   { id: "behavior", name: "Behavior", icon: "⚙" },
+  { id: "app", name: "App", icon: "⬢" },
 ] as const;
 type Category = (typeof CATEGORIES)[number]["id"];
 
@@ -254,6 +293,8 @@ function Preview(props: {
     "--pv-meta-k": s.titleScale,
     "--pv-size": `${s.lyricSize}px`,
     "--pv-font": fontStack(s.lyricFont) ?? "var(--latin-stack)",
+    // a picked font may have no bold face; faking one smears it (see App.tsx)
+    ...(fontStack(s.lyricFont) ? { fontSynthesisWeight: "none" } : {}),
     "--pv-weight": LYRIC_WEIGHTS[s.lyricWeight],
     "--pv-lh": s.lineHeight,
     "--pv-tracking": s.letterSpacing ? `${s.letterSpacing}em` : "normal",
@@ -687,6 +728,7 @@ export default function Settings() {
     slider("lyrics", "scrollSpeed", "Scroll speed", "How far the lyrics move per mouse-wheel step.", {
       min: 0.25, max: 3, step: 0.25, fmt: (v) => `${v}×`,
     }),
+    slider("lyrics", "panelHeight", "Lyrics height", "How tall the lyrics panel is.", { min: 160, max: 520, step: 10, fmt: (v) => `${v}px` }),
     toggle("lyrics", "clickToJump", "Click a line to jump", "Clicking a lyric line moves the song to it."),
     toggle("lyrics", "showLineTimes", "Line times on hover", "A small badge with the line's start time while the pointer is on it."),
     toggle("lyrics", "hideGaps", "Hide instrumental dots", "Leave out the • • • shown during instrumental breaks."),
@@ -817,12 +859,27 @@ export default function Settings() {
       { value: "center", label: "Center" },
     ]),
     toggle("text", "italicLyrics", "Italic", "Slanted lyrics.", { preview: true }),
-    slider("text", "panSpeed", "Long title speed", "How fast a title or artist too long for the widget slides to show the rest.", {
-      min: 2, max: 40, step: 1, fmt: (v) => `${v} px/s`,
-    }),
-    slider("text", "titleScale", "Title size", "Size of the song title and artist.", { min: 0.8, max: 1.6, step: 0.05, fmt: times }),
 
     // Highlight: how the line being sung lights up
+    chips("highlight", "highlight", "Highlight colour", "The colour the sung part of each line lights up in. Rainbow cycles through them all.",
+      (Object.keys(HIGHLIGHTS) as Highlight[]).map((h) => ({
+        value: h,
+        label: (
+          <>
+            <span
+              className={`st-swatch st-swatch-${h}`}
+              style={{ "--sw-h": HIGHLIGHTS[h].h, "--sw-s": `${HIGHLIGHTS[h].s}%`, "--sw-l": `${HIGHLIGHTS[h].l}%` } as React.CSSProperties}
+            />
+            {HIGHLIGHTS[h].name}
+          </>
+        ),
+      }))),
+    slider("highlight", "rainbowSpeed", "Rainbow speed", "Seconds for one trip round the colours, with the Rainbow highlight.", { min: 1, max: 20, step: 1, fmt: (v) => `${v}s` }),
+    chips("highlight", "lyricMotion", "Lyric motion", "How much the sung letters bounce: Calm keeps them still, Bouncy doubles the wave.", [
+      { value: "calm", label: "Calm" },
+      { value: "normal", label: "Normal" },
+      { value: "bouncy", label: "Bouncy" },
+    ], { preview: false }),
     slider("highlight", "highlightStrength", "Highlight strength", "How bright the sung part of the line is.", { min: 0.5, max: 1.2, step: 0.05, fmt: times }),
     slider("highlight", "glowStrength", "Glow", "The soft glow around letters as they are sung.", { min: 0, max: 3, step: 0.1, fmt: times }),
     // Fullscreen: how it opens (Ctrl+Alt+F or the button by the volume)
@@ -864,25 +921,42 @@ export default function Settings() {
     slider("surface", "shadowStrength", "Shadow", "The drop shadow under the widget.", { min: 0, max: 200, step: 5, fmt: pct }),
     slider("surface", "restOpacity", "Fade when not hovered", "How visible the whole widget stays while the pointer is elsewhere.", { min: 20, max: 100, step: 5, fmt: pct }),
 
-    // Layout: what is shown and how big it is
-    slider("layout", "widgetWidth", "Widget width", "How wide the widget is.", { min: 300, max: 480, step: 10, fmt: (v) => `${v}px` }),
-    slider("layout", "panelHeight", "Lyrics height", "How tall the lyrics panel is.", { min: 160, max: 520, step: 10, fmt: (v) => `${v}px` }),
-    toggle("layout", "showCover", "Show cover", "The small cover next to the title.", { preview: true }),
-    chips("layout", "coverShape", "Cover shape", "The small cover next to the title: rounded, square or a circle.", [
+    // Header: the widget's size, the cover, the title and what sits beside it
+    slider("header", "widgetWidth", "Widget width", "How wide the widget is.", { min: 300, max: 480, step: 10, fmt: (v) => `${v}px` }),
+    toggle("header", "showCover", "Show cover", "The small cover next to the title.", { preview: true }),
+    chips("header", "coverShape", "Cover shape", "The small cover next to the title: rounded, square or a circle.", [
       { value: "rounded", label: "Rounded" },
       { value: "square", label: "Square" },
       { value: "circle", label: "Circle" },
     ]),
-    toggle("layout", "showArtist", "Show artist", "The artist under the title.", { preview: true }),
-    toggle("layout", "showNext", "Show the next song", "The NEXT label top right, from Spotify's queue. Click it to skip."),
-    toggle("layout", "showSource", "Show source label", "The player and lyrics source under the progress bar, e.g. Spotify · spicy ●●●."),
-    toggle("layout", "showTimes", "Show times", "The elapsed and remaining times.", { preview: true }),
-    toggle("layout", "showProgress", "Show progress bar", "The bar showing how far into the song you are.", { preview: true }),
-    slider("layout", "barThickness", "Progress bar thickness", "How thick the progress bar is.", { min: 1, max: 6, step: 1, fmt: (v) => `${v + 2}px` }),
-    toggle("layout", "tintBar", "Colour the progress bar", "Light the progress bar in the Highlight colour.", { preview: true }),
-    toggle("layout", "showShuffleRepeat", "Show shuffle & repeat", "The shuffle and repeat buttons."),
-    toggle("layout", "showVolume", "Show volume", "The volume button."),
-    toggle("layout", "pinControls", "Controls always visible", "Keep the play controls shown, not only while the pointer is on the widget."),
+    slider("header", "panSpeed", "Long title speed", "How fast a title or artist too long for the widget slides to show the rest.", {
+      min: 2, max: 40, step: 1, fmt: (v) => `${v} px/s`,
+    }),
+    slider("header", "titleScale", "Title size", "Size of the song title and artist.", { min: 0.8, max: 1.6, step: 0.05, fmt: times }),
+    toggle("header", "showArtist", "Show artist", "The artist under the title.", { preview: true }),
+    chips(
+      "header",
+      "nextSong",
+      "Next song",
+      "The next song in Spotify's queue: the NEXT label top right, a popup in the song's last 10 seconds, both, or neither. Click either to skip.",
+      [
+        { value: "label", label: "Label" },
+        { value: "popup", label: "Popup" },
+        { value: "both", label: "Both" },
+        { value: "off", label: "Off" },
+      ],
+      { preview: false },
+    ),
+    // Controls: the progress bar, times and buttons
+    toggle("controls", "showSource", "Show source label", "The player and lyrics source under the progress bar, e.g. Spotify · spicy ●●●."),
+    toggle("controls", "showTimes", "Show times", "The elapsed and remaining times.", { preview: true }),
+    toggle("controls", "showTotalTime", "Show song length", "The time on the right shows the song's length instead of the time left. Clicking it does the same.", { preview: true }),
+    toggle("controls", "showProgress", "Show progress bar", "The bar showing how far into the song you are.", { preview: true }),
+    slider("controls", "barThickness", "Progress bar thickness", "How thick the progress bar is.", { min: 1, max: 6, step: 1, fmt: (v) => `${v + 2}px` }),
+    toggle("controls", "tintBar", "Colour the progress bar", "Light the progress bar in the Highlight colour.", { preview: true }),
+    toggle("controls", "showShuffleRepeat", "Show shuffle & repeat", "The shuffle and repeat buttons."),
+    toggle("controls", "showVolume", "Show volume", "The volume button."),
+    toggle("controls", "pinControls", "Controls always visible", "Keep the play controls shown, not only while the pointer is on the widget."),
 
     // Album mode
     toggle("album", "albumOnLaunch", "Open in album mode", "Start in album mode, with the big cover."),
@@ -891,42 +965,22 @@ export default function Settings() {
     slider("album", "albumLyricSize", "Lyric size", "How big the album-mode lyric is.", { min: 11, max: 24, step: 1, fmt: (v) => `${v}px` }),
 
     // Fun
-    chips("fun", "highlight", "Highlight colour", "The colour the sung part of each line lights up in. Rainbow cycles through them all.",
-      (Object.keys(HIGHLIGHTS) as Highlight[]).map((h) => ({
-        value: h,
-        label: (
-          <>
-            <span
-              className={`st-swatch st-swatch-${h}`}
-              style={{ "--sw-h": HIGHLIGHTS[h].h, "--sw-s": `${HIGHLIGHTS[h].s}%`, "--sw-l": `${HIGHLIGHTS[h].l}%` } as React.CSSProperties}
-            />
-            {HIGHLIGHTS[h].name}
-          </>
-        ),
-      }))),
-    slider("fun", "rainbowSpeed", "Rainbow speed", "Seconds for one trip round the colours, with the Rainbow highlight.", { min: 1, max: 20, step: 1, fmt: (v) => `${v}s` }),
     toggle("fun", "spinCover", "Spinning cover", "The small cover turns round like a record while music plays.", { preview: true }),
     slider("fun", "spinSpeed", "Spin speed", "Seconds per turn of the spinning cover.", { min: 1, max: 20, step: 1, fmt: (v) => `${v}s` }),
-    chips("fun", "lyricMotion", "Lyric motion", "How much the sung letters bounce: Calm keeps them still, Bouncy doubles the wave.", [
-      { value: "calm", label: "Calm" },
-      { value: "normal", label: "Normal" },
-      { value: "bouncy", label: "Bouncy" },
-    ], { preview: false }),
     toggle("fun", "floatingCover", "Floating cover", "The small cover gently bobs up and down.", { preview: true }),
     toggle("fun", "partyBackground", "Party background", "The cover's glow behind the widget cycles through every colour.", { preview: true }),
     toggle("fun", "allCaps", "ALL CAPS", "Lyrics in capital letters, in the panel and in album mode.", { preview: true }),
 
     // Behavior
     toggle("behavior", "lyricsOnLaunch", "Open lyrics on launch", "Start with the lyrics panel open instead of just the player."),
-    toggle("behavior", "showTotalTime", "Show song length", "The time on the right shows the song's length instead of the time left. Clicking it does the same.", { preview: true }),
     toggle("behavior", "hideWhenIdle", "Hide when nothing plays", "The widget disappears while no music plays, and comes back when it starts."),
     toggle("behavior", "showChangelog", "Show changelog after updates", "Open What's new on the first launch of each new version."),
     toggle("behavior", "alwaysOnTop", "Always on top", "Keep the widget above every other window."),
 
-    // Lyrics keys
+    // App: keys, sign-in, updates, uninstall
     {
       id: "spicyKey",
-      cat: "behavior",
+      cat: "app",
       label: "Spicy Lyrics key",
       hint: keyStatus,
       desc: "Your own free key for word-by-word lyrics from Spicy Lyrics, with any player. Get key opens Spicy Lyrics: sign in, create an application, then copy its key.",
@@ -982,7 +1036,7 @@ export default function Settings() {
     },
     {
       id: "token",
-      cat: "behavior",
+      cat: "app",
       label: "Spotify token",
       hint: tokenStatus,
       desc: "Spotify's pass for word-by-word lyrics when there is no Spicy Lyrics key, or it fails. Spotify sends it by itself while it is open.",
@@ -1039,7 +1093,7 @@ export default function Settings() {
     },
     {
       id: "updates",
-      cat: "behavior",
+      cat: "app",
       label: "Updates",
       hint: updateHint,
       desc: "New versions come from GitHub. Playback asks on launch when one is out; Update installs it and restarts Playback.",
@@ -1057,7 +1111,7 @@ export default function Settings() {
     },
     {
       id: "versions",
-      cat: "behavior",
+      cat: "app",
       label: "Version control",
       desc: "Every version of Playback, newest first, with what changed in each. Update or revert to any of them; Playback restarts on it.",
       control: (
@@ -1068,7 +1122,7 @@ export default function Settings() {
     },
     {
       id: "uninstall",
-      cat: "behavior",
+      cat: "app",
       label: "Uninstall Playback",
       hint: uninstall === "busy" ? "removing the bridge, then closing…" : "removes everything, like it was never installed",
       desc: "Removes Playback, its settings, your Spicy Lyrics key and sign-in, saved lyrics, and the bridge from Spotify (Spotify restarts once).",
@@ -1100,6 +1154,9 @@ export default function Settings() {
       below: uninstallError && <div className="st-error">{uninstallError}</div>,
     },
   ];
+
+  const catOrder = (c: Category) => CATEGORIES.findIndex((x) => x.id === c);
+  items.sort((a, b) => catOrder(a.cat) - catOrder(b.cat));
 
   const resetItem = (it: Item) => (it.key ? () => set(it.key!, DEFAULTS[it.key!] as never) : it.reset);
   const resetItems = (list: Item[]) => list.forEach((it) => resetItem(it)?.());
@@ -1220,7 +1277,7 @@ export default function Settings() {
                 romanized={romanized}
                 peekRomanize={peek.romanize}
                 peekLang={peekLang}
-                caption={explained ?? "Point at a setting to try it here · hold its name 1 s to reset it"}
+                caption={explained ?? "Point at a setting to try it here · click its name to reset it"}
               />
               <div
                 className={`st-list${listScrolled ? " scrolled" : ""}`}

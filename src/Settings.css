@@ -301,31 +301,81 @@
     min-width: 0;
 }
 
-/* ── Hold a setting's name to reset it ──
-   The name dims, then fills left to right over the hold like a sung syllable
-   (the widget's .word sweep: lit up to --hold, a soft 20% ramp, dim after). */
-@property --hold {
-    syntax: "<percentage>";
-    inherits: false;
-    initial-value: -20%;
+/* ── Reset: click a setting's name, then hold the pill that replaces it ── */
+.st-holdable {
+    cursor: pointer;
 }
 
-.st-holdable .st-label-text {
-    --hold: -20%;
-    background-image: linear-gradient(
-        90deg,
-        #fff var(--hold),
-        rgba(255, 255, 255, 0.35) calc(var(--hold) + 20%)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    transition: --hold 200ms ease;
+.st-holdable.st-reset-idle .st-label-text {
+    transition: color 120ms ease;
 }
 
-.st-holdable.holding .st-label-text {
-    --hold: 100%;
-    color: transparent;
-    transition: --hold 1s linear;
+.st-holdable.st-reset-idle:hover .st-label-text {
+    color: #fff;
+}
+
+.st-reset-pill {
+    position: relative;
+    align-self: flex-start;
+    overflow: hidden;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: rgba(255, 90, 70, 0.28);
+    box-shadow: inset 0 0 0 0.5px rgba(255, 120, 100, 0.5);
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    white-space: nowrap;
+    animation: st-reset-in 260ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
+    transition:
+        scale 140ms cubic-bezier(0.3, 1.5, 0.5, 1),
+        background 160ms ease;
+}
+
+.st-reset-text {
+    position: relative;
+}
+
+/* the fill: grows over the hold, drains quickly on an early release */
+.st-reset-fill {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 90, 70, 0.85);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 220ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* pressed: squeezes in, and the fill runs for the hold */
+.st-reset-holding .st-reset-pill {
+    scale: 0.94;
+}
+
+.st-reset-holding .st-reset-fill {
+    transform: scaleX(1);
+    transition: transform var(--hold-ms, 800ms) linear;
+}
+
+/* landed: a pop and a green tick */
+.st-reset-done .st-reset-pill {
+    background: rgba(70, 200, 120, 0.55);
+    box-shadow: inset 0 0 0 0.5px rgba(120, 230, 160, 0.6);
+    animation: st-reset-pop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+.st-reset-done .st-reset-fill {
+    opacity: 0;
+}
+
+@keyframes st-reset-in {
+    from { opacity: 0; scale: 0.85; }
+    to { opacity: 1; scale: 1; }
+}
+
+@keyframes st-reset-pop {
+    0% { scale: 0.94; }
+    45% { scale: 1.1; }
+    100% { scale: 1; }
 }
 
 /* ── Live preview ── */

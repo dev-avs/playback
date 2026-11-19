@@ -81,6 +81,8 @@ const NO_DRAG_SELECTOR =
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
+/** the next-song popup shows for this many seconds before the song ends */
+const NEXT_POPUP_SECS = 10;
 
 /**
  * Insert ellipsis markers into instrumental stretches.
@@ -249,7 +251,7 @@ const PAN_REST_MS = 1500;
 /**
  * A title or artist too long for its row slides to show the rest, like Spicy
  * Lyrics' title marquee: it rests, slides until the last letter is at the
- * edge, rests, and slides back. At a steady speed (Settings → Text → Long
+ * edge, rests, and slides back. At a steady speed (Settings → Header → Long
  * title speed), so a little overflow is over quickly and a lot takes longer;
  * text that fits stays still. Measured by a ResizeObserver (it also fires once
  * on observe), so a resized widget or a new song re-measures by itself.
@@ -735,7 +737,11 @@ export default function App() {
   const [lyricAlign] = usePersisted(KEYS.lyricAlign, DEFAULTS.lyricAlign);
   const [highlight] = usePersisted(KEYS.highlight, DEFAULTS.highlight);
   const [corners] = usePersisted(KEYS.corners, DEFAULTS.corners);
-  const [showNext] = usePersisted(KEYS.showNext, DEFAULTS.showNext);
+  const [nextSong] = usePersisted(KEYS.nextSong, DEFAULTS.nextSong);
+  const showNext = nextSong === "label" || nextSong === "both";
+  const showNextPopup = nextSong === "popup" || nextSong === "both";
+  // the song's last NEXT_POPUP_SECS, for the next-song popup (set by the clock)
+  const [nearEnd, setNearEnd] = useState(false);
   const [showSource] = usePersisted(KEYS.showSource, DEFAULTS.showSource);
   const [showVisualizer] = usePersisted(KEYS.showVisualizer, DEFAULTS.showVisualizer);
   const [lyricMotion] = usePersisted(KEYS.lyricMotion, DEFAULTS.lyricMotion);
@@ -972,6 +978,7 @@ export default function App() {
   const activeKeyRef = useRef("");
   const gapHidingRef = useRef(false);
   const durationRef = useRef(0);
+  const nearEndRef = useRef(false);
 
   useEffect(() => {
     durationRef.current = duration;
@@ -1680,6 +1687,13 @@ export default function App() {
 
       const next = getPosition();
 
+      const dur = durationRef.current;
+      const ending = dur > NEXT_POPUP_SECS * 2 && dur - next <= NEXT_POPUP_SECS && next > 0;
+      if (ending !== nearEndRef.current) {
+        nearEndRef.current = ending;
+        setNearEnd(ending);
+      }
+
       // While scrubbing the pointer owns the slider — repainting it here is
       // what made seeking fight itself, 60 times a second.
       if (!draggingRef.current) {
@@ -2108,6 +2122,22 @@ export default function App() {
         ) : (
           <div className="widget-bg widget-bg-mono" />
         )}
+        {showNextPopup && nearEnd && nextUp && (
+          <button
+            key={np.trackKey}
+            className="next-popup"
+            title={`Next: ${nextUp.name} — ${nextUp.artist} (click to skip)`}
+            disabled={!np.caps.next}
+            onClick={() => window.player?.next()}
+          >
+            {nextUp.image && <img className="next-popup-art" src={nextUp.image} alt="" draggable={false} />}
+            <span className="next-popup-text">
+              <span className="next-popup-label">Up Next</span>
+              <span className="next-popup-name">{nextUp.name}</span>
+              <span className="next-popup-artist">{nextUp.artist}</span>
+            </span>
+          </button>
+        )}
         <div className="top">
           <div
             className="art-wrap"
@@ -2424,7 +2454,12 @@ export default function App() {
                     "--glow-k": glowStrength,
                     transform: `translateY(${-lyricScroll}px)`,
                     "--lyric-size": `${fullscreen ? fsLyricSize : lyricSize}px`,
-                    ...(fontStack(lyricFont) ? { "--latin-stack": fontStack(lyricFont) } : {}),
+                    // A picked font is often installed in one weight only (Outfit-Regular),
+                    // and Chromium fakes the bold by smearing the outline. Use the real
+                    // face instead; the default fonts have their bold and are untouched.
+                    ...(fontStack(lyricFont)
+                      ? { "--latin-stack": fontStack(lyricFont), fontSynthesisWeight: "none" }
+                      : {}),
                   } as React.CSSProperties
                 }
               >

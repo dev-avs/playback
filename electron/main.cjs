@@ -1781,7 +1781,7 @@ app.whenReady().then(() => {
     win?.setAlwaysOnTop(!!on, "screen-saver");
     settingsWin?.setAlwaysOnTop(!!on, "screen-saver");
   });
-  // Settings → Behavior → Uninstall: the bridge out of Spicetify (restarts
+  // Settings → App → Uninstall: the bridge out of Spicetify (restarts
   // Spotify), then, once this process has exited, the app and its data folder
   // (settings, Spicy key and sign-in, lyrics cache). Only the installed app has
   // an uninstaller; the dev build says so instead.

@@ -3,7 +3,7 @@
 // has Check and Update. Update downloads only what changed (the release's
 // blockmap) and restarts player on the new version.
 //
-// Settings → Behavior → Version control installs any release, newer or older.
+// Settings → App → Version control installs any release, newer or older.
 // From 1.3.7 on that goes through the updater, like an update. Older ones
 // (1.3.3–1.3.6) carry no latest.yml, only a full installer: that is downloaded
 // and run, and player quits for it. Those versions have no updater, so the

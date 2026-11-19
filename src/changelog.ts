@@ -22,6 +22,23 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.4",
+    date: "2026-11-18",
+    changes: {
+      new: [
+        "Added Up Next popup in the last 10 seconds of a song (Spotify)",
+        "Added Next song setting: Label, Popup, Both or Off",
+      ],
+      qol: [
+        "Reorganized settings into clearer sections: Header, Controls and App added",
+        "Changed reset: click a setting's name, then hold",
+      ],
+      fixes: [
+        "Fixed smeared fake bold on fonts installed in one weight",
+      ],
+    },
+  },
+  {
     version: "1.5.3",
     date: "2026-11-14",
     changes: {

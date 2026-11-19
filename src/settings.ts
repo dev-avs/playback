@@ -47,6 +47,20 @@ export function romaMode(v: unknown): RomaMode {
   return ROMA_MODES.includes(v as RomaMode) ? (v as RomaMode) : "off";
 }
 
+/**
+ * The next song: the NEXT label top right, a popup over the widget for the last
+ * seconds of the song, both, or neither. Up to 1.5.3 this was the showNext
+ * on/off toggle; an "off" there carries over (below).
+ */
+export type NextMode = "label" | "popup" | "both" | "off";
+
+try {
+  if (localStorage.getItem("set.nextSong") == null && localStorage.getItem("set.showNext") === "false")
+    localStorage.setItem("set.nextSong", JSON.stringify("off"));
+} catch {
+  /* nothing to carry over */
+}
+
 export const DEFAULTS = {
   romanizeDefault: "off" as RomaMode,
   lyricSize: 17,
@@ -84,8 +98,8 @@ export const DEFAULTS = {
   highlight: "white" as Highlight,
   /** widget corner radius, px */
   corners: 13,
-  /** the "Next" song label, top right */
-  showNext: true,
+  /** the next song: label top right, popup near the end, both, or off; see NextMode */
+  nextSong: "label" as NextMode,
   /** "Spotify · spicy ●●●" under the progress bar */
   showSource: true,
   /** the rounded bars next to the title in album mode */
@@ -334,7 +348,7 @@ export const KEYS = {
   lyricAlign: "set.lyricAlign",
   highlight: "set.highlight",
   corners: "set.corners",
-  showNext: "set.showNext",
+  nextSong: "set.nextSong",
   showSource: "set.showSource",
   showVisualizer: "set.showVisualizer",
   lyricMotion: "set.lyricMotion",

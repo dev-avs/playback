@@ -51,7 +51,7 @@ function firstPoints(list: Section[], n: number): Section[] {
 }
 
 /**
- * The version control window (#versions), from Settings → Behavior → Version
+ * The version control window (#versions), from Settings → App → Version
  * control: every release from GitHub that can be installed (1.3.7 on), newest
  * first, each with the start of its notes. Update or Revert installs that one
  * and restarts player. Read more opens one release's notes at a time.

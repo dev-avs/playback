@@ -2462,6 +2462,122 @@ svg {
     object-fit: cover;
 }
 
+/* ── Next-song popup: top right, over the header, in the song's last seconds ── */
+.next-popup {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 6;
+    max-width: min(210px, calc(100% - 16px));
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px 6px 6px;
+    border: none;
+    border-radius: 8px;
+    /* drawn at album-mode size, shrunk in the small widget; scale (not size)
+       so going in and out of album mode grows and shrinks it smoothly */
+    scale: 0.77;
+    transform-origin: top right;
+    /* light frosted glass: the song's colour shows through */
+    /* brightness lifts it off a dark cover; the ring and shadow set it apart
+       from the widget behind it on any cover */
+    background: rgba(255, 255, 255, 0.2);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4) brightness(1.3);
+    backdrop-filter: blur(18px) saturate(1.4) brightness(1.3);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 6px 20px rgba(0, 0, 0, 0.45);
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    animation: next-popup-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    /* glides with the layout when album mode comes or goes */
+    transition:
+        background 120ms ease,
+        top 350ms cubic-bezier(0.4, 0, 0.2, 1),
+        right 350ms cubic-bezier(0.4, 0, 0.2, 1),
+        scale 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* album mode: full size, top right over the cover */
+.widget.art-mode .next-popup {
+    top: 10px;
+    right: 10px;
+    scale: 1;
+}
+
+.next-popup:hover {
+    background: rgba(255, 255, 255, 0.28);
+}
+
+.next-popup:disabled {
+    cursor: default;
+    pointer-events: none;
+}
+
+@keyframes next-popup-in {
+    from { opacity: 0; transform: translateX(16px); }
+    to { opacity: 1; transform: none; }
+}
+
+.next-popup-art {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+.next-popup-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+
+.next-popup-text > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.next-popup-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.next-popup-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.next-popup-artist {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+/* fullscreen: centred at the foot of the screen, rising in */
+.widget.fullscreen .next-popup {
+    top: auto;
+    bottom: 5vh;
+    left: 0;
+    right: 0;
+    width: fit-content;
+    margin: 0 auto;
+    scale: 1;
+    zoom: 1.5;
+    animation-name: next-popup-up;
+}
+
+@keyframes next-popup-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+}
+
 /* ── Lyric provider + timing, beside the platform name ──
    Click cycles to the next provider that has lyrics for this song. */
 .lyric-source {

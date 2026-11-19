@@ -31,7 +31,7 @@ as usual; Playback just sits on top and follows along.
    for you only (no admin needed). Windows may warn that it's unrecognised:
    More info → Run anyway.
    After that, Playback tells you when a new version is out and updates with one
-   click (Settings → Behavior → Updates).
+   click (Settings → App → Updates).
 2. Playback opens with a **Setup** window the first time. It's a checklist
    (see below). Lyrics already work with any music app, so you can close it if you
    don't use Spotify.
@@ -110,7 +110,7 @@ apps can't seek or change volume from outside).
 
 ## Uninstall
 
-Settings → Behavior → **Uninstall Playback**: click it, then hold it to confirm.
+Settings → App → **Uninstall Playback**: click it, then hold it to confirm.
 It removes Playback, its settings and saved lyrics, and takes the bridge out of
 Spotify (Spotify restarts once).
 
