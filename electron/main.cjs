@@ -1187,6 +1187,11 @@ function openPastChangelog() {
   else pastChangelogWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash: "changelog-past" });
 }
 
+/** Tells the settings window whether What's new is open, so its button can grey out. */
+function sendChangelogOpen() {
+  settingsWin?.webContents.send("changelog:openChanged", !!changelogWin);
+}
+
 function openChangelog(fromVersion = null) {
   if (changelogWin) {
     changelogWin.focus();
@@ -1233,7 +1238,9 @@ function openChangelog(fromVersion = null) {
   changelogWin.once("ready-to-show", () => changelogWin?.show());
   changelogWin.on("closed", () => {
     changelogWin = null;
+    sendChangelogOpen();
   });
+  sendChangelogOpen();
   const hash = fromVersion ? `changelog?from=${encodeURIComponent(fromVersion)}` : "changelog";
   if (DEV_URL) changelogWin.loadURL(`${DEV_URL}#${hash}`);
   else changelogWin.loadFile(path.join(__dirname, "..", "dist", "index.html"), { hash });
@@ -1600,6 +1607,7 @@ app.whenReady().then(() => {
   ipcMain.handle("settings:close", () => closeSettings());
   ipcMain.handle("app:version", () => app.getVersion());
   ipcMain.handle("changelog:open", () => openChangelog());
+  ipcMain.handle("changelog:isOpen", () => !!changelogWin);
   ipcMain.handle("changelog:openPast", () => openPastChangelog());
   ipcMain.handle("changelog:check", (_e, enabled) => showChangelogAfterUpdate(!!enabled));
   // Both changelog windows and Setup: whichever one asked.

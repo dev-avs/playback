@@ -2560,17 +2560,41 @@ svg {
     color: rgba(255, 255, 255, 0.75);
 }
 
-/* fullscreen: centred at the foot of the screen, rising in */
+/* Fullscreen: placed in the layout's own grid (an absolute child of a grid
+   sits in, and aligns within, the area it names), so it lands in the same
+   spot relative to the content in every layout:
+   - split: under the lyrics, at their left edge
+   - lyrics dominant: at the end of the header row, beside the title
+   - lyrics hidden: over the cover's top right corner, as in album mode */
 .widget.fullscreen .next-popup {
-    top: auto;
-    bottom: 5vh;
-    left: 0;
-    right: 0;
-    width: fit-content;
-    margin: 0 auto;
+    inset: auto;
+    grid-area: lyrics;
+    align-self: end;
+    justify-self: start;
+    margin: 0 0 1vh 1vw;
     scale: 1;
     zoom: 1.5;
     animation-name: next-popup-up;
+    view-transition-name: fs-next-popup;
+}
+
+.widget.fullscreen.fs-dominant .next-popup {
+    grid-area: top;
+    align-self: center;
+    justify-self: end;
+    margin: 0;
+}
+
+/* the NEXT label would sit under it there */
+.widget.fullscreen.fs-dominant.next-popup-on .next-up {
+    visibility: hidden;
+}
+
+.widget.fullscreen:not(.lyrics-open):not(.fs-dominant) .next-popup {
+    grid-area: top;
+    align-self: start;
+    justify-self: end;
+    margin: 12px;
 }
 
 @keyframes next-popup-up {

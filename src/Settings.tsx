@@ -1184,6 +1184,13 @@ export default function Settings() {
 
   // Two clicks, so a stray one cannot wipe everything.
   const [confirmReset, setConfirmReset] = useState<"section" | "all" | null>(null);
+
+  // What's new greys out while its window is open; clicking it again blinked it.
+  const [changelogOpen, setChangelogOpen] = useState(false);
+  useEffect(() => {
+    window.player?.changelogOpen?.().then(setChangelogOpen).catch(() => {});
+    return window.player?.onChangelogOpen?.(setChangelogOpen);
+  }, []);
   useEffect(() => {
     if (!confirmReset) return;
     const id = setTimeout(() => setConfirmReset(null), 3000);
@@ -1305,7 +1312,7 @@ export default function Settings() {
         </HoverContext.Provider>
 
         <footer className="st-foot">
-          <button className="st-reset" onClick={() => window.player?.openChangelog?.()}>
+          <button className="st-reset" disabled={changelogOpen} onClick={() => window.player?.openChangelog?.()}>
             What's new
           </button>
           <span className="st-foot-right">

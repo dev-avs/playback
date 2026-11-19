@@ -2099,6 +2099,7 @@ export default function App() {
           partyBackground && "party",
           floatingCover && "float-cover",
           highlight === "rainbow" && "rainbow",
+          showNextPopup && nearEnd && nextUp && "next-popup-on",
         ]
           .filter(Boolean)
           .join(" ")}

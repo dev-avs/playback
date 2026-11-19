@@ -118,6 +118,13 @@ contextBridge.exposeInMainWorld("player", {
   // The changelog window.
   appVersion: () => ipcRenderer.invoke("app:version"),
   openChangelog: () => ipcRenderer.invoke("changelog:open"),
+  // whether What's new is open now, and every change after
+  changelogOpen: () => ipcRenderer.invoke("changelog:isOpen"),
+  onChangelogOpen(cb) {
+    const handler = (_e, open) => cb(open);
+    ipcRenderer.on("changelog:openChanged", handler);
+    return () => ipcRenderer.off("changelog:openChanged", handler);
+  },
   openPastChangelog: () => ipcRenderer.invoke("changelog:openPast"),
   checkChangelog: (enabled) => ipcRenderer.invoke("changelog:check", enabled),
   setWidgetHidden: (hidden) => ipcRenderer.invoke("win:setHidden", hidden),

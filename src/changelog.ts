@@ -22,6 +22,18 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.5",
+    date: "2026-11-18",
+    changes: {
+      appearance: [
+        "Moved fullscreen Up Next popup per layout: header in lyrics dominant, under lyrics in split, cover corner with lyrics hidden",
+      ],
+      fixes: [
+        "Fixed What's new blinking when clicked while already open",
+      ],
+    },
+  },
+  {
     version: "1.5.4",
     date: "2026-11-18",
     changes: {

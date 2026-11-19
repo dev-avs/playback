@@ -948,6 +948,12 @@
     }
 }
 
+.st-reset:disabled {
+    color: rgba(255, 255, 255, 0.3);
+    background: none;
+    cursor: default;
+}
+
 .st-reset.confirm {
     color: #fff;
     background: rgba(255, 90, 70, 0.55);
