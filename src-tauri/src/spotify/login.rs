@@ -36,16 +36,12 @@ struct Granted {
     expires_in: Option<f64>,
 }
 
-async fn exchange(code: &str, verifier: &str, id: &str) -> Result<SignedIn, String> {
+/// One call to Spotify's token endpoint. A refresh's answer may leave the
+/// refresh token out, in which case the one asked with stays.
+async fn exchange(params: &[(&str, &str)], kept_refresh: Option<&str>) -> Result<SignedIn, String> {
     let res = client()
         .post("https://accounts.spotify.com/api/token")
-        .form(&[
-            ("grant_type", "authorization_code"),
-            ("code", code),
-            ("redirect_uri", REDIRECT_URI),
-            ("client_id", id),
-            ("code_verifier", verifier),
-        ])
+        .form(params)
         .send()
         .await
         .map_err(|e| e.to_string())?;
@@ -57,9 +53,14 @@ async fn exchange(code: &str, verifier: &str, id: &str) -> Result<SignedIn, Stri
     let g: Granted = res.json().await.map_err(|e| e.to_string())?;
     Ok(SignedIn {
         access_token: Some(g.access_token),
-        refresh_token: g.refresh_token,
+        refresh_token: g.refresh_token.or(kept_refresh.map(String::from)),
         expires_at: Some(now_ms() + g.expires_in.unwrap_or(3600.0) * 1000.0 - 60_000.0),
     })
+}
+
+/// A new access token for a spent one.
+pub async fn refresh(refresh_token: &str, id: &str) -> Result<SignedIn, String> {
+    exchange(&[("grant_type", "refresh_token"), ("refresh_token", refresh_token), ("client_id", id)], Some(refresh_token)).await
 }
 
 /// The path and query of one HTTP request.
@@ -99,7 +100,18 @@ async fn wait_for_redirect(listener: TcpListener, state: &str, verifier: &str, i
                 return Err(error);
             }
             let code = param("code").ok_or("no code in redirect")?;
-            save_signed_in(&exchange(&code, verifier, id).await?)
+            let granted = exchange(
+                &[
+                    ("grant_type", "authorization_code"),
+                    ("code", &code),
+                    ("redirect_uri", REDIRECT_URI),
+                    ("client_id", id),
+                    ("code_verifier", verifier),
+                ],
+                None,
+            )
+            .await?;
+            save_signed_in(&granted)
         }
         .await;
         match &result {

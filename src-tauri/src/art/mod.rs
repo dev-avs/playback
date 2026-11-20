@@ -47,6 +47,10 @@ pub async fn fetch(req: Request) -> Option<String> {
     if artist.is_empty() && title.is_empty() {
         return None;
     }
+    // Spotify's own cover, from the bridge, beats any search
+    if let Some(url) = crate::bridge::art(title, app_id).await {
+        return Some(url);
+    }
     let key = format!("{app_id}|{artist}|{album}|{title}");
     if let Some(url) = FOUND.get(&key) {
         return Some(url);

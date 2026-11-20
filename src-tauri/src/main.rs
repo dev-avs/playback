@@ -5,6 +5,8 @@
 //! - `lyrics`   synced lyrics from LRCMux, NetEase and LrcLib
 //! - `art`      the cover: catalogues, YouTube, the session's thumbnail
 //! - `spotify`  a Spotify token: sign-in, pasted, kept on disk
+//! - `spicy`    Spicy Lyrics: its API, the lyrics cache, the user's key
+//! - `bridge`   what the Spicetify extension inside Spotify sends
 //! - `spicetify` where the Spotify bridge stands (Setup)
 //! - `updates`  releases on GitHub (version control)
 //! - `ui`       the widget, the card windows, fonts, What's new
@@ -14,10 +16,12 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod art;
+mod bridge;
 mod commands;
 mod lyrics;
 mod media;
 mod spicetify;
+mod spicy;
 mod spotify;
 mod support;
 mod ui;
@@ -38,6 +42,7 @@ fn main() {
             if let Some(w) = app.get_webview_window("widget") {
                 let _ = w.set_always_on_top(true);
             }
+            bridge::start(app.handle().clone());
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![
@@ -51,6 +56,12 @@ fn main() {
             commands::spotify_set_token,
             commands::spotify_login,
             commands::spotify_sign_out,
+            commands::spicy_lyrics,
+            commands::bridge_next,
+            commands::spicy_key_status,
+            commands::spicy_key_connect,
+            commands::spicy_key_set,
+            commands::spicy_key_clear,
             commands::settings_toggle,
             commands::settings_open,
             commands::settings_close,
@@ -77,6 +88,11 @@ fn main() {
             commands::win_minimize,
             commands::win_close,
         ])
-        .run(tauri::generate_context!())
-        .expect("Playback failed to start");
+        .build(tauri::generate_context!())
+        .expect("Playback failed to start")
+        .run(|_, event| {
+            if let tauri::RunEvent::Exit = event {
+                bridge::shut_down();
+            }
+        });
 }

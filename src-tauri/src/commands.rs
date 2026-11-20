@@ -4,7 +4,7 @@
 use crate::media::Media;
 use crate::ui::cards::{self, Card};
 use crate::ui::widget::Widget;
-use crate::{art, lyrics, spicetify, spotify, ui, updates};
+use crate::{art, bridge, lyrics, spicetify, spicy, spotify, ui, updates};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use tauri::{AppHandle, Emitter, Manager, State, WebviewWindow};
@@ -93,6 +93,54 @@ pub async fn spotify_login(app: AppHandle) -> Value {
 pub fn spotify_sign_out(app: AppHandle) {
     spotify::sign_out();
     token_changed(&app);
+}
+
+// ── Spicy Lyrics ───────────────────────────────────────────────────
+
+#[tauri::command]
+pub async fn spicy_lyrics(req: bridge::Song, app: AppHandle) -> Value {
+    bridge::spicy_lyrics(&app, req).await
+}
+
+#[derive(Deserialize)]
+pub struct Playing {
+    title: String,
+}
+
+#[tauri::command]
+pub fn bridge_next(req: Playing) -> Option<Value> {
+    bridge::next(&req.title)
+}
+
+/// Setup, Settings and the widget's lyrics follow every change of key.
+fn spicy_key_changed(app: &AppHandle, checked: spicy::key::Checked) -> spicy::key::Checked {
+    if checked.ok {
+        let _ = app.emit("spicyKey:changed", ());
+    }
+    checked
+}
+
+#[tauri::command]
+pub fn spicy_key_status() -> spicy::key::Status {
+    spicy::key::status()
+}
+
+#[tauri::command]
+pub async fn spicy_key_connect(app: AppHandle) -> spicy::key::Checked {
+    let checked = spicy::connect::connect(&app).await;
+    spicy_key_changed(&app, checked)
+}
+
+#[tauri::command]
+pub async fn spicy_key_set(raw: String, app: AppHandle) -> spicy::key::Checked {
+    let checked = spicy::key::set(&raw).await;
+    spicy_key_changed(&app, checked)
+}
+
+#[tauri::command]
+pub fn spicy_key_clear(app: AppHandle) {
+    spicy::key::clear();
+    let _ = app.emit("spicyKey:changed", ());
 }
 
 // ── the card windows ───────────────────────────────────────────────

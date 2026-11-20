@@ -2,10 +2,9 @@
 // Electron's preload (electron/preload.cjs); this gives it the same API on top
 // of Tauri's commands and events, so the components do not change.
 //
-// Does nothing outside Tauri. What src-tauri does not do yet answers like a
-// player with nothing to offer (no Spicy Lyrics), and the optional parts are
-// left out (installing updates, Setup's apply, fullscreen), which the page
-// already handles.
+// Does nothing outside Tauri. The optional parts src-tauri does not do yet
+// are left out (installing updates, Setup's apply, fullscreen), which the
+// page already handles.
 
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type EventCallback } from "@tauri-apps/api/event";
@@ -73,7 +72,17 @@ function bridge(): PlayerBridge {
     fetchArt: (req) => invoke("art_fetch", { req }),
     fetchRomanized: (req) => invoke("lyrics_romanized", { req }),
     fetchReadings: (texts) => invoke("lyrics_readings", { texts }),
-    fetchSpicyLyrics: async () => ({ status: "disabled" }),
+    fetchSpicyLyrics: (req) => invoke("spicy_lyrics", { req }),
+    onSpicyLyrics: (cb) => on("spicy:lyricsArrived", () => cb()),
+    getNext: (req) => invoke("bridge_next", { req }),
+    onBridgedTrack: (cb) => on("bridge:track", () => cb()),
+    onBridgedProgress: (cb) => on<{ pos: number; at: number; playing: boolean; name: string | null }>("bridge:progress", (e) => cb(e.payload)),
+
+    spicyKeyStatus: () => invoke("spicy_key_status"),
+    connectSpicyKey: () => invoke("spicy_key_connect"),
+    setSpicyKey: (raw) => invoke("spicy_key_set", { raw }),
+    clearSpicyKey: () => invoke("spicy_key_clear"),
+    onSpicyKeyChanged: (cb) => on("spicyKey:changed", () => cb()),
 
     spotifyStatus: () => invoke("spotify_status"),
     spotifyLogin: () => invoke("spotify_login"),

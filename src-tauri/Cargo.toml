@@ -15,11 +15,13 @@ serde_json = "1"
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
 regex = "1"
 base64 = "0.22"
-tokio = { version = "1", features = ["time", "net", "io-util"] }
+tokio = { version = "1", features = ["time", "net", "io-util", "sync", "macros"] }
 sha2 = "0.10"
 getrandom = "0.3"
 tauri-plugin-opener = "2"
 tauri-plugin-clipboard-manager = "2"
+flate2 = "1"
+aes-gcm = "0.10"
 lindera = { version = "6", default-features = false, features = ["embed-ipadic"] }
 windows = { version = "0.62", features = [
   "Foundation",
@@ -29,6 +31,8 @@ windows = { version = "0.62", features = [
   "Win32_Foundation",
   "Win32_Graphics_Gdi",
   "Win32_Media_Audio",
+  "Win32_Security",
+  "Win32_Security_Cryptography",
   "Win32_System_Com",
   "Win32_System_Diagnostics_ToolHelp",
   "Win32_System_WinRT",

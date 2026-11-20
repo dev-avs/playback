@@ -134,8 +134,12 @@ pub fn save_manual(raw: &str, known_expiry: Option<f64>) -> Result<f64, String> 
 }
 
 /// Signs out: both the handed-over token and the sign-in's.
-pub fn clear() {
+pub fn clear_manual() {
     let _ = fs::remove_file(data_file(MANUAL));
+}
+
+pub fn clear() {
+    clear_manual();
     let _ = fs::remove_file(data_file(SIGNED_IN));
 }
 
