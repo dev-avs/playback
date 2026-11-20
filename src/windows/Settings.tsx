@@ -191,20 +191,95 @@ function SettingLabel({ label, hint, onReset }: { label: string; hint?: string; 
 // ─────────────────────────── the settings, as data ───────────────────────────
 
 const CATEGORIES = [
-  { id: "lyrics", name: "Lyrics", icon: "♪" },
-  { id: "text", name: "Lyric text", icon: "Aa" },
-  { id: "languages", name: "Languages", icon: "あ" },
-  { id: "highlight", name: "Highlight", icon: "✦" },
-  { id: "surface", name: "Glass", icon: "◐" },
-  { id: "header", name: "Header", icon: "▤" },
-  { id: "controls", name: "Controls", icon: "▸" },
-  { id: "album", name: "Album mode", icon: "◼" },
-  { id: "fun", name: "Fun", icon: "✿" },
-  { id: "fullscreen", name: "Fullscreen", icon: "⛶" },
-  { id: "behavior", name: "Behavior", icon: "⚙" },
-  { id: "app", name: "App", icon: "⬢" },
+  { id: "lyrics", name: "Lyrics" },
+  { id: "text", name: "Lyric text" },
+  { id: "languages", name: "Languages" },
+  { id: "highlight", name: "Highlight" },
+  { id: "surface", name: "Glass" },
+  { id: "header", name: "Header" },
+  { id: "controls", name: "Controls" },
+  { id: "album", name: "Album mode" },
+  { id: "fun", name: "Fun" },
+  { id: "fullscreen", name: "Fullscreen" },
+  { id: "behavior", name: "Behavior" },
+  { id: "app", name: "App" },
 ] as const;
 type Category = (typeof CATEGORIES)[number]["id"];
+
+function CategoryIcon({ id }: { id: Category }) {
+  return (
+    <svg
+      className="st-nav-svg"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.45"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      {id === "lyrics" && (
+        <>
+          <path d="M6.2 11.6V4.2L12.8 2.8v7.4" />
+          <circle cx="4.5" cy="11.8" r="1.7" />
+          <circle cx="11.1" cy="10.4" r="1.7" />
+        </>
+      )}
+      {id === "text" && <path d="M3.2 4.2h9.6M8 4.2v8.4M5.6 12.6h4.8" />}
+      {id === "languages" && (
+        <>
+          <circle cx="8" cy="8" r="5.6" />
+          <ellipse cx="8" cy="8" rx="2.5" ry="5.6" />
+          <path d="M2.6 8h10.8" />
+        </>
+      )}
+      {id === "highlight" && <path d="M8 2.3l1.35 4.35L13.7 8l-4.35 1.35L8 13.7l-1.35-4.35L2.3 8l4.35-1.35z" />}
+      {id === "surface" && (
+        <>
+          <rect x="2.4" y="2.4" width="11.2" height="11.2" rx="3" />
+          <path d="M5.4 10.6l5.2-5.2M5.4 7l1.6-1.6" />
+        </>
+      )}
+      {id === "header" && (
+        <>
+          <rect x="2.3" y="2.8" width="11.4" height="10.4" rx="2.2" />
+          <path d="M2.3 6.5h11.4" />
+        </>
+      )}
+      {id === "controls" && <path d="M5.2 3.8l7 4.2-7 4.2z" />}
+      {id === "album" && (
+        <>
+          <rect x="2.4" y="2.4" width="11.2" height="11.2" rx="2.2" />
+          <circle cx="8" cy="8" r="2.6" />
+          <circle cx="8" cy="8" r="0.5" fill="currentColor" stroke="none" />
+        </>
+      )}
+      {id === "fun" && (
+        <>
+          <path d="M3 13l6.2-6.2" />
+          <path d="M10.8 2.6v2.2M10.8 6.8v0M13 4.8h-2.2M8.6 4.8h0" />
+          <path d="M5.2 3.2l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" />
+        </>
+      )}
+      {id === "fullscreen" && (
+        <path d="M2.8 6V3.5a.7.7 0 0 1 .7-.7H6M10 2.8h2.5a.7.7 0 0 1 .7.7V6M13.2 10v2.5a.7.7 0 0 1-.7.7H10M6 13.2H3.5a.7.7 0 0 1-.7-.7V10" />
+      )}
+      {id === "behavior" && (
+        <>
+          <path d="M2.8 4.8h3.4M9.8 4.8h3.4M2.8 11.2h6.2M12.6 11.2h.6" />
+          <circle cx="8" cy="4.8" r="1.6" />
+          <circle cx="10.8" cy="11.2" r="1.6" />
+        </>
+      )}
+      {id === "app" && (
+        <>
+          <rect x="2.3" y="2.3" width="11.4" height="11.4" rx="3" />
+          <path d="M5 5.6h4.2M4.6 8h6.8M5 10.4h3.2" />
+        </>
+      )}
+    </svg>
+  );
+}
 
 /**
  * One setting in the window. Rows are drawn from these, which is what makes
@@ -1269,7 +1344,7 @@ export default function Settings() {
                   }}
                 >
                   <span className="st-nav-icon" aria-hidden="true">
-                    {c.icon}
+                    <CategoryIcon id={c.id} />
                   </span>
                   {c.name}
                   <span className="st-nav-count">{items.filter((it) => it.cat === c.id).length}</span>

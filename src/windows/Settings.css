@@ -148,10 +148,24 @@
 
 .st-nav-icon {
     width: 16px;
-    text-align: center;
-    font-family: "SF Pro Text", "Yu Gothic UI", sans-serif;
-    font-size: 11px;
-    opacity: 0.85;
+    height: 16px;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.78;
+    transition: opacity 120ms ease;
+}
+
+.st-nav-item:hover .st-nav-icon,
+.st-nav-item.on .st-nav-icon {
+    opacity: 1;
+}
+
+.st-nav-svg {
+    width: 14px;
+    height: 14px;
+    display: block;
 }
 
 .st-nav-count {
