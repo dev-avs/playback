@@ -1,4 +1,4 @@
-// Builds the app and stages it in release/Playback-win32-x64 for
+// Builds the app and stages it in release/eagle for
 // electron-builder's --prepackaged step, which makes the web installer
 // (release/nsis-web: the stub, the package and latest.yml).
 //
@@ -8,14 +8,14 @@
 // (installer/) and the in-app updater all carry on as they are; it looks for
 // <productName>.exe, so the exe is staged as Playback.exe.
 //
-//   node scripts/pack.cjs [out]   (out defaults to release/Playback-win32-x64)
+//   node scripts/pack.cjs [out]   (out defaults to release/eagle)
 
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 
 const root = path.resolve(__dirname, "..");
-const out = path.resolve(root, process.argv[2] ?? "release/Playback-win32-x64");
+const out = path.resolve(root, process.argv[2] ?? "release/eagle");
 
 // runs `npm run build` first (tauri.conf.json: beforeBuildCommand)
 execSync("npx tauri build --no-bundle", { cwd: root, stdio: "inherit" });
