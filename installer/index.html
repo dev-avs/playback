@@ -68,9 +68,62 @@
             </p>
           </section>
 
+          <!-- Flavor -->
+          <section class="page" data-page="flavor">
+            <p class="step" style="--i: 0">Step 1 of 3</p>
+            <h2 class="heading" style="--i: 1">Choose your flavor</h2>
+            <p class="lead flavor-lead" style="--i: 2">
+              Same widget and lyrics — pick the engine that fits your PC best.
+            </p>
+
+            <div class="flavors" id="flavors" role="radiogroup" aria-label="Playback flavor" style="--i: 3">
+              <button class="flavor-card" type="button" role="radio" aria-checked="false" data-flavor="tauri">
+                <div class="flavor-head">
+                  <span class="flavor-radio" aria-hidden="true"></span>
+                  <span class="flavor-name">Tauri</span>
+                  <span class="flavor-badge">Recommended</span>
+                  <span class="flavor-size" data-size="tauri"></span>
+                </div>
+                <p class="flavor-desc">
+                  Lightest everyday build. Uses Windows' built-in WebView2 for a tiny download, fast startup, and low memory usage.
+                </p>
+              </button>
+
+              <button class="flavor-card" type="button" role="radio" aria-checked="false" data-flavor="electron">
+                <div class="flavor-head">
+                  <span class="flavor-radio" aria-hidden="true"></span>
+                  <span class="flavor-name">Electron</span>
+                  <span class="flavor-badge">Classic</span>
+                  <span class="flavor-size" data-size="electron"></span>
+                </div>
+                <p class="flavor-desc">
+                  Bundles its own Chromium engine. Best if you want identical rendering on every PC with zero WebView2 quirks.
+                </p>
+              </button>
+
+              <button class="flavor-card" type="button" role="radio" aria-checked="false" data-flavor="gpui">
+                <div class="flavor-head">
+                  <span class="flavor-radio" aria-hidden="true"></span>
+                  <span class="flavor-name">GPUI</span>
+                  <span class="flavor-badge">Native</span>
+                  <span class="flavor-size" data-size="gpui"></span>
+                </div>
+                <p class="flavor-desc">
+                  Pure native Rust rendered directly on the GPU — no browser engine at all. Lowest RAM and CPU footprint.
+                </p>
+              </button>
+            </div>
+
+            <div class="grow"></div>
+            <div class="actions split" style="--i: 4">
+              <button class="btn quiet" id="flavor-back">Back</button>
+              <button class="btn primary" id="flavor-next" disabled>Continue</button>
+            </div>
+          </section>
+
           <!-- Folder and options -->
           <section class="page" data-page="options">
-            <p class="step" style="--i: 0">Step 1 of 2</p>
+            <p class="step" style="--i: 0">Step 2 of 3</p>
             <h2 class="heading" style="--i: 1">Make it yours</h2>
 
             <label class="label" style="--i: 2">Install to</label>
@@ -112,7 +165,7 @@
 
           <!-- Installing -->
           <section class="page" data-page="progress">
-            <p class="step" style="--i: 0">Step 2 of 2</p>
+            <p class="step" style="--i: 0">Step 3 of 3</p>
             <h2 class="heading" style="--i: 1" id="progress-title">Installing Playback</h2>
             <div class="grow"></div>
             <!-- the logo's lines, big, singing while it installs -->

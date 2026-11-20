@@ -1,4 +1,4 @@
-import type { UpdateState } from "./player";
+import type { UpdateState } from "./types/player";
 
 // What changed in each version, newest first, shown by the changelog window
 // after an update and from Settings → What's new. Written for the person using
@@ -21,6 +21,27 @@ export interface ChangelogEntry {
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.5.9",
+    date: "2026-11-19",
+    changes: {
+      new: [
+        "Rebuilt Playback on Tauri (lightweight native shell using Windows WebView2) and added a native GPUI preview flavor",
+        "Reworked the installer with a flavor picker (Tauri, Electron, or GPUI) explaining when to choose each",
+      ],
+      appearance: [
+        "Redesigned all 12 Settings sidebar icons as crisp uniform stroke icons",
+        "Bundled the SpicyLyrics lyric font locally so lyrics always render in the exact intended typeface",
+      ],
+      performance: [
+        "Dramatically smaller download and lower memory footprint on the default Tauri build",
+      ],
+      fixes: [
+        "Fixed pure English/Latin lines getting mangled into a romanization sub-line in Both mode",
+        "Fixed Japanese counting sequence 一二三四五 reading 四 as \"yon\" instead of \"shi\"",
+      ],
+    },
+  },
   {
     version: "1.5.8",
     date: "2026-11-19",

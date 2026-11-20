@@ -34,12 +34,18 @@ static CANCEL: AtomicBool = AtomicBool::new(false);
 const CANCELLED: &str = "cancelled";
 
 #[derive(Serialize, Deserialize, Clone)]
-struct Release {
-    version: String,
+struct FlavorRelease {
+    id: String,
     stub: String,
     package: String,
     /// the package's size in bytes, for the progress bar
     size: u64,
+}
+
+#[derive(Serialize, Deserialize, Clone)]
+struct Release {
+    version: String,
+    flavors: Vec<FlavorRelease>,
 }
 
 #[derive(Serialize, Clone)]
@@ -134,7 +140,7 @@ fn client() -> Result<reqwest::Client, String> {
         .map_err(|e| e.to_string())
 }
 
-/// The newest release on GitHub and its two files.
+/// The newest release on GitHub and whichever flavors it carries.
 #[tauri::command]
 async fn latest() -> Result<Release, String> {
     let res = client()?
@@ -149,16 +155,72 @@ async fn latest() -> Result<Release, String> {
     let body: serde_json::Value = res.json().await.map_err(|e| e.to_string())?;
     let version = body["tag_name"].as_str().unwrap_or_default().trim_start_matches('v').to_string();
     let assets = body["assets"].as_array().cloned().unwrap_or_default();
-    // by suffix: the files were player-… up to 1.4.2 and playback-… since
+
     let find = |suffix: String| {
         assets
             .iter()
             .find(|a| a["name"].as_str().is_some_and(|n| n.ends_with(&suffix)))
-            .map(|a| (a["browser_download_url"].as_str().unwrap_or_default().to_string(), a["size"].as_u64().unwrap_or(0)))
+            .map(|a| {
+                (
+                    a["browser_download_url"].as_str().unwrap_or_default().to_string(),
+                    a["size"].as_u64().unwrap_or(0),
+                )
+            })
     };
-    let (stub, _) = find(format!("-setup-{version}.exe")).ok_or("The newest release has no installer.")?;
-    let (package, size) = find(format!("-{version}-x64.nsis.7z")).ok_or("The newest release has no package.")?;
-    Ok(Release { version, stub, package, size })
+
+    let mut flavors = Vec::new();
+    for id in ["tauri", "electron", "gpui"] {
+        let stub = find(format!("-{id}-setup-{version}.exe"));
+        let pkg = find(format!("-{id}-{version}-x64.nsis.7z"));
+        if let (Some((stub, _)), Some((package, size))) = (stub, pkg) {
+            flavors.push(FlavorRelease {
+                id: id.into(),
+                stub,
+                package,
+                size,
+            });
+        }
+    }
+
+    // Legacy / single-flavor releases ship playback-setup-<v>.exe + playback-<v>-x64.nsis.7z.
+    let find_default = |suffix: String| {
+        assets
+            .iter()
+            .find(|a| {
+                a["name"].as_str().is_some_and(|n| {
+                    n.ends_with(&suffix)
+                        && !n.contains("-tauri-")
+                        && !n.contains("-electron-")
+                        && !n.contains("-gpui-")
+                })
+            })
+            .map(|a| {
+                (
+                    a["browser_download_url"].as_str().unwrap_or_default().to_string(),
+                    a["size"].as_u64().unwrap_or(0),
+                )
+            })
+    };
+    if let (Some((stub, _)), Some((package, size))) = (
+        find_default(format!("-setup-{version}.exe")),
+        find_default(format!("-{version}-x64.nsis.7z")),
+    ) {
+        // Under 25 MB is the Tauri build; larger packages bundle Chromium (Electron).
+        let id = if size < 25 * 1024 * 1024 { "tauri" } else { "electron" };
+        if !flavors.iter().any(|f| f.id == id) {
+            flavors.push(FlavorRelease {
+                id: id.into(),
+                stub,
+                package,
+                size,
+            });
+        }
+    }
+
+    if flavors.is_empty() {
+        return Err("The newest release has no installable package.".into());
+    }
+    Ok(Release { version, flavors })
 }
 
 /// Downloads `url` to `dest`, reporting each part of `total` through `report`.
@@ -190,21 +252,28 @@ async fn download(url: &str, dest: &Path, mut report: impl FnMut(u64)) -> Result
 /// The whole install. Emits `progress` ({done, total} bytes) while it
 /// downloads, then `phase` "installing" while the stub runs.
 #[tauri::command]
-async fn install(app: AppHandle, release: Release, dir: String, desktop: bool, bridge: bool) -> Result<(), String> {
+async fn install(
+    app: AppHandle,
+    version: String,
+    flavor: FlavorRelease,
+    dir: String,
+    desktop: bool,
+    bridge: bool,
+) -> Result<(), String> {
     CANCEL.store(false, Ordering::Relaxed);
     let work = std::env::temp_dir().join("playback-installer");
     tokio::fs::create_dir_all(&work).await.map_err(|e| e.to_string())?;
-    let stub = work.join(format!("playback-setup-{}.exe", release.version));
-    let package = work.join(format!("playback-{}-x64.nsis.7z", release.version));
+    let stub = work.join(format!("playback-{}-setup-{}.exe", flavor.id, version));
+    let package = work.join(format!("playback-{}-{}-x64.nsis.7z", flavor.id, version));
 
-    let fetched = fetch(&app, &release, &stub, &package).await;
+    let fetched = fetch(&app, &flavor, &stub, &package).await;
     if fetched.is_err() || CANCEL.load(Ordering::Relaxed) {
         let _ = tokio::fs::remove_dir_all(&work).await;
         return Err(fetched.err().unwrap_or_else(|| CANCELLED.into()));
     }
 
     // Before Playback first runs, which reads it.
-    write_options(bridge)?;
+    write_options(bridge, &flavor.id)?;
 
     let _ = app.emit("phase", "installing");
     let status = tokio::process::Command::new(&stub)
@@ -235,11 +304,11 @@ fn cancel() {
 }
 
 /// The stub, then the package with progress.
-async fn fetch(app: &AppHandle, release: &Release, stub: &Path, package: &Path) -> Result<(), String> {
-    download(&release.stub, stub, |_| {}).await?;
+async fn fetch(app: &AppHandle, flavor: &FlavorRelease, stub: &Path, package: &Path) -> Result<(), String> {
+    download(&flavor.stub, stub, |_| {}).await?;
     let mut last = Instant::now() - Duration::from_secs(1);
-    let total = release.size;
-    download(&release.package, &package, |done| {
+    let total = flavor.size;
+    download(&flavor.package, package, |done| {
         // a few dozen updates a second is plenty for the bar
         if last.elapsed() >= Duration::from_millis(40) || done == total {
             last = Instant::now();
@@ -249,11 +318,11 @@ async fn fetch(app: &AppHandle, release: &Release, stub: &Path, package: &Path) 
     .await
 }
 
-/// %APPDATA%\Playback\install-options.json, read by Playback (electron/main.cjs).
-fn write_options(bridge: bool) -> Result<(), String> {
+/// %APPDATA%\Playback\install-options.json, read by Playback on launch.
+fn write_options(bridge: bool, flavor: &str) -> Result<(), String> {
     let folder = dirs::config_dir().ok_or("No AppData folder.")?.join("Playback");
     std::fs::create_dir_all(&folder).map_err(|e| e.to_string())?;
-    let json = serde_json::json!({ "bridge": bridge });
+    let json = serde_json::json!({ "bridge": bridge, "flavor": flavor });
     std::fs::write(folder.join("install-options.json"), json.to_string()).map_err(|e| e.to_string())
 }
 

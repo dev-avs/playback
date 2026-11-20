@@ -6,5 +6,6 @@ export default defineConfig({
   // relative asset paths so Electron can load the build over file://
   base: './',
   plugins: [react()],
-  server: { port: 5173, strictPort: true },
+  // src-tauri/target holds locked build output that would crash the watcher
+  server: { port: 5173, strictPort: true, watch: { ignored: ['**/src-tauri/**'] } },
 })

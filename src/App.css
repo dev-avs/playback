@@ -1,4 +1,25 @@
-@import url("https://fonts.spikerko.org/spicy-lyrics/source.css");
+/* Bundled locally from https://fonts.spikerko.org/spicy-lyrics/source.css
+   so WebView2 (tauri.localhost) does not hit CORS blocks on cross-origin @font-face. */
+@font-face {
+    font-family: "SpicyLyrics";
+    font-weight: 400;
+    src: url("./fonts/spicy-lyrics/LyricsRegular.woff2") format("woff2");
+}
+@font-face {
+    font-family: "SpicyLyrics";
+    font-weight: 500;
+    src: url("./fonts/spicy-lyrics/LyricsMedium.woff2") format("woff2");
+}
+@font-face {
+    font-family: "SpicyLyrics";
+    font-weight: 600;
+    src: url("./fonts/spicy-lyrics/LyricsSemibold.woff2") format("woff2");
+}
+@font-face {
+    font-family: "SpicyLyrics";
+    font-weight: 700;
+    src: url("./fonts/spicy-lyrics/LyricsBold.woff2") format("woff2");
+}
 
 @font-face {
     font-family: "SF Pro Text";

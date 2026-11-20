@@ -3,8 +3,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { applyPinyin, applyReadings, readingTexts, romanizeLines, withRomaLines } from "../src/romanize.ts";
-import type { LyricLine } from "../src/lyrics.ts";
+import { applyPinyin, applyReadings, readingTexts, romanizeLines, withRomaLines } from "../src/lyrics/romanize.ts";
+import type { LyricLine } from "../src/lyrics/lyrics.ts";
 
 const require = createRequire(import.meta.url);
 const kuromoji = require("kuromoji");
@@ -70,4 +70,27 @@ test("Both keeps the line and puts its romanization under it", () => {
   const lines: LyricLine[] = [{ t: 0, text: "きみ" }, { t: 1, text: "hello" }];
   const out = withRomaLines(lines, romanizeLines(lines));
   assert.deepEqual(out.map((l) => [l.text, l.roma?.text]), [["きみ", "kimi"], ["hello", undefined]]);
+});
+
+test("Latin-only word-timed lines are not re-segmented or given a roma line", () => {
+  const w = (text: string, t: number) => ({ text, t, end: t + 0.2 });
+  const lines: LyricLine[] = [
+    {
+      t: 0,
+      text: "Close your eyes, you'll be here soon",
+      words: [
+        w("Close", 0),
+        w("your", 1),
+        w("eyes,", 2),
+        w("you'll", 3),
+        w("be", 4),
+        w("here", 5),
+        w("soon", 6),
+      ],
+    },
+    { t: 7, text: "一二三四五分" },
+  ];
+  const out = withRomaLines(lines, romaji(lines));
+  assert.equal(out[0].roma, undefined);
+  assert.equal(out[1].roma?.text, "ichi ni san shi gofun");
 });

@@ -9,7 +9,7 @@ import {
   TIER,
   type LyricLine,
   type LyricWord,
-} from "./lyrics";
+} from "./lyrics/lyrics";
 import {
   alignRomanizedToWords,
   applyPinyin,
@@ -22,9 +22,9 @@ import {
   romanizeLines,
   withRomaLines,
   type ReadingToken,
-} from "./romanize";
-import { loadSpicyLyrics, type SpicyAttribution } from "./spicy";
-import { BAR_COUNT, useAudioBars } from "./useAudioBars";
+} from "./lyrics/romanize";
+import { loadSpicyLyrics, type SpicyAttribution } from "./lyrics/spicy";
+import { BAR_COUNT, useAudioBars } from "./hooks/useAudioBars";
 import {
   collectLine,
   letterWindows,
@@ -34,8 +34,8 @@ import {
   stepLine,
   type WordUnit,
   setLyricMotion,
-} from "./lyricAnimator";
-import { useNowPlaying, appLabel } from "./useNowPlaying";
+} from "./lyrics/lyricAnimator";
+import { useNowPlaying, appLabel } from "./hooks/useNowPlaying";
 import {
   DEFAULTS,
   KEYS,

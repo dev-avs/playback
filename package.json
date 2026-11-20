@@ -1,7 +1,7 @@
 {
   "name": "playback",
   "private": true,
-  "version": "1.5.8",
+  "version": "1.5.9",
   "description": "Now-playing overlay with synced lyrics",
   "author": "Playback",
   "license": "AGPL-3.0-only",
@@ -18,9 +18,12 @@
     "start": "npm run build && electron .",
     "icon": "electron scripts/make-icon.cjs",
     "pack:app": "node scripts/pack.cjs",
-    "package": "npm run build && npm run pack:app && electron-builder --win nsis-web --prepackaged release/Playback-win32-x64 --publish never",
+    "package": "npm run pack:app && electron-builder --win nsis-web --prepackaged release/eagle --publish never",
     "installer": "npm --prefix installer run build",
-    "thumb": "cargo build --release --manifest-path native/smtc-thumb/Cargo.toml && node -e \"require('fs').copyFileSync('native/smtc-thumb/target/release/smtc-thumb.exe','electron/smtc-thumb.exe')\""
+    "thumb": "cargo build --release --manifest-path native/smtc-thumb/Cargo.toml && node -e \"require('fs').copyFileSync('native/smtc-thumb/target/release/smtc-thumb.exe','electron/smtc-thumb.exe')\"",
+    "snapshot": "electron scripts/snapshot/main.cjs",
+    "tauri": "tauri",
+    "app:tauri": "tauri dev"
   },
   "build": {
     "appId": "com.player.smtcwidget",
@@ -60,6 +63,8 @@
   "devDependencies": {
     "@electron/packager": "^20.2.0",
     "@eslint/js": "^10.0.1",
+    "@tauri-apps/api": "^2.12.5",
+    "@tauri-apps/cli": "^2.12.6",
     "@types/node": "^24.12.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

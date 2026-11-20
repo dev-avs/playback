@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { parseLrc } from "../src/lyrics.ts";
+import { parseLrc } from "../src/lyrics/lyrics.ts";
 
 test("a line with several timestamps is sung at each of them", () => {
   const lines = parseLrc("[00:12.00][00:45.50]again\n[00:20.00]between");

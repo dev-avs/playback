@@ -38,3 +38,10 @@ installer/src-tauri/gen
 
 # The thumbnail helper (native/smtc-thumb): `npm run thumb` copies the exe to electron/
 native/smtc-thumb/target
+
+# The Tauri app (src-tauri/): Rust build output and generated schemas
+src-tauri/target
+src-tauri/gen
+
+# The GPUI port (src-gpui/): Rust build output
+src-gpui/target

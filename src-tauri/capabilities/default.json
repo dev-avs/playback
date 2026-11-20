@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Every window of the page: its own commands (see main.rs), events, and dragging a card by its app-region.",
+  "windows": ["widget", "settings", "changelog", "changelog-past", "setup", "update", "versions"],
+  "permissions": ["core:default", "core:window:allow-start-dragging"]
+}

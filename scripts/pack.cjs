@@ -1,53 +1,26 @@
-// Packages the app into release/Playback-win32-x64 for electron-builder's
-// --prepackaged step (electron-builder's own packaging fails on this machine).
+// Builds the app and stages it in release/eagle for
+// electron-builder's --prepackaged step, which makes the web installer
+// (release/nsis-web: the stub, the package and latest.yml).
 //
-// What goes in is an allow-list: the built UI, the main process, the bridge,
-// package.json, and exactly the production dependencies npm reports. Packager's
-// own pruning dropped electron-updater, so it is turned off here.
+// The app is one exe: `tauri build` embeds the built UI (dist/) and the
+// Spicetify bridge in it. electron-builder's installer is kept from the
+// Electron build so that every install made by it, the installer
+// (installer/) and the in-app updater all carry on as they are; it looks for
+// <productName>.exe, so the exe is staged as Playback.exe.
+//
+//   node scripts/pack.cjs [out]   (out defaults to release/eagle)
 
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
-const { packager } = require("@electron/packager");
 
 const root = path.resolve(__dirname, "..");
+const out = path.resolve(root, process.argv[2] ?? "release/eagle");
 
-// Matches build.publish in package.json.
-const APP_UPDATE_YML = "owner: dev-avs\nrepo: playback\nprovider: github\nupdaterCacheDirName: playback-updater\n";
+// runs `npm run build` first (tauri.conf.json: beforeBuildCommand)
+execSync("npx tauri build --no-bundle", { cwd: root, stdio: "inherit" });
 
-const prodModules = execSync("npm ls --omit=dev --all --parseable", { cwd: root, encoding: "utf8" })
-  .split(/\r?\n/)
-  .map((p) => path.relative(root, p.trim()).split(path.sep).join("/"))
-  .filter((p) => p.startsWith("node_modules/"));
-
-const allowed = ["dist", "electron", "spicetify", "package.json", ...prodModules].map((p) => `/${p}`);
-
-// Keep a path when it is an allowed entry, inside one, or a folder leading to one.
-const keep = (p) => allowed.some((a) => p === a || p.startsWith(`${a}/`) || a.startsWith(`${p}/`));
-
-packager({
-  dir: root,
-  // the exe is Playback.exe; electron-builder looks for <productName>.exe
-  name: "Playback",
-  platform: "win32",
-  arch: "x64",
-  out: path.join(root, "release"),
-  overwrite: true,
-  icon: path.join(root, "build", "icon.ico"),
-  asar: { unpackDir: "electron" },
-  prune: false,
-  ignore: (p) => p !== "" && !keep(p.split(path.sep).join("/")),
-})
-  .then((paths) => {
-    // electron-builder writes this into resources when it packages the app
-    // itself; with --prepackaged it does not, and electron-updater needs it to
-    // download an update (electron/updater.cjs).
-    for (const dir of paths) {
-      fs.writeFileSync(path.join(dir, "resources", "app-update.yml"), APP_UPDATE_YML);
-    }
-    console.log(`packaged ${paths.join(", ")} with ${prodModules.length} production modules`);
-  })
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+fs.rmSync(out, { recursive: true, force: true });
+fs.mkdirSync(path.join(out, "resources"), { recursive: true });
+fs.copyFileSync(path.join(root, "src-tauri", "target", "release", "playback.exe"), path.join(out, "Playback.exe"));
+console.log(`staged ${path.join(out, "Playback.exe")}`);
