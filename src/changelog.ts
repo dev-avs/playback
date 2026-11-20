@@ -22,6 +22,13 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.8",
+    date: "2026-11-19",
+    changes: {
+      fixes: ["Fixed sung lyric lines looking bold right behind the current line"],
+    },
+  },
+  {
     version: "1.5.7",
     date: "2026-11-19",
     changes: {

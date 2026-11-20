@@ -337,8 +337,10 @@ body {
     opacity: var(--line-opacity);
     /* Depth cue, set per line in App.tsx from its distance to the playhead.
        spicy dropped filter: blur() in favour of a text-shadow spread — same
-       defocus read, without rasterising every line into its own layer. */
-    text-shadow: 0 0 var(--BlurAmount, 0px) rgba(255, 255, 255, var(--fill-alpha));
+       defocus read, without rasterising every line into its own layer.
+       Always at the unsung alpha: at a sung line's brightness the small halo
+       right behind the playhead thickened its strokes and read as bold. */
+    text-shadow: 0 0 var(--BlurAmount, 0px) rgba(255, 255, 255, var(--grad-dim));
 
     transition:
         opacity 200ms cubic-bezier(0.61, 1, 0.88, 1),
