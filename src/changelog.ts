@@ -22,6 +22,20 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.0",
+    date: "2026-11-19",
+    changes: {
+      new: [
+        "Switch between flavors (Tauri, Electron, GPUI) directly inside Version control while preserving all your settings",
+      ],
+      fixes: [
+        "Fixed clicking Album mode on Tauri opening a Windows screen-share permission prompt",
+        "Fixed Tauri occasionally staying hidden on launch until force-closed and reopened",
+        "Fixed Tauri's transparent window hitbox staying oversized after collapsing lyrics or switching modes while hovered",
+      ],
+    },
+  },
+  {
     version: "1.5.9",
     date: "2026-11-19",
     changes: {
