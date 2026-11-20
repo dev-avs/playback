@@ -22,6 +22,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.6",
+    date: "2026-11-19",
+    changes: {
+      fixes: [
+        "Fixed Spotify lyrics drifting behind the song mid-track",
+        "Fixed cut-off descenders (y, g, p) in fonts like Segoe UI",
+      ],
+    },
+  },
+  {
     version: "1.5.5",
     date: "2026-11-18",
     changes: {

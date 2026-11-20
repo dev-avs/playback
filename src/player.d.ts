@@ -171,6 +171,10 @@ export interface PlayerBridge {
 
   /** The Spicetify extension reported a new track; Spotify's cover is now known. */
   onBridgedTrack?(cb: () => void): () => void;
+  /** Spotify's own position (ms) as of `at` (epoch ms), from the extension. */
+  onBridgedProgress?(
+    cb: (p: { pos: number; at: number; playing: boolean; name: string | null }) => void,
+  ): () => void;
 
   spotifyStatus(): Promise<{
     configured: boolean;

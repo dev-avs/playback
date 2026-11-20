@@ -616,6 +616,36 @@
     setTimeout(pollLookups, LOOKUP_POLL_MS);
   }
 
+  // ── Playback position ──
+  // Windows' media controls report Spotify's position only every few seconds,
+  // and mid-song that value can sit a few hundred ms off, which left lyrics
+  // trailing the audio until the next seek or track. The client's own clock
+  // is exact; send it about once a second so the player can follow it.
+  const PROGRESS_ENDPOINT = "http://127.0.0.1:8899/progress";
+  const PROGRESS_MS = 1_000;
+
+  async function pushProgress() {
+    try {
+      const pos = Spicetify.Player.getProgress();
+      if (typeof pos === "number" && Number.isFinite(pos)) {
+        const item = Spicetify.Player.data && Spicetify.Player.data.item;
+        await rawFetch(PROGRESS_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({
+            pos,
+            at: Date.now(),
+            playing: Spicetify.Player.isPlaying(),
+            name: (item && item.name) || null,
+          }),
+        });
+      }
+    } catch (e) {
+      /* player closed — push() already reports that */
+    }
+    setTimeout(pushProgress, PROGRESS_MS);
+  }
+
   async function start() {
     while (
       !(window.Spicetify && Spicetify.CosmosAsync && Spicetify.Platform && Spicetify.Player)
@@ -647,6 +677,7 @@
     installSpicyResponseCapture();
     prefetchLyrics(lookupGeneration);
     pollLookups();
+    pushProgress();
   }
 
   start();

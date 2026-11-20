@@ -30,7 +30,7 @@ const MAX_BODY = 4 * 1024 * 1024;
  * @param lookups { pending: () => [{ title, artist }], resolve: (payload) => void }
  *   `payload` is { title, artist, candidates, error? } from the extension.
  */
-function startTokenBridge(onToken, onSpicyCapture, lookups) {
+function startTokenBridge(onToken, onSpicyCapture, lookups, onProgress) {
   const server = http.createServer((req, res) => {
     // The extension runs on a Spotify origin, so the browser treats this as
     // cross-origin. The POST itself is sent as text/plain to stay a "simple"
@@ -51,7 +51,7 @@ function startTokenBridge(onToken, onSpicyCapture, lookups) {
       res.end(JSON.stringify({ lookups: lookups?.pending() ?? [] }));
       return;
     }
-    if (req.method !== "POST" || !["/token", "/spicy", "/resolved"].includes(route)) {
+    if (req.method !== "POST" || !["/token", "/spicy", "/resolved", "/progress"].includes(route)) {
       res.writeHead(404).end();
       return;
     }
@@ -79,6 +79,12 @@ function startTokenBridge(onToken, onSpicyCapture, lookups) {
         const payload = JSON.parse(body);
         if (route === "/resolved") {
           lookups?.resolve(payload);
+          res.writeHead(200, { "Content-Type": "application/json" });
+          res.end('{"ok":true}');
+          return;
+        }
+        if (route === "/progress") {
+          onProgress?.(payload);
           res.writeHead(200, { "Content-Type": "application/json" });
           res.end('{"ok":true}');
           return;

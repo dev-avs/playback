@@ -1731,6 +1731,12 @@ app.whenReady().then(() => {
   {
     pending: () => (pendingLookup ? [{ title: pendingLookup.title, artist: pendingLookup.artist }] : []),
     resolve: resolveLookup,
+  },
+  // Spotify's own playback position, about once a second. SMTC's timeline from
+  // Spotify can sit a few hundred ms off mid-song, which the lyric clock then
+  // inherits until the next seek or track; this is the client's real clock.
+  (progress) => {
+    win?.webContents.send("bridge:progress", progress);
   });
   ipcMain.handle("spotify:login", async () => {
     try {

@@ -58,6 +58,13 @@ contextBridge.exposeInMainWorld("player", {
     return () => ipcRenderer.off("bridge:track", handler);
   },
 
+  // Spotify's own playback position from the Spicetify extension, ~1/s.
+  onBridgedProgress(cb) {
+    const handler = (_e, p) => cb(p);
+    ipcRenderer.on("bridge:progress", handler);
+    return () => ipcRenderer.off("bridge:progress", handler);
+  },
+
   // Updates from GitHub (electron/updater.cjs); nothing installs without a click.
   updateState: () => ipcRenderer.invoke("update:state"),
   checkForUpdate: () => ipcRenderer.invoke("update:check"),

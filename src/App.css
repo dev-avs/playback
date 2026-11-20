@@ -467,6 +467,19 @@ body {
     --sweep-angle: var(--sweep-angle-rtl, 270deg);
 }
 
+/* Descenders: at the tight lyric leading, a face with a deep descent (Segoe
+   UI's "y", "g") runs below the unit's box, and background-clip: text leaves
+   that part unpainted — only the glow showed there. Pad the box down to take
+   it in and pull the margin back so the line keeps its height. The transform
+   origin is pinned in em at the same point 85% of the unpadded box was, so
+   the resting scale and lift land exactly where they did. Line-sweep units
+   are left alone: their gradient runs top to bottom through the box. */
+.lyric-line :is(.word:not([data-sweep]), .letter) {
+    padding-bottom: 0.18em;
+    margin-bottom: -0.18em;
+    --unit-oy: calc(0.85em * var(--lyric-lh, 1.18));
+}
+
 /* Arabic and Hebrew carry vowel marks well above and below the letters. The
    fill is painted with background-clip: text, so it only reaches as far as the
    unit's box; marks outside it stayed unlit. Pad the box to take them in, and
@@ -476,6 +489,8 @@ body {
     padding-bottom: 0.18em;
     margin-top: -0.16em;
     margin-bottom: -0.18em;
+    /* keep the share of the padded box; the general rule above pins it in em */
+    --unit-oy: 85%;
 }
 
 .lyric-line.opposite:dir(rtl) {
@@ -483,15 +498,15 @@ body {
 }
 
 .lyric-line:dir(rtl) .partOfWord {
-    transform-origin: 0% 85%;
+    transform-origin: 0% var(--unit-oy, 85%);
 }
 
 .lyric-line:dir(rtl) .partOfWord + .partOfWord {
-    transform-origin: 50% 85%;
+    transform-origin: 50% var(--unit-oy, 85%);
 }
 
 .lyric-line:dir(rtl) .partOfWord + :is(.word, .wordGroup):not(.partOfWord) {
-    transform-origin: 100% 85%;
+    transform-origin: 100% var(--unit-oy, 85%);
 }
 
 /* Per-language faces. The lang attribute comes from detectLyricLang(), which
@@ -1316,7 +1331,7 @@ body {
        nudge as the current line moved */
     vertical-align: baseline;
     line-height: inherit;
-    transform-origin: 50% 85%;
+    transform-origin: 50% var(--unit-oy, 85%);
     transform: translateY(calc(1em * var(--y, 0.01))) scale(var(--s, 0.95));
 }
 
@@ -1326,15 +1341,15 @@ body {
    parts from the centre, the last part from its left edge, so every part
    shrinks toward the joint instead of away from it. */
 .partOfWord {
-    transform-origin: 100% 85%;
+    transform-origin: 100% var(--unit-oy, 85%);
 }
 
 .partOfWord + .partOfWord {
-    transform-origin: 50% 85%;
+    transform-origin: 50% var(--unit-oy, 85%);
 }
 
 .partOfWord + :is(.word, .wordGroup):not(.partOfWord) {
-    transform-origin: 0% 85%;
+    transform-origin: 0% var(--unit-oy, 85%);
 }
 
 /* One word's syllables, kept on one row (Units in App.tsx) */

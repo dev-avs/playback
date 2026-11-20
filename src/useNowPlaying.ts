@@ -78,6 +78,12 @@ export function appLabel(appId: string): string {
 /** How long a clicked shuffle/repeat state is shown before SMTC must agree. */
 const MODES_HOLD_MS = 3000;
 
+/** How long a Spotify position from the extension stays the clock's source. */
+const BRIDGE_FRESH_MS = 3000;
+
+const normTitle = (s: string | null | undefined) =>
+  String(s ?? "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "");
+
 export function useNowPlaying() {
   const [np, setNp] = useState<NowPlaying>(EMPTY);
   const [connected, setConnected] = useState(false);
@@ -98,6 +104,13 @@ export function useNowPlaying() {
   // MODES_HOLD_MS passes, and then SMTC's word stands: verified, not assumed).
   const expectedModes = useRef<{ shuffle: boolean; repeat: string; at: number } | null>(null);
   const prevTrackRef = useRef<string>("");
+  // Spotify's own clock from the Spicetify extension (see onBridgedProgress).
+  // While it keeps arriving it is the only mid-song correction: SMTC's position
+  // from Spotify can sit a few hundred ms off, under JITTER_SNAP, so folding it
+  // in held lyrics behind the audio until the next seek or track.
+  const titleRef = useRef("");
+  const appIdRef = useRef("");
+  const bridgeAt = useRef(0);
 
   const predictedNow = useCallback(() => {
     const base = anchorPos.current;
@@ -217,10 +230,12 @@ export function useNowPlaying() {
       // heartbeats get the low-pass fold so we don't reprint measurement noise.
       if (trackKey !== prevTrackRef.current || !s.playing) {
         snapAnchor(measured);
-      } else {
+      } else if (performance.now() - bridgeAt.current > BRIDGE_FRESH_MS) {
         foldAnchor(measured);
       }
       prevTrackRef.current = trackKey;
+      titleRef.current = s.title ?? "";
+      appIdRef.current = s.appId ?? "";
 
       // A poll can be in flight when the user drags the slider; ignore
       // reported volume briefly after a local change so it does not snap back.
@@ -254,9 +269,21 @@ export function useNowPlaying() {
       }));
     });
 
+    // Spotify's own position, ~1/s. Only while it is Spotify playing and the
+    // extension names the same song, so a push from just before a track change
+    // cannot pull the new song's clock.
+    const offProgress = bridge.onBridgedProgress?.((p) => {
+      if (!/spotify/i.test(appIdRef.current)) return;
+      if (!p.playing || !playingRef.current) return;
+      if (normTitle(p.name) !== normTitle(titleRef.current)) return;
+      foldAnchor(p.pos / 1000 + Math.max(0, Date.now() - p.at) / 1000);
+      bridgeAt.current = performance.now();
+    });
+
     return () => {
       clearTimeout(clearTimer);
       off();
+      offProgress?.();
     };
   }, [foldAnchor, snapAnchor]);
 
