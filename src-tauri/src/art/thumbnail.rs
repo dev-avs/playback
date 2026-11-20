@@ -23,13 +23,17 @@ fn read(app_id: &str, title: &str) -> windows::core::Result<Thumb> {
         .GetSessions()?
         .into_iter()
         .find(|s| s.SourceAppUserModelId().is_ok_and(|id| id == app_id));
-    let Some(session) = session else { return Ok(Thumb::Gone) };
+    let Some(session) = session else {
+        return Ok(Thumb::Gone);
+    };
     let props = session.TryGetMediaPropertiesAsync()?.join()?;
     // the cover must belong to the song that asked, not the one before it
     if props.Title()? != title {
         return Ok(Thumb::Gone);
     }
-    let Ok(thumb) = props.Thumbnail() else { return Ok(Thumb::NotYet) };
+    let Ok(thumb) = props.Thumbnail() else {
+        return Ok(Thumb::NotYet);
+    };
     let stream = thumb.OpenReadAsync()?.join()?;
     let size = stream.Size()? as u32;
     if size == 0 {
@@ -40,7 +44,11 @@ fn read(app_id: &str, title: &str) -> windows::core::Result<Thumb> {
     reader.LoadAsync(size)?.join()?;
     let mut bytes = vec![0u8; size as usize];
     reader.ReadBytes(&mut bytes)?;
-    let kind = if kind.starts_with("image/") { kind } else { "image/png".into() };
+    let kind = if kind.starts_with("image/") {
+        kind
+    } else {
+        "image/png".into()
+    };
     let b64 = base64::engine::general_purpose::STANDARD.encode(&bytes);
     Ok(Thumb::Found(format!("data:{kind};base64,{b64}")))
 }
@@ -52,7 +60,9 @@ pub async fn find(app_id: &str, title: &str) -> Option<String> {
     }
     for _ in 0..4 {
         let (id, t) = (app_id.to_string(), title.to_string());
-        let thumb = tauri::async_runtime::spawn_blocking(move || read(&id, &t)).await.ok()?;
+        let thumb = tauri::async_runtime::spawn_blocking(move || read(&id, &t))
+            .await
+            .ok()?;
         match thumb {
             Ok(Thumb::Found(url)) => return Some(url),
             Ok(Thumb::NotYet) => tokio::time::sleep(Duration::from_millis(400)).await,
@@ -65,4 +75,3 @@ pub async fn find(app_id: &str, title: &str) -> Option<String> {
     }
     None
 }
-

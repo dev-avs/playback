@@ -51,7 +51,10 @@ impl Track {
         if loose_match(self.name.as_deref(), title) {
             return Some(&self.id);
         }
-        self.next.as_ref().filter(|n| loose_match(n.name.as_deref(), title)).map(|n| n.id.as_str())
+        self.next
+            .as_ref()
+            .filter(|n| loose_match(n.name.as_deref(), title))
+            .map(|n| n.id.as_str())
     }
 
     /// What plays after the session's song, if this is that song.
@@ -72,7 +75,12 @@ mod tests {
             name: Some("Song (feat. Someone)".into()),
             artists: vec![],
             image: None,
-            next: Some(Next { id: "B".into(), name: Some("Other [Remastered]".into()), artist: "X".into(), image: None }),
+            next: Some(Next {
+                id: "B".into(),
+                name: Some("Other [Remastered]".into()),
+                artist: "X".into(),
+                image: None,
+            }),
             at: 1000.0,
         }
     }

@@ -2,9 +2,9 @@
 //! that does the work; nothing here decides anything.
 
 use crate::media::Media;
+use crate::spicetify::setup::{Setup, SetupState};
 use crate::ui::cards::{self, Card};
 use crate::ui::widget::Widget;
-use crate::spicetify::setup::{Setup, SetupState};
 use crate::updates::{UpdateState, Updater};
 use crate::{art, bridge, install, lyrics, spicy, spotify, ui};
 use serde::Deserialize;
@@ -246,13 +246,20 @@ pub async fn update_check(app: AppHandle, updater: State<'_, Updater>) -> Result
 }
 
 #[tauri::command]
-pub async fn update_install(app: AppHandle, updater: State<'_, Updater>) -> Result<UpdateState, ()> {
+pub async fn update_install(
+    app: AppHandle,
+    updater: State<'_, Updater>,
+) -> Result<UpdateState, ()> {
     Ok(updater.install(&app).await)
 }
 
 /// Version control: any release, older or newer.
 #[tauri::command]
-pub async fn update_bump(version: String, app: AppHandle, updater: State<'_, Updater>) -> Result<UpdateState, ()> {
+pub async fn update_bump(
+    version: String,
+    app: AppHandle,
+    updater: State<'_, Updater>,
+) -> Result<UpdateState, ()> {
     Ok(updater.bump(&app, version).await)
 }
 

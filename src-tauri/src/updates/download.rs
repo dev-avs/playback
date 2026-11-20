@@ -22,7 +22,12 @@ static CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| {
 /// Downloads `url` to `to`. `progress` gets each chunk's size, and once the
 /// whole size when the server says it. With `sha512`, a file that does not
 /// match is deleted and refused.
-pub async fn fetch(url: &str, to: &Path, sha512: Option<&str>, mut progress: impl FnMut(Progress)) -> Result<(), String> {
+pub async fn fetch(
+    url: &str,
+    to: &Path,
+    sha512: Option<&str>,
+    mut progress: impl FnMut(Progress),
+) -> Result<(), String> {
     let mut res = CLIENT.get(url).send().await.map_err(|e| e.to_string())?;
     if !res.status().is_success() {
         return Err(format!("GitHub answered {}", res.status().as_u16()));
@@ -33,7 +38,8 @@ pub async fn fetch(url: &str, to: &Path, sha512: Option<&str>, mut progress: imp
     if let Some(dir) = to.parent() {
         std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
     }
-    let mut file = std::fs::File::create(to).map_err(|e| format!("could not write {}: {e}", to.display()))?;
+    let mut file =
+        std::fs::File::create(to).map_err(|e| format!("could not write {}: {e}", to.display()))?;
     let mut hash = Sha512::new();
     while let Some(chunk) = res.chunk().await.map_err(|e| e.to_string())? {
         hash.update(&chunk);
@@ -46,7 +52,10 @@ pub async fn fetch(url: &str, to: &Path, sha512: Option<&str>, mut progress: imp
         let got = base64::engine::general_purpose::STANDARD.encode(hash.finalize());
         if got != expected {
             let _ = std::fs::remove_file(to);
-            return Err(format!("{} did not download intact", to.file_name().unwrap_or_default().to_string_lossy()));
+            return Err(format!(
+                "{} did not download intact",
+                to.file_name().unwrap_or_default().to_string_lossy()
+            ));
         }
     }
     Ok(())

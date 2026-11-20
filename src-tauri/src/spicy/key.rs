@@ -31,10 +31,17 @@ struct Saved {
 }
 
 fn load() -> Option<String> {
-    let saved: Saved = serde_json::from_str(&std::fs::read_to_string(data_file(FILE)).ok()?).ok()?;
-    let opened = |b64: &Option<String>, open: fn(&[u8]) -> Option<String>| open(&B64.decode(b64.as_deref()?).ok()?);
+    let saved: Saved =
+        serde_json::from_str(&std::fs::read_to_string(data_file(FILE)).ok()?).ok()?;
+    let opened = |b64: &Option<String>, open: fn(&[u8]) -> Option<String>| {
+        open(&B64.decode(b64.as_deref()?).ok()?)
+    };
     opened(&saved.encrypted, os_crypt::open)
-        .or_else(|| opened(&saved.dpapi, |b| String::from_utf8(os_crypt::dpapi_open(b)?).ok()))
+        .or_else(|| {
+            opened(&saved.dpapi, |b| {
+                String::from_utf8(os_crypt::dpapi_open(b)?).ok()
+            })
+        })
         .or(saved.key)
 }
 
@@ -42,11 +49,23 @@ fn store(next: Option<&str>) {
     *KEY.lock().unwrap() = next.map(String::from);
     let path = data_file(FILE);
     let written = match next {
-        None => std::fs::remove_file(&path).or_else(|e| if e.kind() == std::io::ErrorKind::NotFound { Ok(()) } else { Err(e) }),
+        None => std::fs::remove_file(&path).or_else(|e| {
+            if e.kind() == std::io::ErrorKind::NotFound {
+                Ok(())
+            } else {
+                Err(e)
+            }
+        }),
         Some(key) => {
             let saved = match os_crypt::seal(key) {
-                Some(sealed) => Saved { encrypted: Some(B64.encode(sealed)), ..Saved::default() },
-                None => Saved { dpapi: os_crypt::dpapi_seal(key.as_bytes()).map(|b| B64.encode(b)), ..Saved::default() },
+                Some(sealed) => Saved {
+                    encrypted: Some(B64.encode(sealed)),
+                    ..Saved::default()
+                },
+                None => Saved {
+                    dpapi: os_crypt::dpapi_seal(key.as_bytes()).map(|b| B64.encode(b)),
+                    ..Saved::default()
+                },
             };
             std::fs::write(&path, serde_json::to_string(&saved).expect("plain JSON"))
         }
@@ -69,13 +88,30 @@ pub struct Status {
 
 pub fn status() -> Status {
     let key = get();
-    Status { set: key.is_some(), ending: key.map(|k| k.chars().rev().take(4).collect::<Vec<_>>().into_iter().rev().collect()) }
+    Status {
+        set: key.is_some(),
+        ending: key.map(|k| {
+            k.chars()
+                .rev()
+                .take(4)
+                .collect::<Vec<_>>()
+                .into_iter()
+                .rev()
+                .collect()
+        }),
+    }
 }
 
 /// `sl_pk_` or `sl_sk_` and at least eight more.
 pub fn looks_like_key(s: &str) -> bool {
-    let rest = s.strip_prefix("sl_pk_").or_else(|| s.strip_prefix("sl_sk_"));
-    rest.is_some_and(|r| r.len() >= 8 && r.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'_' || b == b'-'))
+    let rest = s
+        .strip_prefix("sl_pk_")
+        .or_else(|| s.strip_prefix("sl_sk_"));
+    rest.is_some_and(|r| {
+        r.len() >= 8
+            && r.bytes()
+                .all(|b| b.is_ascii_alphanumeric() || b == b'_' || b == b'-')
+    })
 }
 
 /// `{ ok }` or `{ ok: false, error }`, as the page expects.
@@ -88,7 +124,10 @@ pub struct Checked {
 
 impl Checked {
     fn failed(error: String) -> Checked {
-        Checked { ok: false, error: Some(error) }
+        Checked {
+            ok: false,
+            error: Some(error),
+        }
     }
 }
 
@@ -96,13 +135,23 @@ impl Checked {
 /// rate-limited answers still mean it took the key.
 async fn verify(candidate: &str) -> Checked {
     if !looks_like_key(candidate) {
-        return Checked::failed("That isn't a Spicy Lyrics key. They start with sl_sk_ or sl_pk_".into());
+        return Checked::failed(
+            "That isn't a Spicy Lyrics key. They start with sl_sk_ or sl_pk_".into(),
+        );
     }
     match api::get_lyrics(PROBE_TRACK, candidate).await {
-        Ok(r) if r.http_status == 401 || r.http_status == 403 => Checked::failed(r.message.unwrap_or_else(|| {
-            format!("Spicy Lyrics refused the key ({}).", r.error.unwrap_or(r.http_status.to_string()))
-        })),
-        Ok(_) => Checked { ok: true, error: None },
+        Ok(r) if r.http_status == 401 || r.http_status == 403 => {
+            Checked::failed(r.message.unwrap_or_else(|| {
+                format!(
+                    "Spicy Lyrics refused the key ({}).",
+                    r.error.unwrap_or(r.http_status.to_string())
+                )
+            }))
+        }
+        Ok(_) => Checked {
+            ok: true,
+            error: None,
+        },
         Err(e) => Checked::failed(format!("Couldn't reach Spicy Lyrics: {e}")),
     }
 }

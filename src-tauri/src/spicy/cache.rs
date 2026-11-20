@@ -48,7 +48,9 @@ pub struct DiskCache {
 }
 
 fn now_ms() -> f64 {
-    SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).map_or(0.0, |d| d.as_secs_f64() * 1000.0)
+    SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .map_or(0.0, |d| d.as_secs_f64() * 1000.0)
 }
 
 /// Spotify ids only: nothing else may name a file.
@@ -69,10 +71,18 @@ impl DiskCache {
     pub fn open(dir: PathBuf, max_bytes: u64) -> DiskCache {
         if let Err(e) = fs::create_dir_all(&dir) {
             eprintln!("[lyrics-cache] unusable, continuing without it: {e}");
-            return DiskCache { dir: None, max_bytes, total: Mutex::new(0) };
+            return DiskCache {
+                dir: None,
+                max_bytes,
+                total: Mutex::new(0),
+            };
         }
         let total = entries(&dir).map(|(_, m)| m.len()).sum();
-        DiskCache { dir: Some(dir), max_bytes, total: Mutex::new(total) }
+        DiskCache {
+            dir: Some(dir),
+            max_bytes,
+            total: Mutex::new(total),
+        }
     }
 
     pub fn standard() -> DiskCache {
@@ -118,7 +128,11 @@ impl DiskCache {
         if let Ok(f) = fs::File::options().write(true).open(&file) {
             let _ = f.set_modified(SystemTime::now());
         }
-        Some(Entry { kind: entry.kind, data: entry.data, client_version: entry.client_version })
+        Some(Entry {
+            kind: entry.kind,
+            data: entry.data,
+            client_version: entry.client_version,
+        })
     }
 
     pub fn put(&self, id: &str, entry: &Entry) {
@@ -163,7 +177,9 @@ impl DiskCache {
         if *self.total.lock().unwrap() <= self.max_bytes {
             return;
         }
-        let mut all: Vec<_> = entries(dir).map(|(p, m)| (m.modified().unwrap_or(SystemTime::UNIX_EPOCH), p)).collect();
+        let mut all: Vec<_> = entries(dir)
+            .map(|(p, m)| (m.modified().unwrap_or(SystemTime::UNIX_EPOCH), p))
+            .collect();
         all.sort();
         for (_, file) in all {
             if *self.total.lock().unwrap() <= self.max_bytes {
@@ -180,13 +196,18 @@ mod tests {
     use serde_json::json;
 
     fn temp(name: &str) -> PathBuf {
-        let dir = std::env::temp_dir().join(format!("playback-cache-test-{name}-{}", std::process::id()));
+        let dir =
+            std::env::temp_dir().join(format!("playback-cache-test-{name}-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         dir
     }
 
     fn entry(n: u64) -> Entry {
-        Entry { kind: "packed".into(), data: json!({ "n": n, "pad": "x".repeat(400) }), client_version: Some("6.3.20".into()) }
+        Entry {
+            kind: "packed".into(),
+            data: json!({ "n": n, "pad": "x".repeat(400) }),
+            client_version: Some("6.3.20".into()),
+        }
     }
 
     #[test]
@@ -196,9 +217,18 @@ mod tests {
         cache.put("abc123", &entry(1));
         assert_eq!(cache.get("abc123"), Some(entry(1)));
         let mut text = String::new();
-        GzDecoder::new(fs::read(dir.join("abc123.json.gz")).unwrap().as_slice()).read_to_string(&mut text).unwrap();
+        GzDecoder::new(fs::read(dir.join("abc123.json.gz")).unwrap().as_slice())
+            .read_to_string(&mut text)
+            .unwrap();
         let raw: Value = serde_json::from_str(&text).unwrap();
-        assert_eq!((raw["v"].as_u64(), raw["kind"].as_str(), raw["clientVersion"].as_str()), (Some(1), Some("packed"), Some("6.3.20")));
+        assert_eq!(
+            (
+                raw["v"].as_u64(),
+                raw["kind"].as_str(),
+                raw["clientVersion"].as_str()
+            ),
+            (Some(1), Some("packed"), Some("6.3.20"))
+        );
         assert!(cache.get("../abc123").is_none());
         assert!(cache.get("missing").is_none());
         let _ = fs::remove_dir_all(dir);
@@ -208,9 +238,16 @@ mod tests {
     fn drops_old_and_broken_entries() {
         let dir = temp("old");
         let cache = DiskCache::open(dir.clone(), MAX_BYTES);
-        let old = OnDisk { v: 1, kind: "lyrics".into(), at: now_ms() - REFRESH_AFTER_MS - 1.0, data: json!(1), client_version: None };
+        let old = OnDisk {
+            v: 1,
+            kind: "lyrics".into(),
+            at: now_ms() - REFRESH_AFTER_MS - 1.0,
+            data: json!(1),
+            client_version: None,
+        };
         let mut gz = GzEncoder::new(Vec::new(), Compression::default());
-        gz.write_all(serde_json::to_string(&old).unwrap().as_bytes()).unwrap();
+        gz.write_all(serde_json::to_string(&old).unwrap().as_bytes())
+            .unwrap();
         fs::write(dir.join("old.json.gz"), gz.finish().unwrap()).unwrap();
         fs::write(dir.join("broken.json.gz"), b"not gzip").unwrap();
         assert!(cache.get("old").is_none() && !dir.join("old.json.gz").exists());

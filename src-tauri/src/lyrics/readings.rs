@@ -34,7 +34,10 @@ fn token(surface: &str, details: &[&str]) -> Token {
     let field = |i: usize| details.get(i).copied().unwrap_or("*").to_string();
     Token {
         s: surface.to_string(),
-        r: details.get(7).filter(|r| !r.is_empty() && **r != "*").map(|r| r.to_string()),
+        r: details
+            .get(7)
+            .filter(|r| !r.is_empty() && **r != "*")
+            .map(|r| r.to_string()),
         p: field(0),
         d: field(1),
         b: field(6),
@@ -79,7 +82,9 @@ pub async fn fetch(texts: Vec<String>) -> Option<Vec<Vec<Token>>> {
     if let Some(hit) = FOUND.get(&key) {
         return Some(hit);
     }
-    let found = tauri::async_runtime::spawn_blocking(move || tokenize(&texts)).await.ok()?;
+    let found = tauri::async_runtime::spawn_blocking(move || tokenize(&texts))
+        .await
+        .ok()?;
     match found {
         Ok(tokens) => {
             FOUND.put(key, tokens.clone());
@@ -98,7 +103,10 @@ mod tests {
     fn reads_kanji_in_context() {
         let tokens = super::tokenize(&["女の子が走る".to_string()]).unwrap();
         let line = &tokens[0];
-        assert_eq!(line.iter().map(|t| t.s.as_str()).collect::<String>(), "女の子が走る");
+        assert_eq!(
+            line.iter().map(|t| t.s.as_str()).collect::<String>(),
+            "女の子が走る"
+        );
         assert_eq!(line[0].r.as_deref(), Some("オンナノコ"));
         assert_eq!(line.last().unwrap().b, "走る");
     }
@@ -109,6 +117,9 @@ mod tests {
         assert_eq!(tokens[0][0].s, "Hello");
         assert_eq!(tokens[0][0].r, None);
         assert_eq!(tokens[0][0].b, "*");
-        assert_eq!((tokens[0][1].s.as_str(), tokens[0][1].d.as_str()), (" ", "空白"));
+        assert_eq!(
+            (tokens[0][1].s.as_str(), tokens[0][1].d.as_str()),
+            (" ", "空白")
+        );
     }
 }

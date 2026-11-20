@@ -1,4 +1,4 @@
-import type { UpdateState } from "./player";
+import type { UpdateState } from "./types/player";
 
 // What changed in each version, newest first, shown by the changelog window
 // after an update and from Settings → What's new. Written for the person using

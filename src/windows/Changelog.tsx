@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
-import { CHANGELOG, CHANGE_KINDS, compareVersions, type ChangeKind, type ChangelogEntry } from "./changelog";
-import { KEYS, usePersisted } from "./settings";
+import { CHANGELOG, CHANGE_KINDS, compareVersions, type ChangeKind, type ChangelogEntry } from "../changelog";
+import { KEYS, usePersisted } from "../settings";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;

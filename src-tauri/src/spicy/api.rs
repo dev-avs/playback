@@ -64,11 +64,14 @@ fn query(version: &str, token: Option<&str>, body: Value) -> reqwest::RequestBui
 
 /// The server gives the client's one query the id "0", as a string.
 fn job(body: &Value) -> Option<&Value> {
-    body["queries"].as_array()?.iter().find(|q| match &q["operationId"] {
-        Value::String(s) => s == "0",
-        Value::Number(n) => n.as_u64() == Some(0),
-        _ => false,
-    })
+    body["queries"]
+        .as_array()?
+        .iter()
+        .find(|q| match &q["operationId"] {
+            Value::String(s) => s == "0",
+            Value::Number(n) => n.as_u64() == Some(0),
+            _ => false,
+        })
 }
 
 fn version_in(body: &Value) -> Option<String> {
@@ -81,7 +84,8 @@ fn version_in(body: &Value) -> Option<String> {
 }
 
 async fn ask_version(token: &str, current: &str) -> Result<String, String> {
-    let body = json!({ "queries": [{ "operation": "ext_version" }], "client": { "version": current } });
+    let body =
+        json!({ "queries": [{ "operation": "ext_version" }], "client": { "version": current } });
     let res = query(current, Some(token).filter(|t| !t.is_empty()), body)
         .timeout(Duration::from_secs(5))
         .send()
@@ -97,7 +101,11 @@ async fn ask_version(token: &str, current: &str) -> Result<String, String> {
 /// The version to send: asked again after 15 minutes, or at once (`force`)
 /// when an answer came back without syllables.
 pub async fn client_version(token: &str, force: bool) -> String {
-    let fresh = |v: &Version| v.value.clone().filter(|_| v.at.is_some_and(|at| at.elapsed() < VERSION_TTL));
+    let fresh = |v: &Version| {
+        v.value
+            .clone()
+            .filter(|_| v.at.is_some_and(|at| at.elapsed() < VERSION_TTL))
+    };
     if !force {
         if let Some(v) = fresh(&VERSION.lock().unwrap()) {
             return v;
@@ -122,7 +130,11 @@ pub async fn client_version(token: &str, force: bool) -> String {
             if v.value.as_deref() != Some(&found) {
                 eprintln!("[spicy] client version -> {found}");
             }
-            *v = Version { value: Some(found), at: Some(Instant::now()), retry_at: None };
+            *v = Version {
+                value: Some(found),
+                at: Some(Instant::now()),
+                retry_at: None,
+            };
         }
         Err(e) => {
             v.retry_at = Some(Instant::now() + VERSION_RETRY);
@@ -138,7 +150,11 @@ async fn ask_lyrics(id: &str, token: &str, version: &str) -> Result<Option<Value
         "queries": [{ "operation": "lyrics", "variables": { "id": id, "auth": "SpicyLyrics-WebAuth" } }],
         "client": { "version": version },
     });
-    let res = query(version, Some(token), body).timeout(Duration::from_secs(15)).send().await.map_err(|e| e.to_string())?;
+    let res = query(version, Some(token), body)
+        .timeout(Duration::from_secs(15))
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
     if !res.status().is_success() {
         eprintln!("[spicy] query failed: HTTP {}", res.status().as_u16());
         return Ok(None);
@@ -159,17 +175,25 @@ fn result_of(body: &Value) -> Option<&Value> {
 
 pub async fn query_lyrics(id: &str, token: &str) -> Result<Option<Queried>, String> {
     let mut version = client_version(token, false).await;
-    let Some(mut body) = ask_lyrics(id, token, &version).await? else { return Ok(None) };
+    let Some(mut body) = ask_lyrics(id, token, &version).await? else {
+        return Ok(None);
+    };
 
     // An old version can be served line timing: ask for the current one and
     // retry once, keeping the first answer unless the retry is as fine.
-    if let Some(first) = result_of(&body).filter(|r| r["httpStatus"] == 200 && timing_tier(&r["data"]) < 2) {
+    if let Some(first) =
+        result_of(&body).filter(|r| r["httpStatus"] == 200 && timing_tier(&r["data"]) < 2)
+    {
         let tier = timing_tier(&first["data"]);
         let refreshed = client_version(token, true).await;
         if refreshed != version {
             eprintln!("[spicy] no syllables on {version}, retrying as {refreshed}");
             match ask_lyrics(id, token, &refreshed).await {
-                Ok(Some(retry)) if result_of(&retry).is_some_and(|r| r["httpStatus"] == 200 && timing_tier(&r["data"]) >= tier) => {
+                Ok(Some(retry))
+                    if result_of(&retry).is_some_and(|r| {
+                        r["httpStatus"] == 200 && timing_tier(&r["data"]) >= tier
+                    }) =>
+                {
                     version = refreshed;
                     body = retry;
                 }
@@ -182,7 +206,10 @@ pub async fn query_lyrics(id: &str, token: &str) -> Result<Option<Queried>, Stri
     let Some(result) = result_of(&body) else {
         // Refused requests still answer 200, with only the server's notice.
         let jobs = body["queries"].as_array().cloned().unwrap_or_default();
-        let only_notice = !jobs.is_empty() && jobs.iter().all(|q| !q["_notice"].is_null() && q["result"].is_null());
+        let only_notice = !jobs.is_empty()
+            && jobs
+                .iter()
+                .all(|q| !q["_notice"].is_null() && q["result"].is_null());
         eprintln!(
             "{}",
             if only_notice {
@@ -220,20 +247,42 @@ pub async fn get_lyrics(id: &str, key: &str) -> Result<Keyed, String> {
         .await
         .map_err(|e| e.to_string())?;
     let status = res.status();
-    let retry_after = res.headers().get("Retry-After").and_then(|v| v.to_str().ok()?.trim().parse::<u64>().ok()).filter(|s| *s > 0);
+    let retry_after = res
+        .headers()
+        .get("Retry-After")
+        .and_then(|v| v.to_str().ok()?.trim().parse::<u64>().ok())
+        .filter(|s| *s > 0);
     let body: Value = res.json().await.unwrap_or(Value::Null);
     let body = &body["Body"];
     if status.is_success() {
-        return Ok(Keyed { http_status: status.as_u16(), data: Some(body.clone()), error: None, message: None, retry_after: None });
+        return Ok(Keyed {
+            http_status: status.as_u16(),
+            data: Some(body.clone()),
+            error: None,
+            message: None,
+            retry_after: None,
+        });
     }
     let text = |k: &str| body[k].as_str().map(String::from);
-    Ok(Keyed { http_status: status.as_u16(), data: None, error: text("error"), message: text("message"), retry_after })
+    Ok(Keyed {
+        http_status: status.as_u16(),
+        data: None,
+        error: text("error"),
+        message: text("message"),
+        retry_after,
+    })
 }
 
 /// Track ids are base62; anything else is escaped rather than trusted.
 fn urlencoding(s: &str) -> String {
     s.bytes()
-        .map(|b| if b.is_ascii_alphanumeric() { (b as char).to_string() } else { format!("%{b:02X}") })
+        .map(|b| {
+            if b.is_ascii_alphanumeric() {
+                (b as char).to_string()
+            } else {
+                format!("%{b:02X}")
+            }
+        })
         .collect()
 }
 
@@ -259,7 +308,10 @@ mod tests {
 
     #[test]
     fn escapes_odd_ids() {
-        assert_eq!(urlencoding("1QV6tiMFM6fSOKOGLMHYYg"), "1QV6tiMFM6fSOKOGLMHYYg");
+        assert_eq!(
+            urlencoding("1QV6tiMFM6fSOKOGLMHYYg"),
+            "1QV6tiMFM6fSOKOGLMHYYg"
+        );
         assert_eq!(urlencoding("a/b"), "a%2Fb");
     }
 }

@@ -30,7 +30,10 @@ impl Media {
         let (tx, rx) = channel();
         let latest = Arc::new(Mutex::new(None));
         smtc::spawn(rx, latest.clone(), emit);
-        Media { commands: Mutex::new(tx), latest }
+        Media {
+            commands: Mutex::new(tx),
+            latest,
+        }
     }
 
     /// One command line, as smtc.ps1 read them ("seek 42.5", "volume 0.3").

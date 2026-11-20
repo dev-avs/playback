@@ -1,4 +1,4 @@
-import { UROMAN_DATA } from "./vendor/uroman-data.ts";
+import { UROMAN_DATA } from "../vendor/uroman-data.ts";
 
 /**
  * Universal romanizer: a port of uroman's lattice romanizer

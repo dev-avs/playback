@@ -17,7 +17,8 @@ use windows::Win32::System::Diagnostics::ToolHelp::{
     CreateToolhelp32Snapshot, Process32FirstW, Process32NextW, PROCESSENTRY32W, TH32CS_SNAPPROCESS,
 };
 use windows::Win32::UI::WindowsAndMessaging::{
-    EnumWindows, GetWindow, GetWindowThreadProcessId, IsWindowVisible, ShowWindow, GW_OWNER, SW_HIDE,
+    EnumWindows, GetWindow, GetWindowThreadProcessId, IsWindowVisible, ShowWindow, GW_OWNER,
+    SW_HIDE,
 };
 
 const MAX_OPEN: Duration = Duration::from_secs(25);
@@ -35,19 +36,34 @@ static OPENED: Mutex<Option<u32>> = Mutex::new(None);
 static GENERATION: AtomicU64 = AtomicU64::new(0);
 
 fn exe() -> Option<std::path::PathBuf> {
-    Some(std::path::PathBuf::from(std::env::var_os("APPDATA")?).join("Spotify").join("Spotify.exe")).filter(|p| p.exists())
+    Some(
+        std::path::PathBuf::from(std::env::var_os("APPDATA")?)
+            .join("Spotify")
+            .join("Spotify.exe"),
+    )
+    .filter(|p| p.exists())
 }
 
 /// Process ids of every Spotify.exe.
 fn spotify_pids() -> Vec<u32> {
     let mut pids = Vec::new();
     unsafe {
-        let Ok(snap) = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) else { return pids };
-        let mut entry = PROCESSENTRY32W { dwSize: size_of::<PROCESSENTRY32W>() as u32, ..Default::default() };
+        let Ok(snap) = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0) else {
+            return pids;
+        };
+        let mut entry = PROCESSENTRY32W {
+            dwSize: size_of::<PROCESSENTRY32W>() as u32,
+            ..Default::default()
+        };
         let mut more = Process32FirstW(snap, &mut entry).is_ok();
         while more {
-            let len = entry.szExeFile.iter().position(|c| *c == 0).unwrap_or(entry.szExeFile.len());
-            if String::from_utf16_lossy(&entry.szExeFile[..len]).eq_ignore_ascii_case("spotify.exe") {
+            let len = entry
+                .szExeFile
+                .iter()
+                .position(|c| *c == 0)
+                .unwrap_or(entry.szExeFile.len());
+            if String::from_utf16_lossy(&entry.szExeFile[..len]).eq_ignore_ascii_case("spotify.exe")
+            {
                 pids.push(entry.th32ProcessID);
             }
             more = Process32NextW(snap, &mut entry).is_ok();
@@ -97,7 +113,13 @@ pub fn open() -> bool {
     if !spotify_pids().is_empty() {
         return false;
     }
-    let Ok(child) = Command::new(exe).args(ARGS).creation_flags(CREATE_NO_WINDOW).spawn() else { return false };
+    let Ok(child) = Command::new(exe)
+        .args(ARGS)
+        .creation_flags(CREATE_NO_WINDOW)
+        .spawn()
+    else {
+        return false;
+    };
     *opened = Some(child.id());
     let generation = GENERATION.fetch_add(1, Ordering::SeqCst) + 1;
     drop(opened);
@@ -114,9 +136,14 @@ pub fn open() -> bool {
 
 /// Closes the copy this started, and everything it started.
 pub fn close() {
-    let Some(pid) = OPENED.lock().unwrap().take() else { return };
+    let Some(pid) = OPENED.lock().unwrap().take() else {
+        return;
+    };
     eprintln!("[quick-open] closing Spotify");
-    let _ = Command::new("taskkill").args(["/PID", &pid.to_string(), "/T", "/F"]).creation_flags(CREATE_NO_WINDOW).spawn();
+    let _ = Command::new("taskkill")
+        .args(["/PID", &pid.to_string(), "/T", "/F"])
+        .creation_flags(CREATE_NO_WINDOW)
+        .spawn();
 }
 
 /// The user took this Spotify over (it plays): it stays.

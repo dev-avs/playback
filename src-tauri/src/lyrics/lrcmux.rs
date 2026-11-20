@@ -38,7 +38,10 @@ fn to_yrc(lines: &[Value]) -> String {
         }
         let start = words[0].0;
         let end = words.iter().map(|w| w.1).fold(f64::MIN, f64::max);
-        let body: String = words.iter().map(|(s, e, t)| format!("({s},{},0){t}", (e - s).max(1.0))).collect();
+        let body: String = words
+            .iter()
+            .map(|(s, e, t)| format!("({s},{},0){t}", (e - s).max(1.0)))
+            .collect();
         Some(format!("[{start},{}]{body}", end - start))
     };
     lines.iter().filter_map(line).collect::<Vec<_>>().join("\n")
@@ -67,23 +70,41 @@ pub async fn find(artist: &str, track: &str, album: Option<&str>, duration: Opti
     if let Some(d) = duration {
         query.push(("duration", d.round().to_string()));
     }
-    let res = client().get("https://api.lrcmux.dev/get").query(&query).send().await?;
+    let res = client()
+        .get("https://api.lrcmux.dev/get")
+        .query(&query)
+        .send()
+        .await?;
     if !res.status().is_success() {
         return Ok(None); // 404: nothing found
     }
     let body: Value = res.json().await?;
     let lines = list_of(&body, "lines");
-    if lines.is_empty() || body.pointer("/meta/instrumental").and_then(Value::as_bool).unwrap_or(false) {
+    if lines.is_empty()
+        || body
+            .pointer("/meta/instrumental")
+            .and_then(Value::as_bool)
+            .unwrap_or(false)
+    {
         return Ok(None);
     }
-    if let (Some(d), Some(theirs)) = (duration, body.pointer("/track/duration").and_then(Value::as_f64)) {
+    if let (Some(d), Some(theirs)) = (
+        duration,
+        body.pointer("/track/duration").and_then(Value::as_f64),
+    ) {
         if (theirs - d).abs() > MAX_MISMATCH_S {
-            eprintln!("[lyrics:lrcmux] skipped: {theirs}s recording, playing {}s", d.round());
+            eprintln!(
+                "[lyrics:lrcmux] skipped: {theirs}s recording, playing {}s",
+                d.round()
+            );
             return Ok(None);
         }
     }
 
-    let level = body.pointer("/meta/level").and_then(Value::as_str).unwrap_or("");
+    let level = body
+        .pointer("/meta/level")
+        .and_then(Value::as_str)
+        .unwrap_or("");
     if level == "word" {
         let yrc = to_yrc(lines);
         if !yrc.is_empty() {
@@ -113,12 +134,18 @@ mod tests {
             json!({ "start": 3000, "end": 4000, "text": "whole line", "words": [] }),
             json!({ "start": 5000, "end": 5000, "text": "no length" }),
         ];
-        assert_eq!(to_yrc(&lines), "[1000,1000](1000,400,0)a (1400,600,0)b\n[3000,1000](3000,1000,0)whole line");
+        assert_eq!(
+            to_yrc(&lines),
+            "[1000,1000](1000,400,0)a (1400,600,0)b\n[3000,1000](3000,1000,0)whole line"
+        );
     }
 
     #[test]
     fn lines_become_lrc() {
-        let lines = [json!({ "start": 83_450, "text": "hi" }), json!({ "start": 90_000, "text": "" })];
+        let lines = [
+            json!({ "start": 83_450, "text": "hi" }),
+            json!({ "start": 90_000, "text": "" }),
+        ];
         assert_eq!(to_lrc(&lines), "[01:23.45]hi");
         assert_eq!(lrc_time(0.0), "00:00.00");
     }

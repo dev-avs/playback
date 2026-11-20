@@ -11,7 +11,11 @@ const CREATE_NO_WINDOW: u32 = 0x0800_0000;
 
 pub trait Cli {
     /// Runs `cli args…`; the error says what failed, with its output.
-    fn run(&self, cli: &Path, args: &[&str]) -> impl std::future::Future<Output = Result<(), String>> + Send;
+    fn run(
+        &self,
+        cli: &Path,
+        args: &[&str],
+    ) -> impl std::future::Future<Output = Result<(), String>> + Send;
 }
 
 /// The real one.

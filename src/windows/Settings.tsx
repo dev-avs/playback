@@ -27,10 +27,10 @@ import {
   ROMA_LABELS,
   ROMA_MODES,
   romaMode,
-} from "./settings";
-import { romanizeText } from "./romanize";
-import type { UpdateState } from "./player";
-import { progressText } from "./changelog";
+} from "../settings";
+import { romanizeText } from "../lyrics/romanize";
+import type { UpdateState } from "../types/player";
+import { progressText } from "../changelog";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;

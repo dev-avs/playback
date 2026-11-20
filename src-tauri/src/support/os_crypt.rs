@@ -13,13 +13,18 @@ use aes_gcm::{Aes256Gcm, Nonce};
 use base64::engine::general_purpose::STANDARD as B64;
 use base64::Engine;
 use windows::Win32::Foundation::{LocalFree, HLOCAL};
-use windows::Win32::Security::Cryptography::{CryptProtectData, CryptUnprotectData, CRYPT_INTEGER_BLOB};
+use windows::Win32::Security::Cryptography::{
+    CryptProtectData, CryptUnprotectData, CRYPT_INTEGER_BLOB,
+};
 
 const PREFIX: &[u8] = b"v10";
 const NONCE_LEN: usize = 12;
 
 fn blob(bytes: &[u8]) -> CRYPT_INTEGER_BLOB {
-    CRYPT_INTEGER_BLOB { cbData: bytes.len() as u32, pbData: bytes.as_ptr() as *mut u8 }
+    CRYPT_INTEGER_BLOB {
+        cbData: bytes.len() as u32,
+        pbData: bytes.as_ptr() as *mut u8,
+    }
 }
 
 /// Copies DPAPI's answer out and frees it.
@@ -48,8 +53,11 @@ pub fn dpapi_open(sealed: &[u8]) -> Option<Vec<u8>> {
 
 /// The profile's key, or None before Electron ever made one.
 fn profile_key() -> Option<Aes256Gcm> {
-    let state: serde_json::Value = serde_json::from_slice(&std::fs::read(data_file("Local State")).ok()?).ok()?;
-    let sealed = B64.decode(state["os_crypt"]["encrypted_key"].as_str()?).ok()?;
+    let state: serde_json::Value =
+        serde_json::from_slice(&std::fs::read(data_file("Local State")).ok()?).ok()?;
+    let sealed = B64
+        .decode(state["os_crypt"]["encrypted_key"].as_str()?)
+        .ok()?;
     let key = dpapi_open(sealed.strip_prefix(b"DPAPI")?)?;
     Aes256Gcm::new_from_slice(&key).ok()
 }
@@ -75,7 +83,9 @@ fn open_with(key: &Aes256Gcm, sealed: &[u8]) -> Option<String> {
 }
 
 fn seal_with(key: &Aes256Gcm, plain: &str, nonce: &[u8; NONCE_LEN]) -> Option<Vec<u8>> {
-    let cipher = key.encrypt(Nonce::from_slice(nonce), plain.as_bytes()).ok()?;
+    let cipher = key
+        .encrypt(Nonce::from_slice(nonce), plain.as_bytes())
+        .ok()?;
     Some([PREFIX, nonce, &cipher].concat())
 }
 

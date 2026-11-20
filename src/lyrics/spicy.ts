@@ -1,4 +1,4 @@
-import { SLObjPack } from "./vendor/objpack";
+import { SLObjPack } from "../vendor/objpack";
 import { TIER, type LyricLine, type LyricWord, type Tier } from "./lyrics";
 import { hasNonLatinScript } from "./romanize";
 

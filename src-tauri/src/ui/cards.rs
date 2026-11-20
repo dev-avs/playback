@@ -68,12 +68,21 @@ impl Rect {
 /// `area` the screen's work area.
 pub fn place(card: Card, widget: Rect, anchor: Option<Rect>, area: Rect) -> (f64, f64) {
     let (w, h) = card.size();
-    let centred = |top: f64| ((area.x + (area.w - w) / 2.0).round(), (area.y + area.h * top).round());
+    let centred = |top: f64| {
+        (
+            (area.x + (area.w - w) / 2.0).round(),
+            (area.y + area.h * top).round(),
+        )
+    };
     match card {
         // beside the widget, on whichever side has room
         Card::Settings => {
             let right = widget.right();
-            let x = if right + w <= area.right() { right - STAGE_PAD } else { widget.x - w + STAGE_PAD };
+            let x = if right + w <= area.right() {
+                right - STAGE_PAD
+            } else {
+                widget.x - w + STAGE_PAD
+            };
             (x, widget.y)
         }
         // read once, so it sits apart, unless that would cover the widget
@@ -81,14 +90,22 @@ pub fn place(card: Card, widget: Rect, anchor: Option<Rect>, area: Rect) -> (f64
             let (mut x, mut y) = centred(0.2);
             if (Rect { x, y, w, h }).overlaps(&widget) {
                 let right = widget.right() - STAGE_PAD;
-                x = if right + w <= area.right() { right } else { area.x.max(widget.x - w + STAGE_PAD) };
+                x = if right + w <= area.right() {
+                    right
+                } else {
+                    area.x.max(widget.x - w + STAGE_PAD)
+                };
                 y = widget.y.max(area.y).min(area.y + area.h - h);
             }
             (x, y)
         }
         Card::PastChangelog => {
             let a = anchor.unwrap_or(widget);
-            let x = if a.x + w <= area.right() - w { a.x + w - STAGE_PAD } else { a.x - w + STAGE_PAD };
+            let x = if a.x + w <= area.right() - w {
+                a.x + w - STAGE_PAD
+            } else {
+                a.x - w + STAGE_PAD
+            };
             (x, a.y)
         }
         Card::Versions => centred(0.12),
@@ -103,10 +120,23 @@ fn bounds(win: &WebviewWindow) -> Option<(Rect, Rect)> {
     let size = win.outer_size().ok()?.to_logical::<f64>(scale);
     let monitor = win.current_monitor().ok()??;
     let work = monitor.work_area();
-    let (at, extent) = (work.position.to_logical::<f64>(scale), work.size.to_logical::<f64>(scale));
+    let (at, extent) = (
+        work.position.to_logical::<f64>(scale),
+        work.size.to_logical::<f64>(scale),
+    );
     Some((
-        Rect { x: pos.x, y: pos.y, w: size.width, h: size.height },
-        Rect { x: at.x, y: at.y, w: extent.width, h: extent.height },
+        Rect {
+            x: pos.x,
+            y: pos.y,
+            w: size.width,
+            h: size.height,
+        },
+        Rect {
+            x: at.x,
+            y: at.y,
+            w: extent.width,
+            h: extent.height,
+        },
     ))
 }
 
@@ -123,10 +153,22 @@ pub fn open(app: &AppHandle, card: Card, query: Option<String>) -> tauri::Result
     if let Some(win) = app.get_webview_window(card.label()) {
         return win.set_focus();
     }
-    let Some(widget) = app.get_webview_window(super::WIDGET) else { return Ok(()) };
+    let Some(widget) = app.get_webview_window(super::WIDGET) else {
+        return Ok(());
+    };
     let (widget_rect, area) = bounds(&widget).unwrap_or((
-        Rect { x: 100.0, y: 100.0, w: 394.0, h: 420.0 },
-        Rect { x: 0.0, y: 0.0, w: 1920.0, h: 1040.0 },
+        Rect {
+            x: 100.0,
+            y: 100.0,
+            w: 394.0,
+            h: 420.0,
+        },
+        Rect {
+            x: 0.0,
+            y: 0.0,
+            w: 1920.0,
+            h: 1040.0,
+        },
     ));
     let anchor = (card == Card::PastChangelog)
         .then(|| app.get_webview_window(Card::Changelog.label()))
@@ -198,7 +240,9 @@ pub fn is_open(app: &AppHandle, card: Card) -> bool {
 /// Sizes a card window to its card: the width stays, the height follows.
 pub fn fit(win: &WebviewWindow, height: f64) {
     let h = height.ceil().clamp(120.0, 1000.0);
-    let Ok(scale) = win.scale_factor() else { return };
+    let Ok(scale) = win.scale_factor() else {
+        return;
+    };
     let Ok(size) = win.inner_size() else { return };
     let size = size.to_logical::<f64>(scale);
     if (size.height - h).abs() < 2.0 {
@@ -211,21 +255,49 @@ pub fn fit(win: &WebviewWindow, height: f64) {
 mod tests {
     use super::{place, Card, Rect};
 
-    const AREA: Rect = Rect { x: 0.0, y: 0.0, w: 1920.0, h: 1040.0 };
+    const AREA: Rect = Rect {
+        x: 0.0,
+        y: 0.0,
+        w: 1920.0,
+        h: 1040.0,
+    };
 
     #[test]
     fn settings_open_on_the_side_with_room() {
-        let left = Rect { x: 100.0, y: 200.0, w: 394.0, h: 300.0 };
+        let left = Rect {
+            x: 100.0,
+            y: 200.0,
+            w: 394.0,
+            h: 300.0,
+        };
         assert_eq!(place(Card::Settings, left, None, AREA), (472.0, 200.0));
-        let right = Rect { x: 1500.0, y: 200.0, w: 394.0, h: 300.0 };
-        assert_eq!(place(Card::Settings, right, None, AREA), (1500.0 - 644.0 + 22.0, 200.0));
+        let right = Rect {
+            x: 1500.0,
+            y: 200.0,
+            w: 394.0,
+            h: 300.0,
+        };
+        assert_eq!(
+            place(Card::Settings, right, None, AREA),
+            (1500.0 - 644.0 + 22.0, 200.0)
+        );
     }
 
     #[test]
     fn the_changelog_moves_off_the_widget() {
-        let far = Rect { x: 0.0, y: 800.0, w: 394.0, h: 200.0 };
+        let far = Rect {
+            x: 0.0,
+            y: 800.0,
+            w: 394.0,
+            h: 200.0,
+        };
         assert_eq!(place(Card::Changelog, far, None, AREA), (778.0, 208.0));
-        let under = Rect { x: 800.0, y: 200.0, w: 394.0, h: 300.0 };
+        let under = Rect {
+            x: 800.0,
+            y: 200.0,
+            w: 394.0,
+            h: 300.0,
+        };
         assert_eq!(place(Card::Changelog, under, None, AREA), (1172.0, 200.0));
     }
 }

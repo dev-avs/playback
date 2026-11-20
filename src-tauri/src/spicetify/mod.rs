@@ -44,7 +44,11 @@ impl Paths {
             cli: find_cli(local.join("spicetify").join("spicetify.exe")),
             config_dir: roaming.join("spicetify"),
             spotify_exe: roaming.join("Spotify").join("Spotify.exe"),
-            applied_dir: roaming.join("Spotify").join("Apps").join("xpui").join("extensions"),
+            applied_dir: roaming
+                .join("Spotify")
+                .join("Apps")
+                .join("xpui")
+                .join("extensions"),
         }
     }
 
@@ -73,11 +77,20 @@ fn find_cli(preferred: PathBuf) -> PathBuf {
 
 /// The extensions listed in config-xpui.ini.
 fn registered(config_dir: &Path) -> Vec<String> {
-    let Ok(ini) = fs::read_to_string(config_dir.join("config-xpui.ini")) else { return vec![] };
+    let Ok(ini) = fs::read_to_string(config_dir.join("config-xpui.ini")) else {
+        return vec![];
+    };
     ini.lines()
         .find_map(|line| {
             let (key, value) = line.split_once('=')?;
-            (key.trim() == "extensions").then(|| value.split('|').map(str::trim).filter(|s| !s.is_empty()).map(String::from).collect())
+            (key.trim() == "extensions").then(|| {
+                value
+                    .split('|')
+                    .map(str::trim)
+                    .filter(|s| !s.is_empty())
+                    .map(String::from)
+                    .collect()
+            })
         })
         .unwrap_or_default()
 }
@@ -112,7 +125,12 @@ pub struct Status {
 impl Status {
     /// The current bridge is live in Spotify and nothing old is left behind.
     pub fn ready(&self) -> bool {
-        self.spotify && self.spicetify && self.bridge_copied && self.registered && self.applied_current && self.legacy.is_empty()
+        self.spotify
+            && self.spicetify
+            && self.bridge_copied
+            && self.registered
+            && self.applied_current
+            && self.legacy.is_empty()
     }
 }
 
@@ -128,7 +146,11 @@ pub fn check(source: &[u8], paths: &Paths) -> Status {
         applied_current: same_as(&in_spotify, source),
         legacy: LEGACY
             .iter()
-            .filter(|n| list.iter().any(|l| l == *n) || paths.extension(n).exists() || paths.in_spotify(n).exists())
+            .filter(|n| {
+                list.iter().any(|l| l == *n)
+                    || paths.extension(n).exists()
+                    || paths.in_spotify(n).exists()
+            })
             .map(|n| n.to_string())
             .collect(),
     }
@@ -145,11 +167,20 @@ pub struct Ensured {
 }
 
 /// Puts the bridge in place as far as allowed.
-pub async fn ensure(source: &[u8], allow_apply: bool, paths: &Paths, cli: &impl Cli) -> Result<Ensured, String> {
+pub async fn ensure(
+    source: &[u8],
+    allow_apply: bool,
+    paths: &Paths,
+    cli: &impl Cli,
+) -> Result<Ensured, String> {
     let mut actions = vec![];
     let s = check(source, paths);
     if !s.spicetify {
-        return Ok(Ensured { status: s, actions, needs_apply: false });
+        return Ok(Ensured {
+            status: s,
+            actions,
+            needs_apply: false,
+        });
     }
 
     let mut changed_list = false;
@@ -157,7 +188,8 @@ pub async fn ensure(source: &[u8], allow_apply: bool, paths: &Paths, cli: &impl 
         delete(&paths.extension(name));
         delete(&paths.in_spotify(name));
         if registered(&paths.config_dir).contains(name) {
-            cli.run(&paths.cli, &["config", "extensions", &format!("{name}-")]).await?;
+            cli.run(&paths.cli, &["config", "extensions", &format!("{name}-")])
+                .await?;
             changed_list = true;
         }
         actions.push(format!("Removed the old {name}"));
@@ -169,7 +201,8 @@ pub async fn ensure(source: &[u8], allow_apply: bool, paths: &Paths, cli: &impl 
     }
 
     if !s.registered {
-        cli.run(&paths.cli, &["config", "extensions", BRIDGE]).await?;
+        cli.run(&paths.cli, &["config", "extensions", BRIDGE])
+            .await?;
         changed_list = true;
         actions.push("Turned the bridge on in Spicetify".into());
     }
@@ -191,7 +224,11 @@ pub async fn ensure(source: &[u8], allow_apply: bool, paths: &Paths, cli: &impl 
         actions.push("Applied Spicetify (Spotify restarted)".into());
     }
 
-    Ok(Ensured { status: check(source, paths), actions, needs_apply: needs_apply && !allow_apply })
+    Ok(Ensured {
+        status: check(source, paths),
+        actions,
+        needs_apply: needs_apply && !allow_apply,
+    })
 }
 
 /// Takes the bridge (and any old name of it) back out of Spicetify and
@@ -207,7 +244,8 @@ pub async fn remove(paths: &Paths, cli: &impl Cli) -> Result<Vec<String>, String
             }
         }
         if paths.cli.exists() && registered(&paths.config_dir).iter().any(|n| n == name) {
-            cli.run(&paths.cli, &["config", "extensions", &format!("{name}-")]).await?;
+            cli.run(&paths.cli, &["config", "extensions", &format!("{name}-")])
+                .await?;
             changed_list = true;
             actions.push(format!("Turned {name} off in Spicetify"));
         }
@@ -246,19 +284,35 @@ mod tests {
 
     impl Machine {
         fn new(name: &str, s: Setup) -> Machine {
-            let root = std::env::temp_dir().join(format!("playback-spicetify-{name}-{}", std::process::id()));
+            let root = std::env::temp_dir()
+                .join(format!("playback-spicetify-{name}-{}", std::process::id()));
             let _ = fs::remove_dir_all(&root);
             let paths = Paths {
                 cli: root.join("local").join("spicetify.exe"),
                 config_dir: root.join("roaming").join("spicetify"),
                 spotify_exe: root.join("roaming").join("Spotify").join("Spotify.exe"),
-                applied_dir: root.join("roaming").join("Spotify").join("Apps").join("xpui").join("extensions"),
+                applied_dir: root
+                    .join("roaming")
+                    .join("Spotify")
+                    .join("Apps")
+                    .join("xpui")
+                    .join("extensions"),
             };
             write(&paths.spotify_exe, b"").unwrap();
-            let m = Machine { root, paths, calls: Mutex::default(), backed_up: Mutex::new(!s.apply_fails_until_backup) };
+            let m = Machine {
+                root,
+                paths,
+                calls: Mutex::default(),
+                backed_up: Mutex::new(!s.apply_fails_until_backup),
+            };
             if !s.no_spicetify {
                 write(&m.paths.cli, b"").unwrap();
-                m.save(&s.extensions.iter().map(|e| e.to_string()).collect::<Vec<_>>());
+                m.save(
+                    &s.extensions
+                        .iter()
+                        .map(|e| e.to_string())
+                        .collect::<Vec<_>>(),
+                );
             }
             for (n, body) in s.files {
                 write(&m.paths.extension(n), body).unwrap();
@@ -270,7 +324,15 @@ mod tests {
         }
 
         fn save(&self, list: &[String]) {
-            write(&self.paths.config_dir.join("config-xpui.ini"), format!("[AdditionalOptions]\nextensions            = {}\n", list.join("|")).as_bytes()).unwrap();
+            write(
+                &self.paths.config_dir.join("config-xpui.ini"),
+                format!(
+                    "[AdditionalOptions]\nextensions            = {}\n",
+                    list.join("|")
+                )
+                .as_bytes(),
+            )
+            .unwrap();
         }
 
         fn calls(&self) -> Vec<String> {
@@ -318,12 +380,21 @@ mod tests {
     }
 
     fn block<F: std::future::Future>(f: F) -> F::Output {
-        tokio::runtime::Builder::new_current_thread().build().unwrap().block_on(f)
+        tokio::runtime::Builder::new_current_thread()
+            .build()
+            .unwrap()
+            .block_on(f)
     }
 
     #[test]
     fn without_spicetify_changes_nothing() {
-        let m = Machine::new("none", Setup { no_spicetify: true, ..Default::default() });
+        let m = Machine::new(
+            "none",
+            Setup {
+                no_spicetify: true,
+                ..Default::default()
+            },
+        );
         let r = block(ensure(SOURCE, true, &m.paths, &m)).unwrap();
         assert!(!r.status.spicetify && r.status.spotify);
         assert!(m.calls().is_empty());
@@ -342,12 +413,21 @@ mod tests {
         let m = Machine::new("first", Setup::default());
         let r = block(ensure(SOURCE, true, &m.paths, &m)).unwrap();
         assert!(!r.needs_apply && r.status.ready());
-        assert_eq!(m.calls(), [format!("config extensions {BRIDGE}"), "apply".into()]);
+        assert_eq!(
+            m.calls(),
+            [format!("config extensions {BRIDGE}"), "apply".into()]
+        );
     }
 
     #[test]
     fn a_never_applied_spicetify_backs_up_first() {
-        let m = Machine::new("backup", Setup { apply_fails_until_backup: true, ..Default::default() });
+        let m = Machine::new(
+            "backup",
+            Setup {
+                apply_fails_until_backup: true,
+                ..Default::default()
+            },
+        );
         let r = block(ensure(SOURCE, true, &m.paths, &m)).unwrap();
         assert!(r.status.ready());
         assert_eq!(m.calls()[1..], ["apply".to_string(), "backup apply".into()]);
@@ -356,7 +436,15 @@ mod tests {
     #[test]
     fn the_old_name_is_replaced() {
         let old: &[(&str, &[u8])] = &[("player-token.js", b"old")];
-        let m = Machine::new("legacy", Setup { extensions: &["adblock.js", "player-token.js"], files: old, applied: old, ..Default::default() });
+        let m = Machine::new(
+            "legacy",
+            Setup {
+                extensions: &["adblock.js", "player-token.js"],
+                files: old,
+                applied: old,
+                ..Default::default()
+            },
+        );
         assert_eq!(check(SOURCE, &m.paths).legacy, ["player-token.js"]);
         let r = block(ensure(SOURCE, true, &m.paths, &m)).unwrap();
         assert!(r.status.legacy.is_empty() && r.status.ready());
@@ -366,12 +454,15 @@ mod tests {
 
     #[test]
     fn an_outdated_copy_in_spotify_is_refreshed_without_a_restart() {
-        let m = Machine::new("outdated", Setup {
-            extensions: &[BRIDGE],
-            files: &[(BRIDGE, SOURCE)],
-            applied: &[(BRIDGE, b"// bridge v1\n")],
-            ..Default::default()
-        });
+        let m = Machine::new(
+            "outdated",
+            Setup {
+                extensions: &[BRIDGE],
+                files: &[(BRIDGE, SOURCE)],
+                applied: &[(BRIDGE, b"// bridge v1\n")],
+                ..Default::default()
+            },
+        );
         let r = block(ensure(SOURCE, false, &m.paths, &m)).unwrap();
         assert!(r.status.applied_current && !r.needs_apply);
         assert!(m.calls().is_empty());
@@ -379,7 +470,15 @@ mod tests {
 
     #[test]
     fn everything_current_does_nothing() {
-        let m = Machine::new("current", Setup { extensions: &[BRIDGE], files: &[(BRIDGE, SOURCE)], applied: &[(BRIDGE, SOURCE)], ..Default::default() });
+        let m = Machine::new(
+            "current",
+            Setup {
+                extensions: &[BRIDGE],
+                files: &[(BRIDGE, SOURCE)],
+                applied: &[(BRIDGE, SOURCE)],
+                ..Default::default()
+            },
+        );
         let r = block(ensure(SOURCE, false, &m.paths, &m)).unwrap();
         assert!(r.status.ready() && r.actions.is_empty());
         assert!(m.calls().is_empty());
@@ -387,12 +486,15 @@ mod tests {
 
     #[test]
     fn remove_takes_every_name_out_and_applies() {
-        let m = Machine::new("remove", Setup {
-            extensions: &["adblock.js", BRIDGE, "player-token.js"],
-            files: &[(BRIDGE, SOURCE), ("player-token.js", b"old")],
-            applied: &[(BRIDGE, SOURCE)],
-            ..Default::default()
-        });
+        let m = Machine::new(
+            "remove",
+            Setup {
+                extensions: &["adblock.js", BRIDGE, "player-token.js"],
+                files: &[(BRIDGE, SOURCE), ("player-token.js", b"old")],
+                applied: &[(BRIDGE, SOURCE)],
+                ..Default::default()
+            },
+        );
         block(remove(&m.paths, &m)).unwrap();
         assert_eq!(registered(&m.paths.config_dir), ["adblock.js"]);
         assert!(!m.paths.extension(BRIDGE).exists() && !m.paths.in_spotify(BRIDGE).exists());

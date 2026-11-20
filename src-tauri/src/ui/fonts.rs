@@ -20,7 +20,12 @@ const NTM_PS_OPENTYPE: u32 = 0x20000;
 
 static LISTED: Mutex<Option<Vec<String>>> = Mutex::new(None);
 
-unsafe extern "system" fn add(font: *const LOGFONTW, metric: *const TEXTMETRICW, kind: u32, names: LPARAM) -> i32 {
+unsafe extern "system" fn add(
+    font: *const LOGFONTW,
+    metric: *const TEXTMETRICW,
+    kind: u32,
+    names: LPARAM,
+) -> i32 {
     let names = &mut *(names.0 as *mut BTreeSet<String>);
     let face = &(*font).lfFaceName;
     let len = face.iter().position(|&c| c == 0).unwrap_or(face.len());
@@ -29,7 +34,8 @@ unsafe extern "system" fn add(font: *const LOGFONTW, metric: *const TEXTMETRICW,
     // GDI hands every non-bitmap font its NEWTEXTMETRIC, whose flags tell
     // OpenType with PostScript outlines (CFF) apart
     let outline = kind & TRUETYPE_FONTTYPE != 0
-        || (kind & RASTER_FONTTYPE == 0 && (*(metric as *const NEWTEXTMETRICW)).ntmFlags & NTM_PS_OPENTYPE != 0);
+        || (kind & RASTER_FONTTYPE == 0
+            && (*(metric as *const NEWTEXTMETRICW)).ntmFlags & NTM_PS_OPENTYPE != 0);
     if outline && !name.is_empty() && !name.starts_with('@') {
         names.insert(name);
     }
@@ -41,8 +47,17 @@ fn read() -> Vec<String> {
     unsafe {
         let screen = GetDesktopWindow();
         let dc = GetDC(Some(screen));
-        let wanted = LOGFONTW { lfCharSet: DEFAULT_CHARSET, ..Default::default() };
-        EnumFontFamiliesExW(dc, &wanted, Some(add), LPARAM(&mut names as *mut _ as isize), 0);
+        let wanted = LOGFONTW {
+            lfCharSet: DEFAULT_CHARSET,
+            ..Default::default()
+        };
+        EnumFontFamiliesExW(
+            dc,
+            &wanted,
+            Some(add),
+            LPARAM(&mut names as *mut _ as isize),
+            0,
+        );
         ReleaseDC(Some(screen), dc);
     }
     names.into_iter().collect()

@@ -53,14 +53,22 @@ async fn read_head(stream: &mut TcpStream) -> Option<Request> {
     let mut origin = None;
     let mut length = 0;
     for line in lines {
-        let Some((name, value)) = line.split_once(':') else { continue };
+        let Some((name, value)) = line.split_once(':') else {
+            continue;
+        };
         match name.trim().to_ascii_lowercase().as_str() {
             "origin" => origin = Some(value.trim().to_string()),
             "content-length" => length = value.trim().parse().ok()?,
             _ => {}
         }
     }
-    Some(Request { method, route, origin, length, body: buf[end + 4..].to_vec() })
+    Some(Request {
+        method,
+        route,
+        origin,
+        length,
+        body: buf[end + 4..].to_vec(),
+    })
 }
 
 async fn reply(stream: &mut TcpStream, status: &str, allow_origin: &str, body: Option<&str>) {
@@ -81,7 +89,9 @@ async fn reply(stream: &mut TcpStream, status: &str, allow_origin: &str, body: O
 }
 
 async fn serve(app: AppHandle, mut stream: TcpStream) {
-    let Some(mut req) = read_head(&mut stream).await else { return };
+    let Some(mut req) = read_head(&mut stream).await else {
+        return;
+    };
     if req.method == "OPTIONS" {
         return reply(&mut stream, "204 No Content", "*", None).await;
     }
@@ -89,7 +99,9 @@ async fn serve(app: AppHandle, mut stream: TcpStream) {
         let body = super::pending().to_string();
         return reply(&mut stream, "200 OK", SPOTIFY_ORIGIN, Some(&body)).await;
     }
-    if req.method != "POST" || !["/token", "/spicy", "/resolved", "/progress"].contains(&req.route.as_str()) {
+    if req.method != "POST"
+        || !["/token", "/spicy", "/resolved", "/progress"].contains(&req.route.as_str())
+    {
         return reply(&mut stream, "404 Not Found", "*", None).await;
     }
     if req.origin.as_deref().is_some_and(|o| o != SPOTIFY_ORIGIN) {
@@ -125,7 +137,14 @@ async fn serve(app: AppHandle, mut stream: TcpStream) {
         "/spicy" => ("200 OK", super::on_spicy(&app, &payload).to_string()),
         _ => {
             let saved = super::on_token(&app, &payload);
-            (if saved.ok { "200 OK" } else { "400 Bad Request" }, serde_json::to_string(&saved).unwrap_or(ok))
+            (
+                if saved.ok {
+                    "200 OK"
+                } else {
+                    "400 Bad Request"
+                },
+                serde_json::to_string(&saved).unwrap_or(ok),
+            )
         }
     };
     reply(&mut stream, status, "*", Some(&body)).await;
@@ -141,7 +160,9 @@ pub fn start(app: AppHandle) {
         };
         eprintln!("[bridge] listening for the Spicetify extension on 127.0.0.1:{PORT}");
         loop {
-            let Ok((stream, _)) = listener.accept().await else { continue };
+            let Ok((stream, _)) = listener.accept().await else {
+                continue;
+            };
             let app = app.clone();
             // a stalled connection cannot hold anything up
             tauri::async_runtime::spawn(async move {

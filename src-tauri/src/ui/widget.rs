@@ -7,7 +7,9 @@ use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::{LogicalSize, PhysicalPosition, WebviewWindow};
 use windows::Win32::Foundation::POINT;
-use windows::Win32::UI::WindowsAndMessaging::{GetCursorPos, IsWindowVisible, ShowWindow, SW_HIDE, SW_SHOWNOACTIVATE};
+use windows::Win32::UI::WindowsAndMessaging::{
+    GetCursorPos, IsWindowVisible, ShowWindow, SW_HIDE, SW_SHOWNOACTIVATE,
+};
 
 /// Room around the card for its shadow, on every side (STAGE_PAD in main.cjs).
 pub const STAGE_PAD: f64 = 22.0;
@@ -50,7 +52,10 @@ fn cursor() -> (i32, i32) {
 
 fn logical_size(win: &WebviewWindow) -> (f64, f64) {
     let scale = win.scale_factor().unwrap_or(1.0);
-    let s = win.inner_size().map(|s| s.to_logical::<f64>(scale)).unwrap_or(LogicalSize::new(0.0, 0.0));
+    let s = win
+        .inner_size()
+        .map(|s| s.to_logical::<f64>(scale))
+        .unwrap_or(LogicalSize::new(0.0, 0.0));
     (s.width, s.height)
 }
 
@@ -137,7 +142,9 @@ impl Widget {
         if self.is_fullscreen() {
             return;
         }
-        let Ok(origin) = win.outer_position() else { return };
+        let Ok(origin) = win.outer_position() else {
+            return;
+        };
         let start = cursor();
         let on = Arc::new(AtomicBool::new(true));
         *self.drag.lock().unwrap() = Some(on.clone());
@@ -145,7 +152,10 @@ impl Widget {
         std::thread::spawn(move || {
             while on.load(Ordering::SeqCst) {
                 let (x, y) = cursor();
-                let _ = win.set_position(PhysicalPosition::new(origin.x + x - start.0, origin.y + y - start.1));
+                let _ = win.set_position(PhysicalPosition::new(
+                    origin.x + x - start.0,
+                    origin.y + y - start.1,
+                ));
                 std::thread::sleep(Duration::from_millis(8));
             }
         });
@@ -178,7 +188,9 @@ impl Widget {
     pub fn set_fullscreen(&self, win: &WebviewWindow, on: bool) -> bool {
         let mut from = self.fullscreen_from.lock().unwrap();
         if on && from.is_none() {
-            let (Ok(at), Ok(Some(screen))) = (win.outer_position(), win.current_monitor()) else { return false };
+            let (Ok(at), Ok(Some(screen))) = (win.outer_position(), win.current_monitor()) else {
+                return false;
+            };
             let (width, height) = logical_size(win);
             *from = Some(Bounds { at, width, height });
             let _ = win.set_position(*screen.position());

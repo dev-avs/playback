@@ -63,7 +63,10 @@ pub struct Song {
 
 fn spotify_playing(app: &AppHandle) -> bool {
     let latest = app.state::<Media>().latest();
-    latest.as_ref().and_then(|s| s["appId"].as_str()).is_some_and(|id| id.to_lowercase().contains("spotify"))
+    latest
+        .as_ref()
+        .and_then(|s| s["appId"].as_str())
+        .is_some_and(|id| id.to_lowercase().contains("spotify"))
 }
 
 fn token_fresh() -> bool {
@@ -71,7 +74,13 @@ fn token_fresh() -> bool {
 }
 
 fn bridged_id(title: &str) -> Option<String> {
-    STATE.lock().unwrap().track.as_ref()?.id_for(title, now()).map(String::from)
+    STATE
+        .lock()
+        .unwrap()
+        .track
+        .as_ref()?
+        .id_for(title, now())
+        .map(String::from)
 }
 
 /// The song's Spotify id: from the bridge, else from an earlier search.
@@ -89,10 +98,16 @@ fn request_from_spotify(app: &AppHandle, song: &Song) {
     let lookup_key = format!("{}|{}", song.artist, song.title);
     let need_id = {
         let mut s = STATE.lock().unwrap();
-        let need = !known && IDS.get(&song.artist, &song.title, now()).is_none() && !s.looked_up.contains(&lookup_key);
+        let need = !known
+            && IDS.get(&song.artist, &song.title, now()).is_none()
+            && !s.looked_up.contains(&lookup_key);
         if need {
             s.looked_up.insert(lookup_key);
-            s.pending = Some(Wanted { title: song.title.clone(), artist: song.artist.clone(), duration: song.duration });
+            s.pending = Some(Wanted {
+                title: song.title.clone(),
+                artist: song.artist.clone(),
+                duration: song.duration,
+            });
         }
         need
     };
@@ -132,7 +147,11 @@ pub fn next(title: &str) -> Option<Value> {
 /// session usually names the song a moment before the push lands, so for
 /// Spotify's own songs the push gets two seconds to catch up.
 pub async fn art(title: &str, app_id: &str) -> Option<String> {
-    let tries = if app_id.to_lowercase().contains("spotify") { 10 } else { 1 };
+    let tries = if app_id.to_lowercase().contains("spotify") {
+        10
+    } else {
+        1
+    };
     for _ in 0..tries {
         let found = {
             let s = STATE.lock().unwrap();
@@ -141,7 +160,11 @@ pub async fn art(title: &str, app_id: &str) -> Option<String> {
                 Some(t.image.clone().ok_or_else(|| t.id.clone()))
             } else {
                 // the queued song just started: its cover is already known
-                t.next.as_ref().filter(|n| track::loose_match(n.name.as_deref(), title)).and_then(|n| n.image.clone()).map(Ok)
+                t.next
+                    .as_ref()
+                    .filter(|n| track::loose_match(n.name.as_deref(), title))
+                    .and_then(|n| n.image.clone())
+                    .map(Ok)
             }
         };
         match found {
@@ -156,10 +179,19 @@ pub async fn art(title: &str, app_id: &str) -> Option<String> {
 /// Spotify's cover for a track id, from its public oEmbed endpoint.
 async fn oembed_art(id: &str) -> Option<String> {
     let url = format!("https://open.spotify.com/oembed?url=spotify:track:{id}");
-    let res = client().get(url).timeout(Duration::from_secs(6)).send().await.ok()?;
+    let res = client()
+        .get(url)
+        .timeout(Duration::from_secs(6))
+        .send()
+        .await
+        .ok()?;
     let body: Value = res.error_for_status().ok()?.json().await.ok()?;
     // oEmbed hands out 300px; the 640px one differs only in this code
-    Some(body["thumbnail_url"].as_str()?.replace("ab67616d00001e02", "ab67616d0000b273"))
+    Some(
+        body["thumbnail_url"]
+            .as_str()?
+            .replace("ab67616d00001e02", "ab67616d0000b273"),
+    )
 }
 
 /// Fetches the queued song's lyrics into the cache ahead, once per run.
@@ -184,12 +216,18 @@ fn on_token(app: &AppHandle, payload: &Value) -> spotify::Saved {
         on_track(app, t);
     }
     let before = spotify::signed_in();
-    let saved = spotify::hand_over(payload["token"].as_str().unwrap_or(""), payload["expiresAt"].as_f64());
+    let saved = spotify::hand_over(
+        payload["token"].as_str().unwrap_or(""),
+        payload["expiresAt"].as_f64(),
+    );
     if saved.ok && !before {
         eprintln!("[bridge] token accepted, Spicy Lyrics is reachable again");
         let _ = app.emit("spotify:tokenArrived", ());
     } else if !saved.ok {
-        eprintln!("[bridge] token rejected: {}", saved.error.as_deref().unwrap_or("?"));
+        eprintln!(
+            "[bridge] token rejected: {}",
+            saved.error.as_deref().unwrap_or("?")
+        );
     }
     close_quick_open_when_done(app);
     saved
@@ -210,9 +248,16 @@ fn on_track(app: &AppHandle, t: Track) {
         let _ = app.emit("bridge:track", ());
     }
     if changed {
-        eprintln!("[bridge] now playing {} ({})", t.name.as_deref().unwrap_or("?"), t.id);
+        eprintln!(
+            "[bridge] now playing {} ({})",
+            t.name.as_deref().unwrap_or("?"),
+            t.id
+        );
         // diagnostics only: the current id, readable without a debugger
-        let _ = std::fs::write(data_file("bridged-track.json"), serde_json::to_string(&t).unwrap_or_default());
+        let _ = std::fs::write(
+            data_file("bridged-track.json"),
+            serde_json::to_string(&t).unwrap_or_default(),
+        );
         // The page asked on the session's change, before this id arrived; if
         // lyrics are on hand now, it looks again.
         if spicy::on_hand(&t.id) {
@@ -225,7 +270,9 @@ fn on_track(app: &AppHandle, t: Track) {
 fn on_spicy(app: &AppHandle, payload: &Value) -> Value {
     let id = payload["track"]["id"].as_str().filter(|id| !id.is_empty());
     let lyrics = &payload["lyrics"];
-    let Some(id) = id.filter(|_| !lyrics.is_null()) else { return json!({ "ok": false, "error": "no track id or lyrics" }) };
+    let Some(id) = id.filter(|_| !lyrics.is_null()) else {
+        return json!({ "ok": false, "error": "no track id or lyrics" });
+    };
     eprintln!(
         "[bridge] {} lyrics for {} ({id})",
         lyrics["Type"].as_str().unwrap_or("?"),
@@ -247,7 +294,9 @@ fn pending() -> Value {
 fn on_resolved(app: &AppHandle, payload: &Value) {
     let wanted = {
         let mut s = STATE.lock().unwrap();
-        let matches = s.pending.as_ref().is_some_and(|w| payload["title"] == w.title.as_str() && payload["artist"] == w.artist.as_str());
+        let matches = s.pending.as_ref().is_some_and(|w| {
+            payload["title"] == w.title.as_str() && payload["artist"] == w.artist.as_str()
+        });
         if !matches {
             return;
         }
@@ -256,10 +305,16 @@ fn on_resolved(app: &AppHandle, payload: &Value) {
     if let Some(error) = payload["error"].as_str() {
         eprintln!("[lookup] search failed for {}: {error}", wanted.title);
     } else {
-        let candidates: Vec<Candidate> = serde_json::from_value(payload["candidates"].clone()).unwrap_or_default();
+        let candidates: Vec<Candidate> =
+            serde_json::from_value(payload["candidates"].clone()).unwrap_or_default();
         let id = lookup::pick(&wanted, &candidates);
         IDS.set(&wanted.artist, &wanted.title, id.clone(), now());
-        eprintln!("[lookup] {} - {} -> {}", wanted.artist, wanted.title, id.as_deref().unwrap_or("not on Spotify"));
+        eprintln!(
+            "[lookup] {} - {} -> {}",
+            wanted.artist,
+            wanted.title,
+            id.as_deref().unwrap_or("not on Spotify")
+        );
         if id.is_some() {
             let _ = app.emit("spicy:lyricsArrived", ());
         }

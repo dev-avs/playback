@@ -21,7 +21,9 @@ const SIGNED_IN: &str = "spotify-tokens.json";
 const OPAQUE_TOKEN_TTL_MS: f64 = 55.0 * 60_000.0;
 
 pub fn now_ms() -> f64 {
-    SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).map_or(0.0, |d| d.as_secs_f64() * 1000.0)
+    SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .map_or(0.0, |d| d.as_secs_f64() * 1000.0)
 }
 
 #[derive(Serialize, Deserialize)]
@@ -46,8 +48,14 @@ fn read<T: for<'de> Deserialize<'de>>(name: &str) -> Option<T> {
 pub fn manual() -> Option<Manual> {
     let mut m: Manual = read(MANUAL)?;
     if m.expires_at.is_none() {
-        let saved = fs::metadata(data_file(MANUAL)).and_then(|f| f.modified()).ok()?;
-        let saved = saved.duration_since(SystemTime::UNIX_EPOCH).ok()?.as_secs_f64() * 1000.0;
+        let saved = fs::metadata(data_file(MANUAL))
+            .and_then(|f| f.modified())
+            .ok()?;
+        let saved = saved
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .ok()?
+            .as_secs_f64()
+            * 1000.0;
         m.expires_at = Some(saved + OPAQUE_TOKEN_TTL_MS);
     }
     Some(m)
@@ -68,7 +76,9 @@ pub fn client_id() -> Option<String> {
         #[serde(rename = "clientId")]
         client_id: Option<String>,
     }
-    let id = std::env::var("SPOTIFY_CLIENT_ID").ok().or_else(|| read::<App>("spotify.json")?.client_id)?;
+    let id = std::env::var("SPOTIFY_CLIENT_ID")
+        .ok()
+        .or_else(|| read::<App>("spotify.json")?.client_id)?;
     Some(id.trim().to_string()).filter(|id| !id.is_empty())
 }
 
@@ -77,7 +87,9 @@ pub fn client_id() -> Option<String> {
 /// token early.
 fn jwt_expiry(token: &str) -> Option<f64> {
     let payload = token.split('.').nth(1)?.trim_end_matches('=');
-    let bytes = base64::engine::general_purpose::URL_SAFE_NO_PAD.decode(payload).ok()?;
+    let bytes = base64::engine::general_purpose::URL_SAFE_NO_PAD
+        .decode(payload)
+        .ok()?;
     let claims: serde_json::Value = serde_json::from_slice(&bytes).ok()?;
     claims["exp"].as_f64().map(|s| s * 1000.0)
 }
@@ -85,12 +97,20 @@ fn jwt_expiry(token: &str) -> Option<f64> {
 /// An expiry as epoch ms. Some Spotify builds report seconds, which read as
 /// ms would be 1970 and look long expired.
 fn as_epoch_ms(reported: f64) -> Option<f64> {
-    (reported.is_finite() && reported > 0.0).then_some(if reported < 1e12 { reported * 1000.0 } else { reported })
+    (reported.is_finite() && reported > 0.0).then_some(if reported < 1e12 {
+        reported * 1000.0
+    } else {
+        reported
+    })
 }
 
 /// Checks a handed-over token: the token itself, and when it dies if known.
 /// `known_expiry` is the expiry the caller was told along with it.
-pub fn accept(raw: &str, known_expiry: Option<f64>, now: f64) -> Result<(String, Option<f64>), String> {
+pub fn accept(
+    raw: &str,
+    known_expiry: Option<f64>,
+    now: f64,
+) -> Result<(String, Option<f64>), String> {
     let token = raw.trim();
     let token = match token.get(..7) {
         Some(p) if p.eq_ignore_ascii_case("bearer ") => token[7..].trim_start(),
@@ -123,7 +143,10 @@ pub fn save_manual(raw: &str, known_expiry: Option<f64>) -> Result<f64, String> 
         }
     }
     let expires_at = expiry.unwrap_or(now + OPAQUE_TOKEN_TTL_MS);
-    let record = Manual { access_token: token.clone(), expires_at: Some(expires_at) };
+    let record = Manual {
+        access_token: token.clone(),
+        expires_at: Some(expires_at),
+    };
     let json = serde_json::to_string(&record).map_err(|e| e.to_string())?;
     fs::write(data_file(MANUAL), json).map_err(|e| format!("could not save token: {e}"))?;
     // read back: a silent write failure looks fine until the next start
@@ -151,22 +174,32 @@ mod tests {
     const NOW: f64 = 1_800_000_000_000.0;
 
     fn jwt(exp_s: f64) -> String {
-        let claims = base64::engine::general_purpose::URL_SAFE_NO_PAD.encode(format!("{{\"exp\":{exp_s}}}"));
+        let claims =
+            base64::engine::general_purpose::URL_SAFE_NO_PAD.encode(format!("{{\"exp\":{exp_s}}}"));
         format!("eyJhbGciOiJIUzI1NiJ9.{claims}.signature-signature-signature")
     }
 
     #[test]
     fn refuses_paste_mistakes() {
         assert_eq!(accept("  ", None, NOW).unwrap_err(), "empty token");
-        assert_eq!(accept("short", None, NOW).unwrap_err(), "that does not look like an access token");
+        assert_eq!(
+            accept("short", None, NOW).unwrap_err(),
+            "that does not look like an access token"
+        );
         assert!(accept(&format!("{} x", "a".repeat(50)), None, NOW).is_err());
     }
 
     #[test]
     fn reads_the_expiry_off_the_token() {
         let token = jwt(NOW / 1000.0 + 600.0);
-        assert_eq!(accept(&format!("Bearer {token}"), None, NOW).unwrap(), (token, Some(NOW + 600_000.0)));
-        assert_eq!(accept(&jwt(NOW / 1000.0 - 1.0), None, NOW).unwrap_err(), "that token has already expired");
+        assert_eq!(
+            accept(&format!("Bearer {token}"), None, NOW).unwrap(),
+            (token, Some(NOW + 600_000.0))
+        );
+        assert_eq!(
+            accept(&jwt(NOW / 1000.0 - 1.0), None, NOW).unwrap_err(),
+            "that token has already expired"
+        );
         // an opaque token's expiry is not known
         assert_eq!(accept(&"a".repeat(50), None, NOW).unwrap().1, None);
     }
@@ -174,8 +207,14 @@ mod tests {
     #[test]
     fn takes_a_reported_expiry_in_seconds_or_ms() {
         let token = "a".repeat(50);
-        assert_eq!(accept(&token, Some(NOW + 1000.0), NOW).unwrap().1, Some(NOW + 1000.0));
-        assert_eq!(accept(&token, Some(NOW / 1000.0 + 1.0), NOW).unwrap().1, Some(NOW + 1000.0));
+        assert_eq!(
+            accept(&token, Some(NOW + 1000.0), NOW).unwrap().1,
+            Some(NOW + 1000.0)
+        );
+        assert_eq!(
+            accept(&token, Some(NOW / 1000.0 + 1.0), NOW).unwrap().1,
+            Some(NOW + 1000.0)
+        );
         assert!(accept(&token, Some(NOW - 1.0), NOW).is_err());
     }
 }

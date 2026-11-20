@@ -65,7 +65,10 @@ fn decode(bytes: &[u8]) -> Option<String> {
     let (kind, rest) = bytes.split_first()?;
     match kind {
         0 if rest.len() % 2 == 0 => {
-            let units: Vec<u16> = rest.chunks_exact(2).map(|c| u16::from_le_bytes([c[0], c[1]])).collect();
+            let units: Vec<u16> = rest
+                .chunks_exact(2)
+                .map(|c| u16::from_le_bytes([c[0], c[1]]))
+                .collect();
             String::from_utf16(&units).ok()
         }
         1 => Some(rest.iter().map(|&b| b as char).collect()),
@@ -80,7 +83,10 @@ fn read_electron_storage(leveldb: &Path) -> Result<BTreeMap<String, String>, Str
     let copy = std::env::temp_dir().join("playback-settings-import");
     let _ = fs::remove_dir_all(&copy);
     copy_dir(leveldb, &copy, &["LOCK"]).map_err(|e| e.to_string())?;
-    let opts = Options { create_if_missing: false, ..Options::default() };
+    let opts = Options {
+        create_if_missing: false,
+        ..Options::default()
+    };
     let found = (|| {
         let mut db = DB::open(&copy, opts).map_err(|e| e.to_string())?;
         let mut it = db.new_iter().map_err(|e| e.to_string())?;
@@ -110,7 +116,10 @@ fn script(settings: &BTreeMap<String, String>) -> String {
 }
 
 fn marker(app: &AppHandle) -> Option<std::path::PathBuf> {
-    app.path().app_local_data_dir().ok().map(|d| d.join(IMPORTED))
+    app.path()
+        .app_local_data_dir()
+        .ok()
+        .map(|d| d.join(IMPORTED))
 }
 
 /// The settings script for every window to run, until it has run once.
@@ -130,7 +139,10 @@ fn read_script(app: &AppHandle) -> Option<String> {
     }
     match read_electron_storage(&leveldb) {
         Ok(settings) if !settings.is_empty() => {
-            eprintln!("[migrate] {} settings from the Electron build", settings.len());
+            eprintln!(
+                "[migrate] {} settings from the Electron build",
+                settings.len()
+            );
             Some(script(&settings))
         }
         Ok(_) => None,
@@ -161,7 +173,9 @@ mod tests {
     fn decodes_both_string_forms() {
         assert_eq!(decode(b"\x01lyricsFont").as_deref(), Some("lyricsFont"));
         assert_eq!(decode(b"\x01caf\xe9").as_deref(), Some("café"));
-        let utf16: Vec<u8> = std::iter::once(0).chain("日本".encode_utf16().flat_map(u16::to_le_bytes)).collect();
+        let utf16: Vec<u8> = std::iter::once(0)
+            .chain("日本".encode_utf16().flat_map(u16::to_le_bytes))
+            .collect();
         assert_eq!(decode(&utf16).as_deref(), Some("日本"));
         assert_eq!(decode(b"\x00\x41"), None);
         assert_eq!(decode(b""), None);
@@ -176,18 +190,23 @@ mod tests {
 
     #[test]
     fn reads_a_leveldb_like_electrons() {
-        let dir = std::env::temp_dir().join(format!("playback-migrate-test-{}", std::process::id()));
+        let dir =
+            std::env::temp_dir().join(format!("playback-migrate-test-{}", std::process::id()));
         let _ = fs::remove_dir_all(&dir);
         {
             let mut db = DB::open(&dir, Options::default()).unwrap();
             db.put(b"VERSION", b"1").unwrap();
             db.put(b"META:file://", b"x").unwrap();
             db.put(b"_file://\x00\x01opacity", b"\x010.8").unwrap();
-            db.put(b"_http://localhost:5173\x00\x01opacity", b"\x010.3").unwrap();
+            db.put(b"_http://localhost:5173\x00\x01opacity", b"\x010.3")
+                .unwrap();
             db.flush().unwrap();
         }
         let got = read_electron_storage(&dir).unwrap();
         let _ = fs::remove_dir_all(&dir);
-        assert_eq!(got, BTreeMap::from([("opacity".to_string(), "0.8".to_string())]));
+        assert_eq!(
+            got,
+            BTreeMap::from([("opacity".to_string(), "0.8".to_string())])
+        );
     }
 }

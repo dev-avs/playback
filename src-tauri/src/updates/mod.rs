@@ -53,11 +53,16 @@ pub struct UpdateState {
 
 impl UpdateState {
     pub fn available(&self) -> Option<&str> {
-        (self.status == Status::Available).then_some(self.version.as_deref()).flatten()
+        (self.status == Status::Available)
+            .then_some(self.version.as_deref())
+            .flatten()
     }
 
     fn busy(&self) -> bool {
-        matches!(self.status, Status::Dev | Status::Checking | Status::Downloading)
+        matches!(
+            self.status,
+            Status::Dev | Status::Checking | Status::Downloading
+        )
     }
 }
 
@@ -69,9 +74,19 @@ pub struct Updater {
 
 impl Default for Updater {
     fn default() -> Self {
-        let status = if install::uninstaller().is_some() { Status::Idle } else { Status::Dev };
+        let status = if install::uninstaller().is_some() {
+            Status::Idle
+        } else {
+            Status::Dev
+        };
         Updater {
-            state: Mutex::new(UpdateState { status, version: None, downloaded: 0, total: None, error: None }),
+            state: Mutex::new(UpdateState {
+                status,
+                version: None,
+                downloaded: 0,
+                total: None,
+                error: None,
+            }),
             legacy: Mutex::default(),
         }
     }
@@ -122,7 +137,11 @@ impl Updater {
             Ok(f) => {
                 let newer = feed::compare(&f.version, &current(app)) == Ordering::Greater;
                 self.set(app, |s| {
-                    s.status = if newer { Status::Available } else { Status::None };
+                    s.status = if newer {
+                        Status::Available
+                    } else {
+                        Status::None
+                    };
                     s.version = Some(f.version);
                 })
             }
@@ -136,7 +155,11 @@ impl Updater {
         if matches!(s.status, Status::Dev | Status::Downloading) {
             return s;
         }
-        let s = if s.status == Status::Available { s } else { self.check(app).await };
+        let s = if s.status == Status::Available {
+            s
+        } else {
+            self.check(app).await
+        };
         match s.available().map(String::from) {
             Some(version) => self.install_release(app, None, version).await,
             None => s,
@@ -153,13 +176,22 @@ impl Updater {
         let legacy = self.legacy.lock().unwrap().get(&version).cloned();
         match legacy {
             Some(url) => self.install_legacy(app, version, &url).await,
-            None => self.install_release(app, Some(version.clone()), version).await,
+            None => {
+                self.install_release(app, Some(version.clone()), version)
+                    .await
+            }
         }
     }
 
     fn start_download(&self, app: &AppHandle, version: &str) {
         self.set(app, |s| {
-            *s = UpdateState { status: Status::Downloading, version: Some(version.into()), downloaded: 0, total: None, error: None };
+            *s = UpdateState {
+                status: Status::Downloading,
+                version: Some(version.into()),
+                downloaded: 0,
+                total: None,
+                error: None,
+            };
         });
     }
 
@@ -181,7 +213,12 @@ impl Updater {
     }
 
     /// `pinned`: that version's own feed rather than the newest.
-    async fn install_release(&self, app: &AppHandle, pinned: Option<String>, version: String) -> UpdateState {
+    async fn install_release(
+        &self,
+        app: &AppHandle,
+        pinned: Option<String>,
+        version: String,
+    ) -> UpdateState {
         self.start_download(app, &version);
         let done = async {
             let feed = feed::fetch(pinned.as_deref()).await?;
@@ -190,9 +227,21 @@ impl Updater {
             }
             let dir = work_dir().join(&feed.version);
             let (stub, package) = (dir.join(&feed.stub.file), dir.join(&feed.package.file));
-            download::fetch(&feed.url(&feed.stub), &stub, Some(&feed.stub.sha512), self.counter(app, 0)).await?;
+            download::fetch(
+                &feed.url(&feed.stub),
+                &stub,
+                Some(&feed.stub.sha512),
+                self.counter(app, 0),
+            )
+            .await?;
             let base = fs::metadata(&stub).map(|m| m.len()).unwrap_or(0);
-            download::fetch(&feed.url(&feed.package), &package, Some(&feed.package.sha512), self.counter(app, base)).await?;
+            download::fetch(
+                &feed.url(&feed.package),
+                &package,
+                Some(&feed.package.sha512),
+                self.counter(app, base),
+            )
+            .await?;
             // as electron-updater runs it: silent, the package handed over,
             // and the app started again once it is in place
             let package_arg = format!("--package-file={}", package.display());

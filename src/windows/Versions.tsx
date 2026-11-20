@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
 import { AppMark } from "./Changelog.tsx";
-import { CHANGE_KINDS, compareVersions, progressText, type ChangeKind } from "./changelog";
-import { KEYS, usePersisted } from "./settings";
-import type { Release, UpdateState } from "./player";
+import { CHANGE_KINDS, compareVersions, progressText, type ChangeKind } from "../changelog";
+import { KEYS, usePersisted } from "../settings";
+import type { Release, UpdateState } from "../types/player";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;

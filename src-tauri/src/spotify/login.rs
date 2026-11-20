@@ -48,7 +48,11 @@ async fn exchange(params: &[(&str, &str)], kept_refresh: Option<&str>) -> Result
     let status = res.status();
     if !status.is_success() {
         let body = res.text().await.unwrap_or_default();
-        return Err(format!("token endpoint {}: {}", status.as_u16(), body.chars().take(200).collect::<String>()));
+        return Err(format!(
+            "token endpoint {}: {}",
+            status.as_u16(),
+            body.chars().take(200).collect::<String>()
+        ));
     }
     let g: Granted = res.json().await.map_err(|e| e.to_string())?;
     Ok(SignedIn {
@@ -60,7 +64,15 @@ async fn exchange(params: &[(&str, &str)], kept_refresh: Option<&str>) -> Result
 
 /// A new access token for a spent one.
 pub async fn refresh(refresh_token: &str, id: &str) -> Result<SignedIn, String> {
-    exchange(&[("grant_type", "refresh_token"), ("refresh_token", refresh_token), ("client_id", id)], Some(refresh_token)).await
+    exchange(
+        &[
+            ("grant_type", "refresh_token"),
+            ("refresh_token", refresh_token),
+            ("client_id", id),
+        ],
+        Some(refresh_token),
+    )
+    .await
 }
 
 /// The path and query of one HTTP request.
@@ -73,7 +85,9 @@ async fn request_target(stream: &mut TcpStream) -> Option<Url> {
 }
 
 async fn reply(stream: &mut TcpStream, status: &str, body: &str) {
-    let page = format!(r#"<!doctype html><meta charset="utf-8"><body style="font:15px system-ui;padding:40px">{body}</body>"#);
+    let page = format!(
+        r#"<!doctype html><meta charset="utf-8"><body style="font:15px system-ui;padding:40px">{body}</body>"#
+    );
     let head = format!(
         "HTTP/1.1 {status}\r\nContent-Type: text/html; charset=utf-8\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
         page.len()
@@ -83,15 +97,26 @@ async fn reply(stream: &mut TcpStream, status: &str, body: &str) {
 }
 
 /// Waits for Spotify's redirect and turns its code into tokens.
-async fn wait_for_redirect(listener: TcpListener, state: &str, verifier: &str, id: &str) -> Result<(), String> {
+async fn wait_for_redirect(
+    listener: TcpListener,
+    state: &str,
+    verifier: &str,
+    id: &str,
+) -> Result<(), String> {
     loop {
         let (mut stream, _) = listener.accept().await.map_err(|e| e.to_string())?;
-        let Some(url) = request_target(&mut stream).await else { continue };
+        let Some(url) = request_target(&mut stream).await else {
+            continue;
+        };
         if url.path() != "/callback" {
             reply(&mut stream, "404 Not Found", "").await;
             continue;
         }
-        let param = |k: &str| url.query_pairs().find(|(name, _)| name == k).map(|(_, v)| v.into_owned());
+        let param = |k: &str| {
+            url.query_pairs()
+                .find(|(name, _)| name == k)
+                .map(|(_, v)| v.into_owned())
+        };
         let result = async {
             if param("state").as_deref() != Some(state) {
                 return Err("state mismatch".to_string());
@@ -115,7 +140,14 @@ async fn wait_for_redirect(listener: TcpListener, state: &str, verifier: &str, i
         }
         .await;
         match &result {
-            Ok(()) => reply(&mut stream, "200 OK", "Signed in. You can close this tab and go back to Playback.").await,
+            Ok(()) => {
+                reply(
+                    &mut stream,
+                    "200 OK",
+                    "Signed in. You can close this tab and go back to Playback.",
+                )
+                .await
+            }
             Err(e) => reply(&mut stream, "200 OK", &format!("Sign-in failed: {e}")).await,
         }
         return result;
@@ -132,7 +164,9 @@ pub async fn login(open: impl FnOnce(&str)) -> Result<(), String> {
         return Err("a sign-in is already open in the browser".into());
     }
     let result = async {
-        let listener = TcpListener::bind(("127.0.0.1", PORT)).await.map_err(|e| e.to_string())?;
+        let listener = TcpListener::bind(("127.0.0.1", PORT))
+            .await
+            .map_err(|e| e.to_string())?;
         let verifier = random_b64(64);
         let challenge = B64.encode(Sha256::digest(verifier.as_bytes()));
         let state = random_b64(16);

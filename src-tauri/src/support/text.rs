@@ -10,7 +10,9 @@ static NOT_ALNUM: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"[^\p{L}\p{N}]+
 /// "[Remastered]".
 fn normalize(s: &str) -> String {
     let lower = s.to_lowercase();
-    NOT_ALNUM.replace_all(&DECORATION.replace(&lower, ""), "").into_owned()
+    NOT_ALNUM
+        .replace_all(&DECORATION.replace(&lower, ""), "")
+        .into_owned()
 }
 
 /// The same title or name, give or take decoration: equal, or one inside the
@@ -22,7 +24,12 @@ pub fn loose_match(a: &str, b: &str) -> bool {
 
 /// Equal ignoring case and runs of whitespace.
 pub fn same_text(a: &str, b: &str) -> bool {
-    let squash = |s: &str| s.split_whitespace().collect::<Vec<_>>().join(" ").to_lowercase();
+    let squash = |s: &str| {
+        s.split_whitespace()
+            .collect::<Vec<_>>()
+            .join(" ")
+            .to_lowercase()
+    };
     squash(a) == squash(b)
 }
 

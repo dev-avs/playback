@@ -61,7 +61,13 @@ impl Provider {
         }
     }
 
-    async fn find(self, artist: &str, title: &str, album: Option<&str>, duration: Option<f64>) -> Found {
+    async fn find(
+        self,
+        artist: &str,
+        title: &str,
+        album: Option<&str>,
+        duration: Option<f64>,
+    ) -> Found {
         match self {
             Provider::LrcMux => lrcmux::find(artist, title, album, duration).await,
             Provider::NetEase => netease::find(artist, title, duration).await,
@@ -94,28 +100,46 @@ fn tier_of(r: &Value) -> Tier {
 }
 
 static TITLE_SUFFIX: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(r"(?i)\s*[-–]\s*(Remaster(ed)?|Radio Edit|Single Version|.*Version|.*Mix|Live).*$").unwrap()
+    Regex::new(r"(?i)\s*[-–]\s*(Remaster(ed)?|Radio Edit|Single Version|.*Version|.*Mix|Live).*$")
+        .unwrap()
 });
-static TITLE_FEAT: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?i)\s*[(\[](feat\.?|ft\.?|with)[^)\]]*[)\]]").unwrap());
-static ARTIST_SPLIT: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?i),|&|\sfeat\.?\s|\sft\.?\s").unwrap());
+static TITLE_FEAT: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i)\s*[(\[](feat\.?|ft\.?|with)[^)\]]*[)\]]").unwrap());
+static ARTIST_SPLIT: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"(?i),|&|\sfeat\.?\s|\sft\.?\s").unwrap());
 
 /// Spotify decorates titles in ways lyrics databases do not carry.
 fn clean_title(title: &str) -> String {
-    TITLE_FEAT.replace_all(&TITLE_SUFFIX.replace(title, ""), "").trim().to_string()
+    TITLE_FEAT
+        .replace_all(&TITLE_SUFFIX.replace(title, ""), "")
+        .trim()
+        .to_string()
 }
 
 /// The best-timed lyrics any provider has, asked as reported and then as the
 /// first artist with a cleaned-up title. Timing outranks provider order;
 /// nothing beats syllable timing, so the first such answer ends the search.
 pub async fn fetch(req: Request) -> Option<Value> {
-    let first_artist = ARTIST_SPLIT.split(&req.artist).next().unwrap_or("").trim().to_string();
-    let asks = [(req.artist.clone(), req.title.clone()), (first_artist, clean_title(&req.title))];
+    let first_artist = ARTIST_SPLIT
+        .split(&req.artist)
+        .next()
+        .unwrap_or("")
+        .trim()
+        .to_string();
+    let asks = [
+        (req.artist.clone(), req.title.clone()),
+        (first_artist, clean_title(&req.title)),
+    ];
     let album = req.album.as_deref().filter(|a| !a.is_empty());
     let duration = req.duration.filter(|d| *d > 0.0);
 
     let mut best: Option<(Value, Tier)> = None;
     for provider in Provider::ORDER {
-        if req.only.as_deref().is_some_and(|only| only != provider.name()) {
+        if req
+            .only
+            .as_deref()
+            .is_some_and(|only| only != provider.name())
+        {
             continue;
         }
         for (artist, title) in asks.iter().filter(|(a, t)| !a.is_empty() && !t.is_empty()) {

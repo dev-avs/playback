@@ -3,10 +3,10 @@
 //! for them; this picks the right hit and remembers it. Ported from
 //! electron/spotifyLookup.cjs.
 
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::path::PathBuf;
-use regex::Regex;
 use std::sync::{LazyLock, Mutex};
 
 /// A song Spotify does not have is not searched for again for a week.
@@ -37,8 +37,13 @@ pub struct Candidate {
 /// Letters and digits, lowercased, with "(feat. …)", "[Remastered]" and
 /// " - Live" cut.
 fn norm(s: &str) -> String {
-    static SUFFIX: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(\s+-\s+|\s*[(\[]).*$").expect("a valid pattern"));
-    SUFFIX.replace(&s.to_lowercase(), "").chars().filter(|c| c.is_alphanumeric()).collect()
+    static SUFFIX: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"(\s+-\s+|\s*[(\[]).*$").expect("a valid pattern"));
+    SUFFIX
+        .replace(&s.to_lowercase(), "")
+        .chars()
+        .filter(|c| c.is_alphanumeric())
+        .collect()
 }
 
 fn title_matches(a: &str, b: &str) -> bool {
@@ -63,7 +68,9 @@ pub fn pick(wanted: &Wanted, candidates: &[Candidate]) -> Option<String> {
     let mut best_diff = f64::INFINITY;
     for c in candidates {
         let Some(id) = c.id.as_deref() else { continue };
-        if !title_matches(c.name.as_deref().unwrap_or(""), &wanted.title) || !artist_matches(&wanted.artist, &c.artists) {
+        if !title_matches(c.name.as_deref().unwrap_or(""), &wanted.title)
+            || !artist_matches(&wanted.artist, &c.artists)
+        {
             continue;
         }
         match (want_ms, c.duration_ms.filter(|d| *d > 0.0)) {
@@ -96,18 +103,33 @@ pub struct IdCache {
 }
 
 fn key_of(artist: &str, title: &str) -> String {
-    format!("{}\u{0}{}", artist.trim().to_lowercase(), title.trim().to_lowercase())
+    format!(
+        "{}\u{0}{}",
+        artist.trim().to_lowercase(),
+        title.trim().to_lowercase()
+    )
 }
 
 impl IdCache {
     pub fn open(file: PathBuf) -> IdCache {
-        let entries = std::fs::read_to_string(&file).ok().and_then(|s| serde_json::from_str(&s).ok()).unwrap_or_default();
-        IdCache { file, entries: Mutex::new(entries) }
+        let entries = std::fs::read_to_string(&file)
+            .ok()
+            .and_then(|s| serde_json::from_str(&s).ok())
+            .unwrap_or_default();
+        IdCache {
+            file,
+            entries: Mutex::new(entries),
+        }
     }
 
     /// Some(Some(id)) known, Some(None) known miss, None never looked up.
     pub fn get(&self, artist: &str, title: &str, now: f64) -> Option<Option<String>> {
-        let e = self.entries.lock().unwrap().get(&key_of(artist, title)).cloned()?;
+        let e = self
+            .entries
+            .lock()
+            .unwrap()
+            .get(&key_of(artist, title))
+            .cloned()?;
         if e.id.is_none() && now - e.at > MISS_TTL_MS {
             return None;
         }
@@ -117,7 +139,10 @@ impl IdCache {
     pub fn set(&self, artist: &str, title: &str, id: Option<String>, now: f64) {
         let mut entries = self.entries.lock().unwrap();
         entries.insert(key_of(artist, title), Known { id, at: now });
-        if let Err(e) = std::fs::write(&self.file, serde_json::to_string(&*entries).expect("plain JSON")) {
+        if let Err(e) = std::fs::write(
+            &self.file,
+            serde_json::to_string(&*entries).expect("plain JSON"),
+        ) {
             eprintln!("[lookup] could not persist ids: {e}");
         }
     }
@@ -128,12 +153,21 @@ mod tests {
     use super::*;
 
     fn hit(id: &str, name: &str, artist: &str, ms: Option<f64>) -> Candidate {
-        Candidate { id: Some(id.into()), name: Some(name.into()), artists: vec![artist.into()], duration_ms: ms }
+        Candidate {
+            id: Some(id.into()),
+            name: Some(name.into()),
+            artists: vec![artist.into()],
+            duration_ms: ms,
+        }
     }
 
     #[test]
     fn picks_the_closest_matching_hit() {
-        let wanted = Wanted { title: "Song - Live".into(), artist: "Band feat. Guest".into(), duration: Some(200.0) };
+        let wanted = Wanted {
+            title: "Song - Live".into(),
+            artist: "Band feat. Guest".into(),
+            duration: Some(200.0),
+        };
         let hits = [
             hit("other", "Different", "Band", Some(200_000.0)),
             hit("far", "Song", "Band", Some(230_000.0)),
@@ -142,13 +176,17 @@ mod tests {
         ];
         assert_eq!(pick(&wanted, &hits).as_deref(), Some("closer"));
         assert_eq!(pick(&wanted, &hits[..2]), None);
-        let untimed = Wanted { duration: None, ..wanted };
+        let untimed = Wanted {
+            duration: None,
+            ..wanted
+        };
         assert_eq!(pick(&untimed, &hits).as_deref(), Some("far"));
     }
 
     #[test]
     fn remembers_hits_and_misses() {
-        let file = std::env::temp_dir().join(format!("playback-ids-test-{}.json", std::process::id()));
+        let file =
+            std::env::temp_dir().join(format!("playback-ids-test-{}.json", std::process::id()));
         let _ = std::fs::remove_file(&file);
         let ids = IdCache::open(file.clone());
         assert_eq!(ids.get("A", "T", 0.0), None);

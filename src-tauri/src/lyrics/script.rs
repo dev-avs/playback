@@ -56,7 +56,11 @@ static DERIVED: LazyLock<Regex> = LazyLock::new(|| {
 
 /// An LrcLib upload that says it is a translation or a transliteration.
 pub fn is_derived(entry: &Value) -> bool {
-    DERIVED.is_match(&format!("{} {}", str_of(entry, "trackName"), str_of(entry, "artistName")))
+    DERIVED.is_match(&format!(
+        "{} {}",
+        str_of(entry, "trackName"),
+        str_of(entry, "artistName")
+    ))
 }
 
 #[cfg(test)]
@@ -75,8 +79,12 @@ mod tests {
 
     #[test]
     fn spots_derived_uploads() {
-        assert!(is_derived(&json!({ "trackName": "Song (English Translation)" })));
+        assert!(is_derived(
+            &json!({ "trackName": "Song (English Translation)" })
+        ));
         assert!(is_derived(&json!({ "trackName": "노래 번역" })));
-        assert!(!is_derived(&json!({ "trackName": "Englishman in New York" })));
+        assert!(!is_derived(
+            &json!({ "trackName": "Englishman in New York" })
+        ));
     }
 }

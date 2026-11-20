@@ -13,7 +13,11 @@ fn has_lyrics(entry: &Value) -> bool {
 }
 
 fn text_of(entry: &Value) -> String {
-    format!("{}\n{}", str_of(entry, "syncedLyrics"), str_of(entry, "plainLyrics"))
+    format!(
+        "{}\n{}",
+        str_of(entry, "syncedLyrics"),
+        str_of(entry, "plainLyrics")
+    )
 }
 
 /// The exact match first; then the fuzzy search, which tolerates the
@@ -21,14 +25,21 @@ fn text_of(entry: &Value) -> String {
 pub async fn find(artist: &str, track: &str, album: Option<&str>, duration: Option<f64>) -> Found {
     let expected = scripts_of(&format!("{track} {artist} {}", album.unwrap_or("")));
 
-    let mut query = vec![("artist_name", artist.to_string()), ("track_name", track.to_string())];
+    let mut query = vec![
+        ("artist_name", artist.to_string()),
+        ("track_name", track.to_string()),
+    ];
     if let Some(a) = album {
         query.push(("album_name", a.into()));
     }
     if let Some(d) = duration {
         query.push(("duration", d.round().to_string()));
     }
-    let res = client().get("https://lrclib.net/api/get").query(&query).send().await?;
+    let res = client()
+        .get("https://lrclib.net/api/get")
+        .query(&query)
+        .send()
+        .await?;
     if res.status().is_success() {
         let d: Value = res.json().await?;
         if has_lyrics(&d) && !is_derived(&d) && script_matches(expected, &text_of(&d)) {
@@ -78,5 +89,7 @@ pub async fn find(artist: &str, track: &str, album: Option<&str>, duration: Opti
             best = Some((x, s));
         }
     }
-    Ok(best.filter(|(_, s)| *s >= 0).map(|(x, _)| with_source(x.clone(), SOURCE)))
+    Ok(best
+        .filter(|(_, s)| *s >= 0)
+        .map(|(x, _)| with_source(x.clone(), SOURCE)))
 }

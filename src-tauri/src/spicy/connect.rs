@@ -11,7 +11,10 @@ use super::key::{self, Checked};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::webview::{NewWindowResponse, PageLoadEvent};
-use tauri::{AppHandle, Manager, PhysicalPosition, PhysicalSize, Url, WebviewUrl, WebviewWindow, WebviewWindowBuilder};
+use tauri::{
+    AppHandle, Manager, PhysicalPosition, PhysicalSize, Url, WebviewUrl, WebviewWindow,
+    WebviewWindowBuilder,
+};
 use tauri_plugin_clipboard_manager::ClipboardExt;
 use tokio::sync::watch;
 
@@ -28,7 +31,9 @@ const CLOSE_AFTER: Duration = Duration::from_millis(1200);
 static OPEN: Mutex<Option<watch::Receiver<Option<bool>>>> = Mutex::new(None);
 
 fn signing_in(url: &Url) -> bool {
-    url.host_str() != Some(SITE_HOST) || url.path().starts_with("/sign-in") || url.path().starts_with("/sign-up")
+    url.host_str() != Some(SITE_HOST)
+        || url.path().starts_with("/sign-in")
+        || url.path().starts_with("/sign-up")
 }
 
 fn step_for(url: &Url) -> &'static str {
@@ -67,7 +72,10 @@ fn toast_script(text: &str) -> String {
 }
 
 fn autofill_script() -> String {
-    let (name, url) = (serde_json::to_string(APP_NAME).unwrap(), serde_json::to_string(PROJECT_URL).unwrap());
+    let (name, url) = (
+        serde_json::to_string(APP_NAME).unwrap(),
+        serde_json::to_string(PROJECT_URL).unwrap(),
+    );
     format!(
         r#"(() => {{
   if (window.__playerAutofill) return;
@@ -114,7 +122,8 @@ fn place(app: &AppHandle) -> Option<(PhysicalPosition<i32>, PhysicalSize<u32>)> 
         .and_then(|w| w.current_monitor().ok().flatten())
         .or_else(|| app.primary_monitor().ok().flatten())?;
     let (scale, area) = (m.scale_factor(), m.work_area());
-    let fit = |extent: u32, most: f64| ((extent as f64 - 40.0 * scale).min(most * scale)).max(1.0) as u32;
+    let fit =
+        |extent: u32, most: f64| ((extent as f64 - 40.0 * scale).min(most * scale)).max(1.0) as u32;
     let (w, h) = (fit(area.size.width, 980.0), fit(area.size.height, 780.0));
     let x = area.position.x + (area.size.width.saturating_sub(w) / 2) as i32;
     let y = area.position.y + (area.size.height.saturating_sub(h) / 2) as i32;
@@ -171,10 +180,20 @@ fn open(app: &AppHandle) -> tauri::Result<watch::Receiver<Option<bool>>> {
 
 /// Follows the page and the clipboard until a key is saved or the window
 /// closes.
-async fn watch_window(app: AppHandle, win: WebviewWindow, toast: Toast, done: watch::Sender<Option<bool>>) {
+async fn watch_window(
+    app: AppHandle,
+    win: WebviewWindow,
+    toast: Toast,
+    done: watch::Sender<Option<bool>>,
+) {
     // A failed read (the clipboard busy) is skipped, not taken as empty:
     // otherwise whatever was already there would look newly copied.
-    let read = || app.clipboard().read_text().ok().map(|t| t.trim().to_string());
+    let read = || {
+        app.clipboard()
+            .read_text()
+            .ok()
+            .map(|t| t.trim().to_string())
+    };
     let mut last_text = read();
     let mut last_url = String::new();
     let mut was_signing_in = false;
@@ -239,10 +258,22 @@ pub async fn connect(app: &AppHandle) -> Checked {
     };
     let mut rx = match waiting {
         Ok(rx) => rx,
-        Err(e) => return Checked { ok: false, error: Some(e.to_string()) },
+        Err(e) => {
+            return Checked {
+                ok: false,
+                error: Some(e.to_string()),
+            }
+        }
     };
-    let saved = rx.wait_for(Option::is_some).await.map(|v| *v == Some(true)).unwrap_or(false);
-    Checked { ok: saved, error: None }
+    let saved = rx
+        .wait_for(Option::is_some)
+        .await
+        .map(|v| *v == Some(true))
+        .unwrap_or(false);
+    Checked {
+        ok: saved,
+        error: None,
+    }
 }
 
 #[cfg(test)]
@@ -252,9 +283,14 @@ mod tests {
     #[test]
     fn tells_signing_in_from_the_dashboard() {
         let at = |s: &str| Url::parse(s).unwrap();
-        assert!(signing_in(&at("https://developers.spicylyrics.org/sign-in?next=x")));
+        assert!(signing_in(&at(
+            "https://developers.spicylyrics.org/sign-in?next=x"
+        )));
         assert!(signing_in(&at("https://accounts.google.com/o/oauth2")));
         assert!(!signing_in(&at(KEY_PAGE_URL)));
-        assert_eq!(step_for(&at(KEY_PAGE_URL)), "Create an application, then copy the key to your clipboard");
+        assert_eq!(
+            step_for(&at(KEY_PAGE_URL)),
+            "Create an application, then copy the key to your clipboard"
+        );
     }
 }

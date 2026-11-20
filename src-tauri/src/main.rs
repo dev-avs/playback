@@ -58,7 +58,9 @@ fn main() {
     migrate::adopt_legacy_folder();
     tauri::Builder::default()
         // first, so a second launch leaves before anything has started
-        .plugin(tauri_plugin_single_instance::init(|app, _, _| launch::second_instance(app)))
+        .plugin(tauri_plugin_single_instance::init(|app, _, _| {
+            launch::second_instance(app)
+        }))
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_clipboard_manager::init())
         .manage(ui::widget::Widget::default())

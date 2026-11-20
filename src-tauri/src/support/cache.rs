@@ -16,7 +16,13 @@ struct Entries<V> {
 
 impl<V: Clone> Cache<V> {
     pub fn new(cap: usize) -> Self {
-        Cache { cap, inner: Mutex::new(Entries { map: HashMap::new(), order: VecDeque::new() }) }
+        Cache {
+            cap,
+            inner: Mutex::new(Entries {
+                map: HashMap::new(),
+                order: VecDeque::new(),
+            }),
+        }
     }
 
     pub fn get(&self, key: &str) -> Option<V> {

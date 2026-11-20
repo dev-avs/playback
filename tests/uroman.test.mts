@@ -3,8 +3,8 @@
 // final he, which is ours).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { uromanize, hasUromanScript } from "../src/uroman.ts";
-import { romanizeText, romanizeLines, linesNeedRomanization } from "../src/romanize.ts";
+import { uromanize, hasUromanScript } from "../src/lyrics/uroman.ts";
+import { romanizeText, romanizeLines, linesNeedRomanization } from "../src/lyrics/romanize.ts";
 
 const cases: [string, string][] = [
   ["הָבָה נָגִילָה וְנִשְׂמְחָה", "hava nagila venismecha"],

@@ -9,8 +9,10 @@ use regex::Regex;
 use std::sync::LazyLock;
 use std::time::Duration;
 
-static TITLE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#""title":\{"runs":\[\{"text":"((?:[^"\\]|\\.)*)""#).unwrap());
-static OWNER: LazyLock<Regex> = LazyLock::new(|| Regex::new(r#""ownerText":\{"runs":\[\{"text":"((?:[^"\\]|\\.)*)""#).unwrap());
+static TITLE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r#""title":\{"runs":\[\{"text":"((?:[^"\\]|\\.)*)""#).unwrap());
+static OWNER: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r#""ownerText":\{"runs":\[\{"text":"((?:[^"\\]|\\.)*)""#).unwrap());
 
 /// A JSON string body as text ("&" and the like), or as it was.
 fn unescape(s: &str) -> String {
@@ -33,12 +35,17 @@ pub async fn find(title: &str, channel: &str) -> Result<Option<String>, reqwest:
         return Ok(None);
     }
     let html = res.text().await?;
-    for chunk in html.split(r#""videoRenderer":{"videoId":""#).skip(1).take(7) {
+    for chunk in html
+        .split(r#""videoRenderer":{"videoId":""#)
+        .skip(1)
+        .take(7)
+    {
         let Some(id) = chunk.get(..11) else { continue };
         if !capture(&TITLE, chunk).is_some_and(|t| same_text(&t, title)) {
             continue;
         }
-        if !channel.is_empty() && !loose_match(&capture(&OWNER, chunk).unwrap_or_default(), channel) {
+        if !channel.is_empty() && !loose_match(&capture(&OWNER, chunk).unwrap_or_default(), channel)
+        {
             continue;
         }
         // 1280 px when the uploader made one; 320 px (twice the thumbnail,
@@ -50,7 +57,11 @@ pub async fn find(title: &str, channel: &str) -> Result<Option<String>, reqwest:
             .send()
             .await
             .is_ok_and(|r| r.status().is_success());
-        return Ok(Some(if has_max { max } else { format!("https://i.ytimg.com/vi/{id}/mqdefault.jpg") }));
+        return Ok(Some(if has_max {
+            max
+        } else {
+            format!("https://i.ytimg.com/vi/{id}/mqdefault.jpg")
+        }));
     }
     Ok(None)
 }

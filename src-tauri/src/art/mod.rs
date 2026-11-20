@@ -43,7 +43,12 @@ async fn video(app_id: &str, artist: &str, title: &str) -> Option<String> {
 /// A URL (or data: URL) for the cover, or None. A miss is not remembered: it
 /// may only have been offline, and the widget asks again.
 pub async fn fetch(req: Request) -> Option<String> {
-    let Request { artist, title, album, app_id } = &req;
+    let Request {
+        artist,
+        title,
+        album,
+        app_id,
+    } = &req;
     if artist.is_empty() && title.is_empty() {
         return None;
     }

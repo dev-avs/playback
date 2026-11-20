@@ -14,5 +14,8 @@ pub fn num_of(v: &Value, key: &str) -> Option<f64> {
 
 /// The array at `key`, or an empty slice.
 pub fn list_of<'a>(v: &'a Value, key: &str) -> &'a [Value] {
-    v.get(key).and_then(Value::as_array).map(Vec::as_slice).unwrap_or(&[])
+    v.get(key)
+        .and_then(Value::as_array)
+        .map(Vec::as_slice)
+        .unwrap_or(&[])
 }

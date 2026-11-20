@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PlayerCaps, SmtcEvent, SmtcState } from "./player";
+import type { PlayerCaps, SmtcEvent, SmtcState } from "../types/player";
 
 export interface NowPlaying {
   appId: string;

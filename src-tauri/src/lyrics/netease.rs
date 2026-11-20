@@ -19,8 +19,9 @@ const REFERER: &str = "https://music.163.com";
 
 static KARAOKE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"(?i)karaoke|instrumental|伴奏|inst\.|off vocal").unwrap());
-static REWORKED: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"(?i)remix|edit|sped ?up|slowed|nightcore|mashup|version").unwrap());
+static REWORKED: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(r"(?i)remix|edit|sped ?up|slowed|nightcore|mashup|version").unwrap()
+});
 static COVER: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?i)cover|翻自|翻唱").unwrap());
 
 /// Below this, no NetEase hit beats one.
@@ -45,10 +46,16 @@ fn score_song(song: &Value, artist: &str, track: &str, duration: Option<f64>) ->
 
     // Re-uploads impersonate the act with punctuation ("周杰伦-"), which is a
     // substring match every time: only an exact credit counts in full.
-    let artists: Vec<String> = list_of(song, "artists").iter().map(|a| str_of(a, "name").to_lowercase()).collect();
+    let artists: Vec<String> = list_of(song, "artists")
+        .iter()
+        .map(|a| str_of(a, "name").to_lowercase())
+        .collect();
     if artists.contains(&wanted_artist) {
         score += 30;
-    } else if artists.iter().any(|a| a.contains(&wanted_artist) || wanted_artist.contains(a.as_str())) {
+    } else if artists
+        .iter()
+        .any(|a| a.contains(&wanted_artist) || wanted_artist.contains(a.as_str()))
+    {
         score += 10;
     }
 
@@ -74,7 +81,12 @@ fn score_song(song: &Value, artist: &str, track: &str, duration: Option<f64>) ->
     Some(score)
 }
 
-fn pick_song<'a>(songs: &'a [Value], artist: &str, track: &str, duration: Option<f64>) -> Option<&'a Value> {
+fn pick_song<'a>(
+    songs: &'a [Value],
+    artist: &str,
+    track: &str,
+    duration: Option<f64>,
+) -> Option<&'a Value> {
     let mut best: Option<(&Value, i32)> = None;
     for song in songs {
         if let Some(s) = score_song(song, artist, track, duration) {
@@ -86,11 +98,19 @@ fn pick_song<'a>(songs: &'a [Value], artist: &str, track: &str, duration: Option
     best.filter(|(_, s)| *s >= MIN_SCORE).map(|(song, _)| song)
 }
 
-async fn search(artist: &str, track: &str, duration: Option<f64>) -> Result<Option<i64>, reqwest::Error> {
+async fn search(
+    artist: &str,
+    track: &str,
+    duration: Option<f64>,
+) -> Result<Option<i64>, reqwest::Error> {
     // 10, not 5: the right recording is often buried under re-uploads.
     let res = client()
         .get("https://music.163.com/api/search/get")
-        .query(&[("s", format!("{track} {artist}").as_str()), ("type", "1"), ("limit", "10")])
+        .query(&[
+            ("s", format!("{track} {artist}").as_str()),
+            ("type", "1"),
+            ("limit", "10"),
+        ])
         .header("Referer", REFERER)
         .send()
         .await?;
@@ -98,14 +118,20 @@ async fn search(artist: &str, track: &str, duration: Option<f64>) -> Result<Opti
         return Ok(None);
     }
     let body: Value = res.json().await?;
-    let songs = body.pointer("/result/songs").and_then(Value::as_array).map(Vec::as_slice).unwrap_or(&[]);
+    let songs = body
+        .pointer("/result/songs")
+        .and_then(Value::as_array)
+        .map(Vec::as_slice)
+        .unwrap_or(&[]);
     Ok(pick_song(songs, artist, track, duration).and_then(|s| s["id"].as_i64()))
 }
 
 /// yv=1 asks for yrc (word timing), rv=-1 for romalrc (romanized).
 async fn lyric(id: i64) -> Result<Option<Value>, reqwest::Error> {
     let res = client()
-        .get(format!("https://music.163.com/api/song/lyric?id={id}&lv=1&kv=1&tv=-1&rv=-1&yv=1"))
+        .get(format!(
+            "https://music.163.com/api/song/lyric?id={id}&lv=1&kv=1&tv=-1&rv=-1&yv=1"
+        ))
         .header("Referer", REFERER)
         .send()
         .await?;
@@ -116,14 +142,20 @@ async fn lyric(id: i64) -> Result<Option<Value>, reqwest::Error> {
 }
 
 fn track_text<'a>(data: &'a Value, track: &str) -> &'a str {
-    data.pointer(&format!("/{track}/lyric")).and_then(Value::as_str).unwrap_or("")
+    data.pointer(&format!("/{track}/lyric"))
+        .and_then(Value::as_str)
+        .unwrap_or("")
 }
 
 /// The words as sung: yrc when there is one, LRC otherwise. The `tlyric`
 /// translation is ignored: it only ever translates into Chinese.
 pub async fn find(artist: &str, track: &str, duration: Option<f64>) -> Found {
-    let Some(id) = search(artist, track, duration).await? else { return Ok(None) };
-    let Some(data) = lyric(id).await? else { return Ok(None) };
+    let Some(id) = search(artist, track, duration).await? else {
+        return Ok(None);
+    };
+    let Some(data) = lyric(id).await? else {
+        return Ok(None);
+    };
     let lrc = track_text(&data, "lrc");
     let yrc = track_text(&data, "yrc");
     let body = if yrc.is_empty() { lrc } else { yrc };
@@ -150,9 +182,14 @@ pub async fn romanized(artist: &str, title: &str) -> Option<String> {
         return hit;
     }
     let lookup = async {
-        let Some(id) = search(artist, title, None).await? else { return Ok(None) };
+        let Some(id) = search(artist, title, None).await? else {
+            return Ok(None);
+        };
         let data = lyric(id).await?;
-        let roma = data.as_ref().map(|d| track_text(d, "romalrc")).unwrap_or("");
+        let roma = data
+            .as_ref()
+            .map(|d| track_text(d, "romalrc"))
+            .unwrap_or("");
         Ok::<_, reqwest::Error>(Some(roma.to_string()).filter(|r| !r.trim().is_empty()))
     };
     match lookup.await {
@@ -189,7 +226,10 @@ mod tests {
 
     #[test]
     fn passes_over_karaoke_and_other_songs() {
-        let songs = [song("Shape of You (Karaoke)", "Ed Sheeran", 233_700.0), song("Other Song", "Ed Sheeran", 233_700.0)];
+        let songs = [
+            song("Shape of You (Karaoke)", "Ed Sheeran", 233_700.0),
+            song("Other Song", "Ed Sheeran", 233_700.0),
+        ];
         assert!(pick_song(&songs, "Ed Sheeran", "Shape of You", Some(233.7)).is_none());
     }
 

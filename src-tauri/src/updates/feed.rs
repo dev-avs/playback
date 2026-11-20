@@ -46,8 +46,13 @@ pub fn parse(yml: &str) -> Option<Feed> {
     let mut in_x64 = false;
     for line in yml.lines() {
         let indent = line.len() - line.trim_start().len();
-        let Some((key, value)) = line.trim().split_once(':') else { continue };
-        let value = value.trim().trim_matches(|c| c == '\'' || c == '"').to_string();
+        let Some((key, value)) = line.trim().split_once(':') else {
+            continue;
+        };
+        let value = value
+            .trim()
+            .trim_matches(|c| c == '\'' || c == '"')
+            .to_string();
         match indent {
             0 => {
                 section = key;
@@ -65,8 +70,16 @@ pub fn parse(yml: &str) -> Option<Feed> {
     }
     Some(Feed {
         version: top.remove("version")?,
-        stub: Asset { file: top.remove("path")?, sha512: top.remove("sha512")?, size: None },
-        package: Asset { file: package.remove("path")?, sha512: package.remove("sha512")?, size: package.get("size").and_then(|s| s.parse().ok()) },
+        stub: Asset {
+            file: top.remove("path")?,
+            sha512: top.remove("sha512")?,
+            size: None,
+        },
+        package: Asset {
+            file: package.remove("path")?,
+            sha512: package.remove("sha512")?,
+            size: package.get("size").and_then(|s| s.parse().ok()),
+        },
     })
 }
 
@@ -83,12 +96,17 @@ pub async fn fetch(version: Option<&str>) -> Result<Feed, String> {
             None => format!("GitHub answered {}", res.status().as_u16()),
         });
     }
-    parse(&res.text().await.map_err(|e| e.to_string())?).ok_or_else(|| "the release's latest.yml could not be read".into())
+    parse(&res.text().await.map_err(|e| e.to_string())?)
+        .ok_or_else(|| "the release's latest.yml could not be read".into())
 }
 
 /// Dotted versions compared part by part, as numbers.
 pub fn compare(a: &str, b: &str) -> Ordering {
-    let parts = |v: &str| v.split('.').map(|p| p.parse::<u64>().unwrap_or(0)).collect::<Vec<_>>();
+    let parts = |v: &str| {
+        v.split('.')
+            .map(|p| p.parse::<u64>().unwrap_or(0))
+            .collect::<Vec<_>>()
+    };
     parts(a).cmp(&parts(b))
 }
 
@@ -113,12 +131,25 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>) {
         .filter(|r| r["draft"] != true)
         .filter_map(|r| {
             let version = str_of(r, "tag_name").trim_start_matches('v').to_string();
-            let asset = |name: &str| list_of(r, "assets").iter().find(|a| str_of(a, "name") == name).map(|a| str_of(a, "browser_download_url").to_string());
+            let asset = |name: &str| {
+                list_of(r, "assets")
+                    .iter()
+                    .find(|a| str_of(a, "name") == name)
+                    .map(|a| str_of(a, "browser_download_url").to_string())
+            };
             let legacy = asset("latest.yml").is_none();
             if legacy {
-                legacy_installers.insert(version.clone(), asset(&format!("player-setup-{version}.exe"))?);
+                legacy_installers.insert(
+                    version.clone(),
+                    asset(&format!("player-setup-{version}.exe"))?,
+                );
             }
-            Some(Release { date: str_of(r, "published_at").into(), notes: str_of(r, "body").into(), version, legacy })
+            Some(Release {
+                date: str_of(r, "published_at").into(),
+                notes: str_of(r, "body").into(),
+                version,
+                legacy,
+            })
         })
         .collect();
     (list, legacy_installers)
@@ -128,7 +159,12 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>) {
 /// installers by version.
 pub async fn releases() -> (Value, HashMap<String, String>) {
     let found = async {
-        let res = client().get(RELEASES).header("Accept", "application/vnd.github+json").send().await.map_err(|e| e.to_string())?;
+        let res = client()
+            .get(RELEASES)
+            .header("Accept", "application/vnd.github+json")
+            .send()
+            .await
+            .map_err(|e| e.to_string())?;
         if !res.status().is_success() {
             return Err(format!("GitHub answered {}", res.status().as_u16()));
         }
@@ -165,8 +201,22 @@ releaseDate: '2026-11-20T02:08:25.674Z'
     fn reads_the_feed() {
         let f = parse(YML).unwrap();
         assert_eq!(f.version, "1.5.7");
-        assert_eq!(f.stub, Asset { file: "playback-setup-1.5.7.exe".into(), sha512: "STUB==".into(), size: None });
-        assert_eq!(f.package, Asset { file: "playback-1.5.7-x64.nsis.7z".into(), sha512: "PKG==".into(), size: Some(118739429) });
+        assert_eq!(
+            f.stub,
+            Asset {
+                file: "playback-setup-1.5.7.exe".into(),
+                sha512: "STUB==".into(),
+                size: None
+            }
+        );
+        assert_eq!(
+            f.package,
+            Asset {
+                file: "playback-1.5.7-x64.nsis.7z".into(),
+                sha512: "PKG==".into(),
+                size: Some(118739429)
+            }
+        );
         assert_eq!(f.url(&f.package), "https://github.com/dev-avs/playback/releases/download/v1.5.7/playback-1.5.7-x64.nsis.7z");
         assert!(parse("version: 1.0.0\n").is_none());
     }
@@ -187,7 +237,12 @@ releaseDate: '2026-11-20T02:08:25.674Z'
             { "tag_name": "v9.9.9", "draft": true, "assets": [{ "name": "latest.yml" }] },
         ]);
         let (list, legacy) = installable(&body);
-        assert_eq!(list.iter().map(|r| (r.version.as_str(), r.legacy)).collect::<Vec<_>>(), [("1.5.7", false), ("1.3.5", true)]);
+        assert_eq!(
+            list.iter()
+                .map(|r| (r.version.as_str(), r.legacy))
+                .collect::<Vec<_>>(),
+            [("1.5.7", false), ("1.3.5", true)]
+        );
         assert_eq!(legacy["1.3.5"], "https://x/1.3.5");
     }
 }

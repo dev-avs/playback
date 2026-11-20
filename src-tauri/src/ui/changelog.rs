@@ -3,10 +3,10 @@
 //! The version is recorded in `last-version.json`, the Electron build's file.
 
 use super::cards::{self, Card};
+use crate::launch::Launch;
 use crate::support::paths::data_file;
 use serde_json::json;
 use std::fs;
-use crate::launch::Launch;
 use tauri::{AppHandle, Manager};
 
 const FILE: &str = "last-version.json";
@@ -32,7 +32,11 @@ pub async fn check_after_update(app: &AppHandle, enabled: bool) -> tauri::Result
     match swap_recorded(&current) {
         Some(previous) if enabled && previous != current => {
             app.state::<Launch>().settled().await;
-            cards::open(app, Card::Changelog, Some(format!("from={}", encode(&previous))))
+            cards::open(
+                app,
+                Card::Changelog,
+                Some(format!("from={}", encode(&previous))),
+            )
         }
         _ => Ok(()),
     }
@@ -40,5 +44,7 @@ pub async fn check_after_update(app: &AppHandle, enabled: bool) -> tauri::Result
 
 /// A version is digits and dots, but the file is the user's: keep the hash safe.
 fn encode(s: &str) -> String {
-    s.chars().filter(|c| c.is_ascii_alphanumeric() || matches!(c, '.' | '-')).collect()
+    s.chars()
+        .filter(|c| c.is_ascii_alphanumeric() || matches!(c, '.' | '-'))
+        .collect()
 }

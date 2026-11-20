@@ -20,7 +20,9 @@ async fn itunes(artist: &str, title: &str, album: &str) -> Result<Option<String>
         return Ok(None);
     }
     let body: Value = res.json().await?;
-    let hit = list_of(&body, "results").iter().find(|r| loose_match(str_of(r, "artistName"), artist));
+    let hit = list_of(&body, "results")
+        .iter()
+        .find(|r| loose_match(str_of(r, "artistName"), artist));
     let art = hit.map(|h| match str_of(h, "artworkUrl100") {
         "" => str_of(h, "artworkUrl60"),
         url => url,
@@ -37,13 +39,19 @@ fn resize_itunes(url: &str, px: u32) -> String {
 
 async fn deezer(artist: &str, title: &str) -> Result<Option<String>, reqwest::Error> {
     let q = format!("artist:\"{artist}\" track:\"{title}\"");
-    let res = client().get("https://api.deezer.com/search").query(&[("q", q.as_str()), ("limit", "1")]).send().await?;
+    let res = client()
+        .get("https://api.deezer.com/search")
+        .query(&[("q", q.as_str()), ("limit", "1")])
+        .send()
+        .await?;
     if !res.status().is_success() {
         return Ok(None);
     }
     let body: Value = res.json().await?;
     let album = &body["data"][0]["album"];
-    let url = [str_of(album, "cover_xl"), str_of(album, "cover_big")].into_iter().find(|u| !u.is_empty());
+    let url = [str_of(album, "cover_xl"), str_of(album, "cover_big")]
+        .into_iter()
+        .find(|u| !u.is_empty());
     Ok(url.map(String::from))
 }
 

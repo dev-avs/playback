@@ -3,8 +3,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createRequire } from "node:module";
-import { applyPinyin, applyReadings, readingTexts, romanizeLines, withRomaLines } from "../src/romanize.ts";
-import type { LyricLine } from "../src/lyrics.ts";
+import { applyPinyin, applyReadings, readingTexts, romanizeLines, withRomaLines } from "../src/lyrics/romanize.ts";
+import type { LyricLine } from "../src/lyrics/lyrics.ts";
 
 const require = createRequire(import.meta.url);
 const kuromoji = require("kuromoji");

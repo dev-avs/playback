@@ -54,11 +54,14 @@ impl Command {
 }
 
 fn is_music(s: &Session) -> bool {
-    s.SourceAppUserModelId().is_ok_and(|id| is_music_app(&id.to_string()))
+    s.SourceAppUserModelId()
+        .is_ok_and(|id| is_music_app(&id.to_string()))
 }
 
 fn status_of(s: &Session) -> Status {
-    s.GetPlaybackInfo().and_then(|p| p.PlaybackStatus()).unwrap_or(Status::Closed)
+    s.GetPlaybackInfo()
+        .and_then(|p| p.PlaybackStatus())
+        .unwrap_or(Status::Closed)
 }
 
 fn same_app(a: &Session, b: &Session) -> bool {
@@ -74,7 +77,10 @@ fn pick(mgr: &Manager) -> Option<Session> {
     let all: Vec<Session> = mgr.GetSessions().ok()?.into_iter().collect();
     let cur = mgr.GetCurrentSession().ok();
     for want in [Status::Playing, Status::Paused] {
-        let hits: Vec<&Session> = all.iter().filter(|s| is_music(s) && status_of(s) == want).collect();
+        let hits: Vec<&Session> = all
+            .iter()
+            .filter(|s| is_music(s) && status_of(s) == want)
+            .collect();
         if hits.is_empty() {
             continue;
         }
@@ -127,13 +133,23 @@ fn run(session: &Session, cmd: Command) -> windows::core::Result<()> {
         Command::PlayPause => drop(session.TryTogglePlayPauseAsync()?),
         Command::Next => drop(session.TrySkipNextAsync()?),
         Command::Prev => drop(session.TrySkipPreviousAsync()?),
-        Command::Seek(sec) => drop(session.TryChangePlaybackPositionAsync((sec * 10_000_000.0) as i64)?),
+        Command::Seek(sec) => {
+            drop(session.TryChangePlaybackPositionAsync((sec * 10_000_000.0) as i64)?)
+        }
         Command::Shuffle => {
-            let on = session.GetPlaybackInfo()?.IsShuffleActive().and_then(|r| r.Value()).unwrap_or(false);
+            let on = session
+                .GetPlaybackInfo()?
+                .IsShuffleActive()
+                .and_then(|r| r.Value())
+                .unwrap_or(false);
             drop(session.TryChangeShuffleActiveAsync(!on)?);
         }
         Command::Repeat => {
-            let cur = session.GetPlaybackInfo()?.AutoRepeatMode().and_then(|r| r.Value()).unwrap_or(Repeat::None);
+            let cur = session
+                .GetPlaybackInfo()?
+                .AutoRepeatMode()
+                .and_then(|r| r.Value())
+                .unwrap_or(Repeat::None);
             let next = match cur {
                 Repeat::None => Repeat::List,
                 Repeat::List => Repeat::Track,
@@ -164,7 +180,11 @@ struct Last {
 fn sample(mgr: &Manager, last: &mut Last) -> windows::core::Result<Option<Value>> {
     let Some(s) = pick(mgr) else {
         if !last.none_sent {
-            *last = Last { none_sent: true, anchor_pos: -1.0, ..Default::default() };
+            *last = Last {
+                none_sent: true,
+                anchor_pos: -1.0,
+                ..Default::default()
+            };
             return Ok(Some(json!({ "type": "state", "session": null })));
         }
         return Ok(None);
@@ -182,8 +202,15 @@ fn sample(mgr: &Manager, last: &mut Last) -> windows::core::Result<Option<Value>
     let key = format!("{app_id}|{title}|{artist}|{album}");
     let status = status_name(pb.PlaybackStatus()?);
     let playing = status == "Playing";
-    let shuffle = pb.IsShuffleActive().and_then(|r| r.Value()).unwrap_or(false);
-    let repeat = repeat_name(pb.AutoRepeatMode().and_then(|r| r.Value()).unwrap_or(Repeat::None));
+    let shuffle = pb
+        .IsShuffleActive()
+        .and_then(|r| r.Value())
+        .unwrap_or(false);
+    let repeat = repeat_name(
+        pb.AutoRepeatMode()
+            .and_then(|r| r.Value())
+            .unwrap_or(Repeat::None),
+    );
     let modes = format!("{shuffle}|{repeat}");
     let pos = tl.Position()?.Duration as f64 / 10_000_000.0;
     let end = tl.EndTime()?.Duration as f64 / 10_000_000.0;
@@ -197,7 +224,11 @@ fn sample(mgr: &Manager, last: &mut Last) -> windows::core::Result<Option<Value>
         age = 0.0;
     }
     let actual = if playing { pos + age } else { pos };
-    let expected = if playing { last.anchor_pos + (now - last.anchor_at) / 1000.0 } else { last.anchor_pos };
+    let expected = if playing {
+        last.anchor_pos + (now - last.anchor_at) / 1000.0
+    } else {
+        last.anchor_pos
+    };
     let seeked = last.anchor_pos >= 0.0 && (actual - expected).abs() > 1.5;
 
     let changed = key != last.key || status != last.status || modes != last.modes;
@@ -247,11 +278,17 @@ fn sample(mgr: &Manager, last: &mut Last) -> windows::core::Result<Option<Value>
 
 /// Runs forever on its own thread. `emit` gets every state and error, and the
 /// newest state is also kept in `latest` for a page that loads later.
-pub fn spawn(commands: Receiver<Command>, latest: Arc<Mutex<Option<Value>>>, emit: impl Fn(Value) + Send + 'static) {
+pub fn spawn(
+    commands: Receiver<Command>,
+    latest: Arc<Mutex<Option<Value>>>,
+    emit: impl Fn(Value) + Send + 'static,
+) {
     std::thread::spawn(move || {
         // WinRT on this thread, multithreaded so the async calls can complete.
         unsafe {
-            let _ = windows::Win32::System::WinRT::RoInitialize(windows::Win32::System::WinRT::RO_INIT_MULTITHREADED);
+            let _ = windows::Win32::System::WinRT::RoInitialize(
+                windows::Win32::System::WinRT::RO_INIT_MULTITHREADED,
+            );
         }
         let error = |m: String| json!({ "type": "error", "message": m });
         let mgr = loop {
@@ -263,7 +300,10 @@ pub fn spawn(commands: Receiver<Command>, latest: Arc<Mutex<Option<Value>>>, emi
                 }
             }
         };
-        let mut last = Last { anchor_pos: -1.0, ..Default::default() };
+        let mut last = Last {
+            anchor_pos: -1.0,
+            ..Default::default()
+        };
         let mut next_poll = Instant::now();
         loop {
             if Instant::now() >= next_poll {
@@ -300,7 +340,10 @@ mod tests {
     fn reads_the_scripts_command_words() {
         assert!(matches!(Command::parse("seek 42.5"), Some(Command::Seek(s)) if s == 42.5));
         assert!(matches!(Command::parse("volume 0.3"), Some(Command::Volume(v)) if v == 0.3));
-        assert!(matches!(Command::parse("playpause"), Some(Command::PlayPause)));
+        assert!(matches!(
+            Command::parse("playpause"),
+            Some(Command::PlayPause)
+        ));
         assert!(Command::parse("seek").is_none());
         assert!(Command::parse("louder").is_none());
     }

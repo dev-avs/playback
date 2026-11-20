@@ -7,7 +7,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type EventCallback } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import type { PlayerBridge, SmtcEvent, UpdateState } from "../player.d.ts";
+import type { PlayerBridge, SmtcEvent, UpdateState } from "../types/player.d.ts";
 
 /** listen() is async; the page wants a plain unsubscribe back. */
 function on<T>(event: string, cb: EventCallback<T>): () => void {

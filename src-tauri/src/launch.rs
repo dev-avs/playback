@@ -42,7 +42,9 @@ pub fn start(app: &AppHandle) -> tauri::Result<()> {
     // records this version.
     let first_run = !data_file("last-version.json").exists();
     app.manage(Setup::new(first_run));
-    app.manage(Launch { settled: watch::Sender::new(false) });
+    app.manage(Launch {
+        settled: watch::Sender::new(false),
+    });
     build_widget(app)?;
 
     let handle = app.clone();
@@ -78,7 +80,13 @@ pub fn start(app: &AppHandle) -> tauri::Result<()> {
 }
 
 fn build_widget(app: &AppHandle) -> tauri::Result<()> {
-    let Some(config) = app.config().app.windows.iter().find(|w| w.label == crate::ui::WIDGET) else {
+    let Some(config) = app
+        .config()
+        .app
+        .windows
+        .iter()
+        .find(|w| w.label == crate::ui::WIDGET)
+    else {
         return Ok(());
     };
     let mut builder = WebviewWindowBuilder::from_config(app, config)?.on_page_load(|win, load| {

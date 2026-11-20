@@ -7,8 +7,8 @@
 //! `Uninstall Playback.exe` next to the app, which is how an installed copy
 //! tells itself from a dev build.
 
-use crate::spicetify::{self, Paths, Spicetify};
 use crate::migrate::LEGACY_DATA;
+use crate::spicetify::{self, Paths, Spicetify};
 use crate::support::paths::data_dir;
 use std::os::windows::process::CommandExt;
 use std::path::{Path, PathBuf};
@@ -35,7 +35,13 @@ pub fn uninstaller() -> Option<PathBuf> {
 /// group, and out of any job the app was started in (a job can be set to
 /// end everything in it along with the app).
 pub fn run_detached(program: &Path, args: &[&str]) -> Result<(), String> {
-    let start = |flags| Command::new(program).args(args).stdin(Stdio::null()).creation_flags(flags).spawn();
+    let start = |flags| {
+        Command::new(program)
+            .args(args)
+            .stdin(Stdio::null())
+            .creation_flags(flags)
+            .spawn()
+    };
     let flags = CREATE_NO_WINDOW | CREATE_NEW_PROCESS_GROUP;
     start(flags | CREATE_BREAKAWAY_FROM_JOB)
         .or_else(|_| start(flags))
@@ -63,7 +69,11 @@ pub async fn uninstall(app: &AppHandle) -> Result<(), String> {
     let data = data_dir();
     let mut folders = vec![data.clone(), data.with_file_name(LEGACY_DATA)];
     folders.extend(app.path().app_local_data_dir().ok());
-    let name = exe.file_stem().unwrap_or_default().to_string_lossy().into_owned();
+    let name = exe
+        .file_stem()
+        .unwrap_or_default()
+        .to_string_lossy()
+        .into_owned();
     let mut steps = vec![
         format!("Wait-Process -Id {} -ErrorAction SilentlyContinue", std::process::id()),
         // the web view's processes let go of its profile a moment later
@@ -75,11 +85,32 @@ pub async fn uninstall(app: &AppHandle) -> Result<(), String> {
         ),
         format!("Start-Process -FilePath {} -ArgumentList '/S' -Wait", quote(&uninstaller)),
     ];
-    steps.extend(folders.iter().map(|f| format!("Remove-Item -LiteralPath {} -Recurse -Force -ErrorAction SilentlyContinue", quote(f))));
+    steps.extend(folders.iter().map(|f| {
+        format!(
+            "Remove-Item -LiteralPath {} -Recurse -Force -ErrorAction SilentlyContinue",
+            quote(f)
+        )
+    }));
     let script: Vec<u16> = steps.join("; ").encode_utf16().collect();
-    let encoded = base64::Engine::encode(&base64::engine::general_purpose::STANDARD, script.iter().flat_map(|u| u.to_le_bytes()).collect::<Vec<_>>());
-    run_detached(Path::new("powershell.exe"), &["-NoProfile", "-NonInteractive", "-WindowStyle", "Hidden", "-EncodedCommand", &encoded])
-        .map_err(|_| "Could not start the uninstaller.".to_string())?;
+    let encoded = base64::Engine::encode(
+        &base64::engine::general_purpose::STANDARD,
+        script
+            .iter()
+            .flat_map(|u| u.to_le_bytes())
+            .collect::<Vec<_>>(),
+    );
+    run_detached(
+        Path::new("powershell.exe"),
+        &[
+            "-NoProfile",
+            "-NonInteractive",
+            "-WindowStyle",
+            "Hidden",
+            "-EncodedCommand",
+            &encoded,
+        ],
+    )
+    .map_err(|_| "Could not start the uninstaller.".to_string())?;
     app.exit(0);
     Ok(())
 }

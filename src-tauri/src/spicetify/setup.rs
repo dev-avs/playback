@@ -58,7 +58,10 @@ pub struct Setup {
 
 impl Setup {
     pub fn new(first_run: bool) -> Setup {
-        Setup { first_run, latest: Mutex::new(None) }
+        Setup {
+            first_run,
+            latest: Mutex::new(None),
+        }
     }
 
     /// Puts the bridge in place; `allow_apply` lets it run `spicetify
@@ -90,7 +93,15 @@ impl Setup {
         if !bridge_wanted() {
             // turned off in the installer: only report, never touch Spicetify
             let status = check(SOURCE, &paths);
-            return SetupState { ready: status.ready(), status, actions: vec![], needs_apply: false, bridge_off: true, first_run, error: None };
+            return SetupState {
+                ready: status.ready(),
+                status,
+                actions: vec![],
+                needs_apply: false,
+                bridge_off: true,
+                first_run,
+                error: None,
+            };
         }
         match ensure(SOURCE, allow_apply, &paths, &Spicetify).await {
             Ok(r) => {
@@ -115,7 +126,15 @@ impl Setup {
                 eprintln!("[setup] {e}");
                 let status = check(SOURCE, &paths);
                 let ready = status.ready();
-                SetupState { needs_apply: status.spicetify && !ready, ready, status, actions: vec![], bridge_off: false, first_run, error: Some(e) }
+                SetupState {
+                    needs_apply: status.spicetify && !ready,
+                    ready,
+                    status,
+                    actions: vec![],
+                    bridge_off: false,
+                    first_run,
+                    error: Some(e),
+                }
             }
         }
     }

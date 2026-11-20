@@ -9,8 +9,8 @@ mod login;
 mod token;
 
 pub use login::login;
-pub use token::now_ms;
 use serde::Serialize;
+pub use token::now_ms;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -88,8 +88,16 @@ pub fn set_token(raw: &str) -> Saved {
 /// A token from the Spicetify bridge, which knows when it runs out.
 pub fn hand_over(raw: &str, expires_at: Option<f64>) -> Saved {
     match token::save_manual(raw, expires_at) {
-        Ok(at) => Saved { ok: true, error: None, expires_at: Some(at) },
-        Err(e) => Saved { ok: false, error: Some(e), expires_at: None },
+        Ok(at) => Saved {
+            ok: true,
+            error: None,
+            expires_at: Some(at),
+        },
+        Err(e) => Saved {
+            ok: false,
+            error: Some(e),
+            expires_at: None,
+        },
     }
 }
 
