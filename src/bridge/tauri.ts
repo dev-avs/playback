@@ -92,7 +92,8 @@ function bridge(): PlayerBridge {
     checkForUpdate: () => invoke("update_check"),
     installUpdate: () => invoke("update_install"),
     skipUpdate: () => invoke("update_skip"),
-    bumpTo: (version) => invoke("update_bump", { version }),
+    bumpTo: (version, flavor, settingsJson) =>
+      invoke("update_bump", { version, flavor: flavor ?? null, settingsJson: settingsJson ?? null }),
     onUpdateChanged: (cb) => on<UpdateState>("update:changed", (e) => cb(e.payload)),
     listReleases: () => invoke("update_releases"),
     uninstall: () => invoke("app_uninstall"),

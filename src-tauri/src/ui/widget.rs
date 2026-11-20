@@ -84,8 +84,11 @@ impl Widget {
             set_size(win, w, h); // grow at once, nothing left clipped
             return;
         }
-        // Shrinking under a hovering pointer is what made the widget flicker.
-        if hovered {
+        // Shrinking a small amount (the hover control bar) under a hovering
+        // pointer is what made the widget flicker. Larger shrinks (closing
+        // lyrics or switching modes) still apply so the transparent hitbox
+        // never stays oversized over the desktop.
+        if hovered && (current - h) < 48.0 {
             return;
         }
         let win = win.clone();

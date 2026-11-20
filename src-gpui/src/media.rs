@@ -16,7 +16,8 @@ pub struct NowPlaying {
     pub duration: f64,
     pub sampled_at: Instant,
     pub art_rgba: Option<(u32, u32, Vec<u8>)>,
-    pub accent_rgb: (u8, u8, u8),
+    pub accent_top: (u8, u8, u8),
+    pub accent_bottom: (u8, u8, u8),
 }
 
 impl Default for NowPlaying {
@@ -30,7 +31,8 @@ impl Default for NowPlaying {
             duration: 0.0,
             sampled_at: Instant::now(),
             art_rgba: None,
-            accent_rgb: (46, 36, 58),
+            accent_top: (42, 32, 48),
+            accent_bottom: (16, 16, 20),
         }
     }
 }
@@ -94,7 +96,7 @@ fn friendly_app(id: &str) -> String {
     }
 }
 
-type ThumbnailData = (u32, u32, Vec<u8>, (u8, u8, u8));
+type ThumbnailData = (u32, u32, Vec<u8>, (u8, u8, u8), (u8, u8, u8));
 
 fn read_thumbnail(
     props: &windows::Media::Control::GlobalSystemMediaTransportControlsSessionMediaProperties,
@@ -112,29 +114,60 @@ fn read_thumbnail(
     let img = image::load_from_memory(&bytes).ok()?;
     let small = img.resize_to_fill(96, 96, image::imageops::FilterType::Triangle);
     let rgba = small.to_rgba8();
-    let accent = average_accent(&rgba);
+    let (top, bottom) = split_accents(&rgba);
     // GPUI ImageBuffer expects BGRA on Windows/DirectX; convert RGBA -> BGRA.
     let mut bgra = rgba.into_raw();
     for px in bgra.chunks_exact_mut(4) {
         px.swap(0, 2);
     }
-    Some((96, 96, bgra, accent))
+    Some((96, 96, bgra, top, bottom))
 }
 
-fn average_accent(rgba: &image::RgbaImage) -> (u8, u8, u8) {
-    let (mut r, mut g, mut b, mut n) = (0u64, 0u64, 0u64, 0u64);
-    for px in rgba.pixels().step_by(8) {
-        if px[3] > 128 {
-            r += px[0] as u64;
-            g += px[1] as u64;
-            b += px[2] as u64;
-            n += 1;
+fn boost_saturation(r: u8, g: u8, b: u8) -> (u8, u8, u8) {
+    let (rf, gf, bf) = (r as f32, g as f32, b as f32);
+    let avg = (rf + gf + bf) / 3.0;
+    let sat = 1.45;
+    let clamp = |v: f32| v.clamp(0.0, 255.0) as u8;
+    (
+        clamp(avg + (rf - avg) * sat),
+        clamp(avg + (gf - avg) * sat),
+        clamp(avg + (bf - avg) * sat),
+    )
+}
+
+fn split_accents(rgba: &image::RgbaImage) -> ((u8, u8, u8), (u8, u8, u8)) {
+    let h = rgba.height();
+    let (mut tr, mut tg, mut tb, mut tn) = (0u64, 0u64, 0u64, 0u64);
+    let (mut br, mut bg, mut bb, mut bn) = (0u64, 0u64, 0u64, 0u64);
+    for (y, row) in rgba.enumerate_rows() {
+        for (_, _, px) in row.step_by(4) {
+            if px[3] <= 128 {
+                continue;
+            }
+            if y < h / 2 {
+                tr += px[0] as u64;
+                tg += px[1] as u64;
+                tb += px[2] as u64;
+                tn += 1;
+            } else {
+                br += px[0] as u64;
+                bg += px[1] as u64;
+                bb += px[2] as u64;
+                bn += 1;
+            }
         }
     }
-    if n == 0 {
-        return (46, 36, 58);
-    }
-    ((r / n) as u8, (g / n) as u8, (b / n) as u8)
+    let top = if tn > 0 {
+        boost_saturation((tr / tn) as u8, (tg / tn) as u8, (tb / tn) as u8)
+    } else {
+        (42, 32, 48)
+    };
+    let bottom = if bn > 0 {
+        boost_saturation((br / bn) as u8, (bg / bn) as u8, (bb / bn) as u8)
+    } else {
+        (16, 16, 20)
+    };
+    (top, bottom)
 }
 
 pub fn poll_smtc(prev_key: &str) -> Option<NowPlaying> {
@@ -180,14 +213,14 @@ pub fn poll_smtc(prev_key: &str) -> Option<NowPlaying> {
         .unwrap_or(0.0);
 
     let key = format!("{title}|{artist}");
-    let (art_rgba, accent_rgb) = if key != prev_key {
-        if let Some((w, h, bgra, accent)) = read_thumbnail(&props) {
-            (Some((w, h, bgra)), accent)
+    let (art_rgba, accent_top, accent_bottom) = if key != prev_key {
+        if let Some((w, h, bgra, top, bottom)) = read_thumbnail(&props) {
+            (Some((w, h, bgra)), top, bottom)
         } else {
-            (None, (46, 36, 58))
+            (None, (42, 32, 48), (16, 16, 20))
         }
     } else {
-        (None, (46, 36, 58))
+        (None, (42, 32, 48), (16, 16, 20))
     };
 
     Some(NowPlaying {
@@ -199,7 +232,8 @@ pub fn poll_smtc(prev_key: &str) -> Option<NowPlaying> {
         duration,
         sampled_at: Instant::now(),
         art_rgba,
-        accent_rgb,
+        accent_top,
+        accent_bottom,
     })
 }
 

@@ -257,10 +257,12 @@ pub async fn update_install(
 #[tauri::command]
 pub async fn update_bump(
     version: String,
+    flavor: Option<String>,
+    settings_json: Option<String>,
     app: AppHandle,
     updater: State<'_, Updater>,
 ) -> Result<UpdateState, ()> {
-    Ok(updater.bump(&app, version).await)
+    Ok(updater.bump(&app, version, flavor, settings_json).await)
 }
 
 #[tauri::command]

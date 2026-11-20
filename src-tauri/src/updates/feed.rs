@@ -110,7 +110,7 @@ pub fn compare(a: &str, b: &str) -> Ordering {
     parts(a).cmp(&parts(b))
 }
 
-/// Release in src/player.d.ts.
+/// Release in src/types/player.d.ts.
 #[derive(Serialize)]
 pub struct Release {
     version: String,
@@ -118,12 +118,18 @@ pub struct Release {
     notes: String,
     /// before 1.3.7: installed with its full installer, no updater of its own
     legacy: bool,
+    /// available flavors in this release (e.g. ["tauri", "electron", "gpui"])
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    flavors: Vec<String>,
 }
 
-/// Every release with something to install, newest first, and the full
-/// installer of each legacy one.
-fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>) {
+pub type FlavorUrls = HashMap<(String, String), (String, String)>;
+
+/// Every release with something to install, newest first, plus legacy
+/// installers and per-flavor (stub, package) URLs.
+fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>, FlavorUrls) {
     let mut legacy_installers = HashMap::new();
+    let mut flavor_urls: FlavorUrls = HashMap::new();
     let list = body
         .as_array()
         .into_iter()
@@ -131,8 +137,9 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>) {
         .filter(|r| r["draft"] != true)
         .filter_map(|r| {
             let version = str_of(r, "tag_name").trim_start_matches('v').to_string();
+            let assets = list_of(r, "assets");
             let asset = |name: &str| {
-                list_of(r, "assets")
+                assets
                     .iter()
                     .find(|a| str_of(a, "name") == name)
                     .map(|a| str_of(a, "browser_download_url").to_string())
@@ -144,20 +151,53 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>) {
                     asset(&format!("player-setup-{version}.exe"))?,
                 );
             }
+            let mut flavors = Vec::new();
+            if !legacy {
+                // Default package (Tauri from 1.5.9+)
+                if let (Some(stub), Some(pkg)) = (
+                    asset(&format!("playback-setup-{version}.exe")),
+                    asset(&format!("playback-{version}-x64.nsis.7z")),
+                ) {
+                    let pkg_size = assets
+                        .iter()
+                        .find(|a| str_of(a, "name") == format!("playback-{version}-x64.nsis.7z"))
+                        .and_then(|a| a["size"].as_u64())
+                        .unwrap_or(0);
+                    let id = if pkg_size > 0 && pkg_size < 25 * 1024 * 1024 {
+                        "tauri"
+                    } else {
+                        "electron"
+                    };
+                    flavors.push(id.to_string());
+                    flavor_urls.insert((version.clone(), id.to_string()), (stub, pkg));
+                }
+                for id in ["tauri", "electron", "gpui"] {
+                    if let (Some(stub), Some(pkg)) = (
+                        asset(&format!("playback-{id}-setup-{version}.exe")),
+                        asset(&format!("playback-{id}-{version}-x64.nsis.7z")),
+                    ) {
+                        if !flavors.iter().any(|f| f == id) {
+                            flavors.push(id.to_string());
+                        }
+                        flavor_urls.insert((version.clone(), id.to_string()), (stub, pkg));
+                    }
+                }
+            }
             Some(Release {
                 date: str_of(r, "published_at").into(),
                 notes: str_of(r, "body").into(),
                 version,
                 legacy,
+                flavors,
             })
         })
         .collect();
-    (list, legacy_installers)
+    (list, legacy_installers, flavor_urls)
 }
 
-/// `{ ok, list }` or `{ ok: false, error }` for the page, and the legacy
-/// installers by version.
-pub async fn releases() -> (Value, HashMap<String, String>) {
+/// `{ ok, list }` or `{ ok: false, error }` for the page, legacy installers,
+/// and per-flavor asset URLs.
+pub async fn releases() -> (Value, HashMap<String, String>, FlavorUrls) {
     let found = async {
         let res = client()
             .get(RELEASES)
@@ -172,8 +212,12 @@ pub async fn releases() -> (Value, HashMap<String, String>) {
     }
     .await;
     match found {
-        Ok((list, legacy)) => (json!({ "ok": true, "list": list }), legacy),
-        Err(e) => (json!({ "ok": false, "error": e }), HashMap::new()),
+        Ok((list, legacy, flavors)) => (json!({ "ok": true, "list": list }), legacy, flavors),
+        Err(e) => (
+            json!({ "ok": false, "error": e }),
+            HashMap::new(),
+            HashMap::new(),
+        ),
     }
 }
 
@@ -236,7 +280,7 @@ releaseDate: '2026-11-20T02:08:25.674Z'
             { "tag_name": "v1.3.0", "assets": [] },
             { "tag_name": "v9.9.9", "draft": true, "assets": [{ "name": "latest.yml" }] },
         ]);
-        let (list, legacy) = installable(&body);
+        let (list, legacy, _) = installable(&body);
         assert_eq!(
             list.iter()
                 .map(|r| (r.version.as_str(), r.legacy))

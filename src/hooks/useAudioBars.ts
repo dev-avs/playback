@@ -44,6 +44,9 @@ export function useAudioBars(active: boolean) {
 
   useEffect(() => {
     if (!active) return;
+    // WebView2 (Tauri) has no silent loopback handler, so getDisplayMedia pops
+    // up a screen-share picker. Keep the smooth CSS visualizer fallback there.
+    if ("__TAURI_INTERNALS__" in window) return;
 
     let cancelled = false;
     let raf = 0;

@@ -2,8 +2,24 @@ import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
 import { AppMark } from "./Changelog.tsx";
 import { CHANGE_KINDS, compareVersions, progressText, type ChangeKind } from "../changelog";
-import { KEYS, usePersisted } from "../settings";
+import { DEFAULTS, KEYS, usePersisted } from "../settings";
 import type { Release, UpdateState } from "../types/player";
+
+const FLAVOR_LABELS: Record<string, string> = { tauri: "Tauri", electron: "Electron", gpui: "GPUI" };
+
+function snapshotSettingsJson(): string {
+  const out: Record<string, unknown> = {};
+  for (const [k, def] of Object.entries(DEFAULTS)) {
+    const storageKey = KEYS[k as keyof typeof DEFAULTS];
+    try {
+      const raw = storageKey ? localStorage.getItem(storageKey) : null;
+      out[k] = raw != null ? JSON.parse(raw) : def;
+    } catch {
+      out[k] = def;
+    }
+  }
+  return JSON.stringify(out, null, 2);
+}
 
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
@@ -103,7 +119,8 @@ export default function Versions() {
     holdTimer.current = null;
     setHolding(false);
   };
-  const install = (r: Release) => (r.legacy ? setWarn(r) : window.player?.bumpTo?.(r.version));
+  const install = (r: Release, flavor?: string) =>
+    r.legacy ? setWarn(r) : window.player?.bumpTo?.(r.version, flavor, snapshotSettingsJson());
 
   const close = () => {
     if (warn) {
@@ -206,15 +223,32 @@ export default function Versions() {
                         {cmp === 0 && " · installed"}
                         {r.legacy && " · no updates"}
                       </span>
-                      {cmp !== 0 && (
-                        <button
-                          type="button"
-                          className="cl-button cl-button--quiet vc-go"
-                          disabled={!canInstall}
-                          onClick={() => install(r)}
-                        >
-                          {cmp > 0 ? "Update" : "Revert"}
-                        </button>
+                      {r.flavors && r.flavors.length > 1 ? (
+                        <div style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
+                          {r.flavors.map((fl) => (
+                            <button
+                              key={fl}
+                              type="button"
+                              className="cl-button cl-button--quiet vc-go"
+                              disabled={!canInstall}
+                              onClick={() => install(r, fl)}
+                              title={`Install ${r.version} (${FLAVOR_LABELS[fl] ?? fl}) — keeps all settings`}
+                            >
+                              {FLAVOR_LABELS[fl] ?? fl}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        cmp !== 0 && (
+                          <button
+                            type="button"
+                            className="cl-button cl-button--quiet vc-go"
+                            disabled={!canInstall}
+                            onClick={() => install(r)}
+                          >
+                            {cmp > 0 ? "Update" : "Revert"}
+                          </button>
+                        )
                       )}
                     </div>
                     {(isOpen ? all : firstPoints(all, NOTES_PREVIEW)).map((s, i) => (

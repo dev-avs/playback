@@ -75,6 +75,8 @@ export interface Release {
   notes: string;
   /** before 1.3.7: installed with its full installer, and has no updater of its own */
   legacy: boolean;
+  /** available flavors in this release (e.g. "tauri", "electron", "gpui") */
+  flavors?: string[];
 }
 
 /** Spicetify and the bridge, as electron/spicetifySetup.cjs reports them. */
@@ -150,8 +152,8 @@ export interface PlayerBridge {
   skipUpdate?(): Promise<void>;
   /** Releases version control can install (1.3.7 on), newest first. */
   listReleases?(): Promise<{ ok: true; list: Release[] } | { ok: false; error: string }>;
-  /** Installs that release, newer or older, and restarts into it. */
-  bumpTo?(version: string): Promise<UpdateState>;
+  /** Installs that release (and optional flavor), newer or older, and restarts into it. */
+  bumpTo?(version: string, flavor?: string, settingsJson?: string): Promise<UpdateState>;
   /** Opens the version control window (#versions). */
   openVersions?(): Promise<void>;
   onUpdateChanged?(cb: (state: UpdateState) => void): () => void;

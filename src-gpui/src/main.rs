@@ -11,9 +11,9 @@ mod settings_view;
 use bridge::BridgeState;
 use cards::ChangelogView;
 use gpui::{
-    div, img, prelude::*, px, rgb, rgba, size, App, Application, Bounds, Context, FontWeight,
-    ImageSource, RenderImage, SharedString, Window, WindowBackgroundAppearance, WindowBounds,
-    WindowOptions,
+    div, img, linear_color_stop, linear_gradient, prelude::*, px, rgb, rgba, size, App,
+    Application, Bounds, Context, FontWeight, ImageSource, MouseButton, RenderImage, SharedString,
+    Window, WindowBackgroundAppearance, WindowBounds, WindowOptions,
 };
 use image::{Frame, RgbaImage};
 use lyrics::{active_line_index, fetch_lyrics, LyricsResult};
@@ -29,6 +29,8 @@ static FONT_MEDIUM: &[u8] = include_bytes!("../../src/fonts/spicy-lyrics/LyricsM
 static FONT_SEMIBOLD: &[u8] = include_bytes!("../../src/fonts/spicy-lyrics/LyricsSemibold.woff2");
 static FONT_BOLD: &[u8] = include_bytes!("../../src/fonts/spicy-lyrics/LyricsBold.woff2");
 
+const COLLAPSED_H: f32 = 122.0;
+
 struct SharedState {
     now: RwLock<NowPlaying>,
     bridge: Arc<RwLock<BridgeState>>,
@@ -41,7 +43,8 @@ struct PlaybackWidget {
     lyrics_open: bool,
     album_mode: bool,
     fullscreen: bool,
-    roma_mode: String, // "off" | "latin" | "dual"
+    hovered: bool,
+    roma_mode: String,
     last_art_key: String,
     art_image: Option<Arc<RenderImage>>,
 }
@@ -75,6 +78,7 @@ impl PlaybackWidget {
             lyrics_open,
             album_mode,
             fullscreen: false,
+            hovered: false,
             roma_mode,
             last_art_key: String::new(),
             art_image: None,
@@ -106,14 +110,14 @@ impl PlaybackWidget {
             .state
             .settings
             .read()
-            .map(|s| (s.widget_width + 44.0, s.panel_height))
-            .unwrap_or((394.0, 300.0));
+            .map(|s| (s.widget_width + 24.0, s.panel_height))
+            .unwrap_or((374.0, 300.0));
         let h = if self.album_mode {
             w
         } else if self.lyrics_open {
-            162.0 + ph
+            COLLAPSED_H + ph
         } else {
-            162.0
+            COLLAPSED_H
         };
         window.resize(size(px(w), px(h)));
     }
@@ -152,6 +156,16 @@ fn rgba_u32(r: u8, g: u8, b: u8, a: u8) -> u32 {
     ((r as u32) << 24) | ((g as u32) << 16) | ((b as u32) << 8) | (a as u32)
 }
 
+fn mix_dark(accent: (u8, u8, u8), base: (u8, u8, u8), weight: f32) -> (u8, u8, u8) {
+    let blend =
+        |a: u8, b: u8| ((a as f32 * weight + b as f32 * (1.0 - weight)).clamp(0.0, 255.0)) as u8;
+    (
+        blend(accent.0, base.0),
+        blend(accent.1, base.1),
+        blend(accent.2, base.2),
+    )
+}
+
 fn font_weight_of(name: &str) -> FontWeight {
     match name {
         "normal" => FontWeight::NORMAL,
@@ -179,7 +193,6 @@ impl Render for PlaybackWidget {
             .map(|s| s.clone())
             .unwrap_or_default();
 
-        // Prefer Spicetify bridge position when connected for Spotify (sub-second accuracy).
         let use_bridge =
             br.connected && now.app_name.eq_ignore_ascii_case("spotify") && br.duration > 1.0;
         let dur = if use_bridge {
@@ -203,12 +216,16 @@ impl Render for PlaybackWidget {
             0.0
         };
 
-        let (gr, gg, gb) = set.glass_rgb();
-        let (ar, ag, ab) = now.accent_rgb;
-        let bg_r = ((gr as u16 * 3 + ar as u16) / 4) as u8;
-        let bg_g = ((gg as u16 * 3 + ag as u16) / 4) as u8;
-        let bg_b = ((gb as u16 * 3 + ab as u16) / 4) as u8;
-        let bg_a = ((set.bg_alpha.clamp(20.0, 100.0) / 100.0) * 245.0) as u8;
+        let glass = set.glass_rgb();
+        // Rich two-tone ambient backdrop matching Electron/Tauri's blurred cover glow.
+        let top_c = mix_dark(now.accent_top, glass, 0.52);
+        let bot_c = mix_dark(now.accent_bottom, (10, 10, 14), 0.34);
+        let bg_a = ((set.bg_alpha.clamp(25.0, 100.0) / 100.0) * 246.0) as u8;
+        let card_bg = linear_gradient(
+            155.0,
+            linear_color_stop(rgba(rgba_u32(top_c.0, top_c.1, top_c.2, bg_a)), 0.0),
+            linear_color_stop(rgba(rgba_u32(bot_c.0, bot_c.1, bot_c.2, bg_a)), 1.0),
+        );
 
         let highlight_hex = set.highlight_rgb();
         let bar_color = if set.tint_bar {
@@ -219,7 +236,7 @@ impl Render for PlaybackWidget {
         let cover_radius = match set.cover_shape.as_str() {
             "square" => px(2.0),
             "circle" => px(999.0),
-            _ => px(8.0),
+            _ => px(7.0),
         };
 
         let title_text = if now.title.is_empty() {
@@ -240,7 +257,7 @@ impl Render for PlaybackWidget {
         };
 
         let footer_source = match (&now.app_name[..], lyrics.as_ref()) {
-            ("", _) => "GPUI".to_string(),
+            ("", _) => "Playback".to_string(),
             (app, Some(l)) if set.show_lyric_source => {
                 format!("{app} · {} {}", l.source, l.tier_dots())
             }
@@ -260,12 +277,13 @@ impl Render for PlaybackWidget {
             set.lyric_size
         };
 
+        let show_controls = self.hovered || set.pin_controls || self.fullscreen;
         let show_next_label =
             (set.next_song == "label" || set.next_song == "both") && br.next.is_some();
 
         let _ = window;
 
-        // Album mode: compact square cover with floating active lyric bubble.
+        // Album mode: sleek square cover with floating active lyric bubble.
         if self.album_mode && !self.fullscreen {
             let active_text = lyrics
                 .as_ref()
@@ -275,7 +293,7 @@ impl Render for PlaybackWidget {
             let bubble_a = ((set.bubble_opacity.clamp(15.0, 90.0) / 100.0) * 255.0) as u8;
             return div()
                 .size_full()
-                .p(px(10.0))
+                .p(px(8.0))
                 .bg(rgba(0x00000000))
                 .font_family("SpicyLyrics")
                 .child(
@@ -285,39 +303,38 @@ impl Render for PlaybackWidget {
                         .relative()
                         .rounded(px(set.corners))
                         .overflow_hidden()
-                        .bg(rgba(rgba_u32(bg_r, bg_g, bg_b, 240)))
+                        .bg(card_bg)
                         .border_1()
-                        .border_color(rgba(0xffffff22))
-                        .on_mouse_down(gpui::MouseButton::Left, |_, window, _| {
+                        .border_color(rgba(0xffffff1a))
+                        .on_mouse_down(MouseButton::Left, |_, window, _| {
                             window.start_window_move();
                         })
+                        .on_mouse_down(
+                            MouseButton::Right,
+                            cx.listener(|this, _, _, cx| this.open_settings(cx)),
+                        )
                         .when_some(self.art_image.clone(), |el, image| {
                             el.child(img(ImageSource::Render(image)).size_full())
                         })
                         .child(
                             div()
+                                .id("album-exit")
                                 .absolute()
                                 .top(px(10.0))
                                 .right(px(10.0))
-                                .flex()
-                                .gap(px(6.0))
-                                .child(
-                                    div()
-                                        .id("album-exit")
-                                        .px(px(8.0))
-                                        .py(px(4.0))
-                                        .rounded(px(999.0))
-                                        .bg(rgba(0x00000099))
-                                        .text_size(px(11.0))
-                                        .text_color(rgb(0xffffff))
-                                        .cursor_pointer()
-                                        .on_click(cx.listener(|this, _, window, cx| {
-                                            this.album_mode = false;
-                                            this.sync_window_size(window);
-                                            cx.notify();
-                                        }))
-                                        .child("Widget"),
-                                ),
+                                .px(px(8.0))
+                                .py(px(3.0))
+                                .rounded(px(999.0))
+                                .bg(rgba(0x00000088))
+                                .text_size(px(10.5))
+                                .text_color(rgb(0xffffff))
+                                .cursor_pointer()
+                                .on_click(cx.listener(|this, _, window, cx| {
+                                    this.album_mode = false;
+                                    this.sync_window_size(window);
+                                    cx.notify();
+                                }))
+                                .child("Widget"),
                         )
                         .child(
                             div()
@@ -339,27 +356,33 @@ impl Render for PlaybackWidget {
 
         div()
             .size_full()
-            .p(px(if self.fullscreen { 28.0 } else { 10.0 }))
-            .bg(if self.fullscreen {
-                rgba(rgba_u32(bg_r, bg_g, bg_b, 250))
-            } else {
-                rgba(0x00000000)
-            })
+            .p(px(if self.fullscreen { 0.0 } else { 8.0 }))
+            .bg(rgba(0x00000000))
             .font_family("SpicyLyrics")
             .child(
                 div()
+                    .id("widget-card")
                     .size_full()
                     .flex()
                     .flex_col()
                     .justify_between()
-                    .p(px(if self.fullscreen { 28.0 } else { 14.0 }))
+                    .px(px(if self.fullscreen { 48.0 } else { 14.0 }))
+                    .py(px(if self.fullscreen { 36.0 } else { 12.0 }))
                     .rounded(px(if self.fullscreen { 0.0 } else { set.corners }))
-                    .bg(rgba(rgba_u32(bg_r, bg_g, bg_b, bg_a)))
+                    .bg(card_bg)
                     .when(set.edge_highlight && !self.fullscreen, |d| {
-                        d.border_1().border_color(rgba(0xffffff22))
+                        d.border_1().border_color(rgba(0xffffff1a))
                     })
                     .text_color(rgb(0xf5f5f7))
-                    // Header (click-drag moves the window)
+                    .on_hover(cx.listener(|this, hovered, _, cx| {
+                        this.hovered = *hovered;
+                        cx.notify();
+                    }))
+                    .on_mouse_down(
+                        MouseButton::Right,
+                        cx.listener(|this, _, _, cx| this.open_settings(cx)),
+                    )
+                    // Clean zero-clutter header (matches Electron & Tauri)
                     .child(
                         div()
                             .id("widget-header")
@@ -367,20 +390,18 @@ impl Render for PlaybackWidget {
                             .flex_row()
                             .items_center()
                             .gap(px(10.0))
-                            .on_mouse_down(gpui::MouseButton::Left, |_, window, _| {
+                            .on_mouse_down(MouseButton::Left, |_, window, _| {
                                 window.start_window_move();
                             })
                             .when(set.show_cover, |d| {
                                 d.child(
                                     div()
                                         .id("cover-btn")
-                                        .size(px(44.0))
+                                        .size(px(38.0))
                                         .flex_none()
                                         .rounded(cover_radius)
                                         .overflow_hidden()
                                         .bg(rgba(0xffffff14))
-                                        .border_1()
-                                        .border_color(rgba(0xffffff1f))
                                         .cursor_pointer()
                                         .on_click(cx.listener(|this, _, window, cx| {
                                             this.album_mode = !this.album_mode;
@@ -402,16 +423,17 @@ impl Render for PlaybackWidget {
                                     .gap(px(1.0))
                                     .child(
                                         div()
-                                            .text_size(px(14.0 * set.title_scale))
+                                            .text_size(px(13.5 * set.title_scale))
                                             .font_weight(FontWeight::BOLD)
+                                            .text_color(rgb(0xffffff))
                                             .truncate()
                                             .child(title_text),
                                     )
                                     .when(set.show_artist, |d| {
                                         d.child(
                                             div()
-                                                .text_size(px(12.0 * set.title_scale))
-                                                .text_color(rgba(0xffffff99))
+                                                .text_size(px(11.5 * set.title_scale))
+                                                .text_color(rgba(0xffffff8c))
                                                 .truncate()
                                                 .child(artist_text),
                                         )
@@ -425,7 +447,7 @@ impl Render for PlaybackWidget {
                                     .unwrap_or_default();
                                 d.child(
                                     div()
-                                        .max_w(px(76.0))
+                                        .max_w(px(96.0))
                                         .flex()
                                         .flex_col()
                                         .items_end()
@@ -438,155 +460,16 @@ impl Render for PlaybackWidget {
                                         )
                                         .child(
                                             div()
-                                                .text_size(px(11.0))
-                                                .font_weight(FontWeight::SEMIBOLD)
+                                                .text_size(px(11.5))
+                                                .font_weight(FontWeight::BOLD)
+                                                .text_color(rgba(0xffffffdd))
                                                 .truncate()
                                                 .child(next_title),
                                         ),
                                 )
-                            })
-                            .child(
-                                div()
-                                    .flex()
-                                    .flex_row()
-                                    .gap(px(4.0))
-                                    .child(
-                                        div()
-                                            .id("btn-roma")
-                                            .px(px(6.0))
-                                            .h(px(24.0))
-                                            .rounded(px(7.0))
-                                            .bg(if self.roma_mode != "off" {
-                                                rgba(0xffffff2c)
-                                            } else {
-                                                rgba(0xffffff12)
-                                            })
-                                            .hover(|s| s.bg(rgba(0xffffff2e)))
-                                            .flex()
-                                            .items_center()
-                                            .justify_center()
-                                            .text_size(px(11.0))
-                                            .cursor_pointer()
-                                            .on_click(cx.listener(|this, _, _, cx| {
-                                                this.roma_mode = match this.roma_mode.as_str() {
-                                                    "off" => "latin".into(),
-                                                    "latin" => "dual".into(),
-                                                    _ => "off".into(),
-                                                };
-                                                cx.notify();
-                                            }))
-                                            .child("あ"),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("btn-lyrics")
-                                            .px(px(7.0))
-                                            .h(px(24.0))
-                                            .rounded(px(7.0))
-                                            .bg(if self.lyrics_open {
-                                                rgba(0xffffff2c)
-                                            } else {
-                                                rgba(0xffffff12)
-                                            })
-                                            .hover(|s| s.bg(rgba(0xffffff2e)))
-                                            .flex()
-                                            .items_center()
-                                            .justify_center()
-                                            .text_size(px(11.0))
-                                            .font_weight(FontWeight::SEMIBOLD)
-                                            .cursor_pointer()
-                                            .on_click(cx.listener(|this, _, window, cx| {
-                                                this.lyrics_open = !this.lyrics_open;
-                                                this.sync_window_size(window);
-                                                cx.notify();
-                                            }))
-                                            .child("Lyrics"),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("btn-fs")
-                                            .w(px(24.0))
-                                            .h(px(24.0))
-                                            .rounded(px(7.0))
-                                            .bg(if self.fullscreen {
-                                                rgba(0xffffff2c)
-                                            } else {
-                                                rgba(0xffffff12)
-                                            })
-                                            .hover(|s| s.bg(rgba(0xffffff28)))
-                                            .flex()
-                                            .items_center()
-                                            .justify_center()
-                                            .text_size(px(11.0))
-                                            .cursor_pointer()
-                                            .on_click(cx.listener(|this, _, window, cx| {
-                                                this.fullscreen = !this.fullscreen;
-                                                if this.fullscreen {
-                                                    this.lyrics_open = true;
-                                                }
-                                                window.toggle_fullscreen();
-                                                if !this.fullscreen {
-                                                    this.sync_window_size(window);
-                                                }
-                                                cx.notify();
-                                            }))
-                                            .child("⛶"),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("btn-settings")
-                                            .w(px(24.0))
-                                            .h(px(24.0))
-                                            .rounded(px(7.0))
-                                            .bg(rgba(0xffffff12))
-                                            .hover(|s| s.bg(rgba(0xffffff28)))
-                                            .flex()
-                                            .items_center()
-                                            .justify_center()
-                                            .text_size(px(12.0))
-                                            .cursor_pointer()
-                                            .on_click(cx.listener(|this, _, _, cx| {
-                                                this.open_settings(cx);
-                                            }))
-                                            .child("⚙"),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("btn-changelog")
-                                            .w(px(22.0))
-                                            .h(px(24.0))
-                                            .rounded(px(7.0))
-                                            .bg(rgba(0xffffff12))
-                                            .hover(|s| s.bg(rgba(0xffffff28)))
-                                            .flex()
-                                            .items_center()
-                                            .justify_center()
-                                            .text_size(px(11.0))
-                                            .cursor_pointer()
-                                            .on_click(cx.listener(|this, _, _, cx| {
-                                                this.open_changelog(cx);
-                                            }))
-                                            .child("?"),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("btn-close")
-                                            .w(px(24.0))
-                                            .h(px(24.0))
-                                            .rounded(px(7.0))
-                                            .bg(rgba(0xffffff12))
-                                            .hover(|s| s.bg(rgb(0xff453a)))
-                                            .flex()
-                                            .items_center()
-                                            .justify_center()
-                                            .text_size(px(12.0))
-                                            .cursor_pointer()
-                                            .on_click(|_, _, cx| cx.quit())
-                                            .child("×"),
-                                    ),
-                            ),
+                            }),
                     )
-                    // Synced lyrics list (word-by-word + dual romanization)
+                    // Synced lyrics list (clean generous spacing, matches Electron/Tauri)
                     .when(self.lyrics_open || self.fullscreen, |d| {
                         let visible_count = if self.fullscreen { 8 } else { 6 };
                         let content: Vec<gpui::AnyElement> = if let Some(ref res) = lyrics {
@@ -643,7 +526,7 @@ impl Render for PlaybackWidget {
                                                     .text_color(if sung {
                                                         rgb(highlight_hex)
                                                     } else {
-                                                        rgba(0xffffff66)
+                                                        rgba(0xffffff59)
                                                     })
                                                     .child(wt)
                                             }))
@@ -675,11 +558,11 @@ impl Render for PlaybackWidget {
                                         .text_color(if is_active {
                                             rgb(highlight_hex)
                                         } else if is_past {
-                                            rgba(0xffffff66)
+                                            rgba(0xffffff55)
                                         } else if set.blur_lines {
                                             rgba(0xffffff42)
                                         } else {
-                                            rgba(0xffffff77)
+                                            rgba(0xffffff73)
                                         })
                                         .when(click_jump, |el| {
                                             el.cursor_pointer()
@@ -699,7 +582,7 @@ impl Render for PlaybackWidget {
                                                     .text_color(if is_active {
                                                         rgba(0xffffffb8)
                                                     } else {
-                                                        rgba(0xffffff44)
+                                                        rgba(0xffffff40)
                                                     })
                                                     .child(roma),
                                             )
@@ -710,7 +593,7 @@ impl Render for PlaybackWidget {
                         } else {
                             vec![div()
                                 .text_size(px(14.0))
-                                .text_color(rgba(0xffffff66))
+                                .text_color(rgba(0xffffff55))
                                 .child("No synced lyrics found for this track")
                                 .into_any_element()]
                         };
@@ -718,7 +601,7 @@ impl Render for PlaybackWidget {
                         d.child(
                             div()
                                 .flex_1()
-                                .my(px(12.0))
+                                .my(px(14.0))
                                 .flex()
                                 .flex_col()
                                 .justify_center()
@@ -727,101 +610,212 @@ impl Render for PlaybackWidget {
                                 .children(content),
                         )
                     })
-                    // Transport + progress bar + footer
+                    // Hover-revealed controls + thin progress bar + minimal footer
                     .child(
                         div()
                             .flex()
                             .flex_col()
-                            .gap(px(7.0))
-                            .child(
-                                div()
-                                    .flex()
-                                    .flex_row()
-                                    .items_center()
-                                    .justify_center()
-                                    .gap(px(14.0))
-                                    .when(set.show_shuffle_repeat, |d| {
-                                        d.child(
+                            .gap(px(6.0))
+                            .when(show_controls, |d| {
+                                d.child(
+                                    div()
+                                        .flex()
+                                        .flex_row()
+                                        .items_center()
+                                        .justify_between()
+                                        .pb(px(2.0))
+                                        .child(
                                             div()
-                                                .text_size(px(11.0))
-                                                .text_color(if br.shuffle {
-                                                    rgb(highlight_hex)
-                                                } else {
-                                                    rgba(0xffffff44)
-                                                })
-                                                .child("⇄"),
+                                                .flex()
+                                                .flex_row()
+                                                .items_center()
+                                                .gap(px(4.0))
+                                                .child(
+                                                    div()
+                                                        .id("btn-roma")
+                                                        .px(px(6.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(11.0))
+                                                        .text_color(if self.roma_mode != "off" {
+                                                            rgb(0xffffff)
+                                                        } else {
+                                                            rgba(0xffffff80)
+                                                        })
+                                                        .hover(|s| s.bg(rgba(0xffffff1a)))
+                                                        .cursor_pointer()
+                                                        .on_click(cx.listener(|this, _, _, cx| {
+                                                            this.roma_mode =
+                                                                match this.roma_mode.as_str() {
+                                                                    "off" => "latin".into(),
+                                                                    "latin" => "dual".into(),
+                                                                    _ => "off".into(),
+                                                                };
+                                                            cx.notify();
+                                                        }))
+                                                        .child("あ"),
+                                                )
+                                                .child(
+                                                    div()
+                                                        .id("btn-fs")
+                                                        .px(px(5.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(11.0))
+                                                        .text_color(rgba(0xffffff88))
+                                                        .hover(|s| s.bg(rgba(0xffffff1a)))
+                                                        .cursor_pointer()
+                                                        .on_click(cx.listener(
+                                                            |this, _, window, cx| {
+                                                                this.fullscreen = !this.fullscreen;
+                                                                if this.fullscreen {
+                                                                    this.lyrics_open = true;
+                                                                }
+                                                                window.toggle_fullscreen();
+                                                                if !this.fullscreen {
+                                                                    this.sync_window_size(window);
+                                                                }
+                                                                cx.notify();
+                                                            },
+                                                        ))
+                                                        .child("⛶"),
+                                                ),
                                         )
-                                    })
-                                    .child(
-                                        div()
-                                            .id("ctrl-prev")
-                                            .px(px(8.0))
-                                            .py(px(3.0))
-                                            .rounded(px(8.0))
-                                            .hover(|s| s.bg(rgba(0xffffff1a)))
-                                            .text_size(px(13.0))
-                                            .cursor_pointer()
-                                            .on_click(|_, _, _| {
-                                                std::thread::spawn(|| {
-                                                    send_action(MediaAction::Previous)
-                                                });
-                                            })
-                                            .child("⏮"),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("ctrl-play")
-                                            .px(px(12.0))
-                                            .py(px(4.0))
-                                            .rounded(px(999.0))
-                                            .bg(rgba(0xffffff22))
-                                            .hover(|s| s.bg(rgba(0xffffff38)))
-                                            .text_size(px(13.0))
-                                            .font_weight(FontWeight::BOLD)
-                                            .cursor_pointer()
-                                            .on_click(|_, _, _| {
-                                                std::thread::spawn(|| {
-                                                    send_action(MediaAction::TogglePlay)
-                                                });
-                                            })
-                                            .child(if now.playing { "⏸" } else { "▶" }),
-                                    )
-                                    .child(
-                                        div()
-                                            .id("ctrl-next")
-                                            .px(px(8.0))
-                                            .py(px(3.0))
-                                            .rounded(px(8.0))
-                                            .hover(|s| s.bg(rgba(0xffffff1a)))
-                                            .text_size(px(13.0))
-                                            .cursor_pointer()
-                                            .on_click(|_, _, _| {
-                                                std::thread::spawn(|| {
-                                                    send_action(MediaAction::Next)
-                                                });
-                                            })
-                                            .child("⏭"),
-                                    )
-                                    .when(set.show_shuffle_repeat, |d| {
-                                        d.child(
+                                        .child(
                                             div()
-                                                .text_size(px(11.0))
-                                                .text_color(if br.repeat > 0 {
-                                                    rgb(highlight_hex)
-                                                } else {
-                                                    rgba(0xffffff44)
-                                                })
-                                                .child(if br.repeat == 2 { "↻1" } else { "↻" }),
+                                                .flex()
+                                                .flex_row()
+                                                .items_center()
+                                                .gap(px(10.0))
+                                                .child(
+                                                    div()
+                                                        .id("ctrl-prev")
+                                                        .px(px(6.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(12.0))
+                                                        .text_color(rgba(0xffffffcc))
+                                                        .hover(|s| s.bg(rgba(0xffffff1a)))
+                                                        .cursor_pointer()
+                                                        .on_click(|_, _, _| {
+                                                            std::thread::spawn(|| {
+                                                                send_action(MediaAction::Previous)
+                                                            });
+                                                        })
+                                                        .child("‹‹"),
+                                                )
+                                                .child(
+                                                    div()
+                                                        .id("ctrl-play")
+                                                        .px(px(10.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(999.0))
+                                                        .bg(rgba(0xffffff20))
+                                                        .hover(|s| s.bg(rgba(0xffffff36)))
+                                                        .text_size(px(12.0))
+                                                        .font_weight(FontWeight::BOLD)
+                                                        .cursor_pointer()
+                                                        .on_click(|_, _, _| {
+                                                            std::thread::spawn(|| {
+                                                                send_action(MediaAction::TogglePlay)
+                                                            });
+                                                        })
+                                                        .child(if now.playing {
+                                                            "❚❚"
+                                                        } else {
+                                                            "▶"
+                                                        }),
+                                                )
+                                                .child(
+                                                    div()
+                                                        .id("ctrl-next")
+                                                        .px(px(6.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(12.0))
+                                                        .text_color(rgba(0xffffffcc))
+                                                        .hover(|s| s.bg(rgba(0xffffff1a)))
+                                                        .cursor_pointer()
+                                                        .on_click(|_, _, _| {
+                                                            std::thread::spawn(|| {
+                                                                send_action(MediaAction::Next)
+                                                            });
+                                                        })
+                                                        .child("››"),
+                                                ),
                                         )
-                                    }),
-                            )
+                                        .child(
+                                            div()
+                                                .flex()
+                                                .flex_row()
+                                                .items_center()
+                                                .gap(px(4.0))
+                                                .child(
+                                                    div()
+                                                        .id("btn-lyrics")
+                                                        .px(px(6.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(11.0))
+                                                        .font_weight(FontWeight::SEMIBOLD)
+                                                        .text_color(if self.lyrics_open {
+                                                            rgb(0xffffff)
+                                                        } else {
+                                                            rgba(0xffffff80)
+                                                        })
+                                                        .hover(|s| s.bg(rgba(0xffffff1a)))
+                                                        .cursor_pointer()
+                                                        .on_click(cx.listener(
+                                                            |this, _, window, cx| {
+                                                                this.lyrics_open =
+                                                                    !this.lyrics_open;
+                                                                this.sync_window_size(window);
+                                                                cx.notify();
+                                                            },
+                                                        ))
+                                                        .child("Lyrics"),
+                                                )
+                                                .child(
+                                                    div()
+                                                        .id("btn-changelog")
+                                                        .px(px(5.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(11.0))
+                                                        .text_color(rgba(0xffffff77))
+                                                        .hover(|s| s.bg(rgba(0xffffff1a)))
+                                                        .cursor_pointer()
+                                                        .on_click(cx.listener(|this, _, _, cx| {
+                                                            this.open_changelog(cx);
+                                                        }))
+                                                        .child("?"),
+                                                )
+                                                .child(
+                                                    div()
+                                                        .id("btn-close")
+                                                        .px(px(5.0))
+                                                        .py(px(2.0))
+                                                        .rounded(px(6.0))
+                                                        .text_size(px(11.5))
+                                                        .text_color(rgba(0xffffff77))
+                                                        .hover(|s| {
+                                                            s.bg(rgb(0xff453a))
+                                                                .text_color(rgb(0xffffff))
+                                                        })
+                                                        .cursor_pointer()
+                                                        .on_click(|_, _, cx| cx.quit())
+                                                        .child("×"),
+                                                ),
+                                        ),
+                                )
+                            })
                             .when(set.show_progress, |d| {
                                 d.child(
                                     div()
                                         .w_full()
-                                        .h(px(set.bar_thickness.max(2.0)))
+                                        .h(px(set.bar_thickness.max(2.5)))
                                         .rounded(px(999.0))
-                                        .bg(rgba(0xffffff26))
+                                        .bg(rgba(0xffffff24))
                                         .overflow_hidden()
                                         .child(
                                             div()
@@ -838,8 +832,9 @@ impl Render for PlaybackWidget {
                                         .flex()
                                         .flex_row()
                                         .justify_between()
-                                        .text_size(px(11.0))
-                                        .text_color(rgba(0xffffff80))
+                                        .text_size(px(10.5))
+                                        .font_weight(FontWeight::MEDIUM)
+                                        .text_color(rgba(0xffffff73))
                                         .child(if set.show_times {
                                             format_time(pos)
                                         } else {
@@ -869,13 +864,13 @@ fn start_background_worker(state: Arc<SharedState>) {
             .build()
             .expect("tokio runtime");
         rt.block_on(async move {
-            // Start Spicetify loopback bridge on 127.0.0.1:8899
             tokio::spawn(bridge::run_server(state.bridge.clone()));
 
             let mut last_key = String::new();
             let mut last_spicy_count = 0usize;
             let mut last_art: Option<(u32, u32, Vec<u8>)> = None;
-            let mut last_accent = (46, 36, 58);
+            let mut last_top = (42, 32, 48);
+            let mut last_bot = (16, 16, 20);
 
             loop {
                 if let Some(mut polled) = poll_smtc(&last_key) {
@@ -895,13 +890,15 @@ fn start_background_worker(state: Arc<SharedState>) {
                         if key != last_key {
                             last_key = key.clone();
                             last_art = polled.art_rgba.clone();
-                            last_accent = polled.accent_rgb;
+                            last_top = polled.accent_top;
+                            last_bot = polled.accent_bottom;
                             if let Ok(mut l) = state.lyrics.write() {
                                 *l = None;
                             }
                         } else {
                             polled.art_rgba = last_art.clone();
-                            polled.accent_rgb = last_accent;
+                            polled.accent_top = last_top;
+                            polled.accent_bottom = last_bot;
                         }
                         last_spicy_count = spicy_count;
                         let st = state.clone();
@@ -927,7 +924,8 @@ fn start_background_worker(state: Arc<SharedState>) {
                         });
                     } else {
                         polled.art_rgba = last_art.clone();
-                        polled.accent_rgb = last_accent;
+                        polled.accent_top = last_top;
+                        polled.accent_bottom = last_bot;
                     }
                     if let Ok(mut n) = state.now.write() {
                         *n = polled;
@@ -960,17 +958,17 @@ fn main() {
         let (w, h) = settings
             .read()
             .map(|s| {
-                let w = s.widget_width + 44.0;
+                let w = s.widget_width + 24.0;
                 let h = if s.album_on_launch {
                     w
                 } else if s.lyrics_on_launch {
-                    162.0 + s.panel_height
+                    COLLAPSED_H + s.panel_height
                 } else {
-                    162.0
+                    COLLAPSED_H
                 };
                 (w, h)
             })
-            .unwrap_or((394.0, 162.0));
+            .unwrap_or((374.0, COLLAPSED_H));
 
         let bounds = Bounds::centered(None, size(px(w), px(h)), cx);
         let st = state.clone();

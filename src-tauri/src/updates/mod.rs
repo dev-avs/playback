@@ -70,6 +70,8 @@ pub struct Updater {
     state: Mutex<UpdateState>,
     /// the full installer of each legacy release, from the last listing
     legacy: Mutex<HashMap<String, String>>,
+    /// (version, flavor) -> (stub_url, pkg_url) from the last listing
+    flavors: Mutex<feed::FlavorUrls>,
 }
 
 impl Default for Updater {
@@ -88,6 +90,7 @@ impl Default for Updater {
                 error: None,
             }),
             legacy: Mutex::default(),
+            flavors: Mutex::default(),
         }
     }
 }
@@ -166,12 +169,40 @@ impl Updater {
         }
     }
 
-    /// Installs one release, newer or older than this one, and restarts
-    /// into it.
-    pub async fn bump(&self, app: &AppHandle, version: String) -> UpdateState {
+    /// Installs one release (and optional flavor: "tauri" | "electron" | "gpui"),
+    /// newer, older, or a different flavor of the current version, and restarts
+    /// into it. If `settings_json` is provided, writes it to `gpui-settings.json`
+    /// so settings persist across flavor switches.
+    pub async fn bump(
+        &self,
+        app: &AppHandle,
+        version: String,
+        flavor: Option<String>,
+        settings_json: Option<String>,
+    ) -> UpdateState {
         let s = self.state();
-        if s.busy() || version == current(app) {
+        if s.busy() || (version == current(app) && flavor.is_none()) {
             return s;
+        }
+        if let Some(json) = settings_json {
+            let path = crate::support::paths::data_file("gpui-settings.json");
+            if let Some(parent) = path.parent() {
+                let _ = fs::create_dir_all(parent);
+            }
+            let _ = fs::write(path, json);
+        }
+        if let Some(fl) = flavor {
+            let found = self
+                .flavors
+                .lock()
+                .unwrap()
+                .get(&(version.clone(), fl.clone()))
+                .cloned();
+            if let Some((stub_url, pkg_url)) = found {
+                return self
+                    .install_flavor(app, version, fl, &stub_url, &pkg_url)
+                    .await;
+            }
         }
         let legacy = self.legacy.lock().unwrap().get(&version).cloned();
         match legacy {
@@ -180,6 +211,37 @@ impl Updater {
                 self.install_release(app, Some(version.clone()), version)
                     .await
             }
+        }
+    }
+
+    async fn install_flavor(
+        &self,
+        app: &AppHandle,
+        version: String,
+        flavor: String,
+        stub_url: &str,
+        pkg_url: &str,
+    ) -> UpdateState {
+        let label = format!("{version} ({flavor})");
+        self.start_download(app, &label);
+        let done = async {
+            let dir = work_dir().join(format!("{version}-{flavor}"));
+            let stub = dir.join(format!("playback-{flavor}-setup-{version}.exe"));
+            let package = dir.join(format!("playback-{flavor}-{version}-x64.nsis.7z"));
+            download::fetch(stub_url, &stub, None, self.counter(app, 0)).await?;
+            let base = fs::metadata(&stub).map(|m| m.len()).unwrap_or(0);
+            download::fetch(pkg_url, &package, None, self.counter(app, base)).await?;
+            let package_arg = format!("--package-file={}", package.display());
+            install::run_detached(&stub, &["--updated", "/S", "--force-run", &package_arg])
+        }
+        .await;
+        match done {
+            Ok(()) => {
+                eprintln!("[update] installing {label}");
+                app.exit(0);
+                self.state()
+            }
+            Err(e) => self.fail(app, e),
         }
     }
 
@@ -280,9 +342,12 @@ impl Updater {
 
     /// Every release version control can install, for the page.
     pub async fn releases(&self) -> Value {
-        let (answer, legacy) = feed::releases().await;
+        let (answer, legacy, flavors) = feed::releases().await;
         if !legacy.is_empty() {
             *self.legacy.lock().unwrap() = legacy;
+        }
+        if !flavors.is_empty() {
+            *self.flavors.lock().unwrap() = flavors;
         }
         answer
     }

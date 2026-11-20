@@ -55,12 +55,21 @@ pub fn start(app: &AppHandle) -> tauri::Result<()> {
             open(&handle, Card::Setup);
         }
         // only a first run applies Spicetify on its own (it restarts Spotify);
-        // later launches leave that to Setup's Apply
-        let state = handle.state::<Setup>().run(first_run).await;
-        if state.worth_showing() && !launch.is_settled() {
-            open(&handle, Card::Setup);
-        } else if !cards::is_open(&handle, Card::Setup) {
-            launch.settle();
+        // later launches leave that to Setup's Apply. Bound with a timeout so a
+        // slow or hung spicetify CLI can never keep the widget invisible.
+        let run = tokio::time::timeout(
+            std::time::Duration::from_secs(4),
+            handle.state::<Setup>().run(first_run),
+        )
+        .await;
+        match run {
+            Ok(state) if state.worth_showing() && !launch.is_settled() => {
+                open(&handle, Card::Setup);
+            }
+            _ if !cards::is_open(&handle, Card::Setup) => {
+                launch.settle();
+            }
+            _ => {}
         }
     });
 
@@ -97,7 +106,8 @@ fn build_widget(app: &AppHandle) -> tauri::Result<()> {
     if let Some(script) = migrate::settings_script(app) {
         builder = builder.initialization_script(script);
     }
-    builder.build()?;
+    let win = builder.build()?;
+    let _ = win.set_always_on_top(true);
     Ok(())
 }
 
@@ -118,11 +128,13 @@ pub fn second_instance(app: &AppHandle) {
     if !app.state::<Launch>().is_settled() {
         if let Some(setup) = app.get_webview_window("setup") {
             let _ = setup.set_focus();
+            return;
         }
-        return;
+        app.state::<Launch>().settle();
     }
     if let Some(win) = widget(app) {
         let _ = win.unminimize();
+        app.state::<Widget>().reveal(&win);
         app.state::<Widget>().set_hidden(&win, false);
         let _ = win.set_focus();
     }
