@@ -13,11 +13,9 @@ pub enum Card {
     Changelog,
     /// every version before the current one, beside the latest
     PastChangelog,
-    /// Setup and the update prompt open at launch, which comes with the
-    /// installer and updater work
-    #[allow(dead_code)]
+    /// Spicetify and the bridge; opens at launch when there is something to do
     Setup,
-    #[allow(dead_code)]
+    /// "an update is out", at launch
     Update,
     Versions,
 }
@@ -145,7 +143,11 @@ pub fn open(app: &AppHandle, card: Card, query: Option<String>) -> tauri::Result
         None => card.label().to_string(),
     }));
     let on_top = card != Card::Settings || widget.is_always_on_top().unwrap_or(true);
-    let win = WebviewWindowBuilder::new(app, card.label(), WebviewUrl::External(url))
+    let mut builder = WebviewWindowBuilder::new(app, card.label(), WebviewUrl::External(url));
+    if let Some(script) = crate::migrate::settings_script(app) {
+        builder = builder.initialization_script(script);
+    }
+    let win = builder
         .title("Playback")
         .inner_size(w, h)
         .position(x, y)
@@ -171,6 +173,8 @@ pub fn open(app: &AppHandle, card: Card, query: Option<String>) -> tauri::Result
                 Card::Changelog => changelog_changed(&app),
                 // re-read next time, so a font installed meanwhile appears
                 Card::Settings => super::fonts::forget(),
+                // the widget and the update prompt wait for Setup to go
+                Card::Setup => app.state::<crate::launch::Launch>().settle(),
                 _ => {}
             }
         }

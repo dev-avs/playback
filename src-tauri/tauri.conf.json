@@ -22,7 +22,8 @@
         "transparent": true,
         "shadow": false,
         "alwaysOnTop": true,
-        "visible": true
+        "visible": false,
+        "create": false
       }
     ],
     "security": { "csp": null }

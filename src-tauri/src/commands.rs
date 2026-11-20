@@ -4,7 +4,9 @@
 use crate::media::Media;
 use crate::ui::cards::{self, Card};
 use crate::ui::widget::Widget;
-use crate::{art, bridge, lyrics, spicetify, spicy, spotify, ui, updates};
+use crate::spicetify::setup::{Setup, SetupState};
+use crate::updates::{UpdateState, Updater};
+use crate::{art, bridge, install, lyrics, spicy, spotify, ui};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use tauri::{AppHandle, Emitter, Manager, State, WebviewWindow};
@@ -185,7 +187,7 @@ pub fn changelog_is_open(app: AppHandle) -> bool {
 
 #[tauri::command]
 pub async fn changelog_check(enabled: bool, app: AppHandle) -> tauri::Result<()> {
-    ui::changelog::check_after_update(&app, enabled)
+    ui::changelog::check_after_update(&app, enabled).await
 }
 
 #[tauri::command]
@@ -218,18 +220,58 @@ pub fn fonts_list() -> Vec<String> {
 }
 
 #[tauri::command]
-pub fn setup_state() -> spicetify::SetupState {
-    spicetify::state()
+pub async fn setup_state(setup: State<'_, Setup>) -> Result<SetupState, ()> {
+    Ok(setup.state().await)
 }
 
 #[tauri::command]
-pub fn update_state() -> Value {
-    updates::state()
+pub async fn setup_recheck(setup: State<'_, Setup>) -> Result<SetupState, ()> {
+    Ok(setup.run(false).await)
+}
+
+/// Setup's Apply, and Turn on for a bridge left off in the installer.
+#[tauri::command]
+pub async fn setup_apply(setup: State<'_, Setup>) -> Result<SetupState, ()> {
+    Ok(setup.apply().await)
 }
 
 #[tauri::command]
-pub async fn update_releases() -> Value {
-    updates::releases().await
+pub fn update_state(updater: State<Updater>) -> UpdateState {
+    updater.state()
+}
+
+#[tauri::command]
+pub async fn update_check(app: AppHandle, updater: State<'_, Updater>) -> Result<UpdateState, ()> {
+    Ok(updater.check(&app).await)
+}
+
+#[tauri::command]
+pub async fn update_install(app: AppHandle, updater: State<'_, Updater>) -> Result<UpdateState, ()> {
+    Ok(updater.install(&app).await)
+}
+
+/// Version control: any release, older or newer.
+#[tauri::command]
+pub async fn update_bump(version: String, app: AppHandle, updater: State<'_, Updater>) -> Result<UpdateState, ()> {
+    Ok(updater.bump(&app, version).await)
+}
+
+#[tauri::command]
+pub fn update_skip(updater: State<Updater>) {
+    updater.skip();
+}
+
+#[tauri::command]
+pub async fn update_releases(updater: State<'_, Updater>) -> Result<Value, ()> {
+    Ok(updater.releases().await)
+}
+
+#[tauri::command]
+pub async fn app_uninstall(app: AppHandle) -> Value {
+    match install::uninstall(&app).await {
+        Ok(()) => json!({ "ok": true }),
+        Err(e) => json!({ "ok": false, "error": e }),
+    }
 }
 
 #[tauri::command]
@@ -272,6 +314,11 @@ pub fn win_set_hidden(hidden: bool, app: AppHandle, w: State<Widget>) {
     if let Some(win) = app.get_webview_window(ui::WIDGET) {
         w.set_hidden(&win, hidden);
     }
+}
+
+#[tauri::command]
+pub fn win_fullscreen(on: bool, win: WebviewWindow, w: State<Widget>) -> bool {
+    w.set_fullscreen(&win, on)
 }
 
 #[tauri::command]

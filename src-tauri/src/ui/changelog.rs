@@ -6,7 +6,8 @@ use super::cards::{self, Card};
 use crate::support::paths::data_file;
 use serde_json::json;
 use std::fs;
-use tauri::AppHandle;
+use crate::launch::Launch;
+use tauri::{AppHandle, Manager};
 
 const FILE: &str = "last-version.json";
 
@@ -24,11 +25,13 @@ fn swap_recorded(current: &str) -> Option<String> {
 }
 
 /// Called by the widget once per launch with the user's setting. A first run
-/// (nothing recorded) shows nothing: a fresh install has nothing new.
-pub fn check_after_update(app: &AppHandle, enabled: bool) -> tauri::Result<()> {
+/// (nothing recorded) shows nothing: a fresh install has nothing new. Opens
+/// once Setup is out of the way.
+pub async fn check_after_update(app: &AppHandle, enabled: bool) -> tauri::Result<()> {
     let current = app.package_info().version.to_string();
     match swap_recorded(&current) {
         Some(previous) if enabled && previous != current => {
+            app.state::<Launch>().settled().await;
             cards::open(app, Card::Changelog, Some(format!("from={}", encode(&previous))))
         }
         _ => Ok(()),

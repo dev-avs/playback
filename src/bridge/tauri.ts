@@ -2,14 +2,12 @@
 // Electron's preload (electron/preload.cjs); this gives it the same API on top
 // of Tauri's commands and events, so the components do not change.
 //
-// Does nothing outside Tauri. The optional parts src-tauri does not do yet
-// are left out (installing updates, Setup's apply, fullscreen), which the
-// page already handles.
+// Does nothing outside Tauri.
 
 import { invoke } from "@tauri-apps/api/core";
 import { listen, type EventCallback } from "@tauri-apps/api/event";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import type { PlayerBridge, SmtcEvent } from "../player.d.ts";
+import type { PlayerBridge, SmtcEvent, UpdateState } from "../player.d.ts";
 
 /** listen() is async; the page wants a plain unsubscribe back. */
 function on<T>(event: string, cb: EventCallback<T>): () => void {
@@ -91,8 +89,13 @@ function bridge(): PlayerBridge {
     onTokenArrived: (cb) => on("spotify:tokenArrived", () => cb()),
 
     updateState: () => invoke("update_state"),
-    checkForUpdate: () => invoke("update_state"),
+    checkForUpdate: () => invoke("update_check"),
+    installUpdate: () => invoke("update_install"),
+    skipUpdate: () => invoke("update_skip"),
+    bumpTo: (version) => invoke("update_bump", { version }),
+    onUpdateChanged: (cb) => on<UpdateState>("update:changed", (e) => cb(e.payload)),
     listReleases: () => invoke("update_releases"),
+    uninstall: () => invoke("app_uninstall"),
     openVersions: () => invoke("versions_open"),
     closeUpdate: closeCard,
     resizeUpdate: fit,
@@ -112,7 +115,8 @@ function bridge(): PlayerBridge {
     resizeChangelog: fit,
 
     setupState: () => invoke("setup_state"),
-    recheckSetup: () => invoke("setup_state"),
+    recheckSetup: () => invoke("setup_recheck"),
+    applySetup: () => invoke("setup_apply"),
     copyText: (text) => invoke("copy_text", { text }),
     openLink: (url) => invoke("open_link", { url }),
     closeSetup: closeCard,
@@ -125,6 +129,8 @@ function bridge(): PlayerBridge {
     setWidgetWidth: (width) => invoke("win_set_width", { width }),
     setWidgetHidden: (hidden) => invoke("win_set_hidden", { hidden }),
     setAlwaysOnTop: (on) => invoke("win_set_always_on_top", { on }),
+    setFullscreen: (on) => invoke("win_fullscreen", { on }),
+    onFullscreenToggle: (cb) => on("fullscreen:toggle", () => cb()),
     minimize: () => invoke("win_minimize"),
     close: () => invoke("win_close"),
   };
