@@ -353,7 +353,7 @@ export function applyReadings(lines: LyricLine[], tokens: ReadingToken[][]): Lyr
   return lines.map((line, i) => {
     const toks = tokens[i];
     const text = lineChars(line);
-    if (!toks?.length) return line;
+    if (!toks?.length || !hasNonLatinScript(text)) return line;
     // anything off (a dropped character) and the line is left as it was
     if (toks.map((t) => t.s).join("") !== text) return line;
     const chars: CharText[] = [];
@@ -362,7 +362,15 @@ export function applyReadings(lines: LyricLine[], tokens: ReadingToken[][]): Lyr
       const sp = !!prev && !isSpace(prev.s) && !isSpace(tok.s) && !attaches(tok);
       // the topic and direction particles are said wa and e
       const particle = tok.p === "助詞" && (tok.s === "は" ? "わ" : tok.s === "へ" ? "え" : null);
-      const own = particle ? [particle] : isSpace(tok.s) ? Array.from(tok.s, () => " ") : tokenChars(tok);
+      // In counting sequences (一二三四…), 四 is read し (shi), not IPADIC's default よん (yon).
+      const countingFour = tok.s === "四" && prev?.s === "三" ? "し" : null;
+      const own = particle
+        ? [particle]
+        : countingFour
+          ? [countingFour]
+          : isSpace(tok.s)
+            ? Array.from(tok.s, () => " ")
+            : tokenChars(tok);
       own.forEach((t, n) => chars.push({ t, roma: false, sp: n === 0 && sp }));
     });
     if (chars.length !== Array.from(text).length) return line;
@@ -470,6 +478,7 @@ export function withRomaLines(lines: LyricLine[], roman: LyricLine[], toleranceS
   let j = 0;
   return lines.map((line, i) => {
     if (line.gap) return line;
+    if (!hasNonLatinScript(line.text) && !hasUromanScript(line.text)) return line;
     let m: LyricLine | undefined;
     if (same) m = roman[i];
     else {

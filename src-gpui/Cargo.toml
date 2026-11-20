@@ -1,0 +1,26 @@
+[package]
+name = "playback-gpui"
+version = "0.1.0"
+description = "Playback (Phoenix): native GPUI now-playing overlay with synced lyrics"
+edition = "2021"
+license = "AGPL-3.0-only"
+
+[[bin]]
+name = "playback"
+path = "src/main.rs"
+
+[dependencies]
+gpui = "0.2.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "time", "sync", "macros"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json"] }
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp"] }
+dirs = "6"
+windows = { version = "0.61", features = [
+    "Foundation",
+    "Media_Control",
+    "Storage_Streams",
+    "Win32_Foundation",
+    "Win32_UI_WindowsAndMessaging",
+] }

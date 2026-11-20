@@ -71,3 +71,26 @@ test("Both keeps the line and puts its romanization under it", () => {
   const out = withRomaLines(lines, romanizeLines(lines));
   assert.deepEqual(out.map((l) => [l.text, l.roma?.text]), [["きみ", "kimi"], ["hello", undefined]]);
 });
+
+test("Latin-only word-timed lines are not re-segmented or given a roma line", () => {
+  const w = (text: string, t: number) => ({ text, t, end: t + 0.2 });
+  const lines: LyricLine[] = [
+    {
+      t: 0,
+      text: "Close your eyes, you'll be here soon",
+      words: [
+        w("Close", 0),
+        w("your", 1),
+        w("eyes,", 2),
+        w("you'll", 3),
+        w("be", 4),
+        w("here", 5),
+        w("soon", 6),
+      ],
+    },
+    { t: 7, text: "一二三四五分" },
+  ];
+  const out = withRomaLines(lines, romaji(lines));
+  assert.equal(out[0].roma, undefined);
+  assert.equal(out[1].roma?.text, "ichi ni san shi gofun");
+});

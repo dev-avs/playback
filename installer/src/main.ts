@@ -9,19 +9,31 @@ import { open as pickFolder } from "@tauri-apps/plugin-dialog";
 // Inter with its optical-size axis: the fallback for anyone without SF Pro
 import "@fontsource-variable/inter/opsz.css";
 
-interface Release {
-  version: string;
+type FlavorId = "tauri" | "electron" | "gpui";
+
+interface FlavorRelease {
+  id: FlavorId;
   stub: string;
   package: string;
   size: number;
+}
+interface Release {
+  version: string;
+  flavors: FlavorRelease[];
 }
 interface Installed {
   dir: string;
   version: string;
 }
 
-type Page = "welcome" | "options" | "progress" | "done" | "error";
-const ORDER: Page[] = ["welcome", "options", "progress", "done", "error"];
+const FLAVOR_LABELS: Record<FlavorId, string> = {
+  tauri: "Tauri",
+  electron: "Electron",
+  gpui: "GPUI",
+};
+
+type Page = "welcome" | "flavor" | "options" | "progress" | "done" | "error";
+const ORDER: Page[] = ["welcome", "flavor", "options", "progress", "done", "error"];
 
 const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
 const win = getCurrentWindow();
@@ -30,6 +42,7 @@ const pages = document.querySelector<HTMLElement>(".pages")!;
 
 let page: Page = "welcome";
 let release: Release | null = null;
+let selectedFlavor: FlavorId | null = null;
 let installed: Installed | null = null;
 let dir = "";
 let busy = false;
@@ -89,6 +102,48 @@ async function close() {
 // "Playback", one letter at a time
 $("hello").innerHTML = [..."Playback"].map((c, i) => `<span style="--l: ${i}">${c}</span>`).join("");
 
+function currentFlavor(): FlavorRelease | null {
+  if (!release || !selectedFlavor) return null;
+  return release.flavors.find((f) => f.id === selectedFlavor) ?? null;
+}
+
+function selectFlavor(id: FlavorId) {
+  if (!release?.flavors.some((f) => f.id === id)) return;
+  selectedFlavor = id;
+  for (const el of document.querySelectorAll<HTMLButtonElement>(".flavor-card")) {
+    const active = el.dataset.flavor === id;
+    el.classList.toggle("selected", active);
+    el.setAttribute("aria-checked", String(active));
+  }
+  ($("flavor-next") as HTMLButtonElement).disabled = false;
+  const f = currentFlavor();
+  if (f && release) {
+    $("progress-title").textContent = `Installing Playback ${release.version} · ${FLAVOR_LABELS[f.id]}`;
+  }
+}
+
+function syncFlavorCards() {
+  const available = new Map<string, FlavorRelease>((release?.flavors ?? []).map((f) => [f.id, f]));
+  for (const el of document.querySelectorAll<HTMLButtonElement>(".flavor-card")) {
+    const id = el.dataset.flavor as FlavorId;
+    const item = available.get(id);
+    const sizeEl = el.querySelector<HTMLElement>(`[data-size="${id}"]`);
+    el.classList.toggle("unavailable", !item);
+    el.disabled = !item;
+    if (sizeEl) {
+      sizeEl.textContent = item ? `${mb(item.size)} MB` : "Not in this release";
+    }
+  }
+  const preferred: FlavorId[] = ["tauri", "electron", "gpui"];
+  const first = preferred.find((id) => available.has(id)) ?? null;
+  if (first) {
+    selectFlavor(first);
+  } else {
+    selectedFlavor = null;
+    ($("flavor-next") as HTMLButtonElement).disabled = true;
+  }
+}
+
 async function lookUp() {
   const caption = $("release");
   caption.innerHTML = '<span class="skeleton">Looking up the newest version…</span>';
@@ -99,16 +154,21 @@ async function lookUp() {
     fail(String(e));
     return;
   }
+  syncFlavorCards();
   const v = release.version;
+  const count = release.flavors.length;
+  const flavorNote =
+    count === 1
+      ? `${FLAVOR_LABELS[release.flavors[0].id]} · ${mb(release.flavors[0].size)} MB`
+      : `${count} flavors available`;
   $("start-label").textContent = !installed
     ? "Install"
     : installed.version === v
       ? "Reinstall Playback"
       : `Update to ${v}`;
   caption.textContent = installed
-    ? `You have ${installed.version} · newest is ${v} · ${mb(release.size)} MB`
-    : `Playback ${v} · ${mb(release.size)} MB download`;
-  $("progress-title").textContent = `Installing Playback ${v}`;
+    ? `You have ${installed.version} · newest is ${v} · ${flavorNote}`
+    : `Playback ${v} · ${flavorNote}`;
   ($("start") as HTMLButtonElement).disabled = false;
 }
 
@@ -168,7 +228,8 @@ function tick() {
 }
 
 async function install() {
-  if (!release) return;
+  const flavor = currentFlavor();
+  if (!release || !flavor) return;
   try {
     dir = await invoke<string>("check_dir", { dir });
   } catch (e) {
@@ -214,7 +275,13 @@ async function install() {
   });
 
   try {
-    await invoke("install", { release, dir, desktop: isOn("desktop"), bridge: isOn("bridge") });
+    await invoke("install", {
+      version: release.version,
+      flavor,
+      dir,
+      desktop: isOn("desktop"),
+      bridge: isOn("bridge"),
+    });
   } catch (e) {
     unProgress();
     unPhase();
@@ -278,8 +345,16 @@ function makeBurst() {
 
 $("minimize").addEventListener("click", () => win.minimize());
 $("close").addEventListener("click", close);
-$("start").addEventListener("click", () => show("options"));
-$("back").addEventListener("click", () => show("welcome"));
+$("start").addEventListener("click", () => show("flavor"));
+$("flavor-back").addEventListener("click", () => show("welcome"));
+$("flavor-next").addEventListener("click", () => show("options"));
+for (const el of document.querySelectorAll<HTMLButtonElement>(".flavor-card")) {
+  el.addEventListener("click", () => {
+    const id = el.dataset.flavor as FlavorId;
+    selectFlavor(id);
+  });
+}
+$("back").addEventListener("click", () => show("flavor"));
 $("browse").addEventListener("click", browse);
 $("bridge").addEventListener("click", () => toggle("bridge"));
 $("desktop").addEventListener("click", () => toggle("desktop"));
