@@ -8,6 +8,7 @@
 mod lrclib;
 mod lrcmux;
 mod netease;
+pub mod readings;
 mod script;
 
 pub use netease::romanized;

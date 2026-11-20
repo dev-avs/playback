@@ -1,13 +1,13 @@
-// The widget window: its height follows the page, it is dragged by hand, and
-// it can stay on top. Ported from electron/main.cjs (applyWindowHeight,
-// startDrag), which explains each rule at length.
+//! The widget window: its height follows the page, it is dragged by hand, and
+//! it can stay on top. Ported from electron/main.cjs (applyWindowHeight,
+//! startDrag), which explains each rule at length.
 
 use std::sync::atomic::{AtomicBool, AtomicU64, Ordering};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::{LogicalSize, PhysicalPosition, WebviewWindow};
 use windows::Win32::Foundation::POINT;
-use windows::Win32::UI::WindowsAndMessaging::GetCursorPos;
+use windows::Win32::UI::WindowsAndMessaging::{GetCursorPos, IsWindowVisible, ShowWindow, SW_HIDE, SW_SHOWNOACTIVATE};
 
 /// Room around the card for its shadow, on every side (STAGE_PAD in main.cjs).
 pub const STAGE_PAD: f64 = 22.0;
@@ -89,6 +89,20 @@ impl Widget {
         let (cw, ch) = logical_size(win);
         if cw != w {
             set_size(win, w, ch);
+        }
+    }
+
+    /// Hidden while nothing plays (Settings → Behavior). Shown again without
+    /// taking focus, so music starting never pulls focus from anything.
+    pub fn set_hidden(&self, win: &WebviewWindow, hidden: bool) {
+        let Ok(hwnd) = win.hwnd() else { return };
+        let hwnd = windows::Win32::Foundation::HWND(hwnd.0);
+        unsafe {
+            if hidden {
+                let _ = ShowWindow(hwnd, SW_HIDE);
+            } else if !IsWindowVisible(hwnd).as_bool() {
+                let _ = ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+            }
         }
     }
 

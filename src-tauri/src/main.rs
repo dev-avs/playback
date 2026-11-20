@@ -4,7 +4,10 @@
 //! - `media`    what Windows is playing, its buttons and the app's volume
 //! - `lyrics`   synced lyrics from LRCMux, NetEase and LrcLib
 //! - `art`      the cover: catalogues, YouTube, the session's thumbnail
-//! - `ui`       the windows (so far the widget)
+//! - `spotify`  a Spotify token: sign-in, pasted, kept on disk
+//! - `spicetify` where the Spotify bridge stands (Setup)
+//! - `updates`  releases on GitHub (version control)
+//! - `ui`       the widget, the card windows, fonts, What's new
 //! - `support`  HTTP client, bounded cache, text and JSON helpers
 //! - `commands` what the page calls, handed straight to the above
 
@@ -14,13 +17,18 @@ mod art;
 mod commands;
 mod lyrics;
 mod media;
+mod spicetify;
+mod spotify;
 mod support;
 mod ui;
+mod updates;
 
 use tauri::{Emitter, Manager};
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_opener::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .manage(ui::widget::Widget::default())
         .setup(|app| {
             let handle = app.handle().clone();
@@ -37,7 +45,30 @@ fn main() {
             commands::smtc_last,
             commands::lyrics_fetch,
             commands::lyrics_romanized,
+            commands::lyrics_readings,
             commands::art_fetch,
+            commands::spotify_status,
+            commands::spotify_set_token,
+            commands::spotify_login,
+            commands::spotify_sign_out,
+            commands::settings_toggle,
+            commands::settings_open,
+            commands::settings_close,
+            commands::changelog_open,
+            commands::changelog_open_past,
+            commands::changelog_is_open,
+            commands::changelog_check,
+            commands::versions_open,
+            commands::card_fit,
+            commands::card_close,
+            commands::app_version,
+            commands::fonts_list,
+            commands::setup_state,
+            commands::update_state,
+            commands::update_releases,
+            commands::copy_text,
+            commands::open_link,
+            commands::win_set_hidden,
             commands::win_resize,
             commands::win_set_width,
             commands::win_drag_start,

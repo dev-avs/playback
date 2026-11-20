@@ -2,11 +2,14 @@
 //! that does the work; nothing here decides anything.
 
 use crate::media::Media;
+use crate::ui::cards::{self, Card};
 use crate::ui::widget::Widget;
-use crate::{art, lyrics};
+use crate::{art, lyrics, spicetify, spotify, ui, updates};
 use serde::Deserialize;
-use serde_json::Value;
-use tauri::{AppHandle, State, WebviewWindow};
+use serde_json::{json, Value};
+use tauri::{AppHandle, Emitter, Manager, State, WebviewWindow};
+use tauri_plugin_clipboard_manager::ClipboardExt;
+use tauri_plugin_opener::OpenerExt;
 
 // ── media ──────────────────────────────────────────────────────────
 
@@ -40,8 +43,158 @@ pub async fn lyrics_romanized(req: Song) -> Option<String> {
 }
 
 #[tauri::command]
+pub async fn lyrics_readings(texts: Vec<String>) -> Option<Vec<Vec<lyrics::readings::Token>>> {
+    lyrics::readings::fetch(texts).await
+}
+
+#[tauri::command]
 pub async fn art_fetch(req: art::Request) -> Option<String> {
     art::fetch(req).await
+}
+
+// ── Spotify ────────────────────────────────────────────────────────
+
+/// Every window looks the lyrics up again with the new token.
+fn token_changed(app: &AppHandle) {
+    let _ = app.emit("spotify:tokenArrived", ());
+}
+
+#[tauri::command]
+pub fn spotify_status() -> spotify::Status {
+    spotify::status()
+}
+
+#[tauri::command]
+pub fn spotify_set_token(token: String, app: AppHandle) -> spotify::Saved {
+    let saved = spotify::set_token(&token);
+    if saved.ok {
+        token_changed(&app);
+    }
+    saved
+}
+
+#[tauri::command]
+pub async fn spotify_login(app: AppHandle) -> Value {
+    let opener = app.clone();
+    let done = spotify::login(move |url| {
+        let _ = opener.opener().open_url(url, None::<&str>);
+    })
+    .await;
+    match done {
+        Ok(()) => {
+            token_changed(&app);
+            json!({ "ok": true })
+        }
+        Err(e) => json!({ "ok": false, "error": e }),
+    }
+}
+
+#[tauri::command]
+pub fn spotify_sign_out(app: AppHandle) {
+    spotify::sign_out();
+    token_changed(&app);
+}
+
+// ── the card windows ───────────────────────────────────────────────
+//
+// Whatever can open a window is async: a window built from a sync command
+// waits on the main thread the command is holding, and both stop.
+
+#[tauri::command]
+pub async fn settings_toggle(app: AppHandle) -> tauri::Result<()> {
+    if cards::is_open(&app, Card::Settings) {
+        cards::close(&app, Card::Settings);
+        Ok(())
+    } else {
+        cards::open(&app, Card::Settings, None)
+    }
+}
+
+#[tauri::command]
+pub async fn settings_open(app: AppHandle) -> tauri::Result<()> {
+    cards::open(&app, Card::Settings, None)
+}
+
+#[tauri::command]
+pub fn settings_close(app: AppHandle) {
+    cards::close(&app, Card::Settings);
+}
+
+#[tauri::command]
+pub async fn changelog_open(app: AppHandle) -> tauri::Result<()> {
+    cards::open(&app, Card::Changelog, None)
+}
+
+#[tauri::command]
+pub async fn changelog_open_past(app: AppHandle) -> tauri::Result<()> {
+    cards::open(&app, Card::PastChangelog, None)
+}
+
+#[tauri::command]
+pub fn changelog_is_open(app: AppHandle) -> bool {
+    cards::is_open(&app, Card::Changelog)
+}
+
+#[tauri::command]
+pub async fn changelog_check(enabled: bool, app: AppHandle) -> tauri::Result<()> {
+    ui::changelog::check_after_update(&app, enabled)
+}
+
+#[tauri::command]
+pub async fn versions_open(app: AppHandle) -> tauri::Result<()> {
+    cards::open(&app, Card::Versions, None)
+}
+
+/// The calling card fits its window to its height.
+#[tauri::command]
+pub fn card_fit(height: f64, win: WebviewWindow) {
+    cards::fit(&win, height);
+}
+
+/// The calling card closes.
+#[tauri::command]
+pub fn card_close(win: WebviewWindow) {
+    let _ = win.close();
+}
+
+// ── setup, updates, the rest ───────────────────────────────────────
+
+#[tauri::command]
+pub fn app_version(app: AppHandle) -> String {
+    app.package_info().version.to_string()
+}
+
+#[tauri::command]
+pub fn fonts_list() -> Vec<String> {
+    ui::fonts::list()
+}
+
+#[tauri::command]
+pub fn setup_state() -> spicetify::SetupState {
+    spicetify::state()
+}
+
+#[tauri::command]
+pub fn update_state() -> Value {
+    updates::state()
+}
+
+#[tauri::command]
+pub async fn update_releases() -> Value {
+    updates::releases().await
+}
+
+#[tauri::command]
+pub fn copy_text(text: String, app: AppHandle) {
+    let _ = app.clipboard().write_text(text);
+}
+
+/// https only: the page never opens anything else.
+#[tauri::command]
+pub fn open_link(url: String, app: AppHandle) {
+    if url.starts_with("https://") {
+        let _ = app.opener().open_url(url, None::<&str>);
+    }
 }
 
 // ── the widget window ──────────────────────────────────────────────
@@ -64,6 +217,13 @@ pub fn win_drag_start(win: WebviewWindow, w: State<Widget>) {
 #[tauri::command]
 pub fn win_drag_end(win: WebviewWindow, w: State<Widget>) {
     w.drag_end(&win);
+}
+
+#[tauri::command]
+pub fn win_set_hidden(hidden: bool, app: AppHandle, w: State<Widget>) {
+    if let Some(win) = app.get_webview_window(ui::WIDGET) {
+        w.set_hidden(&win, hidden);
+    }
 }
 
 #[tauri::command]
