@@ -22,6 +22,15 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.7",
+    date: "2026-11-19",
+    changes: {
+      new: [
+        "Added Show lyrics provider setting: hide the provider part of the source label",
+      ],
+    },
+  },
+  {
     version: "1.5.6",
     date: "2026-11-19",
     changes: {

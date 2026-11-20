@@ -743,6 +743,7 @@ export default function App() {
   // the song's last NEXT_POPUP_SECS, for the next-song popup (set by the clock)
   const [nearEnd, setNearEnd] = useState(false);
   const [showSource] = usePersisted(KEYS.showSource, DEFAULTS.showSource);
+  const [showLyricSource] = usePersisted(KEYS.showLyricSource, DEFAULTS.showLyricSource);
   const [showVisualizer] = usePersisted(KEYS.showVisualizer, DEFAULTS.showVisualizer);
   const [lyricMotion] = usePersisted(KEYS.lyricMotion, DEFAULTS.lyricMotion);
   const [hideWhenIdle] = usePersisted(KEYS.hideWhenIdle, DEFAULTS.hideWhenIdle);
@@ -2602,7 +2603,7 @@ export default function App() {
               </span>
               <span className={`platform${showSource ? "" : " hidden"}`}>
                 {platform}
-                {lyricSource && (
+                {lyricSource && showLyricSource && (
                   <button
                     className="lyric-source"
                     title={`Lyrics from ${lyricSource.provider} — click to try another provider for this song`}

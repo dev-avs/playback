@@ -102,6 +102,8 @@ export const DEFAULTS = {
   nextSong: "label" as NextMode,
   /** "Spotify · spicy ●●●" under the progress bar */
   showSource: true,
+  /** the "· spicy ●●●" part of that label */
+  showLyricSource: true,
   /** the rounded bars next to the title in album mode */
   showVisualizer: true,
   /** how much the sung letters lift and grow; see MOTIONS */
@@ -350,6 +352,7 @@ export const KEYS = {
   corners: "set.corners",
   nextSong: "set.nextSong",
   showSource: "set.showSource",
+  showLyricSource: "set.showLyricSource",
   showVisualizer: "set.showVisualizer",
   lyricMotion: "set.lyricMotion",
   hideWhenIdle: "set.hideWhenIdle",

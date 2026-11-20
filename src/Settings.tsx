@@ -949,6 +949,7 @@ export default function Settings() {
     ),
     // Controls: the progress bar, times and buttons
     toggle("controls", "showSource", "Show source label", "The player and lyrics source under the progress bar, e.g. Spotify · spicy ●●●."),
+    toggle("controls", "showLyricSource", "Show lyrics provider", "The lyrics part of the source label, e.g. · spicy ●●●. Click it to try another provider."),
     toggle("controls", "showTimes", "Show times", "The elapsed and remaining times.", { preview: true }),
     toggle("controls", "showTotalTime", "Show song length", "The time on the right shows the song's length instead of the time left. Clicking it does the same.", { preview: true }),
     toggle("controls", "showProgress", "Show progress bar", "The bar showing how far into the song you are.", { preview: true }),
