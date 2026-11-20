@@ -21,6 +21,6 @@ const out = path.resolve(root, process.argv[2] ?? "release/eagle");
 execSync("npx tauri build --no-bundle", { cwd: root, stdio: "inherit" });
 
 fs.rmSync(out, { recursive: true, force: true });
-fs.mkdirSync(out, { recursive: true });
+fs.mkdirSync(path.join(out, "resources"), { recursive: true });
 fs.copyFileSync(path.join(root, "src-tauri", "target", "release", "playback.exe"), path.join(out, "Playback.exe"));
 console.log(`staged ${path.join(out, "Playback.exe")}`);
