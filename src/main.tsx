@@ -1,3 +1,5 @@
+// first: in the Tauri build it sets up window.player before anything reads it
+import './bridge/tauri.ts'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
