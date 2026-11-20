@@ -3,7 +3,7 @@
 // of Tauri's commands and events, so the components do not change.
 //
 // Does nothing outside Tauri. What src-tauri does not do yet answers like a
-// player with nothing to offer (no lyrics, no art, not signed in), and the
+// player with nothing to offer (no Spicy Lyrics, not signed in), and the
 // optional parts are left out, which the page already handles.
 
 import { invoke } from "@tauri-apps/api/core";
@@ -39,13 +39,13 @@ function bridge(): PlayerBridge {
     next: () => command("next"),
     prev: () => command("prev"),
     seek: (seconds) => command(`seek ${seconds}`),
-    setVolume: async () => false,
+    setVolume: (level) => command(`volume ${level}`),
     shuffle: () => command("shuffle"),
     repeat: () => command("repeat"),
 
-    fetchLyrics: async () => null,
-    fetchArt: async () => null,
-    fetchRomanized: async () => null,
+    fetchLyrics: (req) => invoke("lyrics_fetch", { req }),
+    fetchArt: (req) => invoke("art_fetch", { req }),
+    fetchRomanized: (req) => invoke("lyrics_romanized", { req }),
     fetchReadings: async () => null,
     fetchSpicyLyrics: async () => ({ status: "disabled" }),
 

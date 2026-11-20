@@ -1,13 +1,12 @@
-// Windows' media controls (SMTC): what is playing, and the buttons.
-//
-// A port of electron/smtc.ps1. One thread owns the session manager: it polls
-// every 250 ms, emits a state when something changed (or every 5 s as a
-// heartbeat), and runs commands sent to it in between. The state has the same
-// shape the PowerShell script printed, so the page reads it unchanged
-// (SmtcState in src/player.d.ts).
-//
-// Not ported yet: per-app volume (always -1, so the page hides the slider) and
-// passing over a Spotify started hidden for lookups.
+//! Windows' media controls (SMTC): what is playing, and the buttons.
+//!
+//! A port of electron/smtc.ps1. One thread owns the session manager: it polls
+//! every 250 ms, emits a state when something changed (or every 5 s as a
+//! heartbeat), and runs commands sent to it in between. The state has the same
+//! shape the PowerShell script printed, so the page reads it unchanged
+//! (SmtcState in src/player.d.ts).
+//!
+//! Not ported yet: passing over a Spotify started hidden for lookups.
 
 use serde_json::{json, Value};
 use std::sync::mpsc::{Receiver, RecvTimeoutError};
@@ -20,8 +19,7 @@ use windows::Media::Control::{
 };
 use windows::Media::MediaPlaybackAutoRepeatMode as Repeat;
 
-/// Music apps win over anything else (a video in the browser).
-const MUSIC_APPS: [&str; 4] = ["spotify", "cider", "applemusic", "itunes"];
+use super::{is_music_app, volume};
 
 pub enum Command {
     Play,
@@ -32,6 +30,8 @@ pub enum Command {
     Seek(f64),
     Shuffle,
     Repeat,
+    /// the app's own volume, 0..1
+    Volume(f32),
 }
 
 impl Command {
@@ -47,14 +47,14 @@ impl Command {
             "seek" => Command::Seek(parts.next()?.parse().ok()?),
             "shuffle" => Command::Shuffle,
             "repeat" => Command::Repeat,
+            "volume" => Command::Volume(parts.next()?.parse().ok()?),
             _ => return None,
         })
     }
 }
 
 fn is_music(s: &Session) -> bool {
-    let id = s.SourceAppUserModelId().map(|h| h.to_string().to_lowercase()).unwrap_or_default();
-    MUSIC_APPS.iter().any(|m| id.contains(m))
+    s.SourceAppUserModelId().is_ok_and(|id| is_music_app(&id.to_string()))
 }
 
 fn status_of(s: &Session) -> Status {
@@ -141,6 +141,9 @@ fn run(session: &Session, cmd: Command) -> windows::core::Result<()> {
             };
             drop(session.TryChangeAutoRepeatModeAsync(next)?);
         }
+        Command::Volume(level) => {
+            volume::set(&session.SourceAppUserModelId()?.to_string(), level);
+        }
     }
     Ok(())
 }
@@ -218,7 +221,8 @@ fn sample(mgr: &Manager, last: &mut Last) -> windows::core::Result<Option<Value>
         "sampledAt": now as i64,
         "shuffle": shuffle,
         "repeat": repeat,
-        "volume": -1,
+        // -1 when the app has no audio session: the page hides the slider
+        "volume": volume::get(&app_id).unwrap_or(-1.0),
         "caps": {
             "play": c.IsPlayEnabled()?,
             "pause": c.IsPauseEnabled()?,
@@ -286,4 +290,18 @@ pub fn spawn(commands: Receiver<Command>, latest: Arc<Mutex<Option<Value>>>, emi
             }
         }
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Command;
+
+    #[test]
+    fn reads_the_scripts_command_words() {
+        assert!(matches!(Command::parse("seek 42.5"), Some(Command::Seek(s)) if s == 42.5));
+        assert!(matches!(Command::parse("volume 0.3"), Some(Command::Volume(v)) if v == 0.3));
+        assert!(matches!(Command::parse("playpause"), Some(Command::PlayPause)));
+        assert!(Command::parse("seek").is_none());
+        assert!(Command::parse("louder").is_none());
+    }
 }
