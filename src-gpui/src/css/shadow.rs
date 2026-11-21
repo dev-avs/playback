@@ -181,8 +181,9 @@ fn blur_line(v: &mut [f32], tmp: &mut Vec<f32>, sigma: f32) {
     }
 }
 
-/// Gaussian blur of a w × h coverage grid (values 0..255) as Skia's mask blur draws it.
-fn blur(grid: &mut [f32], w: usize, h: usize, sigma: f32) {
+/// Gaussian blur of a w × h coverage grid (values 0..255) as Skia's mask blur draws it (also
+/// `css::filter`'s, per premultiplied channel).
+pub(super) fn blur(grid: &mut [f32], w: usize, h: usize, sigma: f32) {
     assert!(sigma >= 2.0, "css::shadow: sigma {sigma} < 2 uses Skia's small-sigma kernel, not ported");
     let mut tmp = Vec::new();
     for row in grid.chunks_mut(w) {

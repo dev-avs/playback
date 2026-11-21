@@ -225,6 +225,63 @@ scale-pill-pop with the same numbers as the accepted slice B differences); scale
 `parity-diff.mjs --self-test` exit 0, `cargo test` (src-gpui 20, logic all ok), `--selftest-shell` 48/0,
 `--selftest-cards` 192/0.
 
+### Slice C – bakes (2026-11-21, 8/8 pass)
+Helpers `src-gpui/src/css/filter.rs` (the blurred cover, gotcha 7.14) and `src-gpui/src/css/radial.rs`
+(every radial-gradient in use: the three mono glass backgrounds). Both bake on the CPU, cache per
+(cover/background, size, filter) and paint one image (`paint_image`). `shadow::blur` is now
+`pub(super)` and shared; `rounded::clip_mask` is new (below).
+- filter: the cover resized to 192² over the element's span (card + 2 × inset: 60 for `.widget-bg` /
+  `.st-bg`, 40 for `.st-preview-bg`), placed as `background-size: cover`, coverage on the element's
+  edges, premultiplied. Order as CSS: blur (σ = blur_px × 192 / span) → saturate (W3C matrix on the
+  unpremultiplied colour, clamped) → brightness (× b, clamped). The part under the card is resampled
+  bilinearly to device px. Blur 0 ("Cover blur 0", Settings.tsx:1030), or σ_bake < 2, bakes at device
+  scale instead of 192²: Chromium's own path (it never downscales; it draws the cover at device px
+  and blurs there), the 192² grid being 7.14's shortcut where the blur hides it. Preview blur =
+  cover_blur × 6 / 10 (Settings.tsx:366).
+- filter, the card: `filter::cover` also paints the card's background (the card div paints none) and
+  its rounded clip, baked into the image with `rounded::clip_mask`: Chromium's coverage of a
+  `border-radius` box, measured on card-fill-only pages (r 10 and 13), is Skia's path fill: per corner
+  a conic (w √2/2) chopped into two quads, each flattened into 2^shift lines (SkEdge.cpp
+  `diff_to_shift`, accuracy 2: 2 lines at r 10, 4 at r 13), area coverage of that polygon. The chords
+  run inside the circle that GPUI's saturate(0.5 − sdf) follows: circle off by up to 52/255, chords
+  within 20 (top corners) / 32 (bottom, Skia's scanline order, not modelled). Chromium applies the
+  clip's coverage c to each draw (measured, fill alone against fill + layer, within 6/255; one shared
+  coverage is up to 20 off): fill × c, then the layer × opacity × c over it; the bake does the same.
+- **Blur model, measured**: Chromium's software raster blurs with Skia's three-box filter (box
+  d = floor(σ·3√(2π)/4 + 0.5); even d as passes (−h, h−1), (−h+1, h), (−h, h)), transparent outside the
+  element. Against a blurred test square at σ 10/15/25/50 the three-box model is within 1/255; a true
+  gaussian is off by up to 9/255. CSS `blur(Npx)` = σ N.
+- radial: premultiplied interpolation (white fades by alpha only), first layer on top; ellipse t =
+  |((x − cx)/rx, (y − cy)/ry)|, alpha = a(1 − t/stop); linear direction (sin θ, −cos θ), length
+  |w sin θ| + |h cos θ|. **Baked at device size, not half size (deviation from 7.14, measured)**: gpui
+  samples images from an unpadded atlas with wrap addressing (gpui-0.2.2 directx_atlas.rs:255), so a 2×
+  upscale bleeds a 1px frame up to 19.5/255 round the card (1602 pixels on radial-st-mono, passing only
+  as tolerated edges); at device size the straight edges are within 2/255 and 36 edge pixels remain.
+- **Dithering, measured**: Chromium dithers gradients by an ordered ±0.5/255 pattern; below one 8-bit
+  step, not replicated (rounded instead; interior within 2/255).
+- Commands as slices A/B: `node scripts/primitives/run.mjs [--gpui] [--stability] [--only=…]`, then
+  `node scripts/primitives/diff.mjs`. Cover: `fixtures/fake-cover.png`.
+
+| case | source | frames | max delta | untolerated soft % | edge px (max) | result |
+|---|---|---|---|---|---|---|
+| filter-widget | App.css:101, 115-131, 139-148; App.tsx:652-657 (defaults 50/140/100) | 1 | 28 | 0 | 21 (28) | pass (34 with GPUI's AA) |
+| filter-widget-max | as filter-widget, blur 20, saturation 250, brightness 160 (Settings.tsx:1030-1032) | 1 | 25 | 0 | 25 (25) | pass (38) |
+| filter-widget-sharp | as filter-widget, blur 0 (Settings.tsx:1030) | 1 | 25 | 0 | 24 (25) | pass (38) |
+| filter-settings | Settings.css:4-17, 19-27 | 1 | 28 | 0 | 23 (28) | pass (34) |
+| filter-preview | Settings.css:502-516, 517-524; Settings.tsx:366 | 1 | 46 | 0 | 23 (46) | pass (72, 2 hard px) |
+| radial-st-mono | Settings.css:4-17, 19-27, 40-48 | 1 | 48 | 0 | 36 (48) | pass |
+| radial-cl-mono | Changelog.css:5-25, 43-51, 54-62 | 1 | 48 | 0 | 37 (48) | pass |
+| radial-widget-mono | App.css:115-131, 139-148, 2193-2200 | 1 | 47 | 0 | 38 (47) | pass |
+
+Interiors: filter cases 1-3/255, radial cases 0-2/255.
+
+The radial cases keep GPUI's card fill + rounded image (their corners pass at 47-48); `clip_mask` would
+apply to them the same way if wanted.
+
+Both sides byte-stable (243 PNGs each). The 28 earlier cases unchanged (25 pass; scale-pill-in and
+scale-pill-pop as accepted in slice B; text-label still 0.1282% soft). `parity-diff.mjs --self-test`
+exit 0, `cargo test` (src-gpui 24, logic all ok), `--selftest-shell` 48/0, `--selftest-cards` 192/0.
+
 ## Phases 5–7: screens
 Slices of 20–40 ledger rows, in port.md §5 order. Estimate: widget ~15 slices, settings ~15, other
 windows ~6. Each slice: worker → review by a different worker (rerun diffs + 5 spot checks) → rows

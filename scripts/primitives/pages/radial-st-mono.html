@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px); src/index.css:1 border-box */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+* { box-sizing: border-box; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/windows/Settings.css:4-17 .st-card (see filter-settings); height 222px is a harness size */
+.st-card { position: relative; width: 600px; height: 222px; overflow: hidden; border-radius: 13px; padding: 12px 12px 10px;
+  background: rgba(20, 20, 22, 0.72); }
+/* src/windows/Settings.css:19-27 .st-bg (absolute, z-index 0) and :40-48 .st-bg.st-bg-mono: inset 0, no filter, opacity 1 */
+.st-bg { position: absolute; inset: 0; opacity: 1; z-index: 0;
+  background:
+    radial-gradient(50% 35% at 18% 8%, rgba(255, 255, 255, 0.14), transparent 70%),
+    radial-gradient(45% 40% at 88% 96%, rgba(255, 255, 255, 0.07), transparent 70%),
+    linear-gradient(160deg, #1d1d21, #0b0b0d); }
+</style></head><body><div class="stage"><div class="st-card"><div class="st-bg"></div></div></div></body></html>

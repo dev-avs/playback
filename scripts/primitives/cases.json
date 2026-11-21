@@ -41,6 +41,14 @@
     { "name": "text-cjk", "size": [190, 66], "frames": 0, "timeline": [], "text": [[22, 22, 143, 21]] },
     { "name": "text-meta", "size": [106, 80], "frames": 0, "timeline": [], "text": [[22, 22, 60, 17], [22, 39, 56, 17]] },
     { "name": "text-label", "size": [156, 60], "frames": 0, "timeline": [], "text": [[22, 22, 111, 15]] },
-    { "name": "text-nav", "size": [98, 58], "frames": 0, "timeline": [], "text": [[22, 22, 53, 14]] }
+    { "name": "text-nav", "size": [98, 58], "frames": 0, "timeline": [], "text": [[22, 22, 53, 14]] },
+    { "name": "filter-widget", "size": [394, 132], "frames": 0, "timeline": [] },
+    { "name": "filter-widget-max", "size": [394, 132], "frames": 0, "timeline": [] },
+    { "name": "filter-widget-sharp", "size": [394, 132], "frames": 0, "timeline": [] },
+    { "name": "filter-settings", "size": [644, 266], "frames": 0, "timeline": [] },
+    { "name": "filter-preview", "size": [344, 220], "frames": 0, "timeline": [] },
+    { "name": "radial-st-mono", "size": [644, 266], "frames": 0, "timeline": [] },
+    { "name": "radial-cl-mono", "size": [364, 192], "frames": 0, "timeline": [] },
+    { "name": "radial-widget-mono", "size": [394, 132], "frames": 0, "timeline": [] }
   ]
 }

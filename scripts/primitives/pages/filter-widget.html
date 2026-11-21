@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px); src/index.css:1 border-box */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+* { box-sizing: border-box; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget: background rgba(var(--tint, 20, 20, 22), var(--bg-a, .72)), radius 13px,
+   padding 10px 10px 8px, width var(--widget-w, 350px), relative, overflow hidden (the box-shadow belongs to
+   the shadow cases); height 88px is a harness size */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; padding: 10px 10px 8px; width: 350px; height: 88px;
+  position: relative; overflow: hidden; }
+/* src/App.css:139-148 .widget-bg: absolute, inset -60px, cover, centred, z-index 0, opacity calc(.55 * --bg-k),
+   will-change transform, translateZ(0); filter at the variables' defaults (src/App.tsx:652-657, src/settings.ts:125, 190, 192) */
+.widget-bg { position: absolute; inset: -60px; background-image: url(../../../fixtures/fake-cover.png);
+  background-size: cover; background-position: center; filter: blur(50px) saturate(1.4) brightness(1); z-index: 0; opacity: 0.55;
+  will-change: transform; transform: translateZ(0); }
+</style></head><body><div class="stage"><div class="widget"><div class="widget-bg"></div></div></div></body></html>

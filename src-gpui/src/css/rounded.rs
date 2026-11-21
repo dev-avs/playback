@@ -42,6 +42,102 @@ pub fn clamp(r: Radii, w: f32, h: f32) -> Radii {
     }
 }
 
+/// The per-pixel coverage of a `w` × `h` box with `radii` (device px) as Chromium's software raster
+/// clips to it (`overflow: hidden` + `border-radius`): `ceil(w)` × `ceil(h)` values, row-major. For a
+/// clip baked into an image that is then drawn without radii. Skia fills the rounded rect as a path
+/// (SkPath::addRRect: one conic per corner, weight √2/2), the conic chopped into two quads, each quad
+/// flattened into 2^shift lines by its curvature (SkEdge.cpp `diff_to_shift`, accuracy 2), coverage the
+/// line polygon's area (analytic AA). So the curve runs along chords, inside the circle; GPUI's
+/// saturate(0.5 − sdf) follows the circle itself. Measured against Chromium's corners of a card fill
+/// alone: within 20/255 (r 10) and 15/255 (r 13) on the top corners, up to 32/255 on the bottom ones (Skia's
+/// scanline order; not modelled), where the circle is off by up to 52/255.
+pub fn clip_mask(w: f32, h: f32, radii: Radii) -> Vec<f32> {
+    let r = clamp(radii, w, h);
+    let corners = r.map(chords);
+    let (cw, ch) = (w.ceil() as usize, h.ceil() as usize);
+    // per corner: whether (x, y) in box coordinates is inside it, in that corner's own frame (x, y from its sides)
+    let local = |k: usize, x: f32, y: f32| match k {
+        0 => (x, y),
+        1 => (w - x, y),
+        2 => (w - x, h - y),
+        _ => (x, h - y),
+    };
+    let mut out = Vec::with_capacity(cw * ch);
+    for j in 0..ch {
+        for i in 0..cw {
+            let (fx, fy) = (i as f32, j as f32);
+            let area = ((fx + 1.0).min(w) - fx).clamp(0.0, 1.0) * ((fy + 1.0).min(h) - fy).clamp(0.0, 1.0);
+            let near = (0..4).any(|k| {
+                let (a, b) = local(k, fx + 0.5, fy + 0.5);
+                r[k] > 0.0 && a < r[k] + 1.0 && b < r[k] + 1.0
+            });
+            if !near {
+                out.push(area);
+                continue;
+            }
+            const N: usize = 16;
+            let mut hit = 0;
+            for sy in 0..N {
+                for sx in 0..N {
+                    let (x, y) = (fx + (sx as f32 + 0.5) / N as f32, fy + (sy as f32 + 0.5) / N as f32);
+                    if x > w || y > h {
+                        continue;
+                    }
+                    let inside = (0..4).all(|k| {
+                        let (a, b) = local(k, x, y);
+                        a >= r[k] || b >= r[k] || a >= chord_x(&corners[k], b)
+                    });
+                    hit += inside as usize;
+                }
+            }
+            out.push(hit as f32 / (N * N) as f32);
+        }
+    }
+    out
+}
+
+/// One corner of radius `rad` in its own frame (the corner at the origin, the box towards +x, +y): the
+/// polyline Skia fills, from (0, rad) to (rad, 0).
+fn chords(rad: f32) -> Vec<(f32, f32)> {
+    if rad <= 0.0 {
+        return Vec::new();
+    }
+    // SkConic::chop at t = ½ of the conic (0, rad), (0, 0), (rad, 0), weight √2/2 (SkPath::addRRect)
+    let w = std::f32::consts::FRAC_1_SQRT_2;
+    let (p0, p2) = ((0.0, rad), (rad, 0.0));
+    let m = (rad / (2.0 + 2.0 * w), rad / (2.0 + 2.0 * w));
+    let (a, b) = ((0.0, rad / (1.0 + w)), (rad / (1.0 + w), 0.0));
+    let mut pts = vec![p0];
+    for (q0, q1, q2) in [(p0, a, m), (m, b, p2)] {
+        // SkQuadraticEdge::setQuadraticWithoutUpdate(pts, shift 2): points in FDot6 << 2
+        let fd = |v: f32| (v * 256.0) as i32;
+        let dx = ((fd(q1.0) << 1) - fd(q0.0) - fd(q2.0)) >> 2;
+        let dy = ((fd(q1.1) << 1) - fd(q0.1) - fd(q2.1)) >> 2;
+        let (dx, dy) = (dx.abs(), dy.abs());
+        let dist = if dx > dy { dx + (dy >> 1) } else { dy + (dx >> 1) };
+        let dist = (dist + (1 << 4)) >> 5;
+        let shift = (((32 - dist.leading_zeros()) >> 1) as i32).clamp(1, 6);
+        let n = 1 << shift;
+        for k in 1..=n {
+            let t = k as f32 / n as f32;
+            let u = 1.0 - t;
+            pts.push((u * u * q0.0 + 2.0 * u * t * q1.0 + t * t * q2.0, u * u * q0.1 + 2.0 * u * t * q1.1 + t * t * q2.1));
+        }
+    }
+    pts
+}
+
+/// The polyline's x at height `y` (0 ≤ y < rad): y falls and x rises along it.
+fn chord_x(pts: &[(f32, f32)], y: f32) -> f32 {
+    for s in pts.windows(2) {
+        let ((x0, y0), (x1, y1)) = (s[0], s[1]);
+        if y <= y0 && y >= y1 {
+            return if y0 > y1 { x0 + (x1 - x0) * (y0 - y) / (y0 - y1) } else { x1 };
+        }
+    }
+    0.0
+}
+
 pub fn corners(r: Radii) -> Corners<Pixels> {
     Corners { top_left: px(r[0]), top_right: px(r[1]), bottom_right: px(r[2]), bottom_left: px(r[3]) }
 }
@@ -110,6 +206,20 @@ pub fn clip_child(w: f32, h: f32, radii: Radii, child: Rect) -> Option<(Rect, Ra
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn clip_mask_flattens_like_skia() {
+        // diff_to_shift: two lines per quad at r 10, four at r 13 (fitted on the Chromium corners)
+        assert_eq!(chords(10.0).len(), 1 + 2 * 2);
+        assert_eq!(chords(13.0).len(), 1 + 2 * 4);
+        // straight edges and the interior are whole; a fractional far edge is its area
+        let m = clip_mask(300.0, 176.5, uniform(10.0));
+        assert_eq!(m.len(), 300 * 177);
+        assert_eq!(m[50 * 300], 1.0);
+        assert_eq!(m[176 * 300 + 150], 0.5);
+        // the chords run inside the circle: less than the circle's area at the curve
+        assert!(m[6] < 0.37 && m[6] > 0.2);
+    }
 
     #[test]
     fn pill_radius_clamps_to_half_height() {

@@ -11,6 +11,7 @@ use crate::css::{
     Direction, Easing, Fill, HoverProp, Hover, Keyframes, Transition, Tween,
 };
 use crate::css::mask::{masked, LYRICS_PANEL};
+use crate::css::{filter, radial};
 use crate::css::scale::{self, scale};
 use crate::css::text::{self, LineHeight};
 use crate::css::rounded::{clip_child, Radii, Rect};
@@ -85,7 +86,7 @@ pub enum Scene {
     FsIn { start: Option<f64> },
     NextPopupIn { start: Option<f64> },
     VolPillIn { start: Option<f64> },
-    /// shadow-*, rounded-*, mask-*, scale-pill-0xx / -text: one still, drawn by `still`.
+    /// shadow-*, rounded-*, mask-*, scale-pill-0xx / -text, text-*, filter-*, radial-*: one still, drawn by `still`.
     Still(&'static str),
     /// scale-pill-in: the reset pill's entry animation.
     PillIn { start: Option<f64> },
@@ -155,6 +156,14 @@ impl Scene {
             "text-meta" => Scene::Still("text-meta"),
             "text-label" => Scene::Still("text-label"),
             "text-nav" => Scene::Still("text-nav"),
+            "filter-widget" => Scene::Still("filter-widget"),
+            "filter-widget-max" => Scene::Still("filter-widget-max"),
+            "filter-widget-sharp" => Scene::Still("filter-widget-sharp"),
+            "filter-settings" => Scene::Still("filter-settings"),
+            "filter-preview" => Scene::Still("filter-preview"),
+            "radial-st-mono" => Scene::Still("radial-st-mono"),
+            "radial-cl-mono" => Scene::Still("radial-cl-mono"),
+            "radial-widget-mono" => Scene::Still("radial-widget-mono"),
             "scale-pill-in" => Scene::PillIn { start: None },
             // src/windows/Settings.css:429-444: transition background 160ms ease
             "scale-pill-pop" => Scene::PillPop { start: None, bg: Tween::new(PILL_BG, Transition::new(160.0, Easing::EASE)) },
@@ -575,6 +584,43 @@ fn still(name: &str) -> AnyElement {
             let st = text::Style::new(text::SETTINGS_STACK, 600, 11.5, LineHeight::Normal, fill(rgba(255, 255, 255, 0.7)));
             stage().child(text::text("Lyric text", st)).into_any_element()
         }
+        // pages/filter-widget*.html: src/App.css:115-131 .widget (350px wide, radius 13px, rgba(20,20,22,.72);
+        // 88px harness height) with :139-148 .widget-bg (inset -60px, opacity .55) at the case's filter
+        "filter-widget" | "filter-widget-max" | "filter-widget-sharp" => {
+            let f = match name {
+                // src/App.tsx:652-657 at the defaults (src/settings.ts:125, 190, 192)
+                "filter-widget" => filter::WIDGET,
+                // Cover blur 20, Cover colour 250, Cover brightness 160 (src/windows/Settings.tsx:1030-1032)
+                "filter-widget-max" => filter::widget(20.0, 250.0, 160.0),
+                // Cover blur 0 (src/windows/Settings.tsx:1030)
+                _ => filter::widget(0.0, 140.0, 100.0),
+            };
+            stage().child(glow_card(350.0, 88.0).child(filter::cover(fake_cover(), f, filter::WIDGET_INSET, uniform(13.0), 0.55, card_bg()))).into_any_element()
+        }
+        // pages/filter-settings.html: src/windows/Settings.css:4-17 .st-card (600px, radius 13px; 222px harness
+        // height) with :19-27 .st-bg (inset -60px, blur(50px) saturate(1.4), opacity .55)
+        "filter-settings" => stage()
+            .child(glow_card(600.0, 222.0).child(filter::cover(fake_cover(), filter::SETTINGS, filter::SETTINGS_INSET, uniform(13.0), 0.55, card_bg())))
+            .into_any_element(),
+        // pages/filter-preview.html: src/windows/Settings.css:502-516 .st-preview (176px high, radius 10px; 300px
+        // harness width) with :517-524 .st-preview-bg (inset -40px, opacity .55 × --bg-k 1) at the default filter
+        "filter-preview" => stage()
+            .child(glow_card(300.0, 176.0).child(filter::cover(fake_cover(), filter::PREVIEW, filter::PREVIEW_INSET, uniform(10.0), 0.55, card_bg())))
+            .into_any_element(),
+        // pages/radial-st-mono.html: .st-card (as filter-settings) with src/windows/Settings.css:40-48 .st-bg-mono
+        "radial-st-mono" => stage()
+            .child(card(600.0, 222.0, 13.0).child(radial::background(&radial::SETTINGS_MONO, 0.0, uniform(13.0), 1.0)))
+            .into_any_element(),
+        // pages/radial-cl-mono.html: src/windows/Changelog.css:5-25 .cl-card (320px, radius 13px,
+        // rgba(20,20,22,.72); 148px harness height) with :54-62 .cl-bg-mono
+        "radial-cl-mono" => stage()
+            .child(card(320.0, 148.0, 13.0).child(radial::background(&radial::CHANGELOG_MONO, 0.0, uniform(13.0), 1.0)))
+            .into_any_element(),
+        // pages/radial-widget-mono.html: .widget (as filter-widget) with src/App.css:2193-2200 .widget-bg-mono
+        // (inset -60px from .widget-bg, opacity var(--bg-k, 1))
+        "radial-widget-mono" => stage()
+            .child(card(350.0, 88.0, 13.0).child(radial::background(&radial::WIDGET_MONO, radial::WIDGET_MONO_INSET, uniform(13.0), 1.0)))
+            .into_any_element(),
         _ => unreachable!("no still {name}"),
     }
 }
@@ -604,6 +650,34 @@ fn reset_pill(bg: Rgba, edge: Rgba, content: scale::Node) -> scale::Node {
 /// pages/scale-pill-*.html harness stand-in for the text: 76 × 13.75, rgba(255,255,255,.85)
 fn stand_in() -> scale::Node {
     scale::node(div().flex_shrink_0().w(px(76.0)).h(px(13.75))).bg(rgba(255, 255, 255, 0.85))
+}
+
+/// A card of the bake cases: relative, `overflow: hidden`, radius `r`, background rgba(20, 20, 22, .72)
+/// (src/App.css:115-131, src/windows/Settings.css:4-17 and :502-516, src/windows/Changelog.css:5-25), border-box size.
+fn card(w: f32, h: f32, r: f32) -> gpui::Div {
+    div().relative().flex_shrink_0().w(px(w)).h(px(h)).overflow_hidden().rounded(px(r)).bg(fill(card_bg()))
+}
+
+/// The same card under a `filter::cover`, which paints the card's background and rounded clip itself.
+fn glow_card(w: f32, h: f32) -> gpui::Div {
+    div().relative().flex_shrink_0().w(px(w)).h(px(h)).overflow_hidden()
+}
+
+/// fixtures/fake-cover.png (the fake state's cover) as a `filter::Cover` (straight RGBA).
+fn fake_cover() -> filter::Cover {
+    thread_local! {
+        static COVER: filter::Cover = {
+            let dec = png::Decoder::new(std::io::Cursor::new(include_bytes!("../../fixtures/fake-cover.png").as_slice()));
+            let mut r = dec.read_info().expect("fake-cover.png");
+            let mut buf = vec![0; r.output_buffer_size()];
+            let info = r.next_frame(&mut buf).expect("fake-cover.png frame");
+            assert_eq!(info.color_type, png::ColorType::Rgba);
+            buf.truncate(info.buffer_size());
+            let im = image::RgbaImage::from_raw(info.width, info.height, buf).expect("cover size");
+            filter::Cover { key: 1, image: std::sync::Arc::new(im) }
+        };
+    }
+    COVER.with(|c| c.clone())
 }
 
 /// A fill at `rect` (parent coordinates, absolute) with the radii `rounded::clip_child` gave it.

@@ -1,0 +1,16 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px); src/index.css:1 border-box */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+* { box-sizing: border-box; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget (see filter-widget); height 88px is a harness size */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; padding: 10px 10px 8px; width: 350px; height: 88px;
+  position: relative; overflow: hidden; }
+/* src/App.css:139-148 .widget-bg (absolute, inset -60px, z-index 0, will-change transform, translateZ(0)) and
+   :2193-2200 .widget-bg.widget-bg-mono: no filter, opacity var(--bg-k, 1) */
+.widget-bg { position: absolute; inset: -60px; z-index: 0; will-change: transform; transform: translateZ(0); opacity: 1;
+  background:
+    radial-gradient(45% 40% at 22% 18%, rgba(255, 255, 255, 0.16), transparent 70%),
+    radial-gradient(45% 45% at 82% 88%, rgba(255, 255, 255, 0.08), transparent 70%),
+    linear-gradient(160deg, #1d1d21, #0b0b0d); }
+</style></head><body><div class="stage"><div class="widget"><div class="widget-bg"></div></div></div></body></html>

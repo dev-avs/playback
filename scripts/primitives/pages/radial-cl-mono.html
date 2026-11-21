@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px); src/index.css:1 border-box */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+* { box-sizing: border-box; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/windows/Changelog.css:5-25, 34-37 .cl-card.is-open: relative, width 320px, overflow hidden, radius 13px,
+   padding 16px 16px 12px, background rgba(20, 20, 22, .72), opacity 1, no transform (the box-shadow belongs to the
+   shadow cases); height 148px is a harness size */
+.cl-card { position: relative; width: 320px; height: 148px; overflow: hidden; border-radius: 13px; padding: 16px 16px 12px;
+  background: rgba(20, 20, 22, 0.72); }
+/* src/windows/Changelog.css:43-51 .cl-bg (absolute, z-index 0) and :54-62 .cl-bg.cl-bg-mono: inset 0, no filter, opacity 1 */
+.cl-bg { position: absolute; inset: 0; opacity: 1; z-index: 0;
+  background:
+    radial-gradient(55% 40% at 20% 10%, rgba(255, 255, 255, 0.14), transparent 70%),
+    radial-gradient(50% 45% at 85% 95%, rgba(255, 255, 255, 0.07), transparent 70%),
+    linear-gradient(160deg, #1d1d21, #0b0b0d); }
+</style></head><body><div class="stage"><div class="cl-card"><div class="cl-bg"></div></div></div></body></html>

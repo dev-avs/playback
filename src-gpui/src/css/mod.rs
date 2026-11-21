@@ -4,16 +4,18 @@
 //! Slice A (motion): `easing`, `tween`, `keyframes`, `clip_height`, `hover`, plus `translate` (the
 //! keyframe cases move boxes by fractions of a pixel, which taffy's rounded offsets cannot do).
 //! Slice B (geometry): `scale`, `rounded`, `shadow`, `mask`.
-//! Slice C (text): `text`.
+//! Slice C (text): `text`; (bakes): `filter` (the blurred cover), `radial` (radial-gradient backgrounds).
 //! All time arguments are milliseconds on the window's clock (a virtual one in the primitive cases).
 //! The screens (Phases 5-7) use the rest of each helper's API; until then only the primitive cases call it.
 #![allow(dead_code, unused_imports)]
 
 pub mod clip_height;
 pub mod easing;
+pub mod filter;
 pub mod hover;
 pub mod keyframes;
 pub mod mask;
+pub mod radial;
 pub mod scale;
 pub mod rounded;
 pub mod shadow;

@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px); src/index.css:1 border-box */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+* { box-sizing: border-box; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/windows/Settings.css:4-17 .st-card: relative, width 600px, overflow hidden, radius 13px, padding 12px 12px 10px,
+   background rgba(20, 20, 22, .72) (the box-shadow belongs to the shadow cases); height 222px is a harness size */
+.st-card { position: relative; width: 600px; height: 222px; overflow: hidden; border-radius: 13px; padding: 12px 12px 10px;
+  background: rgba(20, 20, 22, 0.72); }
+/* src/windows/Settings.css:19-27 .st-bg: absolute, inset -60px, cover, centred, blur(50px) saturate(1.4), opacity .55, z-index 0 */
+.st-bg { position: absolute; inset: -60px; background-image: url(../../../fixtures/fake-cover.png); background-size: cover;
+  background-position: center; filter: blur(50px) saturate(1.4); opacity: 0.55; z-index: 0; }
+</style></head><body><div class="stage"><div class="st-card"><div class="st-bg"></div></div></div></body></html>
