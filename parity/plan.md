@@ -73,7 +73,7 @@ on day 1, not in Phase 3.
 5. Ledger: `scripts/ledger/build.mjs` parses CSS (postcss) and TSX conditionals (TS compiler API) →
    `parity/ledger.md` (~2–3k rows). Window behaviour and interaction rows are added by hand from
    `electron/main.cjs`.
-6. Gate: every Electron scene is stable on two runs; ledger complete.
+6. Gate: every Electron scene is stable on two runs; ledger complete. **Done 2026-11-20:** 128 stills + 14 motions, 553/553 PNGs byte-identical over two runs (`node scripts/snapshot/stability.mjs`); ledger 3281 rows (`node scripts/ledger/build.mjs`). `window-behaviour?` rows are checked by Phase 3 asserts, not scenes.
 
 ## Phase 3: window shell
 - `src-gpui` skeleton: gpui 0.2.2 pinned, depends on `playback-core`, `--fake-state` and `--snapshot`

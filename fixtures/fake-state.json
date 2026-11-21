@@ -1,0 +1,116 @@
+{
+  "state": {
+    "type": "state",
+    "appId": "Spotify.exe",
+    "title": "Test Song",
+    "artist": "Test Artist",
+    "album": "Test Album",
+    "trackKey": "Test Artist|Test Song",
+    "status": "Paused",
+    "playing": false,
+    "position": 31.5,
+    "duration": 200,
+    "shuffle": false,
+    "repeat": "None",
+    "volume": 0.5,
+    "caps": {
+      "play": true,
+      "pause": true,
+      "next": true,
+      "prev": true,
+      "seek": true,
+      "shuffle": true,
+      "repeat": true
+    }
+  },
+  "cover": "fake-cover.png",
+  "responses": {
+    "fetchLyrics": {
+      "wordLyrics": "[2000,3000](2000,600,0)Morning (2600,600,0)light (3200,600,0)across (3800,600,0)the (4400,600,0)water\n[6000,2400](6000,600,0)Every (6600,600,0)window (7200,600,0)open (7800,600,0)wide\n[10000,3000](10000,600,0)We (10600,600,0)were (11200,600,0)singing (11800,600,0)something (12400,600,0)louder\n[14000,3600](14000,600,0)Than (14600,600,0)the (15200,600,0)engines (15800,600,0)on (16400,600,0)the (17000,600,0)tide\n[18000,3600](18000,600,0)Hold (18600,600,0)the (19200,600,0)moment, (19800,600,0)let (20400,600,0)it (21000,600,0)carry\n[22000,3000](22000,600,0)Every (22600,600,0)word (23200,600,0)we (23800,600,0)left (24400,600,0)behind\n[26000,3600](26000,600,0)And (26600,600,0)the (27200,600,0)city (27800,600,0)keeps (28400,600,0)on (29000,600,0)turning\n[30000,3600](30000,600,0)Like (30600,600,0)a (31200,600,0)record (31800,600,0)in (32400,600,0)my (33000,600,0)mind\n[34000,3000](34000,600,0)Morning (34600,600,0)light (35200,600,0)across (35800,600,0)the (36400,600,0)water\n[38000,2400](38000,600,0)Every (38600,600,0)window (39200,600,0)open (39800,600,0)wide\n[42000,3000](42000,600,0)We (42600,600,0)were (43200,600,0)singing (43800,600,0)something (44400,600,0)louder\n[46000,3600](46000,600,0)Than (46600,600,0)the (47200,600,0)engines (47800,600,0)on (48400,600,0)the (49000,600,0)tide\n[50000,3600](50000,600,0)Hold (50600,600,0)the (51200,600,0)moment, (51800,600,0)let (52400,600,0)it (53000,600,0)carry\n[54000,3000](54000,600,0)Every (54600,600,0)word (55200,600,0)we (55800,600,0)left (56400,600,0)behind\n[58000,3600](58000,600,0)And (58600,600,0)the (59200,600,0)city (59800,600,0)keeps (60400,600,0)on (61000,600,0)turning",
+      "source": "netease"
+    },
+    "fetchRomanized": null,
+    "fetchReadings": null,
+    "fetchSpicyLyrics": {
+      "status": "not-found"
+    },
+    "updateState": {
+      "status": "dev",
+      "version": null,
+      "downloaded": 0,
+      "total": null,
+      "error": null
+    },
+    "checkForUpdate": {
+      "status": "dev",
+      "version": null,
+      "downloaded": 0,
+      "total": null,
+      "error": null
+    },
+    "installUpdate": {
+      "status": "dev",
+      "version": null,
+      "downloaded": 0,
+      "total": null,
+      "error": null
+    },
+    "bumpTo": {
+      "status": "dev",
+      "version": null,
+      "downloaded": 0,
+      "total": null,
+      "error": null
+    },
+    "listReleases": {
+      "ok": false,
+      "error": "snapshot"
+    },
+    "uninstall": {
+      "ok": false,
+      "error": "snapshot"
+    },
+    "spicyKeyStatus": {
+      "set": false,
+      "ending": null
+    },
+    "connectSpicyKey": {
+      "ok": false
+    },
+    "setSpicyKey": {
+      "ok": false
+    },
+    "spotifyStatus": {
+      "configured": false,
+      "signedIn": false,
+      "redirectUri": "",
+      "tokenExpiresAt": null
+    },
+    "spotifyLogin": {
+      "ok": false
+    },
+    "spotifySetToken": {
+      "ok": false
+    },
+    "setFullscreen": false,
+    "appVersion": "0.0.0",
+    "changelogOpen": false,
+    "setupState": {
+      "firstRun": false,
+      "ready": true,
+      "needsApply": false,
+      "actions": [],
+      "status": {
+        "spotify": true,
+        "spicetify": true,
+        "bridgeCopied": true,
+        "registered": true,
+        "applied": true,
+        "appliedCurrent": true,
+        "legacy": []
+      }
+    },
+    "listFonts": [],
+    "getNext": null
+  }
+}

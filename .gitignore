@@ -52,3 +52,6 @@ crates/*/Cargo.lock
 spikes/*/target
 src-tauri/gen
 
+
+# Harness outputs (npm run snapshot, parity-diff, stability)
+parity/out
