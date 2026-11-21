@@ -396,3 +396,75 @@
         background-position: left;
     }
 }
+
+/* the flavor switch's gate, like the installer's GPUI gate */
+.vc-switch-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.vc-switch-head .vc-warn-title {
+    margin: 0;
+}
+
+.vc-switch-icon {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 176, 32, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 176, 32, 0.5);
+    color: #ffc04d;
+}
+
+.vc-switch-path {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.vc-switch-chip {
+    padding: 3px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.vc-switch-chip--to {
+    background: rgba(255, 90, 70, 0.22);
+    color: #fff;
+}
+
+.vc-gate {
+    position: relative;
+    overflow: hidden;
+    min-width: 150px;
+    color: #fff;
+    background: rgba(255, 90, 70, 0.3);
+    font-variant-numeric: tabular-nums;
+}
+
+.vc-gate:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.vc-gate-fill {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 90, 70, 0.85);
+    transform-origin: left;
+    transform: scaleX(var(--p, 0));
+}
+
+.vc-gate-label {
+    position: relative;
+}

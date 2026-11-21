@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ArrowRight, TriangleAlert } from "lucide-react";
 import "./Changelog.css";
 import { AppMark } from "./Changelog.tsx";
 import { CHANGE_KINDS, FLAVORS, compareVersions, progressText, revisionFlavor, versionLabel, type ChangeKind } from "../changelog";
@@ -45,8 +46,12 @@ const NOTES_PREVIEW = 1;
 const PREVIEW_CHARS = 90;
 /** How long the warning's Revert has to be held, like Uninstall in Settings. */
 const HOLD_MS = 1500;
-/** A flavor switch's warning: its button unlocks after this long, like the installer's GPUI gate. */
+/** A flavor switch's warning, like the installer's GPUI gate: its button unlocks after this long… */
 const SWITCH_WAIT_MS = 5000;
+/** …and then has to be held this long. */
+const SWITCH_HOLD_MS = 5000;
+/** Seconds left, with two decimals (4.37), like the installer's gate. */
+const secs = (ms: number) => (Math.max(0, ms) / 1000).toFixed(2);
 
 interface Section {
   kind: ChangeKind | null;
@@ -101,7 +106,10 @@ export default function Versions() {
   const [warn, setWarn] = useState<Release | null>(null);
   // an install that changes the flavor (Tauri → Electron 1.6.1-a), whose warning is up
   const [switching, setSwitching] = useState<{ r: Release; flavor: string } | null>(null);
-  const [switchReady, setSwitchReady] = useState(false);
+  // when the switch's button was pressed (performance.now), or null
+  const switchHeld = useRef<number | null>(null);
+  // the switch's countdowns as last drawn: ms left to wait, ms held (null when not held)
+  const [gate, setGate] = useState<{ left: number; held: number | null }>({ left: SWITCH_WAIT_MS, held: null });
   const [holding, setHolding] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const [state, setState] = useState<UpdateState | null>(null);
@@ -123,19 +131,23 @@ export default function Versions() {
 
   const busy = state?.status === "downloading";
   const canInstall = !!state && !["checking", "downloading", "dev"].includes(state.status);
+  const switchReady = !!switching && gate.left <= 0;
   const holdStart = () => {
-    if (!warn && !(switching && switchReady)) return;
+    if (switching) {
+      if (switchReady) switchHeld.current = performance.now();
+      return;
+    }
+    if (!warn) return;
     setHolding(true);
     holdTimer.current = window.setTimeout(() => {
       holdTimer.current = null;
       setHolding(false);
-      if (warn) window.player?.bumpTo?.(warn.version);
-      else if (switching) window.player?.bumpTo?.(switching.r.version, switching.flavor, snapshotSettingsJson());
+      window.player?.bumpTo?.(warn.version);
       setWarn(null);
-      setSwitching(null);
     }, HOLD_MS);
   };
   const holdEnd = () => {
+    switchHeld.current = null;
     if (holdTimer.current == null) return;
     clearTimeout(holdTimer.current);
     holdTimer.current = null;
@@ -144,7 +156,8 @@ export default function Versions() {
   const install = (r: Release, flavor?: string) => {
     if (r.legacy) setWarn(r);
     else if (flavor && flavor !== CURRENT_FLAVOR) {
-      setSwitchReady(false);
+      switchHeld.current = null;
+      setGate({ left: SWITCH_WAIT_MS, held: null });
       setSwitching({ r, flavor });
     }
     else window.player?.bumpTo?.(r.version, flavor, snapshotSettingsJson());
@@ -154,11 +167,25 @@ export default function Versions() {
     setWarn(null);
     setSwitching(null);
   };
-  // the switch's button waits a moment, so the warning gets read
+  // the switch's countdowns: the wait before its button unlocks, then the hold
   useEffect(() => {
     if (!switching) return;
-    const id = window.setTimeout(() => setSwitchReady(true), SWITCH_WAIT_MS);
-    return () => clearTimeout(id);
+    const at = performance.now();
+    let id = 0;
+    const step = () => {
+      const t = performance.now();
+      const held = switchHeld.current == null ? null : t - switchHeld.current;
+      if (held != null && held >= SWITCH_HOLD_MS) {
+        switchHeld.current = null;
+        window.player?.bumpTo?.(switching.r.version, switching.flavor, snapshotSettingsJson());
+        setSwitching(null);
+        return;
+      }
+      setGate({ left: SWITCH_WAIT_MS - (t - at), held });
+      id = requestAnimationFrame(step);
+    };
+    id = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(id);
   }, [switching]);
 
   const close = () => {
@@ -359,52 +386,65 @@ export default function Versions() {
             </div>
           </div>
         )}
-        {switching && (
-          <div className="vc-warn" role="alertdialog" aria-labelledby="vc-switch-title">
-            <div className="vc-warn-box">
-              <h3 className="vc-warn-title" id="vc-switch-title">
-                Switch to {FLAVOR_LABELS[switching.flavor] ?? switching.flavor}?
-              </h3>
-              <p className="cl-text">
-                {versionLabel(switching.r.version, switching.flavor as keyof typeof FLAVORS)} is the{" "}
-                {FLAVOR_LABELS[switching.flavor] ?? switching.flavor} build. Installing it changes Playback from{" "}
-                {FLAVOR_LABELS[CURRENT_FLAVOR]} to {FLAVOR_LABELS[switching.flavor] ?? switching.flavor}. Your settings
-                come along.
-              </p>
-              {switching.flavor === "gpui" && (
+        {switching && (() => {
+          const to = FLAVOR_LABELS[switching.flavor] ?? switching.flavor;
+          const from = FLAVOR_LABELS[CURRENT_FLAVOR];
+          const held = Math.min(gate.held ?? 0, SWITCH_HOLD_MS);
+          return (
+            <div className="vc-warn" role="alertdialog" aria-labelledby="vc-switch-title">
+              <div className="vc-warn-box">
+                <div className="vc-switch-head">
+                  <span className="vc-switch-icon" aria-hidden="true">
+                    <TriangleAlert size={16} strokeWidth={2.2} />
+                  </span>
+                  <h3 className="vc-warn-title" id="vc-switch-title">
+                    Switch to {to}?
+                  </h3>
+                </div>
+                <div className="vc-switch-path" aria-label={`${from} to ${to}`}>
+                  <span className="vc-switch-chip">{from}</span>
+                  <ArrowRight size={14} strokeWidth={2.4} aria-hidden="true" />
+                  <span className="vc-switch-chip vc-switch-chip--to">{to}</span>
+                </div>
                 <p className="cl-text">
-                  GPUI is experimental and very buggy: screens that look different, stuttering or missing animations,
-                  freezes and crashes. Not for everyday use.
+                  Installing {versionLabel(switching.r.version, switching.flavor as keyof typeof FLAVORS)} changes
+                  Playback from {from} to {to}. Your settings come along.
                 </p>
-              )}
-              <p className="cl-text">
-                To go back, install a {FLAVOR_LABELS[CURRENT_FLAVOR]} version from here. Playback closes and restarts on{" "}
-                {FLAVOR_LABELS[switching.flavor] ?? switching.flavor}.
-              </p>
-              <div className="cl-actions">
-                <button type="button" className="cl-button cl-button--quiet" onClick={cancelWarning}>
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className={`cl-button vc-hold${holding ? " holding" : ""}`}
-                  style={{ "--hold-ms": `${HOLD_MS}ms` } as React.CSSProperties}
-                  disabled={!switchReady}
-                  onPointerDown={holdStart}
-                  onPointerUp={holdEnd}
-                  onPointerLeave={holdEnd}
-                  onPointerCancel={holdEnd}
-                >
-                  {!switchReady
-                    ? "Read this first…"
-                    : holding
-                      ? "Keep holding…"
-                      : `Hold to switch to ${FLAVOR_LABELS[switching.flavor] ?? switching.flavor}`}
-                </button>
+                {switching.flavor === "gpui" && (
+                  <p className="cl-text">
+                    GPUI is experimental and very buggy: screens that look different, stuttering or missing animations,
+                    freezes and crashes. Not for everyday use.
+                  </p>
+                )}
+                <p className="cl-text">To go back, install {/^[AEIOU]/.test(from) ? "an" : "a"} {from} version from here. Playback closes and restarts on {to}.</p>
+                <div className="cl-actions">
+                  <button type="button" className="cl-button cl-button--quiet" onClick={cancelWarning}>
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="cl-button vc-gate"
+                    style={{ "--p": held / SWITCH_HOLD_MS } as React.CSSProperties}
+                    disabled={!switchReady}
+                    onPointerDown={holdStart}
+                    onPointerUp={holdEnd}
+                    onPointerLeave={holdEnd}
+                    onPointerCancel={holdEnd}
+                  >
+                    <span className="vc-gate-fill" />
+                    <span className="vc-gate-label">
+                      {!switchReady
+                        ? `Read this first · ${secs(gate.left)}`
+                        : gate.held != null
+                          ? secs(SWITCH_HOLD_MS - held)
+                          : `Switch to ${to}`}
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );

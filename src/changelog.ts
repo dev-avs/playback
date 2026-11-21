@@ -28,6 +28,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.3",
+    date: "2026-11-20",
+    changes: {
+      appearance: [
+        "Version control's flavor-switch warning matches the installer's gate: a 5.00 countdown before Switch to unlocks, then a 5-second hold with a timer and fill",
+        "The warning shows a warning badge and which flavor you're switching from and to",
+      ],
+    },
+  },
+  {
     version: "1.6.2",
     date: "2026-11-20",
     changes: {
