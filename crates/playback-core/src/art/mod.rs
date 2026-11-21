@@ -27,6 +27,51 @@ pub struct Request {
 }
 
 static FOUND: LazyLock<Cache<String>> = LazyLock::new(|| Cache::new(200));
+/// covers already turned into data: URLs, by their URL
+static INLINED: LazyLock<Cache<String>> = LazyLock::new(|| Cache::new(16));
+
+/// The cover at `url` as a data: URL, so a window that opens later (Settings,
+/// the update prompt) shows it at once instead of downloading it again: each
+/// WebView2 window fetches an http cover by itself, which took seconds. Falls
+/// back to `url` when the download fails.
+pub async fn inline(url: String) -> String {
+    if !url.starts_with("http") {
+        return url;
+    }
+    if let Some(data) = INLINED.get(&url) {
+        return data;
+    }
+    let got = async {
+        let res = crate::support::http::client()
+            .get(&url)
+            .send()
+            .await
+            .ok()?
+            .error_for_status()
+            .ok()?;
+        let kind = res
+            .headers()
+            .get(reqwest::header::CONTENT_TYPE)
+            .and_then(|v| v.to_str().ok())
+            .filter(|k| k.starts_with("image/"))
+            .unwrap_or("image/jpeg")
+            .to_string();
+        let bytes = res.bytes().await.ok()?;
+        use base64::Engine;
+        Some(format!(
+            "data:{kind};base64,{}",
+            base64::engine::general_purpose::STANDARD.encode(&bytes)
+        ))
+    }
+    .await;
+    match got {
+        Some(data) => {
+            INLINED.put(url, data.clone());
+            data
+        }
+        None => url,
+    }
+}
 
 async fn video(app_id: &str, artist: &str, title: &str) -> Option<String> {
     let thumb = thumbnail::find(app_id, title).await?;

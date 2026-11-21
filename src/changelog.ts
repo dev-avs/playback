@@ -28,6 +28,17 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.3-a",
+    date: "2026-11-20",
+    flavor: "tauri",
+    changes: {
+      fixes: [
+        "Fixed the album blur in Settings and the update prompt taking a few seconds to appear",
+        "Fixed closing Playback from the taskbar leaving Settings, Version control and other windows open",
+      ],
+    },
+  },
+  {
     version: "1.6.3",
     date: "2026-11-20",
     changes: {

@@ -52,7 +52,7 @@ pub async fn lyrics_readings(texts: Vec<String>) -> Option<Vec<Vec<lyrics::readi
 
 #[tauri::command]
 pub async fn art_fetch(req: art::Request) -> Option<String> {
-    art::fetch(req).await
+    Some(art::inline(art::fetch(req).await?).await)
 }
 
 // ── Spotify ────────────────────────────────────────────────────────

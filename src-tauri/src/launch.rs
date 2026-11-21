@@ -111,6 +111,14 @@ fn build_widget(app: &AppHandle) -> tauri::Result<()> {
     }
     let win = builder.build()?;
     let _ = win.set_always_on_top(true);
+    // Closing the widget (e.g. from the taskbar) quits, cards included, like
+    // the widget's "closed" handler in electron/main.cjs.
+    let handle = app.clone();
+    win.on_window_event(move |e| {
+        if let tauri::WindowEvent::Destroyed = e {
+            handle.exit(0);
+        }
+    });
     Ok(())
 }
 
