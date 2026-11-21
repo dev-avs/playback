@@ -22,6 +22,18 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.1",
+    date: "2026-11-20",
+    changes: {
+      new: [
+        "Electron gets Version info in Settings → App and dragging Settings from anywhere, as Tauri did in 1.6.0-a",
+      ],
+      appearance: [
+        "Version tag reads \"1.6.1 Tauri\" instead of \"1.6.1-Tauri\"",
+      ],
+    },
+  },
+  {
     version: "1.6.0-a",
     date: "2026-11-20",
     changes: {

@@ -590,9 +590,9 @@ export default function Settings() {
     window.player?.appVersion?.().then(setAppVersion);
     return window.player?.onUpdateChanged?.(setUpdate);
   }, []);
-  // which build this is (the same React bundle runs in both shells), e.g. "1.6.0-Electron"
+  // which build this is (the same React bundle runs in both shells), e.g. "1.6.0 Electron"
   const flavorName = "__TAURI_INTERNALS__" in window ? "Tauri" : "Electron";
-  const versionTag = `${appVersion}-${flavorName}`;
+  const versionTag = `${appVersion} ${flavorName}`;
   // The whole window drags, except its controls (and a list's scrollbar). A
   // click that ends a real drag is swallowed, so dragging never toggles anything.
   const dragFrom = useRef<{ x: number; y: number } | null>(null);
