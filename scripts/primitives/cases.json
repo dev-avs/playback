@@ -1,5 +1,5 @@
 {
-  "_doc": "Primitive cases for the CSS layer (port.md 2.4, parity/plan.md Phase 4). Read by scripts/primitives/main.cjs (Electron, pages/<name>.html) and compiled into the GPUI build (src-gpui/src/primitives.rs, include_str!). size = window size in DIPs; frames = motion frames every 33.33 ms of virtual time after t=0 (0 = one still); timeline ops run at virtual time t (ms, t <= frame time) before that frame's capture. Ops: class (selector, add|remove), move (x, y window coords: the injected cursor), out (cursor leaves the window).",
+  "_doc": "Primitive cases for the CSS layer (port.md 2.4, parity/plan.md Phase 4). Read by scripts/primitives/main.cjs (Electron, pages/<name>.html) and compiled into the GPUI build (src-gpui/src/primitives.rs, include_str!). size = window size in DIPs; frames = motion frames every 33.33 ms of virtual time after t=0 (0 = one still); timeline ops run at virtual time t (ms, t <= frame time) before that frame's capture. Ops: class (selector, add|remove), move (x, y window coords: the injected cursor), out (cursor leaves the window). Optional text: [[x, y, w, h], ...] boxes diffed with the glyph AA tolerance (parity-diff.mjs --aa --text).",
   "cases": [
     { "name": "tween-reverse", "size": [244, 124], "frames": 14,
       "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "remove": "hovered" }, { "t": 100, "op": "class", "selector": ".widget", "add": "hovered" } ] },
@@ -20,6 +20,22 @@
     { "name": "kf-next-popup-in", "size": [184, 100], "frames": 11,
       "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "show" } ] },
     { "name": "kf-vol-pill-in", "size": [164, 80], "frames": 7,
-      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "show" } ] }
+      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "show" } ] },
+    { "name": "scale-pill-085", "size": [140, 62], "frames": 0, "timeline": [] },
+    { "name": "scale-pill-094", "size": [140, 62], "frames": 0, "timeline": [] },
+    { "name": "scale-pill-110", "size": [140, 62], "frames": 0, "timeline": [] },
+    { "name": "scale-pill-text", "size": [140, 62], "frames": 0, "timeline": [], "text": [[33, 24, 79, 15]] },
+    { "name": "scale-pill-in", "size": [140, 62], "frames": 10,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "show" } ] },
+    { "name": "scale-pill-pop", "size": [140, 62], "frames": 14,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "done" } ] },
+    { "name": "shadow-widget", "size": [244, 124], "frames": 0, "timeline": [] },
+    { "name": "shadow-preview", "size": [244, 220], "frames": 0, "timeline": [] },
+    { "name": "shadow-vol-pill", "size": [216, 72], "frames": 0, "timeline": [] },
+    { "name": "shadow-hairline-pill", "size": [164, 140], "frames": 0, "timeline": [] },
+    { "name": "rounded-widget", "size": [264, 130], "frames": 0, "timeline": [] },
+    { "name": "mask-lyrics", "size": [264, 344], "frames": 0, "timeline": [] },
+    { "name": "mask-lyrics-open", "size": [244, 400], "frames": 18,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "add": "lyrics-open" }, { "t": 200, "op": "class", "selector": ".widget", "remove": "lyrics-open" } ] }
   ]
 }

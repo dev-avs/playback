@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget (background, radius, padding 10px 10px 8px, column, overflow hidden) */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; padding: 10px 10px 8px; width: 200px;
+  display: flex; flex-direction: column; overflow: hidden; }
+/* harness stand-ins above and below the panel */
+.head { height: 40px; background: rgba(255, 255, 255, 0.3); flex-shrink: 0; }
+.foot { height: 24px; background: rgba(255, 255, 255, 0.5); flex-shrink: 0; }
+/* src/App.css:268-293 .lyrics-panel, with its mask-image */
+.lyrics-panel { position: relative; max-height: 0; overflow: hidden;
+  transition: max-height 350ms cubic-bezier(0.4, 0, 0.2, 1), margin-bottom 350ms ease;
+  margin: 0 -10px; margin-bottom: 0; flex-shrink: 0;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%); }
+.widget.lyrics-open .lyrics-panel { max-height: 300px; margin-bottom: 8px; }
+/* harness content: 8 rows of 30px laid out at full size (240px, under the 300px --panel-h fallback) */
+.row { height: 30px; }
+.row:nth-child(odd) { background: rgba(255, 255, 255, 0.18); }
+.row:nth-child(even) { background: rgba(255, 255, 255, 0.06); }
+</style></head><body><div class="stage"><div class="widget"><div class="head"></div>
+<div class="lyrics-panel"><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div></div>
+<div class="foot"></div></div></div></body></html>

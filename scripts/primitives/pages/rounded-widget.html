@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget: background, radius 13px, padding 10px 10px 8px, column, relative,
+   overflow hidden (the box-shadow belongs to the shadow cases); 200px is a harness width */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; padding: 10px 10px 8px; width: 200px;
+  display: flex; flex-direction: column; position: relative; overflow: hidden; }
+/* src/App.css:138-148 .widget-bg: absolute, inset -60px, z-index 0, opacity .55 (calc(.55 * --bg-k));
+   the background is a harness stand-in for the blurred cover (the filter belongs to the filter bake) */
+.widget-bg { position: absolute; inset: -60px; background: rgb(200, 100, 50); z-index: 0; opacity: 0.55; }
+/* src/App.css:151-158 .top etc.: relative, z-index 1; src/App.css:166-176 .top: flex, center, gap 8px, margin-bottom 8px */
+.top { position: relative; z-index: 1; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+/* src/App.css:178-190 .art-wrap: 44px, radius var(--cover-radius, 6px), overflow hidden, relative (its
+   fallback gradient is left out: the image covers it, and gradients are not this slice's helper) */
+.art-wrap { width: 44px; height: 44px; border-radius: 6px; overflow: hidden; flex-shrink: 0; position: relative; }
+/* src/App.css:205-210 .art: 100%, cover, block (art-44.png is a harness 44px image, no scaling) */
+.art { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* harness stand-ins: .info, and a fill flush to the bottom corners (margin 0 -10px -8px) */
+.info { flex: 1; height: 20px; background: rgba(255, 255, 255, 0.3); }
+.foot { position: relative; z-index: 1; height: 24px; margin: 0 -10px -8px; background: rgba(255, 255, 255, 0.5); }
+</style></head><body><div class="stage"><div class="widget"><div class="widget-bg"></div>
+<div class="top"><div class="art-wrap"><img class="art" src="art-44.png"></div><div class="info"></div></div>
+<div class="foot"></div></div></div></body></html>

@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget: background, radius 13px, box-shadow at the defaults (--bg-k, --edge-k,
+   --shadow-k = 1); the size is a harness stand-in for the content */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; width: 200px; height: 80px;
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.45); }
+</style></head><body><div class="stage"><div class="widget"></div></div></body></html>

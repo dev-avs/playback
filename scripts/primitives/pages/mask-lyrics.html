@@ -1,0 +1,14 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:268-293 .lyrics-panel, open (max-height: var(--panel-h, 300px)) with its mask-image; the
+   220px width is the widget's 200px plus the panel's -10px margins; overflow hidden */
+.lyrics-panel { position: relative; width: 220px; max-height: 300px; overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 82%, transparent 100%); }
+/* harness content: 10 solid rows of 30px (300px, the full panel) */
+.row { height: 30px; }
+.row:nth-child(odd) { background: rgba(255, 255, 255, 0.85); }
+.row:nth-child(even) { background: rgb(200, 100, 50); }
+</style></head><body><div class="stage"><div class="lyrics-panel"><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div><div class="row"></div></div></div></body></html>

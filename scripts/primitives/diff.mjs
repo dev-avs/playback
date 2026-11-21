@@ -44,7 +44,9 @@ for (const c of cases) {
       notes.push(`${path.basename(n)} missing (${fs.existsSync(fe) ? "gpui" : "electron"})`);
       continue;
     }
-    const r = compare(read(fe), read(fg), { edges: true, diffOut: path.join(dirD, n) });
+    // a case's `text` boxes ([x, y, w, h]) get the glyph AA tolerance (parity-diff.mjs --aa --text)
+    const text = c.text?.map(([x, y, w, h]) => ({ x, y, w, h }));
+    const r = compare(read(fe), read(fg), { edges: true, aa: !!text, text, diffOut: path.join(dirD, n) });
     if (r.reason) {
       bad++;
       notes.push(`${path.basename(n)}: ${r.reason}`);

@@ -1,0 +1,9 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:999-1018 .vol-pill: width 172px, background, radius 8px, box-shadow. The height is a
+   harness stand-in for the content (padding 5px + the 18px row). */
+.vol-pill { width: 172px; height: 28px; border-radius: 8px; background: rgba(20, 20, 22, 0.72);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 6px 18px rgba(0, 0, 0, 0.4); }
+</style></head><body><div class="stage"><div class="vol-pill"></div></div></body></html>

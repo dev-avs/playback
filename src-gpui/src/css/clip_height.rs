@@ -14,6 +14,7 @@ use super::layout_unit;
 use super::tween::{Transition, Tween};
 use gpui::{div, prelude::*, px, Div};
 
+#[derive(Clone)]
 pub struct ClipHeight {
     max_height: Tween<f32>,
 }

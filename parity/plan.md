@@ -113,6 +113,51 @@ no untolerated pixel. Tolerated edge pixels: corners ≤ 31/255 (tween-*, clip-*
 kf-bar-pulse), translated edges ≤ 20/255 (kf-next-popup-in) and ≤ 52/255 (kf-vol-pill-in);
 kf-empty-pulse and kf-fs-in max delta 1. `parity-diff.mjs --self-test` 19/19.
 
+### Slice B: geometry helpers (NOT done: 3 scale cases fail, 2026-11-21)
+Helpers in `src-gpui/src/css/`: `scale` (a tree of `scale::Node`s laid out unscaled as GPUI divs, whose
+bounds are recorded and painted by the helper at `centre + (bounds − centre) × s` in f32, with no second
+layout pass; unrounded fills as pixel-aligned quads with alpha × covered area, rounded fills as GPUI
+quads, shadows through `shadow`'s bakes, text shaped at the scaled size), `rounded` (`clip_child`: the
+visible rect of a child of an `overflow: hidden` rounded box and the radii it carries; `clamp` = CSS
+radius scaling), `shadow` (outer and inset `box-shadow` baked on the CPU as Skia draws it: area coverage,
+sigma = blur / 2 as three box blurs, clipped to outside / inside the box; painted as a sprite), `mask`
+(`mask-image: linear-gradient(to bottom, …)` as one copy per fading device row at the row's alpha).
+Cases' `text` boxes ([x, y, w, h]) are diffed with the glyph AA tolerance (`--aa --text`).
+- Same commands as slice A: `node scripts/primitives/run.mjs [--gpui] [--stability] [--only=…]`, then
+  `node scripts/primitives/diff.mjs` (diff images in `parity/out/primitives/diff/`).
+
+| case | source | frames | max delta | untolerated soft % | edge px (max) | result |
+|---|---|---|---|---|---|---|
+| shadow-widget | App.css:115-131 | 1 | 23 | 0 | 24 (23) | pass |
+| shadow-preview | Settings.css:505-516 | 1 | 33 | 0 | 53 (33) | pass |
+| shadow-vol-pill | App.css:999-1018 | 1 | 22 | 0 | 29 (22) | pass |
+| shadow-hairline-pill | Settings.css:429-444, 472-476, 298-306 | 1 | 47 | 0 | 109 (47) | pass |
+| rounded-widget | App.css:115-131, 138-148, 166-190, 205-210 | 1 | 54.6 | 0 | 90 (54.6) | pass |
+| mask-lyrics | App.css:268-293 | 1 | 1.4 | 0 | 0 | pass |
+| mask-lyrics-open | App.css:268-294 | 18 | 30 | 0 | 29 (30) | pass |
+| scale-pill-085 | Settings.css:429-444, 482-485 | 1 | 26.4 | 0 | 168 (26.4) | pass |
+| scale-pill-094 | Settings.css:461-464 | 1 | 24 | 0 | 36 (24) | pass |
+| scale-pill-110 | Settings.css:487-491 | 1 | 45 | 0 | 240 (45) | pass |
+| scale-pill-text | Settings.css:461-464, Settings.tsx:182 | 1 | 115 | 0.2765 | 282 (63) | FAIL (24 hard px) |
+| scale-pill-in | Settings.css:429-444, 482-485 | 10 | 54 | 7.83 | 634 (54) | FAIL (f001 only, soft) |
+| scale-pill-pop | Settings.css:472-476, 487-491 | 14 | 78 | 0.99 | 598 (64) | FAIL (7/14 frames) |
+
+Shadow tails (below the box) match Electron within 1-2/255 alpha, which confirms sigma = blur / 2 with
+Skia's three-box filter. The .94 stand-in's top row (y 24, edge at 24.42) is alpha 162 on both sides.
+Both sides byte-stable (230 PNGs each). The 10 slice A cases still pass.
+
+Why the remaining scale cases fail (no threshold changed):
+1. scale-pill-text: the unscaled pill is 101 px wide in GPUI and 100 px in Electron (text measured ~1 px
+   wider by DirectWrite). 15 of the 24 hard pixels are the pill's right end (x 115-119); the other 9 are
+   inside the text box (glyph advances off by the same width).
+2. scale-pill-in f001 (soft 7.83%, hard 0): CSS `opacity` fades the composited group, the helper fades
+   each primitive, so where the stand-in overlaps the pill a partly faded frame differs (stand-in pixel
+   Electron 247,245,123 / GPUI 230,228,139 RGBA). Every other frame passes.
+3. scale-pill-pop: f001 (86 hard px) is Chromium's first compositor frame of the animation: the pill's
+   coverage is smeared over rows 21-41 (GPUI 21-40; alpha area 1380 against 1415), as from a layer
+   rasterized at another scale and resampled. f002-f006 and f010 each have 1-2 pixels on the rounded
+   ends at 65-73/255 against the 64 edge limit (GPUI's SDF AA against Skia's at fractional positions).
+
 ## Phases 5–7: screens
 Slices of 20–40 ledger rows, in port.md §5 order. Estimate: widget ~15 slices, settings ~15, other
 windows ~6. Each slice: worker → review by a different worker (rerun diffs + 5 spot checks) → rows

@@ -1,0 +1,24 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: flex; flex-direction: column; align-items: flex-start; padding: 22px; background: transparent; }
+/* src/windows/Settings.css:429-444 .st-reset-pill (animation and transitions per case below);
+   line-height 1.25 from .st-label (Settings.css:406-414), font stack from .st-card (Settings.css:16) */
+.st-reset-pill { position: relative; align-self: flex-start; overflow: hidden; padding: 2px 10px;
+  border-radius: 999px; background: rgba(255, 90, 70, 0.28); box-shadow: inset 0 0 0 0.5px rgba(255, 120, 100, 0.5);
+  font-family: "SF Pro", "SF Pro Text", "SF Pro Display", -apple-system, "Segoe UI", sans-serif;
+  font-size: 11px; font-weight: 600; line-height: 1.25; color: #fff; white-space: nowrap; }
+/* harness stand-in for the text: a 76px block on the 13.75px line */
+.stand { display: block; width: 76px; height: 13.75px; background: rgba(255, 255, 255, 0.85); }
+/* src/windows/Settings.css:429-444: transition background 160ms ease (the entry animation is over) */
+.st-reset-pill { transition: scale 140ms cubic-bezier(0.3, 1.5, 0.5, 1), background 160ms ease; }
+/* src/windows/Settings.css:472-476 .st-reset-done .st-reset-pill */
+.stage.done .st-reset-pill { background: rgba(70, 200, 120, 0.55); box-shadow: inset 0 0 0 0.5px rgba(120, 230, 160, 0.6);
+  animation: st-reset-pop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+/* src/windows/Settings.css:487-491 */
+@keyframes st-reset-pop {
+    0% { scale: 0.94; }
+    45% { scale: 1.1; }
+    100% { scale: 1; }
+}
+</style></head><body><div class="stage"><span class="st-reset-pill"><span class="stand"></span></span></div></body></html>

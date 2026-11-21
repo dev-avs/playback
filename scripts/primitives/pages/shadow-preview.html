@@ -1,0 +1,11 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/windows/Settings.css:505-516 .st-preview: radius var(--pv-radius, 10px), background
+   rgba(var(--pv-tint, 20, 20, 22), var(--bg-a)) (--bg-a at its default .72), box-shadow at the
+   --pv-edge / --pv-shadow fallbacks; the size is a harness stand-in (height 176px is the preview's own) */
+.st-preview { box-sizing: border-box; width: 200px; height: 176px; border-radius: 10px;
+  background: rgba(20, 20, 22, 0.72);
+  box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.12), 0 3px 10px rgba(0, 0, 0, 0.45); }
+</style></head><body><div class="stage"><div class="st-preview"></div></div></body></html>

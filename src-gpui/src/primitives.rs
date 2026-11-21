@@ -7,10 +7,13 @@
 //! (sizes, fills marked "harness" in the page) are the page's own.
 
 use crate::css::{
-    layout_unit, stop, translate, Animation, ClipHeight, Direction, Easing, Fill, HoverProp, Hover, Keyframes,
-    Transition, Tween,
+    inset, inset_shadow, layout_unit, outer, rounded::uniform, shadowed, stop, translate, Animation, ClipHeight,
+    Direction, Easing, Fill, HoverProp, Hover, Keyframes, Transition, Tween,
 };
-use gpui::{div, point, prelude::*, px, AnyElement, Bounds, Hsla, Pixels, Point, Rgba};
+use crate::css::mask::{masked, LYRICS_PANEL};
+use crate::css::scale::{self, scale};
+use crate::css::rounded::{clip_child, Radii, Rect};
+use gpui::{div, img, point, prelude::*, px, AnyElement, Bounds, FontWeight, Hsla, ImageSource, Pixels, Point, Rgba};
 use serde::Deserialize;
 use std::{cell::Cell, rc::Rc};
 
@@ -69,7 +72,8 @@ pub enum Scene {
     /// tween-reverse, tween-color: one card with `transition: background 400ms ease, opacity 300ms ease`.
     Card { hovered: bool, warm: bool, bg: Tween<Rgba>, opacity: Tween<f32> },
     /// clip-lyrics: the `.lyrics-panel` max-height clip inside a widget with `overflow: hidden`.
-    Lyrics { open: bool, panel: ClipHeight, margin_bottom: Tween<f32> },
+    /// mask-lyrics-open: the same, with the panel's mask-image.
+    Lyrics { open: bool, panel: ClipHeight, margin_bottom: Tween<f32>, mask: bool },
     /// clip-controls: the `.controls` max-height clip that turns `overflow: visible` at once on hover.
     Controls { open: bool, panel: ClipHeight, opacity: Tween<f32>, margin_top: Tween<f32> },
     /// hover-next-up: `.next-up:hover` through the injected cursor and the cursor poll.
@@ -80,6 +84,12 @@ pub enum Scene {
     FsIn { start: Option<f64> },
     NextPopupIn { start: Option<f64> },
     VolPillIn { start: Option<f64> },
+    /// shadow-*, rounded-*, mask-*, scale-pill-0xx / -text: one still, drawn by `still`.
+    Still(&'static str),
+    /// scale-pill-in: the reset pill's entry animation.
+    PillIn { start: Option<f64> },
+    /// scale-pill-pop: the reset pill landing (pop animation, background transition).
+    PillPop { start: Option<f64>, bg: Tween<Rgba> },
 }
 
 // pages/tween-*.html (src/App.css:115-131): background rgba(20, 20, 22, .72)
@@ -103,7 +113,8 @@ impl Scene {
                 bg: Tween::new(card_bg(), Transition::new(400.0, Easing::EASE)),
                 opacity: Tween::new(1.0, Transition::new(300.0, Easing::EASE)),
             },
-            "clip-lyrics" => Scene::Lyrics {
+            "clip-lyrics" | "mask-lyrics-open" => Scene::Lyrics {
+                mask: name == "mask-lyrics-open",
                 open: false,
                 // src/App.css:268-293: max-height 350ms cubic-bezier(0.4, 0, 0.2, 1), margin-bottom 350ms ease
                 panel: ClipHeight::new(0.0, Transition::new(350.0, Easing::STANDARD)),
@@ -128,6 +139,19 @@ impl Scene {
             "kf-fs-in" => Scene::FsIn { start: None },
             "kf-next-popup-in" => Scene::NextPopupIn { start: None },
             "kf-vol-pill-in" => Scene::VolPillIn { start: None },
+            "shadow-widget" => Scene::Still("shadow-widget"),
+            "shadow-preview" => Scene::Still("shadow-preview"),
+            "shadow-vol-pill" => Scene::Still("shadow-vol-pill"),
+            "shadow-hairline-pill" => Scene::Still("shadow-hairline-pill"),
+            "rounded-widget" => Scene::Still("rounded-widget"),
+            "mask-lyrics" => Scene::Still("mask-lyrics"),
+            "scale-pill-085" => Scene::Still("scale-pill-085"),
+            "scale-pill-094" => Scene::Still("scale-pill-094"),
+            "scale-pill-110" => Scene::Still("scale-pill-110"),
+            "scale-pill-text" => Scene::Still("scale-pill-text"),
+            "scale-pill-in" => Scene::PillIn { start: None },
+            // src/windows/Settings.css:429-444: transition background 160ms ease
+            "scale-pill-pop" => Scene::PillPop { start: None, bg: Tween::new(PILL_BG, Transition::new(160.0, Easing::EASE)) },
             _ => return None,
         })
     }
@@ -142,7 +166,7 @@ impl Scene {
                 opacity.set(if *hovered { 1.0 } else { REST_OPACITY }, now);
                 bg.set(if *warm { card_bg_warm() } else { card_bg() }, now);
             }
-            Scene::Lyrics { open, panel, margin_bottom } => {
+            Scene::Lyrics { open, panel, margin_bottom, .. } => {
                 *open = on("lyrics-open", *open);
                 // src/App.css:291-294: .widget.lyrics-open .lyrics-panel { max-height: var(--panel-h, 300px); margin-bottom: 8px }
                 panel.set(if *open { 300.0 } else { 0.0 }, now);
@@ -158,7 +182,11 @@ impl Scene {
             Scene::BarPulse { start } if add == Some("playing") => *start = Some(now),
             Scene::EmptyPulse { start } if add == Some("connecting") => *start = Some(now),
             Scene::FsIn { start } if add == Some("fullscreen") => *start = Some(now),
-            Scene::NextPopupIn { start } | Scene::VolPillIn { start } if add == Some("show") => *start = Some(now),
+            Scene::NextPopupIn { start } | Scene::VolPillIn { start } | Scene::PillIn { start } if add == Some("show") => *start = Some(now),
+            Scene::PillPop { start, bg } if add == Some("done") => {
+                *start = Some(now);
+                bg.set(PILL_DONE_BG, now);
+            }
             _ => panic!("primitive: class op {add:?}/{remove:?} does not apply to this scene"),
         }
     }
@@ -178,6 +206,31 @@ impl Scene {
 
     pub fn render(&self, now: f64) -> AnyElement {
         match self {
+            Scene::Still(name) => still(name),
+            Scene::PillIn { start } => {
+                let Some(s) = *start else { return stage().into_any_element() };
+                // src/windows/Settings.css:482-485 @keyframes st-reset-in: opacity 0 → 1, scale .85 → 1;
+                // src/windows/Settings.css:429-444: 260ms cubic-bezier(0.3, 1.5, 0.5, 1) both
+                let anim = Animation::new(260.0, Easing::SPRINGY).fill(Fill::Both);
+                let o = Keyframes::new(vec![stop(0.0, 0.0f32), stop(1.0, 1.0)]).value_or(&anim, s, now, 1.0);
+                let k = Keyframes::new(vec![stop(0.0, 0.85f32), stop(1.0, 1.0)]).value_or(&anim, s, now, 1.0);
+                stage().child(scale(k, o, reset_pill(PILL_BG, PILL_EDGE, stand_in()))).into_any_element()
+            }
+            Scene::PillPop { start, bg } => {
+                // src/windows/Settings.css:472-476 .st-reset-done .st-reset-pill: background (transitioned),
+                // box-shadow (not transitioned), st-reset-pop 380ms cubic-bezier(0.3, 1.6, 0.5, 1) both
+                let (edge, k) = match *start {
+                    None => (PILL_EDGE, 1.0),
+                    Some(s) => {
+                        let anim = Animation::new(380.0, Easing::SPRINGIER).fill(Fill::Both);
+                        // src/windows/Settings.css:487-491 @keyframes st-reset-pop: 0% .94, 45% 1.1, 100% 1
+                        let k = Keyframes::new(vec![stop(0.0, 0.94f32), stop(0.45, 1.1), stop(1.0, 1.0)]).value_or(&anim, s, now, 1.0);
+                        (PILL_DONE_EDGE, k)
+                    }
+                };
+                let bg = bg.value(now);
+                stage().child(scale(k, 1.0, reset_pill(bg, edge, stand_in()))).into_any_element()
+            }
             Scene::Card { bg, opacity, .. } => stage()
                 .child(
                     // src/App.css:115-131 .widget: radius 13px; 200 × 80 harness stand-in for the content
@@ -185,12 +238,22 @@ impl Scene {
                 )
                 .into_any_element(),
 
-            Scene::Lyrics { panel, margin_bottom, .. } => {
+            Scene::Lyrics { panel, margin_bottom, mask, .. } => {
                 // pages/clip-lyrics.html: 8 rows of 30px, odd .18 / even .06 white
-                let rows = div().flex_shrink_0().w_full().flex().flex_col().children((0..8).map(|i| {
-                    let a = if i % 2 == 0 { 0.18 } else { 0.06 };
-                    div().flex_shrink_0().w_full().h(px(30.0)).bg(fill(rgba(255, 255, 255, a)))
-                }));
+                let rows = || {
+                    div().flex_shrink_0().w_full().flex().flex_col().children((0..8).map(|i| {
+                        let a = if i % 2 == 0 { 0.18 } else { 0.06 };
+                        div().flex_shrink_0().w_full().h(px(30.0)).bg(fill(rgba(255, 255, 255, a)))
+                    }))
+                };
+                // src/App.css:268-293 .lyrics-panel: margin 0 -10px, margin-bottom transitions, overflow hidden;
+                // pages/mask-lyrics-open.html adds its mask-image (src/App.css:277-288)
+                let panel_el = if *mask {
+                    let p = panel.clone();
+                    div().flex_shrink_0().child(masked(LYRICS_PANEL, move || p.wrap(240.0, now, true, rows()).w_full().into_any_element()))
+                } else {
+                    panel.wrap(240.0, now, true, rows())
+                };
                 stage()
                     .child(
                         // src/App.css:115-131 .widget: padding 10px 10px 8px, width 200px content-box
@@ -207,13 +270,7 @@ impl Scene {
                             .bg(fill(card_bg()))
                             // harness .head 40px rgba(255,255,255,.3)
                             .child(div().flex_shrink_0().h(px(40.0)).bg(fill(rgba(255, 255, 255, 0.3))))
-                            // src/App.css:268-293 .lyrics-panel: margin 0 -10px, margin-bottom transitions, overflow hidden
-                            .child(
-                                panel
-                                    .wrap(240.0, now, true, rows)
-                                    .mx(px(-10.0))
-                                    .mb(px(layout_unit(margin_bottom.value(now)))),
-                            )
+                            .child(panel_el.mx(px(-10.0)).mb(px(layout_unit(margin_bottom.value(now)))))
                             // harness .foot 24px rgba(255,255,255,.5)
                             .child(div().flex_shrink_0().h(px(24.0)).bg(fill(rgba(255, 255, 255, 0.5)))),
                     )
@@ -350,4 +407,199 @@ impl Scene {
             }
         }
     }
+}
+
+/// The still cases of slice B (pages/<name>.html).
+fn still(name: &str) -> AnyElement {
+    match name {
+        // pages/shadow-widget.html: src/App.css:115-131 .widget, box-shadow at the defaults; 200 × 80 harness size
+        "shadow-widget" => stage()
+            .child(shadowed(
+                &[outer(0.0, 0.0, 0.0, 0.5, rgba(255, 255, 255, 0.08)), outer(0.0, 4.0, 16.0, 0.0, rgba(0, 0, 0, 0.45))],
+                uniform(13.0),
+                div().w(px(200.0)).h(px(80.0)).rounded(px(13.0)).bg(fill(card_bg())),
+            ))
+            .into_any_element(),
+        // pages/shadow-preview.html: src/windows/Settings.css:505-516 .st-preview (radius 10px, fallbacks); 200 × 176
+        "shadow-preview" => stage()
+            .child(shadowed(
+                &[outer(0.0, 0.0, 0.0, 0.5, rgba(255, 255, 255, 0.12)), outer(0.0, 3.0, 10.0, 0.0, rgba(0, 0, 0, 0.45))],
+                uniform(10.0),
+                div().w(px(200.0)).h(px(176.0)).rounded(px(10.0)).bg(fill(card_bg())),
+            ))
+            .into_any_element(),
+        // pages/shadow-vol-pill.html: src/App.css:999-1018 .vol-pill (172px wide, radius 8px); 28px harness height
+        "shadow-vol-pill" => stage()
+            .child(shadowed(
+                &[outer(0.0, 0.0, 0.0, 0.5, rgba(255, 255, 255, 0.12)), outer(0.0, 6.0, 18.0, 0.0, rgba(0, 0, 0, 0.4))],
+                uniform(8.0),
+                div().w(px(172.0)).h(px(28.0)).rounded(px(8.0)).bg(fill(card_bg())),
+            ))
+            .into_any_element(),
+        // pages/shadow-hairline-pill.html: column, gap 8px
+        "shadow-hairline-pill" => {
+            let boxed = |w: f32, h: f32, r: f32, bg: Rgba, edge: Rgba| {
+                div().relative().flex_shrink_0().w(px(w)).h(px(h)).rounded(px(r)).bg(fill(bg)).child(inset(&[inset_shadow(0.0, 0.0, 0.0, 0.5, edge)], uniform(r)))
+            };
+            stage()
+                .gap(px(8.0))
+                // src/windows/Settings.css:429-444 .st-reset-pill (96 × 17.75 harness size)
+                .child(boxed(96.0, 17.75, 999.0, rgba(255, 90, 70, 0.28), rgba(255, 120, 100, 0.5)))
+                // src/windows/Settings.css:472-476 .st-reset-done .st-reset-pill
+                .child(boxed(96.0, 17.75, 999.0, rgba(70, 200, 120, 0.55), rgba(120, 230, 160, 0.6)))
+                // src/windows/Settings.css:298-306 .st-info-tile (120 × 40 harness size)
+                .child(boxed(120.0, 40.0, 10.0, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.08)))
+                .into_any_element()
+        }
+        // pages/rounded-widget.html
+        "rounded-widget" => {
+            // src/App.css:115-131 .widget: 200px content-box (+ 2 × 10 padding), padding 10px 10px 8px,
+            // radius 13px, overflow hidden; height = 10 + 44 (.top) + 8 + 24 (.foot) − 8 + 8 = 86
+            let (w, h, r) = (220.0, 86.0, uniform(13.0));
+            let place = |child: Rect| clip_child(w, h, r, child).expect("rounded-widget: representable child");
+            // src/App.css:138-148 .widget-bg: inset -60px, opacity .55; harness fill rgb(200, 100, 50)
+            let (bg_rect, bg_r) = place(Rect::new(-60.0, -60.0, w + 120.0, h + 120.0));
+            // harness .foot: 24px, margin 0 -10px -8px (flush to the bottom corners), rgba(255,255,255,.5)
+            let (foot_rect, foot_r) = place(Rect::new(0.0, h - 24.0, w, 24.0));
+            // src/App.css:178-190 .art-wrap 44px, radius 6px, overflow hidden; src/App.css:205-210 .art 100%
+            let (art_rect, art_r) = clip_child(44.0, 44.0, uniform(6.0), Rect::new(0.0, 0.0, 44.0, 44.0)).expect("art");
+            stage()
+                .child(
+                    div()
+                        .relative()
+                        .w(px(w))
+                        .h(px(h))
+                        .pt(px(10.0))
+                        .px(px(10.0))
+                        .pb(px(8.0))
+                        .flex()
+                        .flex_col()
+                        .overflow_hidden()
+                        .rounded(px(13.0))
+                        .bg(fill(card_bg()))
+                        .child(rounded_fill(bg_rect, bg_r, rgba(200, 100, 50, 1.0)).opacity(0.55))
+                        // src/App.css:166-176 .top: flex, center, gap 8px, margin-bottom 8px
+                        .child(
+                            div()
+                                .flex_shrink_0()
+                                .flex()
+                                .items_center()
+                                .gap(px(8.0))
+                                .mb(px(8.0))
+                                .child(
+                                    div().relative().flex_shrink_0().size(px(44.0)).overflow_hidden().rounded(px(6.0)).child(
+                                        img(ImageSource::Render(art_44()))
+                                            .absolute()
+                                            .left(px(art_rect.x))
+                                            .top(px(art_rect.y))
+                                            .w(px(art_rect.w))
+                                            .h(px(art_rect.h))
+                                            .rounded_tl(px(art_r[0]))
+                                            .rounded_tr(px(art_r[1]))
+                                            .rounded_br(px(art_r[2]))
+                                            .rounded_bl(px(art_r[3])),
+                                    ),
+                                )
+                                // harness .info: flex 1, 20px, rgba(255,255,255,.3)
+                                .child(div().flex_1().h(px(20.0)).bg(fill(rgba(255, 255, 255, 0.3)))),
+                        )
+                        .child(rounded_fill(foot_rect, foot_r, rgba(255, 255, 255, 0.5))),
+                )
+                .into_any_element()
+        }
+        // pages/mask-lyrics.html: src/App.css:268-293 .lyrics-panel open at 300px (220 wide) with its mask-image;
+        // harness rows: 10 × 30px, odd rgba(255,255,255,.85), even rgb(200,100,50)
+        "mask-lyrics" => stage()
+            .child(masked(LYRICS_PANEL, || {
+                div()
+                    .flex_shrink_0()
+                    .w(px(220.0))
+                    .h(px(300.0))
+                    .overflow_hidden()
+                    .flex()
+                    .flex_col()
+                    .children((0..10).map(|i| {
+                        let c = if i % 2 == 0 { rgba(255, 255, 255, 0.85) } else { rgba(200, 100, 50, 1.0) };
+                        div().flex_shrink_0().w_full().h(px(30.0)).bg(fill(c))
+                    }))
+                    .into_any_element()
+            }))
+            .into_any_element(),
+        // pages/scale-pill-085.html, -094, -110: the reset pill held at a scale
+        // (src/windows/Settings.css:482-485 st-reset-in from .85; :461-464 holding .94; :487-491 st-reset-pop 45% 1.1)
+        "scale-pill-085" | "scale-pill-094" | "scale-pill-110" => {
+            let s = match name {
+                "scale-pill-085" => 0.85,
+                "scale-pill-094" => 0.94,
+                _ => 1.1,
+            };
+            stage().child(scale(s, 1.0, reset_pill(PILL_BG, PILL_EDGE, stand_in()))).into_any_element()
+        }
+        // pages/scale-pill-text.html: holding (.94) with its text (src/windows/Settings.tsx, .st-reset-text)
+        "scale-pill-text" => {
+            // src/windows/Settings.css:16 .st-card font stack ("SF Pro" is not installed: SF Pro Text);
+            // :429-444 11px 600 #fff nowrap; :406-414 line-height 1.25; .st-reset-text relative
+            let mut f = gpui::font("SF Pro Text");
+            f.weight = FontWeight::SEMIBOLD;
+            let label = scale::text(div().relative().flex_shrink_0(), "Keep holding\u{2026}", f, 11.0, 11.0 * 1.25, rgba(255, 255, 255, 1.0));
+            stage().child(scale(0.94, 1.0, reset_pill(PILL_BG, PILL_EDGE, label))).into_any_element()
+        }
+        _ => unreachable!("no still {name}"),
+    }
+}
+
+// src/windows/Settings.css:429-444 .st-reset-pill, :472-476 .st-reset-done .st-reset-pill
+const PILL_BG: Rgba = Rgba { r: 255.0 / 255.0, g: 90.0 / 255.0, b: 70.0 / 255.0, a: 0.28 };
+const PILL_EDGE: Rgba = Rgba { r: 255.0 / 255.0, g: 120.0 / 255.0, b: 100.0 / 255.0, a: 0.5 };
+const PILL_DONE_BG: Rgba = Rgba { r: 70.0 / 255.0, g: 200.0 / 255.0, b: 120.0 / 255.0, a: 0.55 };
+const PILL_DONE_EDGE: Rgba = Rgba { r: 120.0 / 255.0, g: 230.0 / 255.0, b: 160.0 / 255.0, a: 0.6 };
+
+/// src/windows/Settings.css:429-444 .st-reset-pill as a `css::scale` node: padding 2px 10px, radius 999px,
+/// inset 0 0 0 .5px hairline, overflow hidden (its content stays inside the padding).
+fn reset_pill(bg: Rgba, edge: Rgba, content: scale::Node) -> scale::Node {
+    scale::node(div().relative().flex_shrink_0().px(px(10.0)).py(px(2.0)))
+        .bg(bg)
+        .radii(uniform(999.0))
+        .shadows(&[inset_shadow(0.0, 0.0, 0.0, 0.5, edge)])
+        .child(content)
+}
+
+/// pages/scale-pill-*.html harness stand-in for the text: 76 × 13.75, rgba(255,255,255,.85)
+fn stand_in() -> scale::Node {
+    scale::node(div().flex_shrink_0().w(px(76.0)).h(px(13.75))).bg(rgba(255, 255, 255, 0.85))
+}
+
+/// A fill at `rect` (parent coordinates, absolute) with the radii `rounded::clip_child` gave it.
+fn rounded_fill(rect: Rect, r: Radii, c: Rgba) -> gpui::Div {
+    div()
+        .absolute()
+        .left(px(rect.x))
+        .top(px(rect.y))
+        .w(px(rect.w))
+        .h(px(rect.h))
+        .rounded_tl(px(r[0]))
+        .rounded_tr(px(r[1]))
+        .rounded_br(px(r[2]))
+        .rounded_bl(px(r[3]))
+        .bg(fill(c))
+}
+
+/// scripts/primitives/pages/art-44.png (the harness cover) as a GPUI image (BGRA, port.md 7.13).
+fn art_44() -> std::sync::Arc<gpui::RenderImage> {
+    thread_local! {
+        static ART: std::sync::Arc<gpui::RenderImage> = {
+            let dec = png::Decoder::new(std::io::Cursor::new(include_bytes!("../../scripts/primitives/pages/art-44.png").as_slice()));
+            let mut r = dec.read_info().expect("art-44.png");
+            let mut buf = vec![0; r.output_buffer_size()];
+            let info = r.next_frame(&mut buf).expect("art-44.png frame");
+            assert_eq!(info.color_type, png::ColorType::Rgba);
+            buf.truncate(info.buffer_size());
+            for p in buf.chunks_exact_mut(4) {
+                p.swap(0, 2);
+            }
+            let im = image::RgbaImage::from_raw(info.width, info.height, buf).expect("art size");
+            std::sync::Arc::new(gpui::RenderImage::new(vec![image::Frame::new(im)]))
+        };
+    }
+    ART.with(|a| a.clone())
 }

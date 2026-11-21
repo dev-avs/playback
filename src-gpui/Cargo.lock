@@ -4014,6 +4014,7 @@ version = "0.1.0"
 dependencies = [
  "async-channel 2.5.0",
  "gpui",
+ "image",
  "log",
  "playback-core",
  "playback-logic",
