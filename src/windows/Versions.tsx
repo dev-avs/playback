@@ -45,6 +45,8 @@ const NOTES_PREVIEW = 1;
 const PREVIEW_CHARS = 90;
 /** How long the warning's Revert has to be held, like Uninstall in Settings. */
 const HOLD_MS = 1500;
+/** A flavor switch's warning: its button unlocks after this long, like the installer's GPUI gate. */
+const SWITCH_WAIT_MS = 5000;
 
 interface Section {
   kind: ChangeKind | null;
@@ -97,6 +99,9 @@ export default function Versions() {
   const [expanded, setExpanded] = useState<string | null>(null);
   // the legacy release whose warning is up, and whether Revert is held
   const [warn, setWarn] = useState<Release | null>(null);
+  // an install that changes the flavor (Tauri → Electron 1.6.1-a), whose warning is up
+  const [switching, setSwitching] = useState<{ r: Release; flavor: string } | null>(null);
+  const [switchReady, setSwitchReady] = useState(false);
   const [holding, setHolding] = useState(false);
   const holdTimer = useRef<number | null>(null);
   const [state, setState] = useState<UpdateState | null>(null);
@@ -119,13 +124,15 @@ export default function Versions() {
   const busy = state?.status === "downloading";
   const canInstall = !!state && !["checking", "downloading", "dev"].includes(state.status);
   const holdStart = () => {
-    if (!warn) return;
+    if (!warn && !(switching && switchReady)) return;
     setHolding(true);
     holdTimer.current = window.setTimeout(() => {
       holdTimer.current = null;
       setHolding(false);
-      window.player?.bumpTo?.(warn.version);
+      if (warn) window.player?.bumpTo?.(warn.version);
+      else if (switching) window.player?.bumpTo?.(switching.r.version, switching.flavor, snapshotSettingsJson());
       setWarn(null);
+      setSwitching(null);
     }, HOLD_MS);
   };
   const holdEnd = () => {
@@ -134,13 +141,29 @@ export default function Versions() {
     holdTimer.current = null;
     setHolding(false);
   };
-  const install = (r: Release, flavor?: string) =>
-    r.legacy ? setWarn(r) : window.player?.bumpTo?.(r.version, flavor, snapshotSettingsJson());
+  const install = (r: Release, flavor?: string) => {
+    if (r.legacy) setWarn(r);
+    else if (flavor && flavor !== CURRENT_FLAVOR) {
+      setSwitchReady(false);
+      setSwitching({ r, flavor });
+    }
+    else window.player?.bumpTo?.(r.version, flavor, snapshotSettingsJson());
+  };
+  const cancelWarning = () => {
+    holdEnd();
+    setWarn(null);
+    setSwitching(null);
+  };
+  // the switch's button waits a moment, so the warning gets read
+  useEffect(() => {
+    if (!switching) return;
+    const id = window.setTimeout(() => setSwitchReady(true), SWITCH_WAIT_MS);
+    return () => clearTimeout(id);
+  }, [switching]);
 
   const close = () => {
-    if (warn) {
-      holdEnd();
-      setWarn(null);
+    if (warn || switching) {
+      cancelWarning();
       return;
     }
     if (closing || busy) return;
@@ -318,14 +341,7 @@ export default function Versions() {
               </p>
               <p className="cl-text">It uses your settings as they were when you first opened Playback. Playback closes, and the installer opens player {warn.version}.</p>
               <div className="cl-actions">
-                <button
-                  type="button"
-                  className="cl-button cl-button--quiet"
-                  onClick={() => {
-                    holdEnd();
-                    setWarn(null);
-                  }}
-                >
+                <button type="button" className="cl-button cl-button--quiet" onClick={cancelWarning}>
                   Cancel
                 </button>
                 <button
@@ -338,6 +354,52 @@ export default function Versions() {
                   onPointerCancel={holdEnd}
                 >
                   {holding ? "Keep holding…" : "Hold to revert"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        {switching && (
+          <div className="vc-warn" role="alertdialog" aria-labelledby="vc-switch-title">
+            <div className="vc-warn-box">
+              <h3 className="vc-warn-title" id="vc-switch-title">
+                Switch to {FLAVOR_LABELS[switching.flavor] ?? switching.flavor}?
+              </h3>
+              <p className="cl-text">
+                {versionLabel(switching.r.version, switching.flavor as keyof typeof FLAVORS)} is the{" "}
+                {FLAVOR_LABELS[switching.flavor] ?? switching.flavor} build. Installing it changes Playback from{" "}
+                {FLAVOR_LABELS[CURRENT_FLAVOR]} to {FLAVOR_LABELS[switching.flavor] ?? switching.flavor}. Your settings
+                come along.
+              </p>
+              {switching.flavor === "gpui" && (
+                <p className="cl-text">
+                  GPUI is experimental and very buggy: screens that look different, stuttering or missing animations,
+                  freezes and crashes. Not for everyday use.
+                </p>
+              )}
+              <p className="cl-text">
+                To go back, install a {FLAVOR_LABELS[CURRENT_FLAVOR]} version from here. Playback closes and restarts on{" "}
+                {FLAVOR_LABELS[switching.flavor] ?? switching.flavor}.
+              </p>
+              <div className="cl-actions">
+                <button type="button" className="cl-button cl-button--quiet" onClick={cancelWarning}>
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className={`cl-button vc-hold${holding ? " holding" : ""}`}
+                  style={{ "--hold-ms": `${HOLD_MS}ms` } as React.CSSProperties}
+                  disabled={!switchReady}
+                  onPointerDown={holdStart}
+                  onPointerUp={holdEnd}
+                  onPointerLeave={holdEnd}
+                  onPointerCancel={holdEnd}
+                >
+                  {!switchReady
+                    ? "Read this first…"
+                    : holding
+                      ? "Keep holding…"
+                      : `Hold to switch to ${FLAVOR_LABELS[switching.flavor] ?? switching.flavor}`}
                 </button>
               </div>
             </div>

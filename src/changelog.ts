@@ -28,6 +28,18 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.2",
+    date: "2026-11-20",
+    changes: {
+      new: [
+        "Version control warns before an install changes the flavor (e.g. Tauri → Electron 1.6.1-a), like the installer's GPUI warning",
+      ],
+      appearance: [
+        "Flavor revisions show their flavor on Tauri too, e.g. \"Electron 1.6.1-a\", and Version control offers only that flavor for them",
+      ],
+    },
+  },
+  {
     version: "1.6.1-a",
     date: "2026-11-20",
     flavor: "electron",
