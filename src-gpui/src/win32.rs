@@ -18,7 +18,7 @@ use windows::Win32::Storage::Xps::{PrintWindow, PRINT_WINDOW_FLAGS};
 use windows::Win32::UI::HiDpi::GetDpiForWindow;
 use windows::Win32::UI::Input::KeyboardAndMouse::{GetAsyncKeyState, VK_LBUTTON};
 use windows::Win32::UI::WindowsAndMessaging::{
-    GetClientRect, GetCursorPos, GetForegroundWindow, GetWindowLongPtrW, GetWindowRect, IsIconic, IsWindowVisible, PostMessageW,
+    GetClientRect, GetCursorPos, GetForegroundWindow, GetWindowLongPtrW, GetWindowRect, IsIconic, IsWindow, IsWindowVisible, PostMessageW,
     SetWindowPos, ShowWindow, GWL_EXSTYLE, GWL_STYLE, HWND_NOTOPMOST, HWND_TOPMOST, SWP_NOACTIVATE,
     SWP_NOMOVE, SWP_NOSIZE, SWP_NOZORDER, SW_HIDE, SW_MINIMIZE, SW_SHOWMINNOACTIVE, SW_SHOWNOACTIVATE, WM_CLOSE,
 };
@@ -317,4 +317,103 @@ pub fn spawn_ticker(period_ms: i32, stop: std::sync::Arc<std::sync::atomic::Atom
         }
         let _ = CloseHandle(t);
     });
+}
+
+pub fn is_window(hwnd: isize) -> bool {
+    unsafe { IsWindow(Some(h(hwnd))).as_bool() }
+}
+
+/// (bounds, work area) of the monitor nearest a point: Electron's `screen.getDisplayNearestPoint`.
+pub fn monitor_near_point(x: i32, y: i32) -> (Rect, Rect) {
+    unsafe {
+        let m = MonitorFromPoint(POINT { x, y }, MONITOR_DEFAULTTONEAREST);
+        let mut mi = MONITORINFO { cbSize: std::mem::size_of::<MONITORINFO>() as u32, ..Default::default() };
+        let _ = GetMonitorInfoW(m, &mut mi);
+        monitor_rects(&mi)
+    }
+}
+
+/// Posts a client-area mouse message to one of our own windows (tests: nothing is sent to the real input
+/// queue, the cursor does not move). `msg` is WM_RBUTTONDOWN etc., (x, y) in client pixels.
+pub fn post_mouse(hwnd: isize, msg: u32, x: i32, y: i32) {
+    use windows::Win32::Foundation::{LPARAM, WPARAM};
+    let lparam = ((y as u32 & 0xFFFF) << 16) | (x as u32 & 0xFFFF);
+    unsafe {
+        let _ = PostMessageW(Some(h(hwnd)), msg, WPARAM(0), LPARAM(lparam as isize));
+    }
+}
+
+pub const WM_RBUTTONDOWN: u32 = 0x0204;
+pub const WM_RBUTTONUP: u32 = 0x0205;
+pub const WM_LBUTTONDOWN: u32 = 0x0201;
+pub const WM_LBUTTONUP: u32 = 0x0202;
+
+/// A global hotkey on its own thread with its own message loop (GPUI owns the main thread's loop and
+/// would drop a thread-level WM_HOTKEY). `on_press` runs on that thread.
+pub struct Hotkey {
+    thread_id: u32,
+    join: Option<std::thread::JoinHandle<()>>,
+}
+
+pub const MOD_ALT: u32 = 0x1;
+pub const MOD_CONTROL: u32 = 0x2;
+pub const MOD_SHIFT: u32 = 0x4;
+
+impl Hotkey {
+    /// None when the OS refuses (another program has the combination); Electron's `globalShortcut.register`
+    /// returns false then and the app goes on without the shortcut.
+    pub fn register(mods: u32, vk: u32, on_press: impl Fn() + Send + 'static) -> Option<Hotkey> {
+        use windows::Win32::System::Threading::GetCurrentThreadId;
+        use windows::Win32::UI::Input::KeyboardAndMouse::{RegisterHotKey, UnregisterHotKey, HOT_KEY_MODIFIERS};
+        use windows::Win32::UI::WindowsAndMessaging::{GetMessageW, MSG, WM_HOTKEY};
+        let (tx, rx) = std::sync::mpsc::channel::<Option<u32>>();
+        let join = std::thread::spawn(move || unsafe {
+            let ok = RegisterHotKey(None, 1, HOT_KEY_MODIFIERS(mods), vk).is_ok();
+            let _ = tx.send(if ok { Some(GetCurrentThreadId()) } else { None });
+            if !ok {
+                return;
+            }
+            let mut msg = MSG::default();
+            while GetMessageW(&mut msg, None, 0, 0).as_bool() {
+                if msg.message == WM_HOTKEY {
+                    on_press();
+                }
+            }
+            let _ = UnregisterHotKey(None, 1);
+        });
+        match rx.recv().ok().flatten() {
+            Some(thread_id) => Some(Hotkey { thread_id, join: Some(join) }),
+            None => {
+                let _ = join.join();
+                None
+            }
+        }
+    }
+
+    /// Posts a WM_HOTKEY to the hotkey thread itself (tests: the real keys are never pressed).
+    pub fn post_press(&self) {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{PostThreadMessageW, WM_HOTKEY};
+        unsafe {
+            let _ = PostThreadMessageW(self.thread_id, WM_HOTKEY, WPARAM(1), LPARAM(0));
+        }
+    }
+
+    /// Unregisters and waits for the thread to be done (`globalShortcut.unregisterAll`).
+    pub fn unregister(mut self) {
+        use windows::Win32::Foundation::{LPARAM, WPARAM};
+        use windows::Win32::UI::WindowsAndMessaging::{PostThreadMessageW, WM_QUIT};
+        unsafe {
+            let _ = PostThreadMessageW(self.thread_id, WM_QUIT, WPARAM(0), LPARAM(0));
+        }
+        if let Some(j) = self.join.take() {
+            let _ = j.join();
+        }
+    }
+}
+
+/// Whether the window has a menu bar (`GetMenu`).
+pub fn has_menu(hwnd: isize) -> bool {
+    use windows::Win32::UI::WindowsAndMessaging::GetMenu;
+    unsafe { !GetMenu(h(hwnd)).is_invalid() }
 }

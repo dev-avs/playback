@@ -1,10 +1,14 @@
 //! Slice 3a: the widget window shell and the proofs that run against it (`--selftest-shell`,
 //! `--frame-log`, `--snapshot`). All of them open the widget off-screen (`widget::TEST_ORIGIN`).
 
+pub mod cards;
 pub mod framelog;
+pub mod placement;
 pub mod selftest;
+pub mod selftest_cards;
 pub mod snapshot;
 pub mod widget;
+pub mod windows;
 
 use gpui::{AsyncApp, Context, WindowHandle};
 use std::time::Duration;

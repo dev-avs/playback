@@ -97,6 +97,10 @@ pub struct Trace {
     pub drag_ticks: u32,
     pub second_instance: u32,
     pub focus_calls: u32,
+    /// Display-scale replays (electron/main.cjs:1509).
+    pub scale_replays: u32,
+    /// Ctrl+Alt+F presses forwarded to the widget (electron/main.cjs:1792).
+    pub fullscreen_toggles: u32,
 }
 
 #[derive(Default)]
@@ -125,11 +129,15 @@ pub struct Shell {
     pub display: Display,
     pub hovered: Cell<bool>,
     pub resize_mode: Cell<ResizeMode>,
+    /// A display scale a test injects (96 = 100 %); the OS value otherwise.
+    pub fake_dpi: Cell<Option<u32>>,
+    /// The scale last seen by `poll_scale` (electron/main.cjs:1509).
+    last_dpi: Cell<u32>,
     st: RefCell<State>,
 }
 
 impl Shell {
-    fn new(hwnd: isize, test: bool, mode: ResizeMode) -> Rc<Self> {
+    pub(crate) fn new(hwnd: isize, test: bool, mode: ResizeMode) -> Rc<Self> {
         let st = State { widget_outer_w: WIDGET_W as i32, ..Default::default() };
         Rc::new(Self {
             hwnd,
@@ -138,6 +146,8 @@ impl Shell {
             display: Display::default(),
             hovered: Cell::new(false),
             resize_mode: Cell::new(mode),
+            fake_dpi: Cell::new(None),
+            last_dpi: Cell::new(win32::dpi(hwnd).max(1)),
             st: RefCell::new(st),
         })
     }
@@ -156,10 +166,21 @@ impl Shell {
         (s.wanted_height, s.wanted_hovered)
     }
 
-    pub fn scale(&self) -> f32 {
-        win32::dpi(self.hwnd).max(1) as f32 / 96.0
+    fn dpi_now(&self) -> u32 {
+        self.fake_dpi.get().unwrap_or_else(|| win32::dpi(self.hwnd)).max(1)
     }
-    fn to_px(&self, dip: i32) -> i32 {
+    pub fn scale(&self) -> f32 {
+        self.dpi_now() as f32 / 96.0
+    }
+    /// electron/main.cjs:251 `widgetOuterW`, in DIPs.
+    pub fn widget_outer_w(&self) -> i32 {
+        self.st.borrow().widget_outer_w
+    }
+    /// The size a window was first opened at, in DIPs (what `set_window_size` records afterwards).
+    pub fn set_initial_size(&self, width: i32, height: i32) {
+        self.st.borrow_mut().window_size = Some((width, height));
+    }
+    pub(crate) fn to_px(&self, dip: i32) -> i32 {
         (dip as f32 * self.scale()).ceil() as i32
     }
     /// win.getSize(), in DIPs.
@@ -244,6 +265,25 @@ impl Shell {
         if let Some(h) = h {
             self.st.borrow_mut().trace.replays += 1;
             self.apply_window_height(cx, h, hovered);
+        }
+    }
+
+    // electron/main.cjs:1509 (display-metrics-changed, scaleFactor): the window goes back to the size it
+    // last asked for; the fullscreen widget is skipped (electron/main.cjs:1513). The OS only tells a
+    // window's scale through its DPI, so it is compared on every poll tick.
+    pub fn poll_scale(self: &Rc<Self>, cx: &App) {
+        let now = self.dpi_now();
+        if now == self.last_dpi.get() {
+            return;
+        }
+        self.last_dpi.set(now);
+        if self.is_fullscreen() {
+            return;
+        }
+        let size = self.st.borrow().window_size;
+        if let Some((w, h)) = size {
+            self.st.borrow_mut().trace.scale_replays += 1;
+            self.set_window_size(cx, w, h);
         }
     }
 
@@ -451,7 +491,7 @@ pub struct Card {
     start: Option<Instant>,
 }
 impl Card {
-    fn new(h: f32) -> Self {
+    pub(crate) fn new(h: f32) -> Self {
         Self { from: h, to: h, start: None }
     }
     /// The height the card is heading for (its final laid-out height).
@@ -547,6 +587,32 @@ impl Widget {
         }
     }
 
+    // electron/main.cjs:59 (second-instance, the widget branch): restore if minimized, show, focus
+    pub fn on_second_instance(&mut self, window: &mut Window) {
+        let shell = self.shell.clone();
+        let hwnd = shell.hwnd;
+        let mut s = shell.st.borrow_mut();
+        s.trace.second_instance += 1;
+        if win32::is_minimized(hwnd) {
+            win32::show_no_activate(hwnd); // restore()
+        }
+        if !win32::is_visible(hwnd) {
+            win32::show_no_activate(hwnd); // show()
+        }
+        if !shell.test {
+            window.activate_window(); // focus()
+        }
+        s.trace.focus_calls += 1;
+    }
+
+    // electron/main.cjs:1792: Ctrl+Alt+F sends fullscreen:toggle to the widget, which decides (src/App.tsx:918);
+    // the placeholder widget decides by toggling its fullscreen state
+    pub fn on_fullscreen_toggle(&mut self, cx: &mut Context<Self>) {
+        let on = !self.shell.is_fullscreen();
+        self.shell.st.borrow_mut().trace.fullscreen_toggles += 1;
+        self.shell.set_fullscreen(cx, on);
+    }
+
     /// One tick of the poll loop: second launch, restore-from-minimize, cursor hover, drag release.
     fn poll(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let shell = self.shell.clone();
@@ -561,18 +627,7 @@ impl Widget {
             }
         }
         for _ in 0..woke {
-            let mut s = shell.st.borrow_mut();
-            s.trace.second_instance += 1;
-            if win32::is_minimized(hwnd) {
-                win32::show_no_activate(hwnd); // restore()
-            }
-            if !win32::is_visible(hwnd) {
-                win32::show_no_activate(hwnd); // show()
-            }
-            if !shell.test {
-                window.activate_window(); // focus()
-            }
-            s.trace.focus_calls += 1;
+            self.on_second_instance(window);
         }
 
         // electron/main.cjs:1060 (restore): re-apply the last height request
@@ -581,6 +636,8 @@ impl Widget {
             shell.replay_wanted_height(cx);
         }
         self.was_iconic = iconic;
+
+        shell.poll_scale(cx);
 
         // port.md 7.6: GPUI misses the leave event when the cursor leaves a transparent window quickly,
         // so hover comes from the cursor position against the window's drawn rect
