@@ -1,11 +1,26 @@
 import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
 import { AppMark } from "./Changelog.tsx";
-import { CHANGE_KINDS, compareVersions, progressText, type ChangeKind } from "../changelog";
+import { CHANGE_KINDS, FLAVORS, compareVersions, progressText, revisionFlavor, versionLabel, type ChangeKind } from "../changelog";
 import { DEFAULTS, KEYS, usePersisted } from "../settings";
 import type { Release, UpdateState } from "../types/player";
 
-const FLAVOR_LABELS: Record<string, string> = { tauri: "Tauri", electron: "Electron", gpui: "GPUI" };
+const FLAVOR_LABELS: Record<string, string> = FLAVORS;
+/** this build's flavor (the same page runs in both shells) */
+const CURRENT_FLAVOR = "__TAURI_INTERNALS__" in window ? "tauri" : "electron";
+
+/**
+ * The flavors Version control offers for a release. A flavor revision
+ * (1.6.1-a) is one flavor's build, so only that one: the changelog names it,
+ * or the release carries only its files. 1.6.0-a also carried copies of the
+ * other flavors' 1.6.0 files, which are not offered.
+ */
+function offered(r: Release): string[] {
+  const all = r.flavors ?? [];
+  if (!r.version.includes("-")) return all;
+  const only = revisionFlavor(r.version) ?? (all.length === 1 ? all[0] : undefined);
+  return only ? all.filter((f) => f === only) : all;
+}
 
 function snapshotSettingsJson(): string {
   const out: Record<string, unknown> = {};
@@ -209,6 +224,9 @@ export default function Versions() {
                 const total = all.reduce((n, s) => n + s.points.length, 0);
                 const isOpen = expanded === r.version;
                 const more = total > NOTES_PREVIEW || (all[0]?.points[0]?.length ?? 0) > PREVIEW_CHARS;
+                const flavors = offered(r);
+                const single = flavors.length === 1 ? flavors[0] : undefined;
+                const label = r.version.includes("-") && single ? versionLabel(r.version, single as keyof typeof FLAVORS) : r.version;
                 return (
                   <section
                     key={r.version}
@@ -217,15 +235,15 @@ export default function Versions() {
                       .join(" ")}
                   >
                     <div className="cl-entry-head">
-                      <span className="cl-version">{r.version}</span>
+                      <span className="cl-version">{label}</span>
                       <span className="cl-date">
                         {new Date(r.date).toLocaleDateString([], { month: "short", day: "numeric" })}
                         {cmp === 0 && " · installed"}
                         {r.legacy && " · no updates"}
                       </span>
-                      {r.flavors && r.flavors.length > 1 ? (
+                      {flavors.length > 1 ? (
                         <div style={{ display: "flex", gap: 4, marginLeft: "auto" }}>
-                          {r.flavors.map((fl) => (
+                          {flavors.map((fl) => (
                             <button
                               key={fl}
                               type="button"
@@ -238,13 +256,23 @@ export default function Versions() {
                             </button>
                           ))}
                         </div>
+                      ) : single && single !== CURRENT_FLAVOR ? (
+                        <button
+                          type="button"
+                          className="cl-button cl-button--quiet vc-go"
+                          disabled={!canInstall}
+                          onClick={() => install(r, single)}
+                          title={`Install ${r.version} (${FLAVOR_LABELS[single] ?? single}) — keeps all settings`}
+                        >
+                          {FLAVOR_LABELS[single] ?? single}
+                        </button>
                       ) : (
                         cmp !== 0 && (
                           <button
                             type="button"
                             className="cl-button cl-button--quiet vc-go"
                             disabled={!canInstall}
-                            onClick={() => install(r)}
+                            onClick={() => install(r, single)}
                           >
                             {cmp > 0 ? "Update" : "Revert"}
                           </button>

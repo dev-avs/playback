@@ -116,6 +116,30 @@ async function install() {
  */
 // The full installer of each legacy release, from the last listing.
 const legacyInstallers = new Map();
+// "<version> <flavor>" -> { stub, pkg } download URLs, from the last listing
+const flavorUrls = new Map();
+
+/**
+ * The flavors a release carries, as crates/playback-core/src/updates/feed.rs
+ * reads them: `playback-<flavor>-setup-<v>.exe` + `playback-<flavor>-<v>-x64.nsis.7z`,
+ * and the default `playback-setup-<v>.exe` pair, Tauri when its package is under
+ * 25 MB (from 1.5.9), else Electron.
+ */
+function flavorsOf(version, assets) {
+  const url = (name) => assets.find((a) => a.name === name);
+  const flavors = [];
+  const add = (id, stub, pkg) => {
+    if (!stub || !pkg) return;
+    if (!flavors.includes(id)) flavors.push(id);
+    flavorUrls.set(`${version} ${id}`, { stub: stub.browser_download_url, pkg: pkg.browser_download_url });
+  };
+  const pkg = url(`playback-${version}-x64.nsis.7z`);
+  if (pkg) add(pkg.size > 0 && pkg.size < 25 * 1024 * 1024 ? "tauri" : "electron", url(`playback-setup-${version}.exe`), pkg);
+  for (const id of ["tauri", "electron", "gpui"]) {
+    add(id, url(`playback-${id}-setup-${version}.exe`), url(`playback-${id}-${version}-x64.nsis.7z`));
+  }
+  return flavors;
+}
 
 async function releases() {
   const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/releases?per_page=100`, {
@@ -130,7 +154,8 @@ async function releases() {
     const installer = r.assets?.find((a) => a.name === `player-setup-${version}.exe`);
     if (legacy && !installer) continue; // nothing to install
     if (legacy) legacyInstallers.set(version, installer.browser_download_url);
-    list.push({ version, date: r.published_at, notes: r.body ?? "", legacy });
+    const flavors = legacy ? [] : flavorsOf(version, r.assets ?? []);
+    list.push({ version, date: r.published_at, notes: r.body ?? "", legacy, ...(flavors.length && { flavors }) });
   }
   return list;
 }
@@ -156,15 +181,70 @@ async function installLegacy(version, url) {
   app.quit();
 }
 
+/** Downloads `url` to `file`, counting its bytes on top of `base`. */
+async function download(url, file, base) {
+  const res = await fetch(url);
+  if (!res.ok || !res.body) throw new Error(`GitHub answered ${res.status}`);
+  const size = Number(res.headers.get("content-length")) || 0;
+  set({ total: (state.total ?? base) + size });
+  let got = 0;
+  const body = Readable.fromWeb(res.body);
+  body.on("data", (chunk) => {
+    got += chunk.length;
+    set({ downloaded: base + got });
+  });
+  await pipeline(body, fs.createWriteStream(file));
+  return base + got;
+}
+
 /**
- * Installs one release, newer or older than this one, and restarts into it.
- * Points the updater at that release's own latest.yml for the one download,
- * and back at GitHub's newest if it fails.
+ * One flavor of a release (any flavor, this one included), as the Tauri build
+ * installs it: the release's web installer stub and package downloaded, the
+ * stub run silently with the package handed to it, and this app quit so it can
+ * be replaced. Needs no app-update.yml, so it works on a build missing it
+ * (Electron 1.6.1).
  */
-async function bump(version) {
+async function installFlavor(version, flavor, { stub, pkg }) {
+  const dir = path.join(os.tmpdir(), "playback-update", `${version}-${flavor}`);
+  fs.mkdirSync(dir, { recursive: true });
+  const stubFile = path.join(dir, `playback-${flavor}-setup-${version}.exe`);
+  const pkgFile = path.join(dir, `playback-${flavor}-${version}-x64.nsis.7z`);
+  const base = await download(stub, stubFile, 0);
+  await download(pkg, pkgFile, base);
+  spawn(stubFile, ["--updated", "/S", "--force-run", `--package-file=${pkgFile}`], {
+    detached: true,
+    stdio: "ignore",
+  }).unref();
+  app.quit();
+}
+
+/**
+ * Installs one release, newer or older than this one (or another flavor of
+ * it), and restarts into it. With a flavor from the listing, its stub and
+ * package; otherwise points the updater at that release's own latest.yml for
+ * the one download, and back at GitHub's newest if it fails. `settingsJson`
+ * is kept in gpui-settings.json, as the Tauri build does, for a flavor switch.
+ */
+async function bump(version, flavor, settingsJson) {
   if (state.status === "dev" || state.status === "checking" || state.status === "downloading") return state;
-  if (version === app.getVersion()) return state;
-  startDownload(version);
+  const urls = flavor ? flavorUrls.get(`${version} ${flavor}`) : undefined;
+  if (version === app.getVersion() && (!urls || flavor === "electron")) return state;
+  startDownload(flavor ? `${version} (${flavor})` : version);
+  if (settingsJson) {
+    try {
+      fs.writeFileSync(path.join(app.getPath("userData"), "gpui-settings.json"), settingsJson);
+    } catch (e) {
+      console.error("[update] could not keep the settings:", e.message);
+    }
+  }
+  if (urls) {
+    try {
+      await installFlavor(version, flavor, urls);
+    } catch (e) {
+      set({ status: "error", error: e.message });
+    }
+    return state;
+  }
   const legacy = legacyInstallers.get(version);
   if (legacy) {
     try {

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import "./Changelog.css";
-import { CHANGELOG, CHANGE_KINDS, compareVersions, type ChangeKind, type ChangelogEntry } from "../changelog";
+import { CHANGELOG, CHANGE_KINDS, compareVersions, versionLabel, type ChangeKind, type ChangelogEntry } from "../changelog";
 import { KEYS, usePersisted } from "../settings";
 
 // keep in sync with STAGE_PAD in electron/main.cjs
@@ -31,7 +31,7 @@ function Entries({ entries, heads }: { entries: ChangelogEntry[]; heads: boolean
         <section key={e.version} className="cl-entry">
           {heads && (
             <div className="cl-entry-head">
-              <span className="cl-version">{e.version}</span>
+              <span className="cl-version">{versionLabel(e.version, e.flavor)}</span>
               <span className="cl-date">{fmtDate(e.date)}</span>
             </div>
           )}
@@ -163,7 +163,7 @@ export default function Changelog() {
         <div className="cl-heading" style={stagger(0)}>
           <p className="cl-brand">Playback</p>
           <h2 className="cl-title" id="cl-title">
-            {past ? "Past changelogs" : from ? `Updated to ${latest.version}` : "What's new"}
+            {past ? "Past changelogs" : from ? `Updated to ${versionLabel(latest.version, latest.flavor)}` : "What's new"}
           </h2>
         </div>
         <p className="cl-text" style={stagger(1)}>
@@ -175,7 +175,7 @@ export default function Changelog() {
             </>
           ) : (
             <>
-              <span className="cl-pill">{latest.version}</span> · {fmtDate(latest.date)}
+              <span className="cl-pill">{versionLabel(latest.version, latest.flavor)}</span> · {fmtDate(latest.date)}
             </>
           )}
         </p>

@@ -1574,7 +1574,9 @@ app.whenReady().then(() => {
       (e) => ({ ok: false, error: e.message }),
     ),
   );
-  ipcMain.handle("update:bump", (_e, version) => updater.bump(String(version)));
+  ipcMain.handle("update:bump", (_e, version, flavor, settingsJson) =>
+    updater.bump(String(version), flavor ? String(flavor) : undefined, settingsJson ? String(settingsJson) : undefined),
+  );
   ipcMain.handle("versions:open", () => openVersions());
 
   ipcMain.handle("player:command", (_e, cmd) => sendCommand(cmd));

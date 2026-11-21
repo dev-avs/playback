@@ -14,13 +14,35 @@ export const CHANGE_KINDS = {
 } as const;
 export type ChangeKind = keyof typeof CHANGE_KINDS;
 
+/** Playback's builds. A flavor revision (1.6.0-a) is one flavor's build only. */
+export const FLAVORS = { tauri: "Tauri", electron: "Electron", gpui: "GPUI" } as const;
+export type Flavor = keyof typeof FLAVORS;
+
 export interface ChangelogEntry {
   version: string;
   date: string;
+  /** set on a flavor revision: the one flavor it was built for */
+  flavor?: Flavor;
   changes: Partial<Record<ChangeKind, string[]>>;
 }
 
 export const CHANGELOG: ChangelogEntry[] = [
+  {
+    version: "1.6.1-a",
+    date: "2026-11-20",
+    flavor: "electron",
+    changes: {
+      new: [
+        "Version control on Electron lets you pick the flavor (Tauri, Electron, GPUI), like on Tauri",
+      ],
+      appearance: [
+        "Flavor revisions are labelled with their flavor, e.g. \"Electron 1.6.1-a\", and Version control offers only that flavor for them",
+      ],
+      fixes: [
+        "Fixed Version control and updates failing on Electron 1.6.1 with \"ENOENT … app-update.yml\"",
+      ],
+    },
+  },
   {
     version: "1.6.1",
     date: "2026-11-20",
@@ -36,6 +58,7 @@ export const CHANGELOG: ChangelogEntry[] = [
   {
     version: "1.6.0-a",
     date: "2026-11-20",
+    flavor: "tauri",
     changes: {
       new: [
         "Added Version info to Settings → App: version, flavor, runtime and Windows version (also from the version tag in the footer)",
@@ -589,11 +612,20 @@ export const CHANGELOG: ChangelogEntry[] = [
   },
 ];
 
-/** -1, 0 or 1, comparing dotted version numbers part by part. */
 /** How far a download is: a percent when its size is known, else the MB so far. */
 export const progressText = (s: UpdateState) =>
   s.total ? `${Math.round((s.downloaded / s.total) * 100)}%` : `${(s.downloaded / 1048576).toFixed(1)} MB`;
 
+/** The flavor a revision (1.6.0-a) was built for, when the changelog knows it. */
+export const revisionFlavor = (version: string): Flavor | undefined =>
+  CHANGELOG.find((e) => e.version === version)?.flavor;
+
+/** A version as shown: a flavor revision with its flavor, "Electron 1.6.1-a". */
+export function versionLabel(version: string, flavor = revisionFlavor(version)): string {
+  return flavor ? `${FLAVORS[flavor]} ${version}` : version;
+}
+
+/** -1, 0 or 1, comparing dotted version numbers part by part. */
 export function compareVersions(a: string, b: string): number {
   // a flavor revision after a dash comes after its version: 1.6.0 < 1.6.0-a < 1.6.0-b < 1.6.1
   const [na, ra = ""] = a.split("-");
