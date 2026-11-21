@@ -95,6 +95,24 @@ One slice per helper (~12), each with a tiny Electron test page and a passing di
 keyframes, scale emulation (0.85 / 0.94 / 1.1), rounded-clip helper, box-shadow / hairline, filter bake,
 text-shadow ring, gradient-text highlight (7.1), mask fade, radial bake, max-height clip, hover.
 
+### Slice A: harness + motion helpers (done 2026-11-20)
+Helpers in `src-gpui/src/css/`: `easing` (Chromium `gfx::CubicBezier`), `tween` (retarget from the current
+value, reversing shortening factor on output progress, `active()`), `keyframes` (Web Animations timing,
+per-stop easing, fill, alternate, delay), `clip_height` (max-height), `hover` (GPUI hover + cursor poll),
+`translate` (added: taffy rounds relative offsets to whole px, Chromium does not snap transforms, so the
+offset goes through `Window::with_element_offset`).
+- Electron: `node scripts/primitives/run.mjs` (→ `parity/out/primitives/electron/`), `--golden` writes
+  `src-gpui/src/css/golden/*.json`, `--stability` renders twice and compares bytes.
+- GPUI: `node scripts/primitives/run.mjs --gpui` (`Playback.exe --primitive <case> <dir>` per case →
+  `parity/out/primitives/gpui/`), `--gpui --stability` likewise.
+- Diff: `node scripts/primitives/diff.mjs` (parity-diff thresholds with `edges: true`, port.md §4; diff
+  images in `parity/out/primitives/diff/`).
+
+Results: `cargo test` css 9/9 (goldens), both sides byte-stable (178 PNGs each), 10/10 cases pass with
+no untolerated pixel. Tolerated edge pixels: corners ≤ 31/255 (tween-*, clip-*, hover-next-up,
+kf-bar-pulse), translated edges ≤ 20/255 (kf-next-popup-in) and ≤ 52/255 (kf-vol-pill-in);
+kf-empty-pulse and kf-fs-in max delta 1. `parity-diff.mjs --self-test` 19/19.
+
 ## Phases 5–7: screens
 Slices of 20–40 ledger rows, in port.md §5 order. Estimate: widget ~15 slices, settings ~15, other
 windows ~6. Each slice: worker → review by a different worker (rerun diffs + 5 spot checks) → rows

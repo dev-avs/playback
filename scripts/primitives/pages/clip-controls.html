@@ -1,0 +1,17 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget (background, radius, padding 10px 10px 8px, column) */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; padding: 10px 10px 8px; width: 200px;
+  display: flex; flex-direction: column; }
+/* harness stand-in above the controls */
+.head { height: 40px; background: rgba(255, 255, 255, 0.3); flex-shrink: 0; }
+/* src/App.css:892-910 .controls and .widget.hovered .controls (overflow turns visible at once on hover) */
+.controls { display: flex; align-items: center; max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height 200ms ease, opacity 160ms ease, margin-top 200ms ease; margin-top: 0; flex-shrink: 0; }
+.widget.hovered .controls { max-height: 32px; opacity: 1; margin-top: 5px; overflow: visible; }
+/* harness content: one 28px row laid out at full size */
+.btns { width: 100%; height: 28px; background: rgba(255, 255, 255, 0.85); flex-shrink: 0; }
+</style></head><body><div class="stage"><div class="widget"><div class="head"></div>
+<div class="controls"><div class="btns"></div></div></div></div></body></html>

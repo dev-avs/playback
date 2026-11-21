@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* harness stand-in for the .np-empty-title text (its colour #fff) */
+.np-empty-title { width: 160px; height: 16px; background: #fff; }
+/* src/App.css:2260-2267 */
+.widget-empty.connecting .np-empty-title { animation: empty-pulse 1.4s ease-in-out infinite alternate; }
+@keyframes empty-pulse {
+    from { opacity: 1; }
+    to   { opacity: 0.4; }
+}
+</style></head><body><div class="stage"><div class="widget-empty"><div class="np-empty-title"></div></div></div></body></html>

@@ -1,7 +1,7 @@
 // Pixel diff for the parity harness (port.md §4.4, plan.md Decisions #1).
 //
-//   node scripts/parity-diff.mjs <a.png> <b.png> [--out diff.png] [--mask x,y,w,h[,tol] ...] [--aa] [--text x,y,w,h ...]
-//   node scripts/parity-diff.mjs <dirA> <dirB> [--out diffDir] [--aa]
+//   node scripts/parity-diff.mjs <a.png> <b.png> [--out diff.png] [--mask x,y,w,h[,tol] ...] [--aa] [--edges] [--text x,y,w,h ...]
+//   node scripts/parity-diff.mjs <dirA> <dirB> [--out diffDir] [--aa] [--edges]
 //   node scripts/parity-diff.mjs --self-test [some-capture.png]
 //
 // Directory mode compares every .png under dirA with the same relative path under dirB (scene
@@ -23,6 +23,17 @@
 // become soft 16 / hard 40. Glyph-edge noise averages out below that; a 1 px layout shift, a
 // weight change (strokes move ~1 px) or a colour change leaves differences well above it and
 // still fails. `--self-test` checks exactly that.
+//
+// --edges (shape antialiasing, GPUI's quad shader vs Skia; user decision 2026-11-20): GPUI covers a
+// rounded corner pixel by `saturate(0.5 - sdf)` where Skia uses its area (a 3px circle's corner pixel:
+// 59% vs 44%), and paints straight edges unantialiased, snapped at pixel centres, where Skia
+// antialiases a fractional edge (translate). Measured on the primitive cases: up to 31/255 on
+// corners, 52/255 on a translated edge. A pixel over the soft / hard limit is tolerated only if it is a
+// shape-edge pixel in BOTH images (its 3x3 neighbourhood spans more than EDGE_CONTRAST in some
+// premultiplied channel) and its delta is at most EDGE_MAX. A shifted, resized or re-rounded solid
+// shape changes edge pixels by close to its full alpha (> EDGE_MAX), and a wrong fill changes
+// interior pixels, which are not edges: both still fail (`--self-test`). Tolerated pixels are blue in
+// the diff image and counted as `edgePixels`.
 
 import fs from "node:fs";
 import path from "node:path";
@@ -35,6 +46,8 @@ const HARD = 24;
 const MAX_SOFT_FRACTION = 0.001;
 const AA_SOFT = 16;
 const AA_HARD = 40;
+const EDGE_CONTRAST = 16;
+const EDGE_MAX = 64;
 
 const readPng = (f) => PNG.sync.read(fs.readFileSync(f));
 
@@ -72,9 +85,28 @@ function blur3(src, w, h) {
   return out;
 }
 
+/** True if the 3x3 neighbourhood of (x, y) spans more than EDGE_CONTRAST in some premultiplied channel. */
+function isEdge(p, w, h, x, y) {
+  for (let c = 0; c < 4; c++) {
+    let lo = Infinity;
+    let hi = -Infinity;
+    for (let dy = -1; dy <= 1; dy++)
+      for (let dx = -1; dx <= 1; dx++) {
+        const xx = x + dx;
+        const yy = y + dy;
+        if (xx < 0 || yy < 0 || xx >= w || yy >= h) continue;
+        const v = p[(yy * w + xx) * 4 + c];
+        if (v < lo) lo = v;
+        if (v > hi) hi = v;
+      }
+    if (hi - lo > EDGE_CONTRAST) return true;
+  }
+  return false;
+}
+
 const inBox = (b, x, y) => x >= b.x && y >= b.y && x < b.x + b.w && y < b.y + b.h;
 
-/** Compare two decoded PNGs. opts: { masks:[{x,y,w,h,tol}], aa:boolean, text:[{x,y,w,h}], diffOut:path } */
+/** Compare two decoded PNGs. opts: { masks:[{x,y,w,h,tol}], aa:boolean, edges:boolean, text:[{x,y,w,h}], diffOut:path } */
 export function compare(a, b, opts = {}) {
   if (a.width !== b.width || a.height !== b.height)
     return { pass: false, reason: `size ${a.width}x${a.height} vs ${b.width}x${b.height}` };
@@ -92,6 +124,8 @@ export function compare(a, b, opts = {}) {
   let soft = 0;
   let hard = 0;
   let max = 0;
+  let edgePixels = 0;
+  let edgeMax = 0;
   const diff = new PNG({ width: w, height: h });
   pixelmatch(a.data, b.data, diff.data, w, h, { threshold: 0.1, includeAA: true });
   for (let y = 0; y < h; y++)
@@ -110,6 +144,15 @@ export function compare(a, b, opts = {}) {
         hardT = Math.max(hardT, tol);
       }
       if (d > max) max = d;
+      if (opts.edges && d > softT && d <= EDGE_MAX && isEdge(A, w, h, x, y) && isEdge(B, w, h, x, y)) {
+        edgePixels++;
+        if (d > edgeMax) edgeMax = d;
+        diff.data[i] = 0;
+        diff.data[i + 1] = 120;
+        diff.data[i + 2] = 255;
+        diff.data[i + 3] = 255;
+        continue;
+      }
       const isHard = d > hardT;
       const isSoft = d > softT;
       if (isHard) hard++;
@@ -127,7 +170,9 @@ export function compare(a, b, opts = {}) {
     fs.mkdirSync(path.dirname(path.resolve(opts.diffOut)), { recursive: true });
     fs.writeFileSync(opts.diffOut, PNG.sync.write(diff));
   }
-  return { pass, size: [w, h], softPixels: soft, softPct: +softPct.toFixed(4), hardPixels: hard, maxDelta: +max.toFixed(1) };
+  const res = { pass, size: [w, h], softPixels: soft, softPct: +softPct.toFixed(4), hardPixels: hard, maxDelta: +max.toFixed(1) };
+  if (opts.edges) Object.assign(res, { edgePixels, edgeMaxDelta: +edgeMax.toFixed(1) });
+  return res;
 }
 
 const parseBox = (s) => {
@@ -220,7 +265,52 @@ function selfTest(srcFile) {
   for (let y = 10; y < 30; y++) for (let x = 10; x < 60; x++) for (let c = 0; c < 3; c++) maskTest.data[(y * w + x) * 4 + c] = Math.max(0, maskTest.data[(y * w + x) * 4 + c] - 18);
   check("18/255 change inside mask", compare(src, maskTest, { masks: [{ x: 10, y: 10, w: 50, h: 20, tol: 20 }] }).pass, true);
   check("18/255 change outside mask", compare(src, maskTest, {}).pass, false);
+  shapeChecks(check);
   return { pass: results.every((r) => r.pass), edgePixels: edges, size: [w, h], results };
+}
+
+// --edges checks on synthetic shapes. "skia" coverage = the pixel's area inside the rounded rect
+// (16x16 supersampled); "gpui" = gpui 0.2.2's quad_fragment: corner pixels saturate(0.5 - sdf),
+// everything else in or out by the pixel centre.
+function shape(W, H, { x, y, w, h, r, rgba: [R, G, B, A], mode }) {
+  const img = new PNG({ width: W, height: H });
+  const sdf = (px, py) => {
+    const qx = Math.abs(px - (x + w / 2)) - (w / 2 - r);
+    const qy = Math.abs(py - (y + h / 2)) - (h / 2 - r);
+    return { corner: qx > 0 && qy > 0, d: Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - r };
+  };
+  for (let py = 0; py < H; py++)
+    for (let px = 0; px < W; px++) {
+      let cov;
+      if (mode === "skia") {
+        let n = 0;
+        for (let sy = 0; sy < 16; sy++) for (let sx = 0; sx < 16; sx++) if (sdf(px + (sx + 0.5) / 16, py + (sy + 0.5) / 16).d < 0) n++;
+        cov = n / 256;
+      } else {
+        const s = sdf(px + 0.5, py + 0.5);
+        cov = s.corner ? Math.min(1, Math.max(0, 0.5 - s.d)) : s.d < 0 ? 1 : 0;
+      }
+      const i = (py * W + px) * 4;
+      if (cov > 0) [img.data[i], img.data[i + 1], img.data[i + 2], img.data[i + 3]] = [R, G, B, Math.round(A * cov * 255)];
+    }
+  return img;
+}
+
+function shapeChecks(check) {
+  const glass = [20, 20, 22, 0.72]; // src/App.css:115 .widget background
+  const card = { x: 22, y: 22, w: 200, h: 80, r: 13, rgba: glass };
+  const S = (o, mode) => shape(244, 124, { ...card, ...o, mode });
+  const pass = (a, b) => compare(a, b, { edges: true }).pass;
+  const bar = (mode) => shape(67, 58, { x: 22, y: 33, w: 3, h: 3, r: 1.5, rgba: [255, 255, 255, 0.85], mode });
+  check("3px circle AA strict (needs --edges)", compare(bar("skia"), bar("gpui"), {}).pass, false);
+  check("fractional edge strict (needs --edges)", compare(S({ y: 22.3, r: 8 }, "skia"), S({ y: 22.3, r: 8 }, "gpui"), {}).pass, false);
+  check("corner AA r13 edges", pass(S({}, "skia"), S({}, "gpui")), true);
+  check("3px circle AA edges", pass(bar("skia"), bar("gpui")), true);
+  check("fractional edge (y + 0.3) edges", pass(S({ y: 22.3, r: 8 }, "skia"), S({ y: 22.3, r: 8 }, "gpui")), true);
+  check("1px shift edges", pass(S({}, "skia"), S({ x: 23 }, "gpui")), false);
+  check("radius 6 vs 8 edges", pass(S({ r: 8 }, "skia"), S({ r: 6 }, "gpui")), false);
+  check("colour fill edges", pass(S({}, "skia"), S({ rgba: [56, 34, 22, 0.72] }, "gpui")), false);
+  check("2px size edges", pass(S({}, "skia"), S({ w: 202 }, "gpui")), false);
 }
 
 // ── CLI ──
@@ -247,7 +337,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     process.exit(2);
   }
   const [a, b] = positional;
-  const opts = { aa: argv.includes("--aa"), masks: opt("mask").map(parseBox), text: opt("text").length ? opt("text").map(parseBox) : undefined, out: opt("out")[0], all: argv.includes("--all") };
+  const opts = { aa: argv.includes("--aa"), edges: argv.includes("--edges"), masks: opt("mask").map(parseBox), text: opt("text").length ? opt("text").map(parseBox) : undefined, out: opt("out")[0], all: argv.includes("--all") };
   let res;
   if (fs.statSync(a).isDirectory()) res = compareDirs(a, b, opts);
   else res = compare(readPng(a), readPng(b), { ...opts, diffOut: opts.out });

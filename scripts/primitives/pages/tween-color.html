@@ -1,0 +1,10 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:115-131 .widget: background rgba(var(--tint), var(--bg-a)), transition background 400ms ease */
+.widget { background: rgba(20, 20, 22, 0.72); border-radius: 13px; width: 200px; height: 80px;
+  transition: background 400ms ease, opacity 300ms ease; }
+/* src/settings.ts:259 GLASS_TINTS.warm = 56, 34, 22 */
+.widget.warm { background: rgba(56, 34, 22, 0.72); }
+</style></head><body><div class="stage"><div class="widget hovered"></div></div></body></html>

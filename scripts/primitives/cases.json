@@ -1,0 +1,25 @@
+{
+  "_doc": "Primitive cases for the CSS layer (port.md 2.4, parity/plan.md Phase 4). Read by scripts/primitives/main.cjs (Electron, pages/<name>.html) and compiled into the GPUI build (src-gpui/src/primitives.rs, include_str!). size = window size in DIPs; frames = motion frames every 33.33 ms of virtual time after t=0 (0 = one still); timeline ops run at virtual time t (ms, t <= frame time) before that frame's capture. Ops: class (selector, add|remove), move (x, y window coords: the injected cursor), out (cursor leaves the window).",
+  "cases": [
+    { "name": "tween-reverse", "size": [244, 124], "frames": 14,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "remove": "hovered" }, { "t": 100, "op": "class", "selector": ".widget", "add": "hovered" } ] },
+    { "name": "tween-color", "size": [244, 124], "frames": 14,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "add": "warm" } ] },
+    { "name": "clip-lyrics", "size": [244, 400], "frames": 18,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "add": "lyrics-open" }, { "t": 200, "op": "class", "selector": ".widget", "remove": "lyrics-open" } ] },
+    { "name": "clip-controls", "size": [244, 140], "frames": 9,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "add": "hovered" } ] },
+    { "name": "hover-next-up", "size": [120, 76], "frames": 9,
+      "timeline": [ { "t": 0, "op": "move", "x": 50, "y": 38 }, { "t": 66.67, "op": "out" } ] },
+    { "name": "kf-bar-pulse", "size": [67, 58], "frames": 40,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".art-mini-bars", "add": "playing" } ] },
+    { "name": "kf-empty-pulse", "size": [204, 60], "frames": 46,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget-empty", "add": "connecting" } ] },
+    { "name": "kf-fs-in", "size": [200, 120], "frames": 10,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "fullscreen" } ] },
+    { "name": "kf-next-popup-in", "size": [184, 100], "frames": 11,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "show" } ] },
+    { "name": "kf-vol-pill-in", "size": [164, 80], "frames": 7,
+      "timeline": [ { "t": 0, "op": "class", "selector": ".stage", "add": "show" } ] }
+  ]
+}

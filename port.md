@@ -96,7 +96,7 @@ verified against a tiny Electron test page before any screen uses it. Required p
 | `@keyframes` + `animation` (`both`, `forwards`, `infinite alternate`) | `Keyframes` with per-stop easing |
 | Springs (`lyricAnimator.ts`, spr.lua underdamped) | ported 1:1 (2.2) |
 | `scale` / `transform: scale()` on boxes | GPUI divs have no transform. Emulate by scaling size, padding, font size and radius around the box centre, inside a wrapper with the unscaled size so layout does not move. Verify against Electron at 0.85, 0.94 and 1.1 |
-| `translate` | relative offsets |
+| `translate` | `css/translate.rs`: offsets the child in prepaint with `Window::with_element_offset`. Not relative offsets: taffy rounds those to whole px, while Chromium does not snap transforms (fractional, antialiased edges) |
 | `opacity` | `.opacity()`; it applies to text too |
 | Rounded clipping (`overflow: hidden` + `border-radius`) | GPUI clips to **rectangles only**. Any child that touches a rounded edge must carry its own radii (fills, images, backdrops). Write one helper and use it everywhere |
 | `box-shadow` (outer, inset hairlines) | `BoxShadow`; inset 0.5px edges via the hairline border helper. Check that rounded hairlines are not jagged |
@@ -170,6 +170,14 @@ conductor, and the conductor asks the user. Nobody silently approximates.
 
    Exception: the sung line, where the snapshot header already allows ~20/255 for spring settling.
    Tighten these numbers if both builds turn out more stable.
+
+   Edge tolerance (`--edges`, user decision 2026-11-20, instead of forking gpui's quad shader): GPUI
+   antialiases a rounded corner by `saturate(0.5 - sdf)` where Skia uses the pixel's covered area,
+   and paints straight edges unantialiased, snapped at pixel centres (quad_fragment fast path), where
+   Skia antialiases a fractional edge. Measured on the Phase 4 primitives: up to 31/255 on corners,
+   52/255 on a translated edge. A pixel over the limits is tolerated only if it is a shape-edge pixel
+   in both images (3x3 premultiplied contrast > 16/255) and differs by at most 64/255. A 1px shift, a
+   wrong radius, a wrong fill or a 2px size change still fails (`--self-test`).
 5. **Motion.** For each transition (hover in/out, lyrics open/close, settings open, reset pill
    arm/hold/release/done, sweep, scroll follow, next-song popup, fullscreen enter):
    - capture frames at **t = 0, 33, 66, … ms** after the trigger in both builds;

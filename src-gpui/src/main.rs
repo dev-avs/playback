@@ -3,15 +3,18 @@
 //! Flags (all test flags keep the window off-screen):
 //!   --fake-state <file>             parse the fake player state and print a summary line
 //!   --snapshot <scene> <out.png>    render the scene off-screen, write a PNG, exit
+//!   --primitive <case> <out.png|outDir>   draw a CSS-layer primitive case off-screen on a virtual clock (Phase 4)
 //!   --frame-log <file> [--resize off|shell|every-frame]   frame-driver proof, 350 ms tweens
 //!   --selftest-shell                drive and assert every shell behaviour, exit non-zero on failure
 //!   --selftest-cards                the same for the card windows, launch order and quit rules (slice 3b)
 //!   --instance-tag <tag>            single-instance name suffix for tests
 
+mod css;
 mod fake_state;
 mod frame_driver;
 mod host;
 mod instance;
+mod primitives;
 mod shell;
 mod win32;
 
@@ -54,6 +57,9 @@ fn main() {
     let snapshot = flag("--snapshot").map(|i| {
         (args.get(i + 1).cloned().unwrap_or_default(), PathBuf::from(args.get(i + 2).cloned().unwrap_or_default()))
     });
+    let primitive = flag("--primitive").map(|i| {
+        (args.get(i + 1).cloned().unwrap_or_default(), PathBuf::from(args.get(i + 2).cloned().unwrap_or_default()))
+    });
     let framelog = value("--frame-log").map(PathBuf::from);
     let mode = match value("--resize").as_deref() {
         Some("off") => ResizeMode::Off,
@@ -62,7 +68,7 @@ fn main() {
     };
 
     // the real app is single-instance; test flags use their own tag so they never meet a running app
-    let test_mode = selftest || selftest_cards || snapshot.is_some() || framelog.is_some();
+    let test_mode = selftest || selftest_cards || snapshot.is_some() || primitive.is_some() || framelog.is_some();
     let real_wake = if test_mode {
         None
     } else {
@@ -95,6 +101,8 @@ fn main() {
             shell::selftest_cards::run(cx, test_tag);
         } else if let Some((scene, out)) = snapshot {
             shell::snapshot::run(cx, scene, out, &test_tag);
+        } else if let Some((case, out)) = primitive {
+            shell::primitive::run(cx, case, out);
         } else if let Some(path) = framelog {
             shell::framelog::run(cx, path, mode, &test_tag);
         } else {

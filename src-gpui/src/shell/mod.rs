@@ -4,6 +4,7 @@
 pub mod cards;
 pub mod framelog;
 pub mod placement;
+pub mod primitive;
 pub mod selftest;
 pub mod selftest_cards;
 pub mod snapshot;

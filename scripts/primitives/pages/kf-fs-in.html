@@ -1,0 +1,12 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+/* src/App.css:1700-1716 .fs-overlay (mounted when fullscreen starts); the fill is a harness stand-in */
+.fs-overlay { position: fixed; inset: 0; z-index: 100; display: flex; align-items: stretch;
+  animation: fs-in 280ms cubic-bezier(0.4, 0, 0.2, 1) forwards; background: rgba(20, 20, 22, 0.72); }
+.stage:not(.fullscreen) .fs-overlay { display: none; }
+@keyframes fs-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style></head><body><div class="stage"><div class="fs-overlay"></div></div></body></html>

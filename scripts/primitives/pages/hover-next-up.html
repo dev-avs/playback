@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: block; padding: 22px; background: transparent; }
+/* src/App.css:2438-2462 .next-up and .next-up:hover */
+.next-up { display: flex; align-items: center; gap: 6px; padding: 3px 3px 3px 6px; border-radius: 6px;
+  width: max-content; opacity: 0.75; transition: opacity 120ms ease, background 120ms ease; background: none; }
+.next-up:hover { opacity: 1; background: rgba(255, 255, 255, 0.08); }
+/* src/App.css:2495-2501 .next-up-art 26px, radius 4px (a solid harness stand-in for the image) */
+.art { width: 26px; height: 26px; border-radius: 4px; background: rgb(200, 100, 50); flex-shrink: 0; }
+/* harness stand-in for .next-up-text */
+.text { width: 40px; height: 10px; background: rgba(255, 255, 255, 0.85); flex-shrink: 0; }
+</style></head><body><div class="stage"><div class="next-up"><div class="art"></div><div class="text"></div></div></div></body></html>
