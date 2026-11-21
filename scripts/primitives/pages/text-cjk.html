@@ -1,0 +1,27 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: flex; flex-direction: column; align-items: flex-start; padding: 22px; background: transparent; }
+/* src/App.css:3-22 */
+@font-face { font-family: "SpicyLyrics"; font-weight: 400; src: url("../../../src/fonts/spicy-lyrics/LyricsRegular.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 500; src: url("../../../src/fonts/spicy-lyrics/LyricsMedium.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 600; src: url("../../../src/fonts/spicy-lyrics/LyricsSemibold.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 700; src: url("../../../src/fonts/spicy-lyrics/LyricsBold.woff2") format("woff2"); }
+/* src/App.css:24-48 */
+@font-face { font-family: "SF Pro Text"; font-weight: 300; src: local("SF Pro Text Light"), local("SF-Pro-Text-Light"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 400; src: local("SF Pro Text Regular"), local("SF-Pro-Text-Regular"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 500; src: local("SF Pro Text Medium"), local("SF-Pro-Text-Medium"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 600; src: local("SF Pro Text Semibold"), local("SF-Pro-Text-Semibold"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 700; src: local("SF Pro Text Bold"), local("SF-Pro-Text-Bold"); }
+/* src/App.css:62, 69, 78-80 */
+:root { --latin-stack: "SpicyLyrics", "Noto Sans Georgian", "Vazirmatn", "SF Pro Text";
+  --cjk-stack: "Yu Gothic UI", "Noto Sans KR", "Malgun Gothic", "Microsoft YaHei UI";
+  --cjk-ja: "Yu Gothic UI", "Meiryo"; }
+/* src/App.css:338-346 .lyric-line (font-size: src/App.css:298 --lyric-size 17px; weight 700, line-height 1.18
+   defaults); color rgba(255,255,255,var(--fill-alpha)) at --grad-lit .85 (src/App.css:352, 357, 427).
+   harness: plain text, no word units, no opacity or text-shadow (later slices) */
+.lyric-line { font-family: var(--latin-stack), var(--cjk-stack), sans-serif; font-size: 17px; font-weight: 700;
+  line-height: 1.18; color: rgba(255, 255, 255, 0.85); white-space: nowrap; }
+/* src/App.css:543-546 .lyric-line:lang(ja); harness text */
+.lyric-line:lang(ja) { font-family: var(--latin-stack), var(--cjk-ja), sans-serif; }
+</style></head><body><div class="stage"><div class="lyric-line" lang="ja">夜明けの街 走り出す</div></div></body></html>

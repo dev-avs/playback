@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: flex; flex-direction: column; align-items: flex-start; padding: 22px; background: transparent; }
+/* src/App.css:24-48 */
+@font-face { font-family: "SF Pro Text"; font-weight: 300; src: local("SF Pro Text Light"), local("SF-Pro-Text-Light"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 400; src: local("SF Pro Text Regular"), local("SF-Pro-Text-Regular"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 500; src: local("SF Pro Text Medium"), local("SF-Pro-Text-Medium"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 600; src: local("SF Pro Text Semibold"), local("SF-Pro-Text-Semibold"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 700; src: local("SF Pro Text Bold"), local("SF-Pro-Text-Bold"); }
+/* src/windows/Settings.css:16 .st-card font stack; :406-414 .st-label; text src/windows/Settings.tsx:783 */
+.stage { font-family: "SF Pro", "SF Pro Text", "SF Pro Display", -apple-system, "Segoe UI", sans-serif; }
+.st-label { display: flex; flex-direction: column; font-size: 12px; font-weight: 500; color: rgba(255, 255, 255, 0.9);
+  line-height: 1.25; white-space: nowrap; }
+</style></head><body><div class="stage"><div class="st-label">Provider · all songs</div></div></body></html>

@@ -163,6 +163,68 @@ Why the remaining scale cases fail (no threshold changed):
    rasterized at another scale and resampled. f002-f006 and f010 each have 1-2 pixels on the rounded
    ends at 65-73/255 against the 64 edge limit (GPUI's SDF AA against Skia's at fractional positions).
 
+### Slice C – text basics (2026-11-21, 5/6 pass, text-label open)
+Helper `src-gpui/src/css/text.rs` (shared by the later text-shadow and lyric-sweep helpers):
+- fonts: the four SpicyLyrics WOFF2 files (App.css:3-22) are unpacked by DirectWrite
+  (`IDWriteFactory5::UnpackFontFile`) and added with `add_fonts` (`load_fonts`, called by the primitive
+  runner); their own family name is `BlinkMacSystemFont`. "SF Pro Text" (App.css:24-48, `local()`) is the
+  installed family. Stacks as constants with their source lines (body, .st-card, --latin-stack,
+  --cjk-stack, --cjk-ko/ja/zh, `lyric_stack`); `sans-serif` = Arial; families that are not installed
+  ("SF Pro", "SF Pro Display", -apple-system, …) are skipped as Chromium skips them; `@font-face` weights
+  are matched by the CSS rules.
+- per-character fallback: each character takes the first family in the stack that draws it; each run
+  of one face is shaped on its own (as HarfBuzz shapes Blink's font runs).
+- width: the advance sum (kerned, unrounded) + letter-spacing after every character, as a LayoutUnit
+  rounded up; the `Text` element lays out at that width and the line-box height.
+- line-height: a number → LayoutUnit(size × k); `normal` → round(A) + round(D) + round(lineGap) of the
+  primary (first available) font; baseline = top + floor((L − (A + D)) / 2) + A with A, D rounded
+  (Blink `AscentDescentWithHacks`, LayoutNG `CalculateLeadingSpace`).
+- paint: glyphs through `Window::paint_glyph` at x + 1/8 px and y + 1/2 px (Skia's quarter-pixel x,
+  whole-pixel y rounding against GPUI's flooring); `scale` text nodes now use it (glyphs at size × s from
+  the scaled pen positions and baseline).
+- Commands as slices A/B: `node scripts/primitives/run.mjs [--gpui] [--stability] [--only=…]`, then
+  `node scripts/primitives/diff.mjs`. Text boxes are the line boxes, rounded out.
+
+**The 1px width difference (scale-pill-text)**, measured on both sides ("Keep holding…", 11px SF Pro Text
+Semibold): Electron 79.8359 (canvas `measureText`; HarfBuzz advance sum 80.2817 with the K-e kern pair
+−0.4458), Range width 79.84375 → pill 100px. GPUI 80.2817: no kerning, because gpui sets an
+`IDWriteTypography` on every range (gpui-0.2.2 direct_write.rs:602, :642) that is empty for default
+font features (`apply_font_features` returns early, :1730-1732), and an empty one turns DirectWrite's
+default kerning off; then its text element rounds the width up to a whole px (elements/text.rs:419) →
+81 → pill 101. Fixed in text.rs without forking gpui: every face asks for `kern` = 1 (gpui then also
+sets liga/clig/calt = 1, HarfBuzz's defaults too) and `Text` uses the LayoutUnit width: GPUI 79.8359,
+pill 100.
+A second gpui issue found on the CJK case: in one shaped line, a bundled-font run after a system-font
+run is drawn in the system font (the space of "夜明けの街 走り出す" came out in Yu Gothic UI, 4.67px
+against BlinkMacSystemFont's 3.36), hence shaping each face run on its own. After it the CJK line is
+142.3418 → 142.34375 on both sides.
+
+| case | source | frames | max delta | untolerated soft % | edge px (max) | result |
+|---|---|---|---|---|---|---|
+| text-lyric | App.css:3-22, 62, 69, 298, 338-346, 352-357, 427 | 1 | 53.1 | 0.0856 | 353 (53.1) | pass |
+| text-cjk | App.css:79, 338-346, 543-546 (harness text) | 1 | 49 | 0 | 329 (49) | pass |
+| text-meta | App.css:85-91, 214-237, 253-261 | 1 | 41.4 | 0.0118 | 177 (41.4) | pass |
+| text-label | Settings.css:16, 406-414; Settings.tsx:783 | 1 | 45.6 | 0.1282 | 303 (45.6) | FAIL (12 soft px, hard 0) |
+| text-nav | Settings.css:16, 33-35, 123-137; Settings.tsx:195 (line-height normal) | 1 | 37 | 0.0352 | 83 (37) | pass |
+| scale-pill-text (rerun) | Settings.css:461-464, Settings.tsx:182 | 1 | 52 | 0.0346 | 258 (52) | pass (was FAIL, 115) |
+
+Electron widths (Range, px): lyric 184.359375, CJK 142.34375 (Yu Gothic UI Bold ×9 + BlinkMacSystemFont
+Bold space), title 59.734375, artist 55.75, label 110.25, nav 52.21875; line boxes 20.046875,
+16.875, 15.515625, 15, 14 (normal). GPUI's shaped widths equal them to the 1/64 px where dumped (pill,
+label, CJK); the per-glyph pen positions of the label and CJK line match Electron's Range rects.
+
+text-label is open (no threshold changed): its 12 soft pixels are the "ll" of "all" (x 90-91 and 111/118,
+rows 26-30). Glyph positions are the same on both sides (second l at 68.953 / 68.959), but Chromium's
+rasterized stems are wider and softer than GPUI's DirectWrite grayscale glyphs (first l, alpha by column
+x 88-91: Electron 117 224 141 84, GPUI 99 229 117 0), so the gap between the two stems differs by more
+than the AA tolerance after the 3×3 blur. A rasterizer difference (Skia's glyph masks against gpui's
+atlas), not layout; it needs a decision (accept, or a glyph rasterizer that is not gpui's).
+
+Both sides byte-stable (235 PNGs each). The 23 earlier cases unchanged (20 pass; scale-pill-in and
+scale-pill-pop with the same numbers as the accepted slice B differences); scale-pill-text now passes.
+`parity-diff.mjs --self-test` exit 0, `cargo test` (src-gpui 20, logic all ok), `--selftest-shell` 48/0,
+`--selftest-cards` 192/0.
+
 ## Phases 5–7: screens
 Slices of 20–40 ledger rows, in port.md §5 order. Estimate: widget ~15 slices, settings ~15, other
 windows ~6. Each slice: worker → review by a different worker (rerun diffs + 5 spot checks) → rows

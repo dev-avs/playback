@@ -12,8 +12,9 @@ use crate::css::{
 };
 use crate::css::mask::{masked, LYRICS_PANEL};
 use crate::css::scale::{self, scale};
+use crate::css::text::{self, LineHeight};
 use crate::css::rounded::{clip_child, Radii, Rect};
-use gpui::{div, img, point, prelude::*, px, AnyElement, Bounds, FontWeight, Hsla, ImageSource, Pixels, Point, Rgba};
+use gpui::{div, img, point, prelude::*, px, AnyElement, Bounds, Hsla, ImageSource, Pixels, Point, Rgba};
 use serde::Deserialize;
 use std::{cell::Cell, rc::Rc};
 
@@ -149,6 +150,11 @@ impl Scene {
             "scale-pill-094" => Scene::Still("scale-pill-094"),
             "scale-pill-110" => Scene::Still("scale-pill-110"),
             "scale-pill-text" => Scene::Still("scale-pill-text"),
+            "text-lyric" => Scene::Still("text-lyric"),
+            "text-cjk" => Scene::Still("text-cjk"),
+            "text-meta" => Scene::Still("text-meta"),
+            "text-label" => Scene::Still("text-label"),
+            "text-nav" => Scene::Still("text-nav"),
             "scale-pill-in" => Scene::PillIn { start: None },
             // src/windows/Settings.css:429-444: transition background 160ms ease
             "scale-pill-pop" => Scene::PillPop { start: None, bg: Tween::new(PILL_BG, Transition::new(160.0, Easing::EASE)) },
@@ -537,15 +543,46 @@ fn still(name: &str) -> AnyElement {
         }
         // pages/scale-pill-text.html: holding (.94) with its text (src/windows/Settings.tsx, .st-reset-text)
         "scale-pill-text" => {
-            // src/windows/Settings.css:16 .st-card font stack ("SF Pro" is not installed: SF Pro Text);
-            // :429-444 11px 600 #fff nowrap; :406-414 line-height 1.25; .st-reset-text relative
-            let mut f = gpui::font("SF Pro Text");
-            f.weight = FontWeight::SEMIBOLD;
-            let label = scale::text(div().relative().flex_shrink_0(), "Keep holding\u{2026}", f, 11.0, 11.0 * 1.25, rgba(255, 255, 255, 1.0));
+            // src/windows/Settings.css:16 .st-card font stack; :429-444 11px 600 #fff nowrap;
+            // :406-414 line-height 1.25; .st-reset-text relative
+            let st = text::Style::new(text::SETTINGS_STACK, 600, 11.0, LineHeight::Number(1.25), fill(rgba(255, 255, 255, 1.0)));
+            let label = scale::text(div().relative().flex_shrink_0(), "Keep holding\u{2026}", st);
             stage().child(scale(0.94, 1.0, reset_pill(PILL_BG, PILL_EDGE, label))).into_any_element()
+        }
+        // pages/text-lyric.html: src/App.css:338-346 .lyric-line with the untagged CJK stack
+        "text-lyric" => stage().child(text::text("Like a record in my mind", lyric_style(text::CJK_STACK))).into_any_element(),
+        // pages/text-cjk.html: src/App.css:543-546 .lyric-line:lang(ja); harness text
+        "text-cjk" => stage().child(text::text("\u{591c}\u{660e}\u{3051}\u{306e}\u{8857} \u{8d70}\u{308a}\u{51fa}\u{3059}", lyric_style(text::CJK_JA))).into_any_element(),
+        // pages/text-meta.html: src/App.css:214-223 .info (column, gap 1px), text from fixtures/fake-state.json
+        "text-meta" => {
+            // src/App.css:85-91 body font stack; :225-237 .title 12.5px 600 #fff, letter-spacing -0.01em, line-height 1.35
+            let title = text::Style::new(text::BODY_STACK, 600, 12.5, LineHeight::Number(1.35), fill(rgba(255, 255, 255, 1.0))).letter_spacing(-0.01 * 12.5);
+            // src/App.css:253-261 .artist 11.5px 400 rgba(255,255,255,.48), line-height 1.35
+            let artist = text::Style::new(text::BODY_STACK, 400, 11.5, LineHeight::Number(1.35), fill(rgba(255, 255, 255, 0.48)));
+            stage()
+                .child(div().flex().flex_col().gap(px(1.0)).child(text::text("Test Song", title)).child(text::text("Test Artist", artist)))
+                .into_any_element()
+        }
+        // pages/text-label.html: src/windows/Settings.css:16 stack; :406-414 .st-label 12px 500 rgba(255,255,255,.9),
+        // line-height 1.25; text src/windows/Settings.tsx:783
+        "text-label" => {
+            let st = text::Style::new(text::SETTINGS_STACK, 500, 12.0, LineHeight::Number(1.25), fill(rgba(255, 255, 255, 0.9)));
+            stage().child(text::text("Provider \u{b7} all songs", st)).into_any_element()
+        }
+        // pages/text-nav.html: src/windows/Settings.css:16 stack; :123-137 .st-nav-item 11.5px 600 rgba(255,255,255,.7),
+        // a button's line-height normal; text src/windows/Settings.tsx:195
+        "text-nav" => {
+            let st = text::Style::new(text::SETTINGS_STACK, 600, 11.5, LineHeight::Normal, fill(rgba(255, 255, 255, 0.7)));
+            stage().child(text::text("Lyric text", st)).into_any_element()
         }
         _ => unreachable!("no still {name}"),
     }
+}
+
+/// src/App.css:338-346 .lyric-line: `var(--latin-stack), <cjk>, sans-serif`, 17px (:298 --lyric-size), 700,
+/// line-height 1.18; colour rgba(255,255,255,var(--fill-alpha)) at --grad-lit .85 (:352, :357, :427).
+fn lyric_style(cjk: &str) -> text::Style {
+    text::Style::new(text::lyric_stack(text::LATIN_STACK, cjk), 700, 17.0, LineHeight::Number(1.18), fill(rgba(255, 255, 255, 0.85)))
 }
 
 // src/windows/Settings.css:429-444 .st-reset-pill, :472-476 .st-reset-done .st-reset-pill

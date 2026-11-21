@@ -83,6 +83,7 @@ pub fn run(cx: &mut App, name: String, out: PathBuf) {
         eprintln!("primitive: unknown case {name:?} (known: {})", all.iter().map(|c| c.name.as_str()).collect::<Vec<_>>().join(", "));
         std::process::exit(2);
     };
+    crate::css::text::load_fonts(cx).unwrap_or_else(|e| fail(format!("fonts: {e}")));
     let scene = Scene::new(&name).unwrap_or_else(|| fail(format!("no scene for case {name}")));
     let (w, h) = (case.size[0], case.size[1]);
     let renders = Rc::new(Cell::new(0u64));

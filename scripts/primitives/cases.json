@@ -36,6 +36,11 @@
     { "name": "rounded-widget", "size": [264, 130], "frames": 0, "timeline": [] },
     { "name": "mask-lyrics", "size": [264, 344], "frames": 0, "timeline": [] },
     { "name": "mask-lyrics-open", "size": [244, 400], "frames": 18,
-      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "add": "lyrics-open" }, { "t": 200, "op": "class", "selector": ".widget", "remove": "lyrics-open" } ] }
+      "timeline": [ { "t": 0, "op": "class", "selector": ".widget", "add": "lyrics-open" }, { "t": 200, "op": "class", "selector": ".widget", "remove": "lyrics-open" } ] },
+    { "name": "text-lyric", "size": [230, 66], "frames": 0, "timeline": [], "text": [[22, 22, 185, 21]] },
+    { "name": "text-cjk", "size": [190, 66], "frames": 0, "timeline": [], "text": [[22, 22, 143, 21]] },
+    { "name": "text-meta", "size": [106, 80], "frames": 0, "timeline": [], "text": [[22, 22, 60, 17], [22, 39, 56, 17]] },
+    { "name": "text-label", "size": [156, 60], "frames": 0, "timeline": [], "text": [[22, 22, 111, 15]] },
+    { "name": "text-nav", "size": [98, 58], "frames": 0, "timeline": [], "text": [[22, 22, 53, 14]] }
   ]
 }

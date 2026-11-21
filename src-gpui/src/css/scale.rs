@@ -20,28 +20,28 @@
 //!   the pixel's covered area: what Skia draws for an axis-aligned rect;
 //! - rounded fills go to the SDF path as GPUI draws any rounded box (port.md 4, edge tolerance);
 //! - shadows: `css::shadow`'s bakes at the scaled geometry (offset, blur, spread × s);
-//! - text: shaped at the scaled font size and painted at the scaled line box with the scaled line height.
+//! - text: laid out unscaled by `css::text` (Blink's width and line box), its glyphs drawn at the scaled
+//!   font size from the scaled pen positions and baseline.
 //! `opacity` (clamped to [0, 1] as CSS does) multiplies every painted colour.
 //! Children are not clipped (no scaled box the app has overflows its parent).
 //!
 //! Limits:
-//! - text is measured by DirectWrite, so a text node's unscaled width can differ from Blink's
-//!   (scale-pill-text: 101px against 100px); that is the text layout's difference, not the scale's;
 //! - `opacity` fades each primitive, where CSS fades the composited group: where nodes overlap
 //!   (the stand-in over the pill) a partly faded frame is lighter in CSS (scale-pill-in f001).
 
 use super::rounded::{clamp, corners, Radii};
 use super::shadow::{self, Shadow};
+use super::text::{self as css_text, Style};
 use gpui::{
-    canvas, div, fill, point, prelude::*, px, quad, size, AnyElement, App, Bounds, Div, Element, ElementId, Font,
-    GlobalElementId, Hsla, InspectorElementId, IntoElement, LayoutId, Pixels, Rgba, SharedString, TextRun, Window,
+    canvas, div, fill, point, prelude::*, px, quad, size, AnyElement, App, Bounds, Div, Element, ElementId,
+    GlobalElementId, Hsla, InspectorElementId, IntoElement, LayoutId, Pixels, Rgba, SharedString, Window,
 };
 use std::{cell::Cell, rc::Rc};
 
 /// What a node paints.
 enum Paint {
     Box { bg: Option<Rgba>, radii: Radii, shadows: Vec<Shadow> },
-    Text { text: SharedString, font: Font, size: f32, line_height: f32, color: Rgba },
+    Text { text: SharedString, style: Style },
 }
 
 /// One box or line of text in a scaled subtree: `layout` carries its layout style (size, padding,
@@ -57,9 +57,9 @@ pub fn node(layout: Div) -> Node {
     Node { layout, paint: Paint::Box { bg: None, radii: [0.0; 4], shadows: Vec::new() }, children: Vec::new() }
 }
 
-/// One line of text (`white-space: nowrap`) in `font` at `size` px with `line_height` px; `layout` places it.
-pub fn text(layout: Div, text: impl Into<SharedString>, font: Font, size: f32, line_height: f32, color: Rgba) -> Node {
-    Node { layout, paint: Paint::Text { text: text.into(), font, size, line_height, color }, children: Vec::new() }
+/// One line of text (`white-space: nowrap`) set with `style` (`css::text`); `layout` places it.
+pub fn text(layout: Div, text: impl Into<SharedString>, style: Style) -> Node {
+    Node { layout, paint: Paint::Text { text: text.into(), style }, children: Vec::new() }
 }
 
 impl Node {
@@ -104,8 +104,8 @@ fn build(n: Node, out: &mut Vec<(Paint, Rc<Cell<Option<Bounds<Pixels>>>>)>) -> A
     let rec = at.clone();
     let probe = canvas(move |b, _, _| rec.set(Some(b)), |_, _, _, _| {}).absolute().top_0().left_0().size_full();
     let mut el = n.layout;
-    if let Paint::Text { text, font, size, line_height, .. } = &n.paint {
-        el = el.font(font.clone()).text_size(px(*size)).line_height(px(*line_height)).whitespace_nowrap().child(text.clone());
+    if let Paint::Text { text, style } = &n.paint {
+        el = el.child(css_text::text(text.clone(), style.clone()));
     }
     out.push((n.paint, at));
     for c in n.children {
@@ -147,7 +147,7 @@ impl Element for Scale {
         self.main.prepaint(window, cx);
     }
 
-    fn paint(&mut self, _: Option<&GlobalElementId>, _: Option<&InspectorElementId>, bounds: Bounds<Pixels>, _: &mut (), _: &mut (), window: &mut Window, cx: &mut App) {
+    fn paint(&mut self, _: Option<&GlobalElementId>, _: Option<&InspectorElementId>, bounds: Bounds<Pixels>, _: &mut (), _: &mut (), window: &mut Window, _: &mut App) {
         let (s, o) = (self.s, self.opacity);
         // transform-origin 50% 50%
         let c = point(f32::from(bounds.origin.x) + f32::from(bounds.size.width) / 2.0, f32::from(bounds.origin.y) + f32::from(bounds.size.height) / 2.0);
@@ -177,10 +177,10 @@ impl Element for Scale {
                     }
                     shadow::paint(true, sb, r, &scaled, window);
                 }
-                Paint::Text { text, font, size: fs, line_height, color } => {
-                    let run = TextRun { len: text.len(), font: font.clone(), color: fade(*color).into(), background_color: None, underline: None, strikethrough: None };
-                    let line = window.text_system().shape_line(text.clone(), px(fs * s), &[run], None);
-                    let _ = line.paint(sb.origin, px(line_height * s), window, cx);
+                Paint::Text { text, style } => {
+                    let line = css_text::shape(text, style, window);
+                    let color = Hsla { a: style.color.a * o, ..style.color };
+                    line.paint(sb.origin, line.line_box(style.line_height), s, color, window);
                 }
             }
         }
