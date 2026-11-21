@@ -41,7 +41,7 @@ export interface LyricLine {
   opposite?: boolean;
 }
 
-function parseMmSs(min: string, sec: string): number {
+export function parseMmSs(min: string, sec: string): number {
   return parseInt(min) * 60 + parseFloat(sec);
 }
 
@@ -89,7 +89,7 @@ const CREDIT_CJK_LABEL = /^\s*[一-鿿]{1,8}\s*[:：]\s*\S/;
 const CREDIT_ROLE_LAST =
   /,\s*(?:songwriters?|writers?|lyricists?|composers?|producers?|co-producers?|arrangers?|engineers?|mixers?)\s*$/i;
 
-function isCreditLine(text: string): boolean {
+export function isCreditLine(text: string): boolean {
   const t = text.trim();
   if (!t) return false;
   return CREDIT_ROLE.test(t) || CREDIT_BY.test(t) || CREDIT_CJK_LABEL.test(t) || CREDIT_ROLE_LAST.test(t);
@@ -160,7 +160,7 @@ const TRAILING_ASIDE = /^(.*\S)\s*\(([^()]{2,})\)$/;
  * Returns -1 when no run qualifies, which sends the caller down the
  * timing-free path rather than mangling the words.
  */
-function asideWordIndex(words: LyricWord[]): number {
+export function asideWordIndex(words: LyricWord[]): number {
   for (let i = 1; i < words.length; i++) {
     if (!words[i].text.startsWith("(")) continue;
     const tail = words.slice(i).map((w) => w.text).join("");
@@ -169,7 +169,7 @@ function asideWordIndex(words: LyricWord[]): number {
   return -1;
 }
 
-function stripBrackets(words: LyricWord[]): LyricWord[] {
+export function stripBrackets(words: LyricWord[]): LyricWord[] {
   return words
     .map((w, i) => {
       let text = w.text;
@@ -196,7 +196,7 @@ function stripBrackets(words: LyricWord[]): LyricWord[] {
  * Without words both lines share the lead's window, which is the honest answer
  * for plain LRC.
  */
-function splitTrailingAside(line: LyricLine): { lead: LyricLine; bg: LyricLine } | null {
+export function splitTrailingAside(line: LyricLine): { lead: LyricLine; bg: LyricLine } | null {
   const m = line.text.trim().match(TRAILING_ASIDE);
   if (!m) return null;
 
@@ -503,7 +503,7 @@ export interface LoadedLyrics {
  * Skipped where it would be nonsense: single-word lines, and spans so long the
  * line is clearly followed by an instrumental rather than sung throughout.
  */
-function charsIn(text: string): number {
+export function charsIn(text: string): number {
   return text.replace(/\s+/g, "").length;
 }
 
@@ -519,7 +519,7 @@ function charsIn(text: string): number {
  * percentile of "gap per character" approximates the true singing rate. Taking
  * it per song adapts to ballads and fast rap alike.
  */
-function estimateRate(lines: LyricLine[]): number {
+export function estimateRate(lines: LyricLine[]): number {
   const samples: number[] = [];
   for (let i = 0; i < lines.length - 1; i++) {
     const chars = charsIn(lines[i].text);

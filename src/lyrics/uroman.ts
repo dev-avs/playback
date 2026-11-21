@@ -121,7 +121,7 @@ const CONSONANTS = /^[bcdfghjklmnpqrstvwxyz]+$/;
 
 type Edge = { start: number; end: number; txt: string; type: string };
 
-class Lattice {
+export class Lattice {
   private t = load();
   private s: string[];
   private n: number;
@@ -467,7 +467,7 @@ const PRESENTATION_FORMS = new RegExp("[" + String.fromCharCode(0xfb50) + "-" + 
 const SILENT_HE = /(?<=\p{Mn})ה(?![\p{L}\p{M}])/gu;
 const ZWNJ = String.fromCharCode(0x200c);
 
-function prepare(text: string): string {
+export function prepare(text: string): string {
   return text.replace(PRESENTATION_FORMS, (c) => c.normalize("NFKC")).replace(SILENT_HE, ZWNJ);
 }
 

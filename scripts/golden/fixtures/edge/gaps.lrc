@@ -1,0 +1,15 @@
+[ar:Test Artist]
+[ti:Gaps]
+[length:03:30]
+[offset:+250]
+[00:00.50]First line right at the start
+[00:04.00]
+[00:21.30]After a long instrumental
+[00:24.10][01:30.00]Chorus that comes back twice
+[00:28.00]Line with trailing spaces   
+[00:33.333]Three digit centiseconds
+[00:40.5]One digit fraction
+[01:02]No fraction
+[01:10.00]   
+[01:45.00]Last line before silence
+[03:10.00]

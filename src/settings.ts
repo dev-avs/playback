@@ -423,7 +423,7 @@ export const KEYS = {
   art: "state.art",
 };
 
-function read<T>(key: string, initial: T): T {
+export function read<T>(key: string, initial: T): T {
   try {
     const raw = localStorage.getItem(key);
     return raw == null ? initial : (JSON.parse(raw) as T);

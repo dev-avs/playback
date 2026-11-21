@@ -1,0 +1,17 @@
+[package]
+name = "playback-logic"
+version = "0.1.0"
+description = "Playback's UI logic (lyrics parsing, romanization, lyric motion, settings helpers), ported function for function from src/ for the GPUI build"
+edition = "2021"
+license = "AGPL-3.0-only"
+
+[dependencies]
+libm = "0.2"
+regex = "1.13.2"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+unicode-normalization = "0.1.26"
+unicode-segmentation = "1"
+
+[dev-dependencies]
+pretty_assertions = "1"

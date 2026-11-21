@@ -25,11 +25,30 @@ Concrete plan for `port.md`. Written 2026-11-20 against the repo at `0163b39` (+
    - `spicy/connect` and `migrate` stay in `src-tauri` (webview / Tauri specific).
 4. Gate: `cargo test`, `npm test`, `npm run package` dry build, Tauri preview approved by the user.
 
+**Frame-driver spike: done, passes (2026-11-20).** `spikes/frame-driver` (gpui 0.2.2), 350 ms tweens,
+6 per run, frame timestamps in `spikes/frame-driver/logs*/`:
+- `request_animation_frame()` from render, from a canvas prepaint, or `on_next_frame` + notify: ~180 fps
+  (this display's rate), worst gap < 10 ms, with no resize, one resize, a resize every frame (`follow`),
+  a resize from `on_children_prepainted` (`measure`), and a redundant resize each render (`spam`).
+  `follow` renders ~470/s (extra renders on resize), still no gap > 8.4 ms.
+- A background `timer(4ms)` + notify: 64 fps, gaps up to 21 ms. Rejected.
+- The first attempt's stall (2 frames, then a 250 ms idle) did not reproduce. Use request_animation_frame
+  from render; keep a frame-gap log in the real driver (Phase 3) to catch a regression.
+
 **In parallel: frame-driver spike (port.md 2.5).** One test window, a 350ms tween, a window resize
 mid-tween, frame-timestamp log. If GPUI 0.2.2 cannot hold ≥55 fps here the port is blocked, so find out
 on day 1, not in Phase 3.
 
 ## Phase 1: logic port + golden tests
+- **Where (decided 2026-11-20):** the ported logic lives in `src-gpui/logic` (pure Rust, no GPUI,
+  so its tests build in seconds); `src-gpui` will depend on it. Golden JSON goes to
+  `src-gpui/logic/golden/`, fixtures to `scripts/golden/fixtures/`, one case file per module in
+  `scripts/golden/cases/`. Settings codegen writes `src-gpui/logic/src/settings_gen.rs` and
+  `settings_items_gen.rs` (not `src-gpui/src/`).
+- `romanize.ts` uses `pinyin-pro` 3.29.5 (npm, MIT) for Chinese. **Decided (2026-11-20, left to the
+  conductor):** port pinyin-pro itself: export its dictionaries to `src-gpui/logic/data/` with its
+  licence, and translate only the path Playback calls (`pinyin(text, { type: "all", toneType: "none" })`),
+  word segmentation and polyphone rules included. No other pinyin crate: their readings differ.
 - `scripts/golden/run.mts` (loads TS the way `tests/*.mts` already do) runs over
   `scripts/golden/fixtures/` and writes `golden/*.json`.
 - Fixtures: real Spicy (syllable, line, static), NetEase YRC, LRCLIB, lrcmux payloads; edge cases: gaps,
@@ -40,7 +59,7 @@ on day 1, not in Phase 3.
 - `scripts/gen-gpui-settings.cjs` imports `src/settings.ts` → `src-gpui/src/settings_gen.rs` (struct,
   defaults, serde camelCase matching `snapshotSettingsJson()` in `src/windows/Versions.tsx`), plus
   `settings_items_gen.rs` from `items` (text byte for byte).
-- Gate: all golden tests pass; re-running the codegen produces no diff.
+- Gate: all golden tests pass; re-running the codegen produces no diff. **Done 2026-11-20:** 49 Rust tests pass against goldens from the TS (uroman, romanize + pinyin-pro, lyrics, spicy, objpack, lyricAnimator + cubic-spline, settings, App.tsx line state moved to `src/lineState.ts`).
 
 ## Phase 2: harness + ledger
 1. Move the fake state out of `scripts/snapshot/preload.cjs` into `fixtures/fake-state.json` (cover as a
@@ -79,7 +98,7 @@ marked `done`. User preview at the end of each phase.
 - GPUI stage in `scripts/pack.cjs` → `release/phoenix/` → `playback-gpui-setup-<v>.exe` +
   `playback-gpui-<v>-x64.nsis.7z`.
 - Flavor-switch test: Tauri → GPUI → Tauri, settings file round-trips.
-- Restore `src-gpui/target` in `.gitignore` and the Phoenix lines in `CLAUDE.md` when work starts.
+- Restore the Phoenix lines in `CLAUDE.md` when work starts (`src-gpui/target` and `src-gpui/*/target` are back in `.gitignore`).
 
 ## Decisions (user, 2026-11-20)
 1. **Text antialiasing:** diff with an edge tolerance. GPUI uses DirectWrite and Electron uses Skia, so

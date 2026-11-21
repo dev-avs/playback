@@ -35,6 +35,9 @@ release
 # The installer (installer/): Rust build output and generated schemas
 installer/src-tauri/target
 crates/*/target
+src-gpui/target
+src-gpui/*/target
+src-gpui/*/Cargo.lock
 crates/*/Cargo.lock
 spikes/*/target
 installer/src-tauri/gen

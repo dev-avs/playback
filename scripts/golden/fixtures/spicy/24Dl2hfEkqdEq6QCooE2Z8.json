@@ -1,0 +1,2991 @@
+{
+ "Content": [
+  {
+   "Lead": {
+    "EndTime": 17.522,
+    "StartTime": 16.039,
+    "Syllables": [
+     {
+      "EndTime": 17.522,
+      "IsPartOfWord": false,
+      "StartTime": 16.039,
+      "Text": "Woo"
+     }
+    ]
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 33.098,
+    "StartTime": 29.967,
+    "Syllables": [
+     {
+      "EndTime": 30.288,
+      "IsPartOfWord": true,
+      "StartTime": 29.967,
+      "Text": "De"
+     },
+     {
+      "EndTime": 30.666,
+      "IsPartOfWord": true,
+      "StartTime": 30.288,
+      "Text": "lu"
+     },
+     {
+      "EndTime": 30.93,
+      "IsPartOfWord": false,
+      "StartTime": 30.666,
+      "Text": "sion"
+     },
+     {
+      "EndTime": 31.161,
+      "IsPartOfWord": false,
+      "StartTime": 30.93,
+      "Text": "is"
+     },
+     {
+      "EndTime": 31.401,
+      "IsPartOfWord": false,
+      "StartTime": 31.161,
+      "Text": "just"
+     },
+     {
+      "EndTime": 31.62,
+      "IsPartOfWord": false,
+      "StartTime": 31.401,
+      "Text": "what"
+     },
+     {
+      "EndTime": 31.861,
+      "IsPartOfWord": false,
+      "StartTime": 31.62,
+      "Text": "I"
+     },
+     {
+      "EndTime": 32.166,
+      "IsPartOfWord": false,
+      "StartTime": 31.861,
+      "Text": "do"
+     },
+     {
+      "EndTime": 33.098,
+      "IsPartOfWord": false,
+      "StartTime": 32.166,
+      "Text": "best"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 36.656,
+    "StartTime": 33.444,
+    "Syllables": [
+     {
+      "EndTime": 33.686,
+      "IsPartOfWord": true,
+      "StartTime": 33.444,
+      "Text": "Bro"
+     },
+     {
+      "EndTime": 33.844,
+      "IsPartOfWord": true,
+      "StartTime": 33.686,
+      "Text": "ken-"
+     },
+     {
+      "EndTime": 34.267,
+      "IsPartOfWord": true,
+      "StartTime": 33.844,
+      "Text": "hear"
+     },
+     {
+      "EndTime": 34.476,
+      "IsPartOfWord": false,
+      "StartTime": 34.267,
+      "Text": "ted"
+     },
+     {
+      "EndTime": 34.717,
+      "IsPartOfWord": false,
+      "StartTime": 34.476,
+      "Text": "but"
+     },
+     {
+      "EndTime": 35.006,
+      "IsPartOfWord": false,
+      "StartTime": 34.717,
+      "Text": "I'm"
+     },
+     {
+      "EndTime": 35.272,
+      "IsPartOfWord": true,
+      "StartTime": 35.006,
+      "Text": "wea"
+     },
+     {
+      "EndTime": 35.437,
+      "IsPartOfWord": false,
+      "StartTime": 35.272,
+      "Text": "ring"
+     },
+     {
+      "EndTime": 35.617,
+      "IsPartOfWord": false,
+      "StartTime": 35.437,
+      "Text": "it"
+     },
+     {
+      "EndTime": 36.656,
+      "IsPartOfWord": false,
+      "StartTime": 35.617,
+      "Text": "well"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 40.322,
+    "StartTime": 36.945,
+    "Syllables": [
+     {
+      "EndTime": 37.24,
+      "IsPartOfWord": true,
+      "StartTime": 36.945,
+      "Text": "Pay"
+     },
+     {
+      "EndTime": 37.417,
+      "IsPartOfWord": false,
+      "StartTime": 37.24,
+      "Text": "ing"
+     },
+     {
+      "EndTime": 37.848,
+      "IsPartOfWord": false,
+      "StartTime": 37.417,
+      "Text": "bills"
+     },
+     {
+      "EndTime": 38.087,
+      "IsPartOfWord": false,
+      "StartTime": 37.848,
+      "Text": "with"
+     },
+     {
+      "EndTime": 38.4,
+      "IsPartOfWord": false,
+      "StartTime": 38.087,
+      "Text": "all"
+     },
+     {
+      "EndTime": 38.53,
+      "IsPartOfWord": false,
+      "StartTime": 38.4,
+      "Text": "the"
+     },
+     {
+      "EndTime": 38.795,
+      "IsPartOfWord": false,
+      "StartTime": 38.53,
+      "Text": "things"
+     },
+     {
+      "EndTime": 39.026,
+      "IsPartOfWord": false,
+      "StartTime": 38.795,
+      "Text": "that"
+     },
+     {
+      "EndTime": 39.239,
+      "IsPartOfWord": false,
+      "StartTime": 39.026,
+      "Text": "you"
+     },
+     {
+      "EndTime": 40.322,
+      "IsPartOfWord": false,
+      "StartTime": 39.239,
+      "Text": "say"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 43.271,
+    "StartTime": 40.604,
+    "Syllables": [
+     {
+      "EndTime": 40.773,
+      "IsPartOfWord": false,
+      "StartTime": 40.604,
+      "Text": "Put"
+     },
+     {
+      "EndTime": 40.987,
+      "IsPartOfWord": false,
+      "StartTime": 40.773,
+      "Text": "your"
+     },
+     {
+      "EndTime": 41.482,
+      "IsPartOfWord": false,
+      "StartTime": 40.987,
+      "Text": "face"
+     },
+     {
+      "EndTime": 41.67,
+      "IsPartOfWord": false,
+      "StartTime": 41.482,
+      "Text": "up"
+     },
+     {
+      "EndTime": 41.986,
+      "IsPartOfWord": false,
+      "StartTime": 41.67,
+      "Text": "on"
+     },
+     {
+      "EndTime": 42.082,
+      "IsPartOfWord": false,
+      "StartTime": 41.986,
+      "Text": "a"
+     },
+     {
+      "EndTime": 42.359,
+      "IsPartOfWord": true,
+      "StartTime": 42.082,
+      "Text": "bill"
+     },
+     {
+      "EndTime": 42.59,
+      "IsPartOfWord": false,
+      "StartTime": 42.359,
+      "Text": "board,"
+     },
+     {
+      "EndTime": 42.837,
+      "IsPartOfWord": false,
+      "StartTime": 42.59,
+      "Text": "just"
+     },
+     {
+      "EndTime": 43.271,
+      "IsPartOfWord": false,
+      "StartTime": 42.837,
+      "Text": "wait"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 45.332,
+    "StartTime": 43.271,
+    "Syllables": [
+     {
+      "EndTime": 43.704,
+      "IsPartOfWord": false,
+      "StartTime": 43.271,
+      "Text": "I"
+     },
+     {
+      "EndTime": 44.152,
+      "IsPartOfWord": false,
+      "StartTime": 43.704,
+      "Text": "don't"
+     },
+     {
+      "EndTime": 44.599,
+      "IsPartOfWord": false,
+      "StartTime": 44.152,
+      "Text": "know"
+     },
+     {
+      "EndTime": 45.332,
+      "IsPartOfWord": false,
+      "StartTime": 44.599,
+      "Text": "why"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 47.333,
+    "StartTime": 45.855,
+    "Syllables": [
+     {
+      "EndTime": 46.116,
+      "IsPartOfWord": false,
+      "StartTime": 45.855,
+      "Text": "In"
+     },
+     {
+      "EndTime": 46.307,
+      "IsPartOfWord": false,
+      "StartTime": 46.116,
+      "Text": "my"
+     },
+     {
+      "EndTime": 47.333,
+      "IsPartOfWord": false,
+      "StartTime": 46.307,
+      "Text": "mind"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 50.831,
+    "StartTime": 47.711,
+    "Syllables": [
+     {
+      "EndTime": 47.88,
+      "IsPartOfWord": false,
+      "StartTime": 47.711,
+      "Text": "You've"
+     },
+     {
+      "EndTime": 48.147,
+      "IsPartOfWord": false,
+      "StartTime": 47.88,
+      "Text": "been"
+     },
+     {
+      "EndTime": 48.61,
+      "IsPartOfWord": true,
+      "StartTime": 48.147,
+      "Text": "haun"
+     },
+     {
+      "EndTime": 49.073,
+      "IsPartOfWord": false,
+      "StartTime": 48.61,
+      "Text": "ting"
+     },
+     {
+      "EndTime": 49.507,
+      "IsPartOfWord": false,
+      "StartTime": 49.073,
+      "Text": "me"
+     },
+     {
+      "EndTime": 49.918,
+      "IsPartOfWord": true,
+      "StartTime": 49.507,
+      "Text": "in"
+     },
+     {
+      "EndTime": 50.831,
+      "IsPartOfWord": false,
+      "StartTime": 49.918,
+      "Text": "side"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 52.739,
+    "StartTime": 50.831,
+    "Syllables": [
+     {
+      "EndTime": 51.073,
+      "IsPartOfWord": false,
+      "StartTime": 50.831,
+      "Text": "It's"
+     },
+     {
+      "EndTime": 51.387,
+      "IsPartOfWord": false,
+      "StartTime": 51.073,
+      "Text": "so"
+     },
+     {
+      "EndTime": 51.795,
+      "IsPartOfWord": true,
+      "StartTime": 51.387,
+      "Text": "un"
+     },
+     {
+      "EndTime": 52.739,
+      "IsPartOfWord": false,
+      "StartTime": 51.795,
+      "Text": "fair"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 54.389,
+    "StartTime": 53.095,
+    "Syllables": [
+     {
+      "EndTime": 53.329,
+      "IsPartOfWord": false,
+      "StartTime": 53.095,
+      "Text": "How"
+     },
+     {
+      "EndTime": 53.486,
+      "IsPartOfWord": false,
+      "StartTime": 53.329,
+      "Text": "you"
+     },
+     {
+      "EndTime": 54.389,
+      "IsPartOfWord": false,
+      "StartTime": 53.486,
+      "Text": "made"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 56.044,
+    "StartTime": 54.884,
+    "Syllables": [
+     {
+      "EndTime": 55.146,
+      "IsPartOfWord": false,
+      "StartTime": 54.884,
+      "Text": "Made"
+     },
+     {
+      "EndTime": 55.352,
+      "IsPartOfWord": false,
+      "StartTime": 55.146,
+      "Text": "a"
+     },
+     {
+      "EndTime": 56.044,
+      "IsPartOfWord": false,
+      "StartTime": 55.352,
+      "Text": "home"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 57.687,
+    "StartTime": 56.628,
+    "Syllables": [
+     {
+      "EndTime": 56.828,
+      "IsPartOfWord": false,
+      "StartTime": 56.628,
+      "Text": "In"
+     },
+     {
+      "EndTime": 57.075,
+      "IsPartOfWord": false,
+      "StartTime": 56.828,
+      "Text": "my"
+     },
+     {
+      "EndTime": 57.687,
+      "IsPartOfWord": false,
+      "StartTime": 57.075,
+      "Text": "head"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 60.845,
+    "StartTime": 58.864,
+    "Syllables": [
+     {
+      "EndTime": 59.057,
+      "IsPartOfWord": false,
+      "StartTime": 58.864,
+      "Text": "'Cause"
+     },
+     {
+      "EndTime": 59.262,
+      "IsPartOfWord": false,
+      "StartTime": 59.057,
+      "Text": "you're"
+     },
+     {
+      "EndTime": 59.696,
+      "IsPartOfWord": true,
+      "StartTime": 59.262,
+      "Text": "run"
+     },
+     {
+      "EndTime": 59.87,
+      "IsPartOfWord": false,
+      "StartTime": 59.696,
+      "Text": "ning"
+     },
+     {
+      "EndTime": 60.137,
+      "IsPartOfWord": false,
+      "StartTime": 59.87,
+      "Text": "through"
+     },
+     {
+      "EndTime": 60.358,
+      "IsPartOfWord": false,
+      "StartTime": 60.137,
+      "Text": "my"
+     },
+     {
+      "EndTime": 60.845,
+      "IsPartOfWord": false,
+      "StartTime": 60.358,
+      "Text": "dreams"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 62.578,
+    "StartTime": 60.845,
+    "Syllables": [
+     {
+      "EndTime": 61.031,
+      "IsPartOfWord": false,
+      "StartTime": 60.845,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 61.538,
+      "IsPartOfWord": true,
+      "StartTime": 61.031,
+      "Text": "cal"
+     },
+     {
+      "EndTime": 61.803,
+      "IsPartOfWord": false,
+      "StartTime": 61.538,
+      "Text": "ling"
+     },
+     {
+      "EndTime": 62.03,
+      "IsPartOfWord": false,
+      "StartTime": 61.803,
+      "Text": "in"
+     },
+     {
+      "EndTime": 62.193,
+      "IsPartOfWord": false,
+      "StartTime": 62.03,
+      "Text": "my"
+     },
+     {
+      "EndTime": 62.578,
+      "IsPartOfWord": false,
+      "StartTime": 62.193,
+      "Text": "sleep"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 65.085,
+    "StartTime": 62.578,
+    "Syllables": [
+     {
+      "EndTime": 62.82,
+      "IsPartOfWord": false,
+      "StartTime": 62.578,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 63.254,
+      "IsPartOfWord": true,
+      "StartTime": 62.82,
+      "Text": "ma"
+     },
+     {
+      "EndTime": 63.523,
+      "IsPartOfWord": false,
+      "StartTime": 63.254,
+      "Text": "king"
+     },
+     {
+      "EndTime": 63.733,
+      "IsPartOfWord": false,
+      "StartTime": 63.523,
+      "Text": "it"
+     },
+     {
+      "EndTime": 63.963,
+      "IsPartOfWord": false,
+      "StartTime": 63.733,
+      "Text": "so"
+     },
+     {
+      "EndTime": 64.453,
+      "IsPartOfWord": false,
+      "StartTime": 63.963,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 64.623,
+      "IsPartOfWord": false,
+      "StartTime": 64.453,
+      "Text": "to"
+     },
+     {
+      "EndTime": 65.085,
+      "IsPartOfWord": false,
+      "StartTime": 64.623,
+      "Text": "breathe"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 67.704,
+    "StartTime": 65.085,
+    "Syllables": [
+     {
+      "EndTime": 65.434,
+      "IsPartOfWord": false,
+      "StartTime": 65.085,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 65.886,
+      "IsPartOfWord": false,
+      "StartTime": 65.434,
+      "Text": "my"
+     },
+     {
+      "EndTime": 66.298,
+      "IsPartOfWord": true,
+      "StartTime": 65.886,
+      "Text": "di"
+     },
+     {
+      "EndTime": 66.971,
+      "IsPartOfWord": false,
+      "StartTime": 66.298,
+      "Text": "sease,"
+     },
+     {
+      "EndTime": 67.198,
+      "IsPartOfWord": false,
+      "StartTime": 66.971,
+      "Text": "you"
+     },
+     {
+      "EndTime": 67.704,
+      "IsPartOfWord": false,
+      "StartTime": 67.198,
+      "Text": "know"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 71.306,
+    "StartTime": 67.704,
+    "Syllables": [
+     {
+      "EndTime": 67.947,
+      "IsPartOfWord": true,
+      "StartTime": 67.704,
+      "Text": "Me"
+     },
+     {
+      "EndTime": 68.179,
+      "IsPartOfWord": true,
+      "StartTime": 67.947,
+      "Text": "la"
+     },
+     {
+      "EndTime": 68.663,
+      "IsPartOfWord": true,
+      "StartTime": 68.179,
+      "Text": "to"
+     },
+     {
+      "EndTime": 69.138,
+      "IsPartOfWord": false,
+      "StartTime": 68.663,
+      "Text": "nin's"
+     },
+     {
+      "EndTime": 69.48,
+      "IsPartOfWord": false,
+      "StartTime": 69.138,
+      "Text": "got"
+     },
+     {
+      "EndTime": 69.792,
+      "IsPartOfWord": false,
+      "StartTime": 69.48,
+      "Text": "not"
+     },
+     {
+      "EndTime": 70.016,
+      "IsPartOfWord": false,
+      "StartTime": 69.792,
+      "Text": "a"
+     },
+     {
+      "EndTime": 70.596,
+      "IsPartOfWord": false,
+      "StartTime": 70.016,
+      "Text": "thing"
+     },
+     {
+      "EndTime": 70.936,
+      "IsPartOfWord": false,
+      "StartTime": 70.596,
+      "Text": "on"
+     },
+     {
+      "EndTime": 71.306,
+      "IsPartOfWord": false,
+      "StartTime": 70.936,
+      "Text": "you"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 73.109,
+    "StartTime": 71.306,
+    "Syllables": [
+     {
+      "EndTime": 71.576,
+      "IsPartOfWord": false,
+      "StartTime": 71.306,
+      "Text": "Not"
+     },
+     {
+      "EndTime": 71.758,
+      "IsPartOfWord": false,
+      "StartTime": 71.576,
+      "Text": "a"
+     },
+     {
+      "EndTime": 73.109,
+      "IsPartOfWord": false,
+      "StartTime": 71.758,
+      "Text": "wink"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 77.551,
+    "StartTime": 73.11,
+    "Syllables": [
+     {
+      "EndTime": 73.366,
+      "IsPartOfWord": false,
+      "StartTime": 73.11,
+      "Text": "'Cause"
+     },
+     {
+      "EndTime": 73.531,
+      "IsPartOfWord": false,
+      "StartTime": 73.366,
+      "Text": "we're"
+     },
+     {
+      "EndTime": 74.236,
+      "IsPartOfWord": false,
+      "StartTime": 73.531,
+      "Text": "back"
+     },
+     {
+      "EndTime": 74.679,
+      "IsPartOfWord": true,
+      "StartTime": 74.236,
+      "Text": "to"
+     },
+     {
+      "EndTime": 74.97,
+      "IsPartOfWord": true,
+      "StartTime": 74.679,
+      "Text": "ge"
+     },
+     {
+      "EndTime": 75.364,
+      "IsPartOfWord": false,
+      "StartTime": 74.97,
+      "Text": "ther,"
+     },
+     {
+      "EndTime": 75.983,
+      "IsPartOfWord": false,
+      "StartTime": 75.364,
+      "Text": "then"
+     },
+     {
+      "EndTime": 76.44,
+      "IsPartOfWord": false,
+      "StartTime": 75.983,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 76.756,
+      "IsPartOfWord": true,
+      "StartTime": 76.44,
+      "Text": "\"ne"
+     },
+     {
+      "EndTime": 76.963,
+      "IsPartOfWord": false,
+      "StartTime": 76.756,
+      "Text": "ver"
+     },
+     {
+      "EndTime": 77.184,
+      "IsPartOfWord": true,
+      "StartTime": 76.963,
+      "Text": "a"
+     },
+     {
+      "EndTime": 77.551,
+      "IsPartOfWord": false,
+      "StartTime": 77.184,
+      "Text": "gain\""
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 82.243,
+    "StartTime": 77.551,
+    "Syllables": [
+     {
+      "EndTime": 78.003,
+      "IsPartOfWord": false,
+      "StartTime": 77.551,
+      "Text": "But"
+     },
+     {
+      "EndTime": 78.513,
+      "IsPartOfWord": false,
+      "StartTime": 78.003,
+      "Text": "I"
+     },
+     {
+      "EndTime": 78.961,
+      "IsPartOfWord": false,
+      "StartTime": 78.513,
+      "Text": "just"
+     },
+     {
+      "EndTime": 79.879,
+      "IsPartOfWord": false,
+      "StartTime": 78.961,
+      "Text": "know"
+     },
+     {
+      "EndTime": 80.077,
+      "IsPartOfWord": false,
+      "StartTime": 79.879,
+      "Text": "that"
+     },
+     {
+      "EndTime": 80.242,
+      "IsPartOfWord": false,
+      "StartTime": 80.077,
+      "Text": "I'm"
+     },
+     {
+      "EndTime": 80.474,
+      "IsPartOfWord": true,
+      "StartTime": 80.242,
+      "Text": "gon"
+     },
+     {
+      "EndTime": 80.674,
+      "IsPartOfWord": false,
+      "StartTime": 80.474,
+      "Text": "na"
+     },
+     {
+      "EndTime": 81.114,
+      "IsPartOfWord": false,
+      "StartTime": 80.674,
+      "Text": "see"
+     },
+     {
+      "EndTime": 81.42,
+      "IsPartOfWord": false,
+      "StartTime": 81.114,
+      "Text": "you"
+     },
+     {
+      "EndTime": 81.603,
+      "IsPartOfWord": false,
+      "StartTime": 81.42,
+      "Text": "in"
+     },
+     {
+      "EndTime": 81.805,
+      "IsPartOfWord": false,
+      "StartTime": 81.603,
+      "Text": "my"
+     },
+     {
+      "EndTime": 82.243,
+      "IsPartOfWord": false,
+      "StartTime": 81.805,
+      "Text": "dreams"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 84.059,
+    "StartTime": 82.243,
+    "Syllables": [
+     {
+      "EndTime": 82.48,
+      "IsPartOfWord": false,
+      "StartTime": 82.243,
+      "Text": "A"
+     },
+     {
+      "EndTime": 82.932,
+      "IsPartOfWord": false,
+      "StartTime": 82.48,
+      "Text": "phone"
+     },
+     {
+      "EndTime": 83.207,
+      "IsPartOfWord": false,
+      "StartTime": 82.932,
+      "Text": "call"
+     },
+     {
+      "EndTime": 83.379,
+      "IsPartOfWord": false,
+      "StartTime": 83.207,
+      "Text": "in"
+     },
+     {
+      "EndTime": 83.569,
+      "IsPartOfWord": true,
+      "StartTime": 83.379,
+      "Text": "be"
+     },
+     {
+      "EndTime": 84.059,
+      "IsPartOfWord": false,
+      "StartTime": 83.569,
+      "Text": "tween"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 87.315,
+    "StartTime": 84.059,
+    "Syllables": [
+     {
+      "EndTime": 84.256,
+      "IsPartOfWord": false,
+      "StartTime": 84.059,
+      "Text": "A"
+     },
+     {
+      "EndTime": 84.709,
+      "IsPartOfWord": true,
+      "StartTime": 84.256,
+      "Text": "brea"
+     },
+     {
+      "EndTime": 84.9,
+      "IsPartOfWord": false,
+      "StartTime": 84.709,
+      "Text": "kup"
+     },
+     {
+      "EndTime": 85.167,
+      "IsPartOfWord": false,
+      "StartTime": 84.9,
+      "Text": "and"
+     },
+     {
+      "EndTime": 85.449,
+      "IsPartOfWord": false,
+      "StartTime": 85.167,
+      "Text": "a"
+     },
+     {
+      "EndTime": 85.904,
+      "IsPartOfWord": true,
+      "StartTime": 85.449,
+      "Text": "wed"
+     },
+     {
+      "EndTime": 86.153,
+      "IsPartOfWord": false,
+      "StartTime": 85.904,
+      "Text": "ding"
+     },
+     {
+      "EndTime": 87.315,
+      "IsPartOfWord": false,
+      "StartTime": 86.153,
+      "Text": "ring"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 90.691,
+    "StartTime": 87.57,
+    "Syllables": [
+     {
+      "EndTime": 87.803,
+      "IsPartOfWord": true,
+      "StartTime": 87.57,
+      "Text": "De"
+     },
+     {
+      "EndTime": 88.269,
+      "IsPartOfWord": true,
+      "StartTime": 87.803,
+      "Text": "li"
+     },
+     {
+      "EndTime": 88.549,
+      "IsPartOfWord": true,
+      "StartTime": 88.269,
+      "Text": "ri"
+     },
+     {
+      "EndTime": 88.785,
+      "IsPartOfWord": false,
+      "StartTime": 88.549,
+      "Text": "um"
+     },
+     {
+      "EndTime": 88.952,
+      "IsPartOfWord": false,
+      "StartTime": 88.785,
+      "Text": "is"
+     },
+     {
+      "EndTime": 89.183,
+      "IsPartOfWord": true,
+      "StartTime": 88.952,
+      "Text": "star"
+     },
+     {
+      "EndTime": 89.433,
+      "IsPartOfWord": false,
+      "StartTime": 89.183,
+      "Text": "ting"
+     },
+     {
+      "EndTime": 89.644,
+      "IsPartOfWord": false,
+      "StartTime": 89.433,
+      "Text": "to"
+     },
+     {
+      "EndTime": 90.691,
+      "IsPartOfWord": false,
+      "StartTime": 89.644,
+      "Text": "set"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 94.189,
+    "StartTime": 90.863,
+    "Syllables": [
+     {
+      "EndTime": 91.144,
+      "IsPartOfWord": false,
+      "StartTime": 90.863,
+      "Text": "Was"
+     },
+     {
+      "EndTime": 91.364,
+      "IsPartOfWord": false,
+      "StartTime": 91.144,
+      "Text": "it"
+     },
+     {
+      "EndTime": 91.811,
+      "IsPartOfWord": false,
+      "StartTime": 91.364,
+      "Text": "you"
+     },
+     {
+      "EndTime": 92.038,
+      "IsPartOfWord": false,
+      "StartTime": 91.811,
+      "Text": "or"
+     },
+     {
+      "EndTime": 92.301,
+      "IsPartOfWord": false,
+      "StartTime": 92.038,
+      "Text": "was"
+     },
+     {
+      "EndTime": 92.534,
+      "IsPartOfWord": false,
+      "StartTime": 92.301,
+      "Text": "it"
+     },
+     {
+      "EndTime": 92.821,
+      "IsPartOfWord": true,
+      "StartTime": 92.534,
+      "Text": "some"
+     },
+     {
+      "EndTime": 93.02,
+      "IsPartOfWord": false,
+      "StartTime": 92.821,
+      "Text": "thing"
+     },
+     {
+      "EndTime": 93.25,
+      "IsPartOfWord": false,
+      "StartTime": 93.02,
+      "Text": "I"
+     },
+     {
+      "EndTime": 94.189,
+      "IsPartOfWord": false,
+      "StartTime": 93.25,
+      "Text": "said?"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 97.847,
+    "StartTime": 94.522,
+    "Syllables": [
+     {
+      "EndTime": 94.701,
+      "IsPartOfWord": true,
+      "StartTime": 94.522,
+      "Text": "Tri"
+     },
+     {
+      "EndTime": 94.983,
+      "IsPartOfWord": true,
+      "StartTime": 94.701,
+      "Text": "ple-"
+     },
+     {
+      "EndTime": 95.385,
+      "IsPartOfWord": true,
+      "StartTime": 94.983,
+      "Text": "tex"
+     },
+     {
+      "EndTime": 95.635,
+      "IsPartOfWord": false,
+      "StartTime": 95.385,
+      "Text": "ting,"
+     },
+     {
+      "EndTime": 95.828,
+      "IsPartOfWord": false,
+      "StartTime": 95.635,
+      "Text": "then"
+     },
+     {
+      "EndTime": 96.071,
+      "IsPartOfWord": true,
+      "StartTime": 95.828,
+      "Text": "de"
+     },
+     {
+      "EndTime": 96.386,
+      "IsPartOfWord": true,
+      "StartTime": 96.071,
+      "Text": "le"
+     },
+     {
+      "EndTime": 96.582,
+      "IsPartOfWord": false,
+      "StartTime": 96.386,
+      "Text": "ting"
+     },
+     {
+      "EndTime": 96.803,
+      "IsPartOfWord": false,
+      "StartTime": 96.582,
+      "Text": "in"
+     },
+     {
+      "EndTime": 97.847,
+      "IsPartOfWord": false,
+      "StartTime": 96.803,
+      "Text": "ten"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 100.748,
+    "StartTime": 98.128,
+    "Syllables": [
+     {
+      "EndTime": 98.321,
+      "IsPartOfWord": true,
+      "StartTime": 98.128,
+      "Text": "Li"
+     },
+     {
+      "EndTime": 98.552,
+      "IsPartOfWord": false,
+      "StartTime": 98.321,
+      "Text": "vin'"
+     },
+     {
+      "EndTime": 98.945,
+      "IsPartOfWord": true,
+      "StartTime": 98.552,
+      "Text": "rent-"
+     },
+     {
+      "EndTime": 99.244,
+      "IsPartOfWord": false,
+      "StartTime": 98.945,
+      "Text": "free"
+     },
+     {
+      "EndTime": 99.456,
+      "IsPartOfWord": false,
+      "StartTime": 99.244,
+      "Text": "up"
+     },
+     {
+      "EndTime": 99.624,
+      "IsPartOfWord": true,
+      "StartTime": 99.456,
+      "Text": "in"
+     },
+     {
+      "EndTime": 99.909,
+      "IsPartOfWord": false,
+      "StartTime": 99.624,
+      "Text": "side"
+     },
+     {
+      "EndTime": 100.137,
+      "IsPartOfWord": false,
+      "StartTime": 99.909,
+      "Text": "of"
+     },
+     {
+      "EndTime": 100.306,
+      "IsPartOfWord": false,
+      "StartTime": 100.137,
+      "Text": "my"
+     },
+     {
+      "EndTime": 100.748,
+      "IsPartOfWord": false,
+      "StartTime": 100.306,
+      "Text": "head"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 102.788,
+    "StartTime": 100.748,
+    "Syllables": [
+     {
+      "EndTime": 101.258,
+      "IsPartOfWord": false,
+      "StartTime": 100.748,
+      "Text": "I"
+     },
+     {
+      "EndTime": 101.699,
+      "IsPartOfWord": false,
+      "StartTime": 101.258,
+      "Text": "don't"
+     },
+     {
+      "EndTime": 102.152,
+      "IsPartOfWord": false,
+      "StartTime": 101.699,
+      "Text": "know"
+     },
+     {
+      "EndTime": 102.788,
+      "IsPartOfWord": false,
+      "StartTime": 102.152,
+      "Text": "why"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 104.884,
+    "StartTime": 103.446,
+    "Syllables": [
+     {
+      "EndTime": 103.729,
+      "IsPartOfWord": false,
+      "StartTime": 103.446,
+      "Text": "In"
+     },
+     {
+      "EndTime": 103.952,
+      "IsPartOfWord": false,
+      "StartTime": 103.729,
+      "Text": "my"
+     },
+     {
+      "EndTime": 104.884,
+      "IsPartOfWord": false,
+      "StartTime": 103.952,
+      "Text": "mind"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 108.388,
+    "StartTime": 105.271,
+    "Syllables": [
+     {
+      "EndTime": 105.488,
+      "IsPartOfWord": false,
+      "StartTime": 105.271,
+      "Text": "You've"
+     },
+     {
+      "EndTime": 105.72,
+      "IsPartOfWord": false,
+      "StartTime": 105.488,
+      "Text": "been"
+     },
+     {
+      "EndTime": 106.12,
+      "IsPartOfWord": true,
+      "StartTime": 105.72,
+      "Text": "haun"
+     },
+     {
+      "EndTime": 106.628,
+      "IsPartOfWord": false,
+      "StartTime": 106.12,
+      "Text": "ting"
+     },
+     {
+      "EndTime": 107.057,
+      "IsPartOfWord": false,
+      "StartTime": 106.628,
+      "Text": "me"
+     },
+     {
+      "EndTime": 107.423,
+      "IsPartOfWord": true,
+      "StartTime": 107.057,
+      "Text": "in"
+     },
+     {
+      "EndTime": 108.388,
+      "IsPartOfWord": false,
+      "StartTime": 107.423,
+      "Text": "side"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 110.01,
+    "StartTime": 108.388,
+    "Syllables": [
+     {
+      "EndTime": 108.625,
+      "IsPartOfWord": false,
+      "StartTime": 108.388,
+      "Text": "It's"
+     },
+     {
+      "EndTime": 108.891,
+      "IsPartOfWord": false,
+      "StartTime": 108.625,
+      "Text": "so"
+     },
+     {
+      "EndTime": 109.333,
+      "IsPartOfWord": true,
+      "StartTime": 108.891,
+      "Text": "un"
+     },
+     {
+      "EndTime": 110.01,
+      "IsPartOfWord": false,
+      "StartTime": 109.333,
+      "Text": "fair"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 111.67,
+    "StartTime": 110.525,
+    "Syllables": [
+     {
+      "EndTime": 110.793,
+      "IsPartOfWord": false,
+      "StartTime": 110.525,
+      "Text": "How"
+     },
+     {
+      "EndTime": 111.044,
+      "IsPartOfWord": false,
+      "StartTime": 110.793,
+      "Text": "you"
+     },
+     {
+      "EndTime": 111.67,
+      "IsPartOfWord": false,
+      "StartTime": 111.044,
+      "Text": "made"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 113.492,
+    "StartTime": 112.441,
+    "Syllables": [
+     {
+      "EndTime": 112.595,
+      "IsPartOfWord": false,
+      "StartTime": 112.441,
+      "Text": "Made"
+     },
+     {
+      "EndTime": 112.852,
+      "IsPartOfWord": false,
+      "StartTime": 112.595,
+      "Text": "a"
+     },
+     {
+      "EndTime": 113.492,
+      "IsPartOfWord": false,
+      "StartTime": 112.852,
+      "Text": "home"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 115.124,
+    "StartTime": 114.209,
+    "Syllables": [
+     {
+      "EndTime": 114.471,
+      "IsPartOfWord": false,
+      "StartTime": 114.209,
+      "Text": "In"
+     },
+     {
+      "EndTime": 114.665,
+      "IsPartOfWord": false,
+      "StartTime": 114.471,
+      "Text": "my"
+     },
+     {
+      "EndTime": 115.124,
+      "IsPartOfWord": false,
+      "StartTime": 114.665,
+      "Text": "head"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 118.011,
+    "StartTime": 116.016,
+    "Syllables": [
+     {
+      "EndTime": 116.212,
+      "IsPartOfWord": false,
+      "StartTime": 116.016,
+      "Text": "'Cause"
+     },
+     {
+      "EndTime": 116.444,
+      "IsPartOfWord": false,
+      "StartTime": 116.212,
+      "Text": "you're"
+     },
+     {
+      "EndTime": 116.885,
+      "IsPartOfWord": true,
+      "StartTime": 116.444,
+      "Text": "run"
+     },
+     {
+      "EndTime": 117.09,
+      "IsPartOfWord": false,
+      "StartTime": 116.885,
+      "Text": "ning"
+     },
+     {
+      "EndTime": 117.415,
+      "IsPartOfWord": false,
+      "StartTime": 117.09,
+      "Text": "through"
+     },
+     {
+      "EndTime": 117.51,
+      "IsPartOfWord": false,
+      "StartTime": 117.415,
+      "Text": "my"
+     },
+     {
+      "EndTime": 118.011,
+      "IsPartOfWord": false,
+      "StartTime": 117.51,
+      "Text": "dreams"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 119.849,
+    "StartTime": 118.011,
+    "Syllables": [
+     {
+      "EndTime": 118.26,
+      "IsPartOfWord": false,
+      "StartTime": 118.011,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 118.711,
+      "IsPartOfWord": true,
+      "StartTime": 118.26,
+      "Text": "cal"
+     },
+     {
+      "EndTime": 118.939,
+      "IsPartOfWord": false,
+      "StartTime": 118.711,
+      "Text": "ling"
+     },
+     {
+      "EndTime": 119.148,
+      "IsPartOfWord": false,
+      "StartTime": 118.939,
+      "Text": "in"
+     },
+     {
+      "EndTime": 119.303,
+      "IsPartOfWord": false,
+      "StartTime": 119.148,
+      "Text": "my"
+     },
+     {
+      "EndTime": 119.849,
+      "IsPartOfWord": false,
+      "StartTime": 119.303,
+      "Text": "sleep"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 122.196,
+    "StartTime": 119.849,
+    "Syllables": [
+     {
+      "EndTime": 120.029,
+      "IsPartOfWord": false,
+      "StartTime": 119.849,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 120.496,
+      "IsPartOfWord": true,
+      "StartTime": 120.029,
+      "Text": "ma"
+     },
+     {
+      "EndTime": 120.747,
+      "IsPartOfWord": false,
+      "StartTime": 120.496,
+      "Text": "king"
+     },
+     {
+      "EndTime": 120.94,
+      "IsPartOfWord": false,
+      "StartTime": 120.747,
+      "Text": "it"
+     },
+     {
+      "EndTime": 121.197,
+      "IsPartOfWord": false,
+      "StartTime": 120.94,
+      "Text": "so"
+     },
+     {
+      "EndTime": 121.599,
+      "IsPartOfWord": false,
+      "StartTime": 121.197,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 121.734,
+      "IsPartOfWord": false,
+      "StartTime": 121.599,
+      "Text": "to"
+     },
+     {
+      "EndTime": 122.196,
+      "IsPartOfWord": false,
+      "StartTime": 121.734,
+      "Text": "breathe"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 124.937,
+    "StartTime": 122.196,
+    "Syllables": [
+     {
+      "EndTime": 122.609,
+      "IsPartOfWord": false,
+      "StartTime": 122.196,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 123.026,
+      "IsPartOfWord": false,
+      "StartTime": 122.609,
+      "Text": "my"
+     },
+     {
+      "EndTime": 123.556,
+      "IsPartOfWord": true,
+      "StartTime": 123.026,
+      "Text": "di"
+     },
+     {
+      "EndTime": 124.292,
+      "IsPartOfWord": false,
+      "StartTime": 123.556,
+      "Text": "sease,"
+     },
+     {
+      "EndTime": 124.49,
+      "IsPartOfWord": false,
+      "StartTime": 124.292,
+      "Text": "you"
+     },
+     {
+      "EndTime": 124.937,
+      "IsPartOfWord": false,
+      "StartTime": 124.49,
+      "Text": "know"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 128.534,
+    "StartTime": 124.937,
+    "Syllables": [
+     {
+      "EndTime": 125.183,
+      "IsPartOfWord": true,
+      "StartTime": 124.937,
+      "Text": "Me"
+     },
+     {
+      "EndTime": 125.4,
+      "IsPartOfWord": true,
+      "StartTime": 125.183,
+      "Text": "la"
+     },
+     {
+      "EndTime": 125.818,
+      "IsPartOfWord": true,
+      "StartTime": 125.4,
+      "Text": "to"
+     },
+     {
+      "EndTime": 126.294,
+      "IsPartOfWord": false,
+      "StartTime": 125.818,
+      "Text": "nin's"
+     },
+     {
+      "EndTime": 126.702,
+      "IsPartOfWord": false,
+      "StartTime": 126.294,
+      "Text": "got"
+     },
+     {
+      "EndTime": 126.95,
+      "IsPartOfWord": false,
+      "StartTime": 126.702,
+      "Text": "not"
+     },
+     {
+      "EndTime": 127.102,
+      "IsPartOfWord": false,
+      "StartTime": 126.95,
+      "Text": "a"
+     },
+     {
+      "EndTime": 127.818,
+      "IsPartOfWord": false,
+      "StartTime": 127.102,
+      "Text": "thing"
+     },
+     {
+      "EndTime": 128.063,
+      "IsPartOfWord": false,
+      "StartTime": 127.818,
+      "Text": "on"
+     },
+     {
+      "EndTime": 128.534,
+      "IsPartOfWord": false,
+      "StartTime": 128.063,
+      "Text": "you"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 130.206,
+    "StartTime": 128.534,
+    "Syllables": [
+     {
+      "EndTime": 128.702,
+      "IsPartOfWord": false,
+      "StartTime": 128.534,
+      "Text": "Not"
+     },
+     {
+      "EndTime": 128.912,
+      "IsPartOfWord": false,
+      "StartTime": 128.702,
+      "Text": "a"
+     },
+     {
+      "EndTime": 130.206,
+      "IsPartOfWord": false,
+      "StartTime": 128.912,
+      "Text": "wink"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 134.83,
+    "StartTime": 130.326,
+    "Syllables": [
+     {
+      "EndTime": 130.548,
+      "IsPartOfWord": false,
+      "StartTime": 130.326,
+      "Text": "'Cause"
+     },
+     {
+      "EndTime": 130.761,
+      "IsPartOfWord": false,
+      "StartTime": 130.548,
+      "Text": "we're"
+     },
+     {
+      "EndTime": 131.343,
+      "IsPartOfWord": false,
+      "StartTime": 130.761,
+      "Text": "back"
+     },
+     {
+      "EndTime": 131.783,
+      "IsPartOfWord": true,
+      "StartTime": 131.343,
+      "Text": "to"
+     },
+     {
+      "EndTime": 132.114,
+      "IsPartOfWord": true,
+      "StartTime": 131.783,
+      "Text": "ge"
+     },
+     {
+      "EndTime": 132.587,
+      "IsPartOfWord": false,
+      "StartTime": 132.114,
+      "Text": "ther,"
+     },
+     {
+      "EndTime": 133.222,
+      "IsPartOfWord": false,
+      "StartTime": 132.587,
+      "Text": "then"
+     },
+     {
+      "EndTime": 133.676,
+      "IsPartOfWord": false,
+      "StartTime": 133.222,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 133.867,
+      "IsPartOfWord": true,
+      "StartTime": 133.676,
+      "Text": "\"ne"
+     },
+     {
+      "EndTime": 134.09,
+      "IsPartOfWord": false,
+      "StartTime": 133.867,
+      "Text": "ver"
+     },
+     {
+      "EndTime": 134.321,
+      "IsPartOfWord": true,
+      "StartTime": 134.09,
+      "Text": "a"
+     },
+     {
+      "EndTime": 134.83,
+      "IsPartOfWord": false,
+      "StartTime": 134.321,
+      "Text": "gain\""
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 139.491,
+    "StartTime": 134.83,
+    "Syllables": [
+     {
+      "EndTime": 135.205,
+      "IsPartOfWord": false,
+      "StartTime": 134.83,
+      "Text": "But"
+     },
+     {
+      "EndTime": 135.596,
+      "IsPartOfWord": false,
+      "StartTime": 135.205,
+      "Text": "I"
+     },
+     {
+      "EndTime": 136.076,
+      "IsPartOfWord": false,
+      "StartTime": 135.596,
+      "Text": "just"
+     },
+     {
+      "EndTime": 136.969,
+      "IsPartOfWord": false,
+      "StartTime": 136.076,
+      "Text": "know"
+     },
+     {
+      "EndTime": 137.177,
+      "IsPartOfWord": false,
+      "StartTime": 136.969,
+      "Text": "that"
+     },
+     {
+      "EndTime": 137.354,
+      "IsPartOfWord": false,
+      "StartTime": 137.177,
+      "Text": "I'm"
+     },
+     {
+      "EndTime": 137.574,
+      "IsPartOfWord": true,
+      "StartTime": 137.354,
+      "Text": "gon"
+     },
+     {
+      "EndTime": 137.817,
+      "IsPartOfWord": false,
+      "StartTime": 137.574,
+      "Text": "na"
+     },
+     {
+      "EndTime": 138.301,
+      "IsPartOfWord": false,
+      "StartTime": 137.817,
+      "Text": "see"
+     },
+     {
+      "EndTime": 138.566,
+      "IsPartOfWord": false,
+      "StartTime": 138.301,
+      "Text": "you"
+     },
+     {
+      "EndTime": 138.81,
+      "IsPartOfWord": false,
+      "StartTime": 138.566,
+      "Text": "in"
+     },
+     {
+      "EndTime": 138.988,
+      "IsPartOfWord": false,
+      "StartTime": 138.81,
+      "Text": "my"
+     },
+     {
+      "EndTime": 139.491,
+      "IsPartOfWord": false,
+      "StartTime": 138.988,
+      "Text": "dreams"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 141.188,
+    "StartTime": 139.491,
+    "Syllables": [
+     {
+      "EndTime": 139.682,
+      "IsPartOfWord": false,
+      "StartTime": 139.491,
+      "Text": "A"
+     },
+     {
+      "EndTime": 140.144,
+      "IsPartOfWord": false,
+      "StartTime": 139.682,
+      "Text": "phone"
+     },
+     {
+      "EndTime": 140.415,
+      "IsPartOfWord": false,
+      "StartTime": 140.144,
+      "Text": "call"
+     },
+     {
+      "EndTime": 140.66,
+      "IsPartOfWord": false,
+      "StartTime": 140.415,
+      "Text": "in"
+     },
+     {
+      "EndTime": 140.827,
+      "IsPartOfWord": true,
+      "StartTime": 140.66,
+      "Text": "be"
+     },
+     {
+      "EndTime": 141.188,
+      "IsPartOfWord": false,
+      "StartTime": 140.827,
+      "Text": "tween"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Background": [
+    {
+     "EndTime": 146.289,
+     "StartTime": 145.176,
+     "Syllables": [
+      {
+       "EndTime": 146.289,
+       "IsPartOfWord": false,
+       "StartTime": 145.176,
+       "Text": "Woo"
+      }
+     ]
+    }
+   ],
+   "Lead": {
+    "EndTime": 146.289,
+    "StartTime": 141.188,
+    "Syllables": [
+     {
+      "EndTime": 141.385,
+      "IsPartOfWord": false,
+      "StartTime": 141.188,
+      "Text": "A"
+     },
+     {
+      "EndTime": 141.921,
+      "IsPartOfWord": true,
+      "StartTime": 141.385,
+      "Text": "brea"
+     },
+     {
+      "EndTime": 142.057,
+      "IsPartOfWord": false,
+      "StartTime": 141.921,
+      "Text": "kup"
+     },
+     {
+      "EndTime": 142.37,
+      "IsPartOfWord": false,
+      "StartTime": 142.057,
+      "Text": "and"
+     },
+     {
+      "EndTime": 142.57,
+      "IsPartOfWord": false,
+      "StartTime": 142.37,
+      "Text": "a"
+     },
+     {
+      "EndTime": 143.01,
+      "IsPartOfWord": true,
+      "StartTime": 142.57,
+      "Text": "wed"
+     },
+     {
+      "EndTime": 143.19,
+      "IsPartOfWord": false,
+      "StartTime": 143.01,
+      "Text": "ding"
+     },
+     {
+      "EndTime": 144.57,
+      "IsPartOfWord": false,
+      "StartTime": 143.19,
+      "Text": "ring"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 175.234,
+    "StartTime": 173.167,
+    "Syllables": [
+     {
+      "EndTime": 173.393,
+      "IsPartOfWord": false,
+      "StartTime": 173.167,
+      "Text": "'Cause"
+     },
+     {
+      "EndTime": 173.598,
+      "IsPartOfWord": false,
+      "StartTime": 173.393,
+      "Text": "you're"
+     },
+     {
+      "EndTime": 174.089,
+      "IsPartOfWord": true,
+      "StartTime": 173.598,
+      "Text": "run"
+     },
+     {
+      "EndTime": 174.317,
+      "IsPartOfWord": false,
+      "StartTime": 174.089,
+      "Text": "ning"
+     },
+     {
+      "EndTime": 174.53,
+      "IsPartOfWord": false,
+      "StartTime": 174.317,
+      "Text": "through"
+     },
+     {
+      "EndTime": 174.739,
+      "IsPartOfWord": false,
+      "StartTime": 174.53,
+      "Text": "my"
+     },
+     {
+      "EndTime": 175.234,
+      "IsPartOfWord": false,
+      "StartTime": 174.739,
+      "Text": "dreams"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 176.966,
+    "StartTime": 175.234,
+    "Syllables": [
+     {
+      "EndTime": 175.492,
+      "IsPartOfWord": false,
+      "StartTime": 175.234,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 175.859,
+      "IsPartOfWord": true,
+      "StartTime": 175.492,
+      "Text": "cal"
+     },
+     {
+      "EndTime": 176.141,
+      "IsPartOfWord": false,
+      "StartTime": 175.859,
+      "Text": "ling"
+     },
+     {
+      "EndTime": 176.351,
+      "IsPartOfWord": false,
+      "StartTime": 176.141,
+      "Text": "in"
+     },
+     {
+      "EndTime": 176.528,
+      "IsPartOfWord": false,
+      "StartTime": 176.351,
+      "Text": "my"
+     },
+     {
+      "EndTime": 176.966,
+      "IsPartOfWord": false,
+      "StartTime": 176.528,
+      "Text": "sleep"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 179.431,
+    "StartTime": 176.966,
+    "Syllables": [
+     {
+      "EndTime": 177.203,
+      "IsPartOfWord": false,
+      "StartTime": 176.966,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 177.633,
+      "IsPartOfWord": true,
+      "StartTime": 177.203,
+      "Text": "ma"
+     },
+     {
+      "EndTime": 177.84,
+      "IsPartOfWord": false,
+      "StartTime": 177.633,
+      "Text": "king"
+     },
+     {
+      "EndTime": 178.083,
+      "IsPartOfWord": false,
+      "StartTime": 177.84,
+      "Text": "it"
+     },
+     {
+      "EndTime": 178.271,
+      "IsPartOfWord": false,
+      "StartTime": 178.083,
+      "Text": "so"
+     },
+     {
+      "EndTime": 178.755,
+      "IsPartOfWord": false,
+      "StartTime": 178.271,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 178.913,
+      "IsPartOfWord": false,
+      "StartTime": 178.755,
+      "Text": "to"
+     },
+     {
+      "EndTime": 179.431,
+      "IsPartOfWord": false,
+      "StartTime": 178.913,
+      "Text": "breathe"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 182.104,
+    "StartTime": 179.431,
+    "Syllables": [
+     {
+      "EndTime": 179.832,
+      "IsPartOfWord": false,
+      "StartTime": 179.431,
+      "Text": "You're"
+     },
+     {
+      "EndTime": 180.31,
+      "IsPartOfWord": false,
+      "StartTime": 179.832,
+      "Text": "my"
+     },
+     {
+      "EndTime": 180.763,
+      "IsPartOfWord": true,
+      "StartTime": 180.31,
+      "Text": "di"
+     },
+     {
+      "EndTime": 181.467,
+      "IsPartOfWord": false,
+      "StartTime": 180.763,
+      "Text": "sease,"
+     },
+     {
+      "EndTime": 181.643,
+      "IsPartOfWord": false,
+      "StartTime": 181.467,
+      "Text": "you"
+     },
+     {
+      "EndTime": 182.104,
+      "IsPartOfWord": false,
+      "StartTime": 181.643,
+      "Text": "know"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 185.701,
+    "StartTime": 182.104,
+    "Syllables": [
+     {
+      "EndTime": 182.346,
+      "IsPartOfWord": true,
+      "StartTime": 182.104,
+      "Text": "Me"
+     },
+     {
+      "EndTime": 182.499,
+      "IsPartOfWord": true,
+      "StartTime": 182.346,
+      "Text": "la"
+     },
+     {
+      "EndTime": 182.979,
+      "IsPartOfWord": true,
+      "StartTime": 182.499,
+      "Text": "to"
+     },
+     {
+      "EndTime": 183.441,
+      "IsPartOfWord": false,
+      "StartTime": 182.979,
+      "Text": "nin's"
+     },
+     {
+      "EndTime": 183.885,
+      "IsPartOfWord": false,
+      "StartTime": 183.441,
+      "Text": "got"
+     },
+     {
+      "EndTime": 184.155,
+      "IsPartOfWord": false,
+      "StartTime": 183.885,
+      "Text": "not"
+     },
+     {
+      "EndTime": 184.348,
+      "IsPartOfWord": false,
+      "StartTime": 184.155,
+      "Text": "a"
+     },
+     {
+      "EndTime": 185.007,
+      "IsPartOfWord": false,
+      "StartTime": 184.348,
+      "Text": "thing"
+     },
+     {
+      "EndTime": 185.304,
+      "IsPartOfWord": false,
+      "StartTime": 185.007,
+      "Text": "on"
+     },
+     {
+      "EndTime": 185.701,
+      "IsPartOfWord": false,
+      "StartTime": 185.304,
+      "Text": "you"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 187.421,
+    "StartTime": 185.701,
+    "Syllables": [
+     {
+      "EndTime": 185.948,
+      "IsPartOfWord": false,
+      "StartTime": 185.701,
+      "Text": "Not"
+     },
+     {
+      "EndTime": 186.136,
+      "IsPartOfWord": false,
+      "StartTime": 185.948,
+      "Text": "a"
+     },
+     {
+      "EndTime": 187.421,
+      "IsPartOfWord": false,
+      "StartTime": 186.136,
+      "Text": "wink"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 191.906,
+    "StartTime": 187.421,
+    "Syllables": [
+     {
+      "EndTime": 187.747,
+      "IsPartOfWord": false,
+      "StartTime": 187.421,
+      "Text": "'Cause"
+     },
+     {
+      "EndTime": 187.9,
+      "IsPartOfWord": false,
+      "StartTime": 187.747,
+      "Text": "we're"
+     },
+     {
+      "EndTime": 188.617,
+      "IsPartOfWord": false,
+      "StartTime": 187.9,
+      "Text": "back"
+     },
+     {
+      "EndTime": 189.006,
+      "IsPartOfWord": true,
+      "StartTime": 188.617,
+      "Text": "to"
+     },
+     {
+      "EndTime": 189.261,
+      "IsPartOfWord": true,
+      "StartTime": 189.006,
+      "Text": "ge"
+     },
+     {
+      "EndTime": 189.732,
+      "IsPartOfWord": false,
+      "StartTime": 189.261,
+      "Text": "ther,"
+     },
+     {
+      "EndTime": 190.262,
+      "IsPartOfWord": false,
+      "StartTime": 189.732,
+      "Text": "then"
+     },
+     {
+      "EndTime": 190.85,
+      "IsPartOfWord": false,
+      "StartTime": 190.262,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 191,
+      "IsPartOfWord": true,
+      "StartTime": 190.85,
+      "Text": "\"ne"
+     },
+     {
+      "EndTime": 191.229,
+      "IsPartOfWord": false,
+      "StartTime": 191,
+      "Text": "ver"
+     },
+     {
+      "EndTime": 191.455,
+      "IsPartOfWord": true,
+      "StartTime": 191.229,
+      "Text": "a"
+     },
+     {
+      "EndTime": 191.906,
+      "IsPartOfWord": false,
+      "StartTime": 191.455,
+      "Text": "gain\""
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 196.53,
+    "StartTime": 191.906,
+    "Syllables": [
+     {
+      "EndTime": 192.373,
+      "IsPartOfWord": false,
+      "StartTime": 191.906,
+      "Text": "But"
+     },
+     {
+      "EndTime": 192.823,
+      "IsPartOfWord": false,
+      "StartTime": 192.373,
+      "Text": "I"
+     },
+     {
+      "EndTime": 193.297,
+      "IsPartOfWord": false,
+      "StartTime": 192.823,
+      "Text": "just"
+     },
+     {
+      "EndTime": 194.191,
+      "IsPartOfWord": false,
+      "StartTime": 193.297,
+      "Text": "know"
+     },
+     {
+      "EndTime": 194.448,
+      "IsPartOfWord": false,
+      "StartTime": 194.191,
+      "Text": "that"
+     },
+     {
+      "EndTime": 194.685,
+      "IsPartOfWord": false,
+      "StartTime": 194.448,
+      "Text": "I'm"
+     },
+     {
+      "EndTime": 194.876,
+      "IsPartOfWord": true,
+      "StartTime": 194.685,
+      "Text": "gon"
+     },
+     {
+      "EndTime": 195.084,
+      "IsPartOfWord": false,
+      "StartTime": 194.876,
+      "Text": "na"
+     },
+     {
+      "EndTime": 195.543,
+      "IsPartOfWord": false,
+      "StartTime": 195.084,
+      "Text": "see"
+     },
+     {
+      "EndTime": 195.847,
+      "IsPartOfWord": false,
+      "StartTime": 195.543,
+      "Text": "you"
+     },
+     {
+      "EndTime": 196.007,
+      "IsPartOfWord": false,
+      "StartTime": 195.847,
+      "Text": "in"
+     },
+     {
+      "EndTime": 196.18,
+      "IsPartOfWord": false,
+      "StartTime": 196.007,
+      "Text": "my"
+     },
+     {
+      "EndTime": 196.53,
+      "IsPartOfWord": false,
+      "StartTime": 196.18,
+      "Text": "dreams"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 198.379,
+    "StartTime": 196.53,
+    "Syllables": [
+     {
+      "EndTime": 196.761,
+      "IsPartOfWord": false,
+      "StartTime": 196.53,
+      "Text": "A"
+     },
+     {
+      "EndTime": 197.299,
+      "IsPartOfWord": false,
+      "StartTime": 196.761,
+      "Text": "phone"
+     },
+     {
+      "EndTime": 197.569,
+      "IsPartOfWord": false,
+      "StartTime": 197.299,
+      "Text": "call"
+     },
+     {
+      "EndTime": 197.75,
+      "IsPartOfWord": false,
+      "StartTime": 197.569,
+      "Text": "in"
+     },
+     {
+      "EndTime": 197.921,
+      "IsPartOfWord": true,
+      "StartTime": 197.75,
+      "Text": "be"
+     },
+     {
+      "EndTime": 198.379,
+      "IsPartOfWord": false,
+      "StartTime": 197.921,
+      "Text": "tween"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 204.523,
+    "StartTime": 198.379,
+    "Syllables": [
+     {
+      "EndTime": 198.681,
+      "IsPartOfWord": false,
+      "StartTime": 198.379,
+      "Text": "A"
+     },
+     {
+      "EndTime": 199.053,
+      "IsPartOfWord": true,
+      "StartTime": 198.681,
+      "Text": "brea"
+     },
+     {
+      "EndTime": 199.372,
+      "IsPartOfWord": false,
+      "StartTime": 199.053,
+      "Text": "kup"
+     },
+     {
+      "EndTime": 199.585,
+      "IsPartOfWord": false,
+      "StartTime": 199.372,
+      "Text": "and"
+     },
+     {
+      "EndTime": 199.836,
+      "IsPartOfWord": false,
+      "StartTime": 199.585,
+      "Text": "a"
+     },
+     {
+      "EndTime": 200.243,
+      "IsPartOfWord": true,
+      "StartTime": 199.836,
+      "Text": "wed"
+     },
+     {
+      "EndTime": 200.48,
+      "IsPartOfWord": false,
+      "StartTime": 200.243,
+      "Text": "ding"
+     },
+     {
+      "EndTime": 202.488,
+      "IsPartOfWord": false,
+      "StartTime": 200.48,
+      "Text": "ring"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 204.523,
+    "StartTime": 201.383,
+    "Syllables": [
+     {
+      "EndTime": 201.785,
+      "IsPartOfWord": false,
+      "StartTime": 201.383,
+      "Text": "That's"
+     },
+     {
+      "EndTime": 202.019,
+      "IsPartOfWord": false,
+      "StartTime": 201.785,
+      "Text": "how"
+     },
+     {
+      "EndTime": 202.166,
+      "IsPartOfWord": false,
+      "StartTime": 202.019,
+      "Text": "it"
+     },
+     {
+      "EndTime": 204.523,
+      "IsPartOfWord": false,
+      "StartTime": 202.166,
+      "Text": "goes"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 207.969,
+    "StartTime": 205.009,
+    "Syllables": [
+     {
+      "EndTime": 205.365,
+      "IsPartOfWord": false,
+      "StartTime": 205.009,
+      "Text": "We"
+     },
+     {
+      "EndTime": 205.615,
+      "IsPartOfWord": false,
+      "StartTime": 205.365,
+      "Text": "come"
+     },
+     {
+      "EndTime": 206.003,
+      "IsPartOfWord": false,
+      "StartTime": 205.615,
+      "Text": "and"
+     },
+     {
+      "EndTime": 207.969,
+      "IsPartOfWord": false,
+      "StartTime": 206.003,
+      "Text": "go"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 212.103,
+    "StartTime": 208.498,
+    "Syllables": [
+     {
+      "EndTime": 208.919,
+      "IsPartOfWord": true,
+      "StartTime": 208.498,
+      "Text": "Cal"
+     },
+     {
+      "EndTime": 209.178,
+      "IsPartOfWord": false,
+      "StartTime": 208.919,
+      "Text": "ling"
+     },
+     {
+      "EndTime": 209.684,
+      "IsPartOfWord": false,
+      "StartTime": 209.178,
+      "Text": "it"
+     },
+     {
+      "EndTime": 212.103,
+      "IsPartOfWord": false,
+      "StartTime": 209.684,
+      "Text": "off"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 217.622,
+    "StartTime": 212.099,
+    "Syllables": [
+     {
+      "EndTime": 212.447,
+      "IsPartOfWord": true,
+      "StartTime": 212.099,
+      "Text": "Fal"
+     },
+     {
+      "EndTime": 212.68,
+      "IsPartOfWord": false,
+      "StartTime": 212.447,
+      "Text": "ling"
+     },
+     {
+      "EndTime": 213.16,
+      "IsPartOfWord": false,
+      "StartTime": 212.68,
+      "Text": "in"
+     },
+     {
+      "EndTime": 217.622,
+      "IsPartOfWord": false,
+      "StartTime": 213.16,
+      "Text": "love"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 223.407,
+    "StartTime": 218.97,
+    "Syllables": [
+     {
+      "EndTime": 219.179,
+      "IsPartOfWord": false,
+      "StartTime": 218.97,
+      "Text": "But"
+     },
+     {
+      "EndTime": 219.565,
+      "IsPartOfWord": false,
+      "StartTime": 219.179,
+      "Text": "that's"
+     },
+     {
+      "EndTime": 219.802,
+      "IsPartOfWord": false,
+      "StartTime": 219.565,
+      "Text": "how"
+     },
+     {
+      "EndTime": 220.064,
+      "IsPartOfWord": false,
+      "StartTime": 219.802,
+      "Text": "it"
+     },
+     {
+      "EndTime": 223.407,
+      "IsPartOfWord": false,
+      "StartTime": 220.064,
+      "Text": "goes"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 228.38,
+    "StartTime": 226.063,
+    "Syllables": [
+     {
+      "EndTime": 226.273,
+      "IsPartOfWord": false,
+      "StartTime": 226.063,
+      "Text": "In"
+     },
+     {
+      "EndTime": 228.38,
+      "IsPartOfWord": false,
+      "StartTime": 226.273,
+      "Text": "love"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  }
+ ],
+ "EndTime": 228.38,
+ "HasTransliterations": false,
+ "Language": "pcm",
+ "SongWriters": [
+  "Joseph Benedict Matchinsky"
+ ],
+ "StartTime": 16.039,
+ "TTMLUploadMetadata": {
+  "Maker": {
+   "avatar": "https://cdn.discordapp.com/avatars/1009968586208579595/e37c402961a3aeed6df649c27d6d3187.webp?size=256",
+   "hasProfileBanner": false,
+   "id": "1009968586208579595",
+   "username": "stupid dog"
+  },
+  "Uploader": {
+   "avatar": "https://cdn.discordapp.com/avatars/1231969764377628722/ff8bcc6944d334fc7acbb5fb521b6c4f.webp?size=256",
+   "hasProfileBanner": false,
+   "id": "1231969764377628722",
+   "username": "kore"
+  }
+ },
+ "Type": "Syllable",
+ "id": "24Dl2hfEkqdEq6QCooE2Z8",
+ "source": "spl",
+ "uri": "spotify:track:24Dl2hfEkqdEq6QCooE2Z8"
+}

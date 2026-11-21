@@ -1,0 +1,2230 @@
+{
+ "Content": [
+  {
+   "Lead": {
+    "EndTime": 8.612,
+    "StartTime": 0.023,
+    "Syllables": [
+     {
+      "EndTime": 0.729,
+      "IsPartOfWord": false,
+      "StartTime": 0.023,
+      "Text": "Close"
+     },
+     {
+      "EndTime": 4.053,
+      "IsPartOfWord": false,
+      "StartTime": 3.077,
+      "Text": "your"
+     },
+     {
+      "EndTime": 5.045,
+      "IsPartOfWord": false,
+      "StartTime": 4.053,
+      "Text": "eyes,"
+     },
+     {
+      "EndTime": 6.053,
+      "IsPartOfWord": false,
+      "StartTime": 5.045,
+      "Text": "you'll"
+     },
+     {
+      "EndTime": 7.021,
+      "IsPartOfWord": false,
+      "StartTime": 6.053,
+      "Text": "be"
+     },
+     {
+      "EndTime": 8.052,
+      "IsPartOfWord": false,
+      "StartTime": 7.021,
+      "Text": "here"
+     },
+     {
+      "EndTime": 8.612,
+      "IsPartOfWord": false,
+      "StartTime": 8.052,
+      "Text": "soon"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 16.485,
+    "StartTime": 11.373,
+    "Syllables": [
+     {
+      "EndTime": 11.776,
+      "IsPartOfWord": true,
+      "StartTime": 11.373,
+      "Text": "一",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ichi"
+     },
+     {
+      "EndTime": 12.111,
+      "IsPartOfWord": true,
+      "StartTime": 11.776,
+      "Text": "二",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ni"
+     },
+     {
+      "EndTime": 13.083,
+      "IsPartOfWord": true,
+      "StartTime": 12.111,
+      "Text": "三",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "san"
+     },
+     {
+      "EndTime": 14.028,
+      "IsPartOfWord": true,
+      "StartTime": 13.083,
+      "Text": "四",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "shi"
+     },
+     {
+      "EndTime": 15.103,
+      "IsPartOfWord": true,
+      "StartTime": 14.028,
+      "Text": "五",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "go"
+     },
+     {
+      "EndTime": 16.485,
+      "IsPartOfWord": true,
+      "StartTime": 15.103,
+      "Text": "分",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "fun"
+     }
+    ],
+    "TransliteratedText": "ichinisanshigobun"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 24.502,
+    "StartTime": 19.446,
+    "Syllables": [
+     {
+      "EndTime": 19.755,
+      "IsPartOfWord": true,
+      "StartTime": 19.446,
+      "Text": "時",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "toki"
+     },
+     {
+      "EndTime": 20.043,
+      "IsPartOfWord": true,
+      "StartTime": 19.755,
+      "Text": "々",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "doki"
+     },
+     {
+      "EndTime": 21.028,
+      "IsPartOfWord": true,
+      "StartTime": 20.043,
+      "Text": "本",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "hon"
+     },
+     {
+      "EndTime": 22.048,
+      "IsPartOfWord": true,
+      "StartTime": 21.028,
+      "Text": "当",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "tou"
+     },
+     {
+      "EndTime": 23.107,
+      "IsPartOfWord": true,
+      "StartTime": 22.048,
+      "Text": "に",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ni"
+     },
+     {
+      "EndTime": 24.057,
+      "IsPartOfWord": true,
+      "StartTime": 23.107,
+      "Text": "寝",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ne"
+     },
+     {
+      "EndTime": 24.502,
+      "IsPartOfWord": true,
+      "StartTime": 24.057,
+      "Text": "たい",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "tai"
+     }
+    ],
+    "TransliteratedText": "tokidohontouninetai"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 32.449,
+    "StartTime": 27.385,
+    "Syllables": [
+     {
+      "EndTime": 27.612,
+      "IsPartOfWord": true,
+      "StartTime": 27.385,
+      "Text": "で",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "de"
+     },
+     {
+      "EndTime": 27.78,
+      "IsPartOfWord": true,
+      "StartTime": 27.612,
+      "Text": "も",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mo"
+     },
+     {
+      "EndTime": 27.921,
+      "IsPartOfWord": true,
+      "StartTime": 27.78,
+      "Text": "こ",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ko"
+     },
+     {
+      "EndTime": 28.058,
+      "IsPartOfWord": true,
+      "StartTime": 27.921,
+      "Text": "の",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "no"
+     },
+     {
+      "EndTime": 30.076,
+      "IsPartOfWord": true,
+      "StartTime": 28.058,
+      "Text": "ワード",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "waado"
+     },
+     {
+      "EndTime": 31.04,
+      "IsPartOfWord": true,
+      "StartTime": 30.076,
+      "Text": "で",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "de"
+     },
+     {
+      "EndTime": 32.099,
+      "IsPartOfWord": true,
+      "StartTime": 31.04,
+      "Text": "き",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ki"
+     },
+     {
+      "EndTime": 32.449,
+      "IsPartOfWord": true,
+      "StartTime": 32.099,
+      "Text": "ない",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "nai"
+     }
+    ],
+    "TransliteratedText": "demokonowaadodekinai"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 36.466,
+    "StartTime": 33.067,
+    "Syllables": [
+     {
+      "EndTime": 33.438,
+      "IsPartOfWord": true,
+      "StartTime": 33.067,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 34.462,
+      "IsPartOfWord": true,
+      "StartTime": 34.05,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 35.425,
+      "IsPartOfWord": true,
+      "StartTime": 34.976,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 36.466,
+      "IsPartOfWord": true,
+      "StartTime": 35.971,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumi"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 40.473,
+    "StartTime": 37.074,
+    "Syllables": [
+     {
+      "EndTime": 37.445,
+      "IsPartOfWord": true,
+      "StartTime": 37.074,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 38.469,
+      "IsPartOfWord": true,
+      "StartTime": 38.057,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 39.432,
+      "IsPartOfWord": true,
+      "StartTime": 39.023,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 40.473,
+      "IsPartOfWord": true,
+      "StartTime": 39.978,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumi"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 44.428,
+    "StartTime": 41.029,
+    "Syllables": [
+     {
+      "EndTime": 41.4,
+      "IsPartOfWord": true,
+      "StartTime": 41.029,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 42.464,
+      "IsPartOfWord": true,
+      "StartTime": 42.012,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 43.427,
+      "IsPartOfWord": true,
+      "StartTime": 42.978,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 44.428,
+      "IsPartOfWord": true,
+      "StartTime": 44.013,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumi"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 48.024,
+    "StartTime": 45.036,
+    "Syllables": [
+     {
+      "EndTime": 45.407,
+      "IsPartOfWord": true,
+      "StartTime": 45.036,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 46.471,
+      "IsPartOfWord": true,
+      "StartTime": 46.059,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 48.024,
+      "IsPartOfWord": true,
+      "StartTime": 46.985,
+      "Text": "す—",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "su—"
+     }
+    ],
+    "TransliteratedText": "oyasu—"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 50.992,
+    "StartTime": 48.034,
+    "Syllables": [
+     {
+      "EndTime": 48.367,
+      "IsPartOfWord": true,
+      "StartTime": 48.034,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 48.697,
+      "IsPartOfWord": true,
+      "StartTime": 48.367,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 49.084,
+      "IsPartOfWord": true,
+      "StartTime": 48.697,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 49.391,
+      "IsPartOfWord": true,
+      "StartTime": 49.084,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 50.006,
+      "IsPartOfWord": true,
+      "StartTime": 49.391,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 50.386,
+      "IsPartOfWord": true,
+      "StartTime": 50.006,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 50.56,
+      "IsPartOfWord": true,
+      "StartTime": 50.386,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 50.992,
+      "IsPartOfWord": true,
+      "StartTime": 50.56,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 55.2,
+    "StartTime": 50.992,
+    "Syllables": [
+     {
+      "EndTime": 51.585,
+      "IsPartOfWord": false,
+      "StartTime": 50.992,
+      "Text": "Close"
+     },
+     {
+      "EndTime": 52.082,
+      "IsPartOfWord": false,
+      "StartTime": 51.585,
+      "Text": "your"
+     },
+     {
+      "EndTime": 52.465,
+      "IsPartOfWord": false,
+      "StartTime": 52.082,
+      "Text": "eyes"
+     },
+     {
+      "EndTime": 52.72,
+      "IsPartOfWord": false,
+      "StartTime": 52.465,
+      "Text": "and"
+     },
+     {
+      "EndTime": 53.109,
+      "IsPartOfWord": false,
+      "StartTime": 52.72,
+      "Text": "you'll"
+     },
+     {
+      "EndTime": 53.609,
+      "IsPartOfWord": false,
+      "StartTime": 53.109,
+      "Text": "leave"
+     },
+     {
+      "EndTime": 54.066,
+      "IsPartOfWord": false,
+      "StartTime": 53.609,
+      "Text": "this"
+     },
+     {
+      "EndTime": 55.2,
+      "IsPartOfWord": false,
+      "StartTime": 54.066,
+      "Text": "dream"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 59.589,
+    "StartTime": 55.992,
+    "Syllables": [
+     {
+      "EndTime": 56.389,
+      "IsPartOfWord": true,
+      "StartTime": 55.992,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 56.719,
+      "IsPartOfWord": true,
+      "StartTime": 56.389,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 57.026,
+      "IsPartOfWord": true,
+      "StartTime": 56.719,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 57.373,
+      "IsPartOfWord": true,
+      "StartTime": 57.026,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 57.988,
+      "IsPartOfWord": true,
+      "StartTime": 57.373,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 58.525,
+      "IsPartOfWord": true,
+      "StartTime": 57.988,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 59.041,
+      "IsPartOfWord": true,
+      "StartTime": 58.525,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 59.589,
+      "IsPartOfWord": true,
+      "StartTime": 59.041,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 63.019,
+    "StartTime": 59.589,
+    "Syllables": [
+     {
+      "EndTime": 60.088,
+      "IsPartOfWord": false,
+      "StartTime": 59.589,
+      "Text": "I"
+     },
+     {
+      "EndTime": 60.434,
+      "IsPartOfWord": false,
+      "StartTime": 60.088,
+      "Text": "know"
+     },
+     {
+      "EndTime": 60.743,
+      "IsPartOfWord": false,
+      "StartTime": 60.434,
+      "Text": "that"
+     },
+     {
+      "EndTime": 61.021,
+      "IsPartOfWord": false,
+      "StartTime": 60.743,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 61.579,
+      "IsPartOfWord": false,
+      "StartTime": 61.021,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 62.053,
+      "IsPartOfWord": false,
+      "StartTime": 61.579,
+      "Text": "to"
+     },
+     {
+      "EndTime": 63.019,
+      "IsPartOfWord": false,
+      "StartTime": 62.053,
+      "Text": "do"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 67.105,
+    "StartTime": 63.019,
+    "Syllables": [
+     {
+      "EndTime": 63.518,
+      "IsPartOfWord": false,
+      "StartTime": 63.019,
+      "Text": "Days"
+     },
+     {
+      "EndTime": 64.041,
+      "IsPartOfWord": false,
+      "StartTime": 63.518,
+      "Text": "go"
+     },
+     {
+      "EndTime": 65.023,
+      "IsPartOfWord": false,
+      "StartTime": 64.041,
+      "Text": "by,"
+     },
+     {
+      "EndTime": 65.558,
+      "IsPartOfWord": true,
+      "StartTime": 65.023,
+      "Text": "しょう",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "shou"
+     },
+     {
+      "EndTime": 66.086,
+      "IsPartOfWord": true,
+      "StartTime": 65.558,
+      "Text": "が",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ga"
+     },
+     {
+      "EndTime": 67.105,
+      "IsPartOfWord": true,
+      "StartTime": 66.086,
+      "Text": "ない",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "nai"
+     }
+    ],
+    "TransliteratedText": "Days ​go ​by, ​shiyouganai"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 71.09,
+    "StartTime": 67.105,
+    "Syllables": [
+     {
+      "EndTime": 67.625,
+      "IsPartOfWord": true,
+      "StartTime": 67.105,
+      "Text": "Mo"
+     },
+     {
+      "EndTime": 68.034,
+      "IsPartOfWord": false,
+      "StartTime": 67.625,
+      "Text": "ments"
+     },
+     {
+      "EndTime": 69.026,
+      "IsPartOfWord": false,
+      "StartTime": 68.034,
+      "Text": "pass,"
+     },
+     {
+      "EndTime": 69.559,
+      "IsPartOfWord": true,
+      "StartTime": 69.026,
+      "Text": "shat"
+     },
+     {
+      "EndTime": 69.992,
+      "IsPartOfWord": false,
+      "StartTime": 69.559,
+      "Text": "tered"
+     },
+     {
+      "EndTime": 71.09,
+      "IsPartOfWord": false,
+      "StartTime": 69.992,
+      "Text": "glass"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 75.059,
+    "StartTime": 71.09,
+    "Syllables": [
+     {
+      "EndTime": 71.596,
+      "IsPartOfWord": false,
+      "StartTime": 71.09,
+      "Text": "Hands"
+     },
+     {
+      "EndTime": 72.061,
+      "IsPartOfWord": false,
+      "StartTime": 71.596,
+      "Text": "of"
+     },
+     {
+      "EndTime": 73.076,
+      "IsPartOfWord": false,
+      "StartTime": 72.061,
+      "Text": "time,"
+     },
+     {
+      "EndTime": 73.59,
+      "IsPartOfWord": false,
+      "StartTime": 73.076,
+      "Text": "where's"
+     },
+     {
+      "EndTime": 74.014,
+      "IsPartOfWord": false,
+      "StartTime": 73.59,
+      "Text": "that"
+     },
+     {
+      "EndTime": 75.059,
+      "IsPartOfWord": false,
+      "StartTime": 74.014,
+      "Text": "chime?"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 77.1,
+    "StartTime": 75.059,
+    "Syllables": [
+     {
+      "EndTime": 75.537,
+      "IsPartOfWord": false,
+      "StartTime": 75.059,
+      "Text": "In"
+     },
+     {
+      "EndTime": 76.013,
+      "IsPartOfWord": false,
+      "StartTime": 75.537,
+      "Text": "my"
+     },
+     {
+      "EndTime": 77.1,
+      "IsPartOfWord": false,
+      "StartTime": 76.013,
+      "Text": "head"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 78.927,
+    "StartTime": 77.1,
+    "Syllables": [
+     {
+      "EndTime": 77.496,
+      "IsPartOfWord": false,
+      "StartTime": 77.1,
+      "Text": "I'll"
+     },
+     {
+      "EndTime": 77.909,
+      "IsPartOfWord": false,
+      "StartTime": 77.496,
+      "Text": "just,"
+     },
+     {
+      "EndTime": 78.548,
+      "IsPartOfWord": false,
+      "StartTime": 78.013,
+      "Text": "I'll"
+     },
+     {
+      "EndTime": 78.927,
+      "IsPartOfWord": false,
+      "StartTime": 78.548,
+      "Text": "just"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 80.919,
+    "StartTime": 79.024,
+    "Syllables": [
+     {
+      "EndTime": 79.525,
+      "IsPartOfWord": false,
+      "StartTime": 79.024,
+      "Text": "I'll"
+     },
+     {
+      "EndTime": 79.925,
+      "IsPartOfWord": false,
+      "StartTime": 79.525,
+      "Text": "just,"
+     },
+     {
+      "EndTime": 80.538,
+      "IsPartOfWord": false,
+      "StartTime": 80.069,
+      "Text": "I'll"
+     },
+     {
+      "EndTime": 80.919,
+      "IsPartOfWord": false,
+      "StartTime": 80.538,
+      "Text": "just"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Background": [
+    {
+     "EndTime": 82.74,
+     "StartTime": 82.052,
+     "Syllables": [
+      {
+       "EndTime": 82.74,
+       "IsPartOfWord": false,
+       "StartTime": 82.052,
+       "Text": "Hands"
+      }
+     ]
+    }
+   ],
+   "Lead": {
+    "EndTime": 89.518,
+    "StartTime": 81.085,
+    "Syllables": [
+     {
+      "EndTime": 81.699,
+      "IsPartOfWord": false,
+      "StartTime": 81.085,
+      "Text": "Hands"
+     },
+     {
+      "EndTime": 85.029,
+      "IsPartOfWord": false,
+      "StartTime": 84.004,
+      "Text": "of"
+     },
+     {
+      "EndTime": 86.065,
+      "IsPartOfWord": false,
+      "StartTime": 85.029,
+      "Text": "time"
+     },
+     {
+      "EndTime": 87.093,
+      "IsPartOfWord": false,
+      "StartTime": 86.065,
+      "Text": "will"
+     },
+     {
+      "EndTime": 88.138,
+      "IsPartOfWord": false,
+      "StartTime": 87.093,
+      "Text": "wring"
+     },
+     {
+      "EndTime": 89.101,
+      "IsPartOfWord": false,
+      "StartTime": 88.138,
+      "Text": "my"
+     },
+     {
+      "EndTime": 89.518,
+      "IsPartOfWord": true,
+      "StartTime": 89.101,
+      "Text": "neck"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 97.545,
+    "StartTime": 92.346,
+    "Syllables": [
+     {
+      "EndTime": 92.577,
+      "IsPartOfWord": true,
+      "StartTime": 92.346,
+      "Text": "E"
+     },
+     {
+      "EndTime": 92.73,
+      "IsPartOfWord": false,
+      "StartTime": 92.577,
+      "Text": "very"
+     },
+     {
+      "EndTime": 92.902,
+      "IsPartOfWord": true,
+      "StartTime": 92.73,
+      "Text": "lit"
+     },
+     {
+      "EndTime": 93.067,
+      "IsPartOfWord": false,
+      "StartTime": 92.902,
+      "Text": "tle"
+     },
+     {
+      "EndTime": 93.998,
+      "IsPartOfWord": true,
+      "StartTime": 93.067,
+      "Text": "mo"
+     },
+     {
+      "EndTime": 94.994,
+      "IsPartOfWord": false,
+      "StartTime": 93.998,
+      "Text": "ment"
+     },
+     {
+      "EndTime": 96.076,
+      "IsPartOfWord": false,
+      "StartTime": 94.994,
+      "Text": "spells"
+     },
+     {
+      "EndTime": 97.031,
+      "IsPartOfWord": true,
+      "StartTime": 96.076,
+      "Text": "re"
+     },
+     {
+      "EndTime": 97.545,
+      "IsPartOfWord": false,
+      "StartTime": 97.031,
+      "Text": "gret"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 105.436,
+    "StartTime": 100.007,
+    "Syllables": [
+     {
+      "EndTime": 100.368,
+      "IsPartOfWord": false,
+      "StartTime": 100.007,
+      "Text": "But"
+     },
+     {
+      "EndTime": 100.753,
+      "IsPartOfWord": false,
+      "StartTime": 100.368,
+      "Text": "I"
+     },
+     {
+      "EndTime": 101.045,
+      "IsPartOfWord": false,
+      "StartTime": 100.753,
+      "Text": "don't"
+     },
+     {
+      "EndTime": 102.08,
+      "IsPartOfWord": false,
+      "StartTime": 101.045,
+      "Text": "have"
+     },
+     {
+      "EndTime": 103.034,
+      "IsPartOfWord": false,
+      "StartTime": 102.08,
+      "Text": "to"
+     },
+     {
+      "EndTime": 104.031,
+      "IsPartOfWord": false,
+      "StartTime": 103.034,
+      "Text": "feel"
+     },
+     {
+      "EndTime": 105,
+      "IsPartOfWord": false,
+      "StartTime": 104.031,
+      "Text": "this"
+     },
+     {
+      "EndTime": 105.436,
+      "IsPartOfWord": false,
+      "StartTime": 105,
+      "Text": "way"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 113.403,
+    "StartTime": 108.066,
+    "Syllables": [
+     {
+      "EndTime": 108.708,
+      "IsPartOfWord": false,
+      "StartTime": 108.066,
+      "Text": "As"
+     },
+     {
+      "EndTime": 109.111,
+      "IsPartOfWord": false,
+      "StartTime": 108.708,
+      "Text": "a"
+     },
+     {
+      "EndTime": 110.032,
+      "IsPartOfWord": false,
+      "StartTime": 109.111,
+      "Text": "voice"
+     },
+     {
+      "EndTime": 111.05,
+      "IsPartOfWord": true,
+      "StartTime": 110.032,
+      "Text": "in"
+     },
+     {
+      "EndTime": 112.084,
+      "IsPartOfWord": false,
+      "StartTime": 111.05,
+      "Text": "side"
+     },
+     {
+      "EndTime": 113.073,
+      "IsPartOfWord": false,
+      "StartTime": 112.084,
+      "Text": "my"
+     },
+     {
+      "EndTime": 113.403,
+      "IsPartOfWord": false,
+      "StartTime": 113.073,
+      "Text": "head"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 117.437,
+    "StartTime": 114.078,
+    "Syllables": [
+     {
+      "EndTime": 114.409,
+      "IsPartOfWord": true,
+      "StartTime": 114.078,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 115.433,
+      "IsPartOfWord": true,
+      "StartTime": 115.061,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 116.436,
+      "IsPartOfWord": true,
+      "StartTime": 115.987,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 117.437,
+      "IsPartOfWord": true,
+      "StartTime": 116.982,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumi"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 121.484,
+    "StartTime": 118.085,
+    "Syllables": [
+     {
+      "EndTime": 118.456,
+      "IsPartOfWord": true,
+      "StartTime": 118.085,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 119.44,
+      "IsPartOfWord": true,
+      "StartTime": 119.068,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 120.483,
+      "IsPartOfWord": true,
+      "StartTime": 119.994,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 121.484,
+      "IsPartOfWord": true,
+      "StartTime": 121.029,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumi"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 125.479,
+    "StartTime": 122.04,
+    "Syllables": [
+     {
+      "EndTime": 122.451,
+      "IsPartOfWord": true,
+      "StartTime": 122.04,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 123.435,
+      "IsPartOfWord": true,
+      "StartTime": 123.063,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 124.438,
+      "IsPartOfWord": true,
+      "StartTime": 123.989,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 125.479,
+      "IsPartOfWord": true,
+      "StartTime": 124.984,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumi"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 129.057,
+    "StartTime": 126.087,
+    "Syllables": [
+     {
+      "EndTime": 126.418,
+      "IsPartOfWord": true,
+      "StartTime": 126.087,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 127.442,
+      "IsPartOfWord": true,
+      "StartTime": 127.07,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 129.057,
+      "IsPartOfWord": true,
+      "StartTime": 128.036,
+      "Text": "す—",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "su—"
+     }
+    ],
+    "TransliteratedText": "oyasu"
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 132.011,
+    "StartTime": 129.057,
+    "Syllables": [
+     {
+      "EndTime": 129.426,
+      "IsPartOfWord": true,
+      "StartTime": 129.057,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 129.716,
+      "IsPartOfWord": true,
+      "StartTime": 129.426,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 130.063,
+      "IsPartOfWord": true,
+      "StartTime": 129.716,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 130.41,
+      "IsPartOfWord": true,
+      "StartTime": 130.063,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 130.985,
+      "IsPartOfWord": true,
+      "StartTime": 130.41,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 131.403,
+      "IsPartOfWord": true,
+      "StartTime": 130.985,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 131.54,
+      "IsPartOfWord": true,
+      "StartTime": 131.403,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 132.011,
+      "IsPartOfWord": true,
+      "StartTime": 131.54,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 136.206,
+    "StartTime": 132.011,
+    "Syllables": [
+     {
+      "EndTime": 132.564,
+      "IsPartOfWord": false,
+      "StartTime": 132.011,
+      "Text": "Close"
+     },
+     {
+      "EndTime": 133.141,
+      "IsPartOfWord": false,
+      "StartTime": 132.564,
+      "Text": "your"
+     },
+     {
+      "EndTime": 133.444,
+      "IsPartOfWord": false,
+      "StartTime": 133.141,
+      "Text": "eyes"
+     },
+     {
+      "EndTime": 133.779,
+      "IsPartOfWord": false,
+      "StartTime": 133.444,
+      "Text": "and"
+     },
+     {
+      "EndTime": 134.088,
+      "IsPartOfWord": false,
+      "StartTime": 133.779,
+      "Text": "you'll"
+     },
+     {
+      "EndTime": 134.628,
+      "IsPartOfWord": false,
+      "StartTime": 134.088,
+      "Text": "leave"
+     },
+     {
+      "EndTime": 135.085,
+      "IsPartOfWord": false,
+      "StartTime": 134.628,
+      "Text": "this"
+     },
+     {
+      "EndTime": 136.206,
+      "IsPartOfWord": false,
+      "StartTime": 135.085,
+      "Text": "dream"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 140.568,
+    "StartTime": 136.99,
+    "Syllables": [
+     {
+      "EndTime": 137.368,
+      "IsPartOfWord": true,
+      "StartTime": 136.99,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 137.738,
+      "IsPartOfWord": true,
+      "StartTime": 137.368,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 138.085,
+      "IsPartOfWord": true,
+      "StartTime": 137.738,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 138.392,
+      "IsPartOfWord": true,
+      "StartTime": 138.085,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 139.007,
+      "IsPartOfWord": true,
+      "StartTime": 138.392,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 139.544,
+      "IsPartOfWord": true,
+      "StartTime": 139.007,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 140.06,
+      "IsPartOfWord": true,
+      "StartTime": 139.544,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 140.568,
+      "IsPartOfWord": true,
+      "StartTime": 140.06,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 144.078,
+    "StartTime": 140.568,
+    "Syllables": [
+     {
+      "EndTime": 141.107,
+      "IsPartOfWord": false,
+      "StartTime": 140.568,
+      "Text": "I"
+     },
+     {
+      "EndTime": 141.493,
+      "IsPartOfWord": false,
+      "StartTime": 141.107,
+      "Text": "know"
+     },
+     {
+      "EndTime": 141.762,
+      "IsPartOfWord": false,
+      "StartTime": 141.493,
+      "Text": "that"
+     },
+     {
+      "EndTime": 142.08,
+      "IsPartOfWord": false,
+      "StartTime": 141.762,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 142.54,
+      "IsPartOfWord": false,
+      "StartTime": 142.08,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 143.084,
+      "IsPartOfWord": false,
+      "StartTime": 142.54,
+      "Text": "to"
+     },
+     {
+      "EndTime": 144.078,
+      "IsPartOfWord": false,
+      "StartTime": 143.084,
+      "Text": "do"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 145.667,
+    "StartTime": 145.402,
+    "Syllables": [
+     {
+      "EndTime": 145.667,
+      "IsPartOfWord": false,
+      "StartTime": 145.402,
+      "Text": "Hey"
+     }
+    ]
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 153.689,
+    "StartTime": 153.394,
+    "Syllables": [
+     {
+      "EndTime": 153.689,
+      "IsPartOfWord": false,
+      "StartTime": 153.394,
+      "Text": "Hey"
+     }
+    ]
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 161.75,
+    "StartTime": 161.35,
+    "Syllables": [
+     {
+      "EndTime": 161.75,
+      "IsPartOfWord": false,
+      "StartTime": 161.35,
+      "Text": "Hey"
+     }
+    ]
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 176.683,
+    "StartTime": 171.411,
+    "Syllables": [
+     {
+      "EndTime": 171.763,
+      "IsPartOfWord": false,
+      "StartTime": 171.411,
+      "Text": "Hey,"
+     },
+     {
+      "EndTime": 173.781,
+      "IsPartOfWord": false,
+      "StartTime": 173.412,
+      "Text": "hey,"
+     },
+     {
+      "EndTime": 175.746,
+      "IsPartOfWord": false,
+      "StartTime": 175.396,
+      "Text": "hey,"
+     },
+     {
+      "EndTime": 176.683,
+      "IsPartOfWord": false,
+      "StartTime": 176.425,
+      "Text": "hey"
+     }
+    ]
+   },
+   "OppositeAligned": true,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 180.066,
+    "StartTime": 177.073,
+    "Syllables": [
+     {
+      "EndTime": 177.402,
+      "IsPartOfWord": true,
+      "StartTime": 177.073,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 177.732,
+      "IsPartOfWord": true,
+      "StartTime": 177.402,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 178.079,
+      "IsPartOfWord": true,
+      "StartTime": 177.732,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 178.386,
+      "IsPartOfWord": true,
+      "StartTime": 178.079,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 179.041,
+      "IsPartOfWord": true,
+      "StartTime": 178.386,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 179.419,
+      "IsPartOfWord": true,
+      "StartTime": 179.041,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 179.596,
+      "IsPartOfWord": true,
+      "StartTime": 179.419,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 180.066,
+      "IsPartOfWord": true,
+      "StartTime": 179.596,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 184.121,
+    "StartTime": 180.066,
+    "Syllables": [
+     {
+      "EndTime": 180.58,
+      "IsPartOfWord": false,
+      "StartTime": 180.066,
+      "Text": "Close"
+     },
+     {
+      "EndTime": 181.157,
+      "IsPartOfWord": false,
+      "StartTime": 180.58,
+      "Text": "your"
+     },
+     {
+      "EndTime": 181.46,
+      "IsPartOfWord": false,
+      "StartTime": 181.157,
+      "Text": "eyes"
+     },
+     {
+      "EndTime": 181.755,
+      "IsPartOfWord": false,
+      "StartTime": 181.46,
+      "Text": "and"
+     },
+     {
+      "EndTime": 182.144,
+      "IsPartOfWord": false,
+      "StartTime": 181.755,
+      "Text": "you'll"
+     },
+     {
+      "EndTime": 182.644,
+      "IsPartOfWord": false,
+      "StartTime": 182.144,
+      "Text": "leave"
+     },
+     {
+      "EndTime": 183.061,
+      "IsPartOfWord": false,
+      "StartTime": 182.644,
+      "Text": "this"
+     },
+     {
+      "EndTime": 184.121,
+      "IsPartOfWord": false,
+      "StartTime": 183.061,
+      "Text": "dream"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 188.584,
+    "StartTime": 185.046,
+    "Syllables": [
+     {
+      "EndTime": 185.424,
+      "IsPartOfWord": true,
+      "StartTime": 185.046,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 185.754,
+      "IsPartOfWord": true,
+      "StartTime": 185.424,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 186.101,
+      "IsPartOfWord": true,
+      "StartTime": 185.754,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 186.408,
+      "IsPartOfWord": true,
+      "StartTime": 186.101,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 186.983,
+      "IsPartOfWord": true,
+      "StartTime": 186.408,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 187.56,
+      "IsPartOfWord": true,
+      "StartTime": 186.983,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 188.076,
+      "IsPartOfWord": true,
+      "StartTime": 187.56,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 188.584,
+      "IsPartOfWord": true,
+      "StartTime": 188.076,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 193.059,
+    "StartTime": 188.584,
+    "Syllables": [
+     {
+      "EndTime": 189.123,
+      "IsPartOfWord": false,
+      "StartTime": 188.584,
+      "Text": "I"
+     },
+     {
+      "EndTime": 189.469,
+      "IsPartOfWord": false,
+      "StartTime": 189.123,
+      "Text": "know"
+     },
+     {
+      "EndTime": 189.778,
+      "IsPartOfWord": false,
+      "StartTime": 189.469,
+      "Text": "that"
+     },
+     {
+      "EndTime": 190.056,
+      "IsPartOfWord": false,
+      "StartTime": 189.778,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 190.596,
+      "IsPartOfWord": false,
+      "StartTime": 190.056,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 191.06,
+      "IsPartOfWord": false,
+      "StartTime": 190.596,
+      "Text": "to"
+     },
+     {
+      "EndTime": 193.059,
+      "IsPartOfWord": false,
+      "StartTime": 191.06,
+      "Text": "do"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 196.038,
+    "StartTime": 193.059,
+    "Syllables": [
+     {
+      "EndTime": 193.428,
+      "IsPartOfWord": true,
+      "StartTime": 193.059,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 193.758,
+      "IsPartOfWord": true,
+      "StartTime": 193.428,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 194.065,
+      "IsPartOfWord": true,
+      "StartTime": 193.758,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 194.372,
+      "IsPartOfWord": true,
+      "StartTime": 194.065,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 194.987,
+      "IsPartOfWord": true,
+      "StartTime": 194.372,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 195.405,
+      "IsPartOfWord": true,
+      "StartTime": 194.987,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 195.542,
+      "IsPartOfWord": true,
+      "StartTime": 195.405,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 196.038,
+      "IsPartOfWord": true,
+      "StartTime": 195.542,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 200.216,
+    "StartTime": 196.038,
+    "Syllables": [
+     {
+      "EndTime": 196.518,
+      "IsPartOfWord": false,
+      "StartTime": 196.038,
+      "Text": "Close"
+     },
+     {
+      "EndTime": 197.074,
+      "IsPartOfWord": false,
+      "StartTime": 196.518,
+      "Text": "your"
+     },
+     {
+      "EndTime": 197.422,
+      "IsPartOfWord": false,
+      "StartTime": 197.074,
+      "Text": "eyes"
+     },
+     {
+      "EndTime": 197.695,
+      "IsPartOfWord": false,
+      "StartTime": 197.422,
+      "Text": "and"
+     },
+     {
+      "EndTime": 198.071,
+      "IsPartOfWord": false,
+      "StartTime": 197.695,
+      "Text": "you'll"
+     },
+     {
+      "EndTime": 198.596,
+      "IsPartOfWord": false,
+      "StartTime": 198.071,
+      "Text": "leave"
+     },
+     {
+      "EndTime": 199.03,
+      "IsPartOfWord": false,
+      "StartTime": 198.596,
+      "Text": "this"
+     },
+     {
+      "EndTime": 200.216,
+      "IsPartOfWord": false,
+      "StartTime": 199.03,
+      "Text": "dream"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "HasTransliterations": true,
+   "Lead": {
+    "EndTime": 204.561,
+    "StartTime": 200.989,
+    "Syllables": [
+     {
+      "EndTime": 201.366,
+      "IsPartOfWord": true,
+      "StartTime": 200.989,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 201.728,
+      "IsPartOfWord": true,
+      "StartTime": 201.366,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 202.051,
+      "IsPartOfWord": true,
+      "StartTime": 201.728,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 202.332,
+      "IsPartOfWord": true,
+      "StartTime": 202.051,
+      "Text": "み、",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "mi"
+     },
+     {
+      "EndTime": 203.046,
+      "IsPartOfWord": true,
+      "StartTime": 202.332,
+      "Text": "お",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "o"
+     },
+     {
+      "EndTime": 203.56,
+      "IsPartOfWord": true,
+      "StartTime": 203.046,
+      "Text": "や",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "ya"
+     },
+     {
+      "EndTime": 204.065,
+      "IsPartOfWord": true,
+      "StartTime": 203.56,
+      "Text": "す",
+      "TransliteratedIsPartOfWord": true,
+      "TransliteratedText": "su"
+     },
+     {
+      "EndTime": 204.561,
+      "IsPartOfWord": true,
+      "StartTime": 204.065,
+      "Text": "み",
+      "TransliteratedIsPartOfWord": false,
+      "TransliteratedText": "mi"
+     }
+    ],
+    "TransliteratedText": "oyasumioyasumi"
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  },
+  {
+   "Lead": {
+    "EndTime": 208.106,
+    "StartTime": 204.561,
+    "Syllables": [
+     {
+      "EndTime": 205.016,
+      "IsPartOfWord": false,
+      "StartTime": 204.561,
+      "Text": "I"
+     },
+     {
+      "EndTime": 205.377,
+      "IsPartOfWord": false,
+      "StartTime": 205.016,
+      "Text": "know"
+     },
+     {
+      "EndTime": 205.783,
+      "IsPartOfWord": false,
+      "StartTime": 205.377,
+      "Text": "that"
+     },
+     {
+      "EndTime": 206.027,
+      "IsPartOfWord": false,
+      "StartTime": 205.783,
+      "Text": "it's"
+     },
+     {
+      "EndTime": 206.575,
+      "IsPartOfWord": false,
+      "StartTime": 206.027,
+      "Text": "hard"
+     },
+     {
+      "EndTime": 207.021,
+      "IsPartOfWord": false,
+      "StartTime": 206.575,
+      "Text": "to"
+     },
+     {
+      "EndTime": 208.106,
+      "IsPartOfWord": false,
+      "StartTime": 207.021,
+      "Text": "do"
+     }
+    ]
+   },
+   "OppositeAligned": false,
+   "Type": "Vocal"
+  }
+ ],
+ "EndTime": 208.106,
+ "HasTransliterations": true,
+ "JapaneseRomaji": "written2",
+ "Language": "eng",
+ "LanguageISO2": "en",
+ "SongWriters": [
+  "Calum Thomas Bowen"
+ ],
+ "StartTime": 0.023,
+ "TTMLUploadMetadata": {
+  "Maker": {},
+  "Uploader": {
+   "avatar": "https://cdn.discordapp.com/avatars/687257918638260231/a_4203e89712400c7044c7e427d6494521.gif?size=256",
+   "hasProfileBanner": true,
+   "id": "687257918638260231",
+   "username": "onoff"
+  }
+ },
+ "Type": "Syllable",
+ "id": "0wZUJxxybEiafs0BIg9SAP",
+ "source": "spl",
+ "uri": "spotify:track:0wZUJxxybEiafs0BIg9SAP"
+}

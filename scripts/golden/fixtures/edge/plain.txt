@@ -1,0 +1,4 @@
+This song has no timestamps
+Just plain lines of text
+
+With an empty line between

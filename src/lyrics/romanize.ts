@@ -98,13 +98,13 @@ const KANA: Record<string, string> = {
 
 const VOWELS = new Set(["a", "i", "u", "e", "o"]);
 
-function katakanaToHiragana(text: string): string {
+export function katakanaToHiragana(text: string): string {
   return text.replace(/[ァ-ヶ]/g, (c) =>
     String.fromCharCode(c.charCodeAt(0) - 0x60),
   );
 }
 
-function romanizeJapanese(input: string): string {
+export function romanizeJapanese(input: string): string {
   const text = katakanaToHiragana(input);
   let out = "";
   let sokuon = false; // っ pending: doubles the next consonant
@@ -175,7 +175,7 @@ const FINALS = [
   "ng", "j", "ch", "k", "t", "p", "h",
 ];
 
-function romanizeKorean(text: string): string {
+export function romanizeKorean(text: string): string {
   let out = "";
   for (const ch of text) {
     const code = ch.charCodeAt(0);
@@ -210,7 +210,7 @@ export type ReadingToken = { s: string; r?: string; p?: string; d?: string; b?: 
  * punctuation do; particles and words do not (onnanoko ni, yuuki o).
  * です and だ stand apart (ii desu ka), as do いる and ある (akogarete iru).
  */
-function attaches(tok: ReadingToken): boolean {
+export function attaches(tok: ReadingToken): boolean {
   switch (tok.p) {
     case "助動詞":
       return tok.b !== "です" && tok.b !== "だ";
@@ -227,13 +227,13 @@ function attaches(tok: ReadingToken): boolean {
   }
 }
 
-const isSpace = (s: string) => /^\s+$/.test(s);
+export const isSpace = (s: string) => /^\s+$/.test(s);
 
 const JA_KANJI = /[一-鿿㐀-䶿々]/;
 const JA_KANJI_RUNS = /[一-鿿㐀-䶿々]+|[^一-鿿㐀-䶿々]+/g;
 
 /** The text a line's readings are looked up for: its words run together, so each character lines up with one. */
-function lineChars(line: LyricLine): string {
+export function lineChars(line: LyricLine): string {
   return line.words?.length ? line.words.map((w) => w.text).join("") : line.text;
 }
 
@@ -248,7 +248,7 @@ export function linesNeedReadings(lines: LyricLine[]): boolean {
 }
 
 /** Kana split into morae: small kana and ー join the one before, っ the one after. */
-function morae(kana: string): string[] {
+export function morae(kana: string): string[] {
   const out: string[] = [];
   let carry = "";
   for (const ch of kana) {
@@ -267,7 +267,7 @@ function morae(kana: string): string[] {
 }
 
 /** A reading shared across n characters by morae (馬車 ばしゃ → ば, しゃ). */
-function spread(reading: string, n: number): string[] {
+export function spread(reading: string, n: number): string[] {
   if (n <= 1) return [reading];
   const m = morae(reading);
   if (m.length < n) return [reading, ...Array<string>(n - 1).fill("")];
@@ -283,7 +283,7 @@ const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
  * (憧れ あこがれ → 憧 あこが, れ れ), so only the kanji take the dictionary's
  * reading; kana keep their own spelling, which already romanizes.
  */
-function tokenChars(tok: ReadingToken): string[] {
+export function tokenChars(tok: ReadingToken): string[] {
   const chars = Array.from(tok.s);
   if (!tok.r || !JA_KANJI.test(tok.s)) return chars;
   const reading = katakanaToHiragana(tok.r);
@@ -305,9 +305,9 @@ function tokenChars(tok: ReadingToken): string[] {
  * Each character's text, joined: romanized hanzi stand apart from each other
  * and from Latin, and `sp` puts a space before a character that starts a word.
  */
-type CharText = { t: string; roma: boolean; sp?: boolean };
+export type CharText = { t: string; roma: boolean; sp?: boolean };
 
-function joinChars(chars: CharText[]): string {
+export function joinChars(chars: CharText[]): string {
   let out = "";
   chars.forEach((c, i) => {
     const prev = chars[i - 1];
@@ -323,7 +323,7 @@ function joinChars(chars: CharText[]): string {
 }
 
 /** Puts per-character text back into the line, word by word, keeping each word's timing. */
-function withChars(line: LyricLine, chars: CharText[]): LyricLine {
+export function withChars(line: LyricLine, chars: CharText[]): LyricLine {
   if (!line.words?.length) return { ...line, text: joinChars(chars) };
   // Word breaks known (Japanese): a unit glues to the next unless a word starts there.
   const known = chars.some((c) => c.sp !== undefined);
@@ -393,7 +393,7 @@ export function applyPinyin(lines: LyricLine[]): LyricLine[] {
 }
 
 // ── Entry points ──────────────────────────────────────────────
-function romanizeKanaHangul(text: string): string {
+export function romanizeKanaHangul(text: string): string {
   let out = text;
   if (HANGUL.test(out)) out = romanizeKorean(out);
   if (HIRAGANA.test(out) || KATAKANA.test(out)) out = romanizeJapanese(out);

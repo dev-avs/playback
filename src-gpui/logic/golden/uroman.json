@@ -1,0 +1,11117 @@
+{
+ "uromanize": [
+  {
+   "in": "Привет, как дела?",
+   "has": true,
+   "out": "Privet, kak dela?"
+  },
+  {
+   "in": "Γειά σου κόσμε",
+   "has": true,
+   "out": "Geia sou kosme"
+  },
+  {
+   "in": "สวัสดีครับ",
+   "has": true,
+   "out": "swatdiikrap"
+  },
+  {
+   "in": "नमस्ते दुनिया",
+   "has": true,
+   "out": "namaste duniyaa"
+  },
+  {
+   "in": "שלום עולם",
+   "has": true,
+   "out": "shlvm 'vlm"
+  },
+  {
+   "in": "مرحبا بالعالم",
+   "has": true,
+   "out": "mrhba bal'alm"
+  },
+  {
+   "in": "안녕하세요 반갑습니다",
+   "has": false,
+   "out": "안녕하세요 반갑습니다"
+  },
+  {
+   "in": "こんにちは、世界！カタカナもある",
+   "has": false,
+   "out": "こんにちは、世界！カタカナもある"
+  },
+  {
+   "in": "你好，世界",
+   "has": false,
+   "out": "你好，世界"
+  },
+  {
+   "in": "Hello, plain Latin with café and naïve",
+   "has": false,
+   "out": "Hello, plain Latin with café and naïve"
+  },
+  {
+   "in": "Ελληνικά and English mixed",
+   "has": true,
+   "out": "Ellenika and English mixed"
+  },
+  {
+   "in": "Ёжик в тумане",
+   "has": true,
+   "out": "Ezhik v tumane"
+  },
+  {
+   "in": "ทดสอบ ภาษาไทย",
+   "has": true,
+   "out": "thdsop phaasaathai"
+  },
+  {
+   "in": "Привет, как дела?",
+   "has": true,
+   "out": "Privet, kak dela?"
+  },
+  {
+   "in": "Ёжик в тумане 123",
+   "has": true,
+   "out": "Ezhik v tumane 123"
+  },
+  {
+   "in": "Щука, цирк, ъ ь Ъ",
+   "has": true,
+   "out": "Shchuka, tsirk,   "
+  },
+  {
+   "in": "ΣΟΦΙΑ και σοφία",
+   "has": true,
+   "out": "SOFIA kai sofia"
+  },
+  {
+   "in": "Ὁμήρου Ἰλιάς, ΘΕΣΣΑΛΟΝΙΚΗ Thessaloníki",
+   "has": true,
+   "out": "Omerou Ilias, THESSALONIKE Thessaloníki"
+  },
+  {
+   "in": "مَرْحَبًا بِكُمْ في العالم",
+   "has": true,
+   "out": "marhaba bikum fy al'alm"
+  },
+  {
+   "in": "السلام عليكم ورحمة الله ٠١٢٣٤٥٦٧٨٩",
+   "has": true,
+   "out": "alslam 'lykm wrhma allh 0123456789"
+  },
+  {
+   "in": "ﻻ ﷲ ﻼ ﭐ ﺏ ﺑ ﺒ ﺐ",
+   "has": true,
+   "out": "la allh la a b b b b"
+  },
+  {
+   "in": "שָׁלוֹם עוֹלָם",
+   "has": true,
+   "out": "shalom 'olam"
+  },
+  {
+   "in": "הָבָה נָגִילָה, מַה זֶּה ה",
+   "has": true,
+   "out": "hava nagila, ma ze h"
+  },
+  {
+   "in": "שלום עולם בלי ניקוד",
+   "has": true,
+   "out": "shlvm 'vlm vly nyqvd"
+  },
+  {
+   "in": "ԱՅԲՈՒԲԵՆ հայերեն բառ",
+   "has": true,
+   "out": "AYBUBEN hayeren bar"
+  },
+  {
+   "in": "ქართული ენა და სიტყვა",
+   "has": true,
+   "out": "khartuli ena da sitqva"
+  },
+  {
+   "in": "አማርኛ ቋንቋ ኢትዮጵያ",
+   "has": true,
+   "out": "amaarenyaa qwaaneqwaa iteyopheyaa"
+  },
+  {
+   "in": "สวัสดีครับ เรียนภาษาไทย",
+   "has": true,
+   "out": "swatdiikrap rianphaasaathai"
+  },
+  {
+   "in": "เด็กไปโรงเรียน แม่ใจดี ไม้ใหม่ ๑๒๓",
+   "has": true,
+   "out": "dekpairongrian maechaidii maihaim 123"
+  },
+  {
+   "in": "ทดสอบ ภาษาไทย อ่าน อยู่ ที่นี่",
+   "has": true,
+   "out": "thdsop phaasaathai aan yuu thiinii"
+  },
+  {
+   "in": "नमस्ते दुनिया, हिन्दी भाषा १२३",
+   "has": true,
+   "out": "namaste duniyaa, hindii bhaassaa 123"
+  },
+  {
+   "in": "संस्कृतम् ज्ञान क्षत्रिय श्री",
+   "has": true,
+   "out": "samskrtam jnyaan kssatriy shrii"
+  },
+  {
+   "in": "বাংলা ভাষা আমি তোমাকে ভালোবাসি",
+   "has": true,
+   "out": "baanglaa bhaassaa aami tomaake bhaalobaasi"
+  },
+  {
+   "in": "ગુજરાતી ભાષા કેમ છો",
+   "has": true,
+   "out": "gujaraatii bhaassaa kema cho"
+  },
+  {
+   "in": "ਪੰਜਾਬੀ ਭਾਸ਼ਾ ਸੱਤ ਅੱਖ ਮੱਛੀ",
+   "has": true,
+   "out": "pamjaabii bhaasaa satta akkha macchii"
+  },
+  {
+   "in": "ಕನ್ನಡ ಭಾಷೆ ನಮಸ್ಕಾರ",
+   "has": true,
+   "out": "kannadda bhaasse namaskaara"
+  },
+  {
+   "in": "ខ្មែរ ភាសាខ្មែរ សួស្តី ប្រទេសកម្ពុជា",
+   "has": true,
+   "out": "khmaero phaasaakhmaero suastii brotesakampucaa"
+  },
+  {
+   "in": "മലയാളം ഭാഷ നമസ്കാരം",
+   "has": true,
+   "out": "malayaallam bhaassa namaskaaram"
+  },
+  {
+   "in": "မြန်မာ ဘာသာစကား မင်္ဂလာပါ",
+   "has": true,
+   "out": "mranmaa bhaasaacakaa manggalaapaa"
+  },
+  {
+   "in": "ଓଡ଼ିଆ ଭାଷା ନମସ୍କାର",
+   "has": true,
+   "out": "oddiaa bhaassaa namaskaara"
+  },
+  {
+   "in": "සිංහල භාෂාව ආයුබෝවන්",
+   "has": true,
+   "out": "sinhala baasaava aayuboovan"
+  },
+  {
+   "in": "ᮘᮞ ᮞᮥᮔ᮪ᮓ ᮅᮛᮀ",
+   "has": true,
+   "out": "basa sunda urang"
+  },
+  {
+   "in": "தமிழ் மொழி வணக்கம் ௧௨௩",
+   "has": true,
+   "out": "tamil moli vanakkam 123"
+  },
+  {
+   "in": "తెలుగు భాష నమస్కారం",
+   "has": true,
+   "out": "telugu bhaassa namaskaaram"
+  },
+  {
+   "in": "བོད་ཡིག ཀུན་ཏུ་བཟང་པོ",
+   "has": true,
+   "out": "bod·yig kun·tu·bzng·po"
+  },
+  {
+   "in": "ພາສາລາວ ສະບາຍດີ",
+   "has": true,
+   "out": "phaasaalaaw sabaanyodii"
+  },
+  {
+   "in": "ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ",
+   "has": true,
+   "out": "monggol qele"
+  },
+  {
+   "in": "ᏣᎳᎩ ᎦᏬᏂᎯᏍᏗ",
+   "has": true,
+   "out": "tsalagi gawonihisdi"
+  },
+  {
+   "in": "ܐܬܘܪܝܐ ܠܫܢܐ",
+   "has": true,
+   "out": "atwryua lshna"
+  },
+  {
+   "in": "ދިވެހި ބަސް",
+   "has": true,
+   "out": "dhivehi bas"
+  },
+  {
+   "in": "Hello, plain Latin with café and naïve",
+   "has": false,
+   "out": "Hello, plain Latin with café and naïve"
+  },
+  {
+   "in": "Ελληνικά and English mixed",
+   "has": true,
+   "out": "Ellenika and English mixed"
+  },
+  {
+   "in": "Привет world, mixed Latin Привет",
+   "has": true,
+   "out": "Privet world, mixed Latin Privet"
+  },
+  {
+   "in": "Здравствуйте!!! ... ??? ,,, --- «цитата» „цитата“ (скобки) [x] {y}",
+   "has": true,
+   "out": "Zdravstvuite!!! ... ??? ,,, --- «tsitata» „tsitata“ (skobki) [x] {y}"
+  },
+  {
+   "in": "Тест 😀 emoji 🎵 Привет 𝒜 𐎠 нота",
+   "has": true,
+   "out": "Test 😀 emoji 🎵 Privet 𝒜 𐎠 nota"
+  },
+  {
+   "in": "é́ combining ̃ Привет̆ ̀",
+   "has": true,
+   "out": "é combining  Privet "
+  },
+  {
+   "in": "a b c   spaces   Привет  двойной",
+   "has": true,
+   "out": "a b c   spaces   Privet  dvoinoi"
+  },
+  {
+   "in": "Привет",
+   "has": true,
+   "out": "Privet"
+  },
+  {
+   "in": ".,;:!?",
+   "has": false,
+   "out": ".,;:!?"
+  },
+  {
+   "in": "12345 67890",
+   "has": false,
+   "out": "12345 67890"
+  },
+  {
+   "in": "Ёё Ии Йй Ъъ Ыы Ээ Юю Яя",
+   "has": true,
+   "out": "Ee Ii Ii  Yy Ee Yuyu Yaya"
+  },
+  {
+   "in": "ΑΒΓΔ ΕΖΗΘ αβγδ ςσ",
+   "has": true,
+   "out": "ABGD EZETH abgd ss"
+  },
+  {
+   "in": "٣٫١٤ ۱۲۳ ߀߁ ०१२ ১২৩ ૧૨૩",
+   "has": false,
+   "out": "٣٫١٤ ۱۲۳ ߀߁ ०१२ ১২৩ ૧૨૩"
+  },
+  {
+   "in": "क्ष त्र ज्ञ श्र द्य ध्यान",
+   "has": true,
+   "out": "kssa tra jnya shra dya dhyaan"
+  },
+  {
+   "in": "कृष्ण ऋषि पृथ्वी",
+   "has": true,
+   "out": "krssnna rassi prthvii"
+  },
+  {
+   "in": "কৃষ্ণ ঋষি অ আ ই",
+   "has": true,
+   "out": "krssnna rassi a aa i"
+  },
+  {
+   "in": "ကျွန်တော် မြန်မာ ကို",
+   "has": true,
+   "out": "kywanteaa mranmaa kiu"
+  },
+  {
+   "in": "ฤๅษี ฦ ศึกษา ปัญญา",
+   "has": true,
+   "out": "ruesii lue sueksaa panyaa"
+  },
+  {
+   "in": "ใหญ่ ไหม เกาะ เสือ แมว",
+   "has": true,
+   "out": "hain haim ko suea maeo"
+  },
+  {
+   "in": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ",
+   "has": true,
+   "out": "alhamdu lilahi rabi al'aalamiyna"
+  },
+  {
+   "in": "בְּרֵאשִׁית בָּרָא אֱלֹהִים",
+   "has": true,
+   "out": "bereashiyt baraa elohim"
+  },
+  {
+   "in": "תוֹדָה רַבָּה לְךָ אֵלֶיהָ",
+   "has": true,
+   "out": "toda raba leka aeleyha"
+  },
+  {
+   "in": "Ѣ ѣ Ѳ ѳ Ѵ ѵ Ґ ґ Є є Ї ї Ў ў Ђ ђ Љ љ Њ њ Џ џ",
+   "has": true,
+   "out": "YA ya F f I i GH gh Ie ie YI yi U u DJ dj LJ lj NJ nj Dzh dzh"
+  },
+  {
+   "in": "",
+   "has": false,
+   "out": ""
+  },
+  {
+   "in": " ",
+   "has": false,
+   "out": " "
+  }
+ ],
+ "prepare": [
+  {
+   "in": "Привет, как дела?",
+   "out": "Привет, как дела?"
+  },
+  {
+   "in": "Γειά σου κόσμε",
+   "out": "Γειά σου κόσμε"
+  },
+  {
+   "in": "สวัสดีครับ",
+   "out": "สวัสดีครับ"
+  },
+  {
+   "in": "नमस्ते दुनिया",
+   "out": "नमस्ते दुनिया"
+  },
+  {
+   "in": "שלום עולם",
+   "out": "שלום עולם"
+  },
+  {
+   "in": "مرحبا بالعالم",
+   "out": "مرحبا بالعالم"
+  },
+  {
+   "in": "안녕하세요 반갑습니다",
+   "out": "안녕하세요 반갑습니다"
+  },
+  {
+   "in": "こんにちは、世界！カタカナもある",
+   "out": "こんにちは、世界！カタカナもある"
+  },
+  {
+   "in": "你好，世界",
+   "out": "你好，世界"
+  },
+  {
+   "in": "Hello, plain Latin with café and naïve",
+   "out": "Hello, plain Latin with café and naïve"
+  },
+  {
+   "in": "Ελληνικά and English mixed",
+   "out": "Ελληνικά and English mixed"
+  },
+  {
+   "in": "Ёжик в тумане",
+   "out": "Ёжик в тумане"
+  },
+  {
+   "in": "ทดสอบ ภาษาไทย",
+   "out": "ทดสอบ ภาษาไทย"
+  },
+  {
+   "in": "Привет, как дела?",
+   "out": "Привет, как дела?"
+  },
+  {
+   "in": "Ёжик в тумане 123",
+   "out": "Ёжик в тумане 123"
+  },
+  {
+   "in": "Щука, цирк, ъ ь Ъ",
+   "out": "Щука, цирк, ъ ь Ъ"
+  },
+  {
+   "in": "ΣΟΦΙΑ και σοφία",
+   "out": "ΣΟΦΙΑ και σοφία"
+  },
+  {
+   "in": "Ὁμήρου Ἰλιάς, ΘΕΣΣΑΛΟΝΙΚΗ Thessaloníki",
+   "out": "Ὁμήρου Ἰλιάς, ΘΕΣΣΑΛΟΝΙΚΗ Thessaloníki"
+  },
+  {
+   "in": "مَرْحَبًا بِكُمْ في العالم",
+   "out": "مَرْحَبًا بِكُمْ في العالم"
+  },
+  {
+   "in": "السلام عليكم ورحمة الله ٠١٢٣٤٥٦٧٨٩",
+   "out": "السلام عليكم ورحمة الله ٠١٢٣٤٥٦٧٨٩"
+  },
+  {
+   "in": "ﻻ ﷲ ﻼ ﭐ ﺏ ﺑ ﺒ ﺐ",
+   "out": "لا الله لا ٱ ب ب ب ب"
+  },
+  {
+   "in": "שָׁלוֹם עוֹלָם",
+   "out": "שָׁלוֹם עוֹלָם"
+  },
+  {
+   "in": "הָבָה נָגִילָה, מַה זֶּה ה",
+   "out": "הָבָ‌ נָגִילָ‌, מַ‌ זֶּ‌ ה"
+  },
+  {
+   "in": "שלום עולם בלי ניקוד",
+   "out": "שלום עולם בלי ניקוד"
+  },
+  {
+   "in": "ԱՅԲՈՒԲԵՆ հայերեն բառ",
+   "out": "ԱՅԲՈՒԲԵՆ հայերեն բառ"
+  },
+  {
+   "in": "ქართული ენა და სიტყვა",
+   "out": "ქართული ენა და სიტყვა"
+  },
+  {
+   "in": "አማርኛ ቋንቋ ኢትዮጵያ",
+   "out": "አማርኛ ቋንቋ ኢትዮጵያ"
+  },
+  {
+   "in": "สวัสดีครับ เรียนภาษาไทย",
+   "out": "สวัสดีครับ เรียนภาษาไทย"
+  },
+  {
+   "in": "เด็กไปโรงเรียน แม่ใจดี ไม้ใหม่ ๑๒๓",
+   "out": "เด็กไปโรงเรียน แม่ใจดี ไม้ใหม่ ๑๒๓"
+  },
+  {
+   "in": "ทดสอบ ภาษาไทย อ่าน อยู่ ที่นี่",
+   "out": "ทดสอบ ภาษาไทย อ่าน อยู่ ที่นี่"
+  },
+  {
+   "in": "नमस्ते दुनिया, हिन्दी भाषा १२३",
+   "out": "नमस्ते दुनिया, हिन्दी भाषा १२३"
+  },
+  {
+   "in": "संस्कृतम् ज्ञान क्षत्रिय श्री",
+   "out": "संस्कृतम् ज्ञान क्षत्रिय श्री"
+  },
+  {
+   "in": "বাংলা ভাষা আমি তোমাকে ভালোবাসি",
+   "out": "বাংলা ভাষা আমি তোমাকে ভালোবাসি"
+  },
+  {
+   "in": "ગુજરાતી ભાષા કેમ છો",
+   "out": "ગુજરાતી ભાષા કેમ છો"
+  },
+  {
+   "in": "ਪੰਜਾਬੀ ਭਾਸ਼ਾ ਸੱਤ ਅੱਖ ਮੱਛੀ",
+   "out": "ਪੰਜਾਬੀ ਭਾਸ਼ਾ ਸੱਤ ਅੱਖ ਮੱਛੀ"
+  },
+  {
+   "in": "ಕನ್ನಡ ಭಾಷೆ ನಮಸ್ಕಾರ",
+   "out": "ಕನ್ನಡ ಭಾಷೆ ನಮಸ್ಕಾರ"
+  },
+  {
+   "in": "ខ្មែរ ភាសាខ្មែរ សួស្តី ប្រទេសកម្ពុជា",
+   "out": "ខ្មែរ ភាសាខ្មែរ សួស្តី ប្រទេសកម្ពុជា"
+  },
+  {
+   "in": "മലയാളം ഭാഷ നമസ്കാരം",
+   "out": "മലയാളം ഭാഷ നമസ്കാരം"
+  },
+  {
+   "in": "မြန်မာ ဘာသာစကား မင်္ဂလာပါ",
+   "out": "မြန်မာ ဘာသာစကား မင်္ဂလာပါ"
+  },
+  {
+   "in": "ଓଡ଼ିଆ ଭାଷା ନମସ୍କାର",
+   "out": "ଓଡ଼ିଆ ଭାଷା ନମସ୍କାର"
+  },
+  {
+   "in": "සිංහල භාෂාව ආයුබෝවන්",
+   "out": "සිංහල භාෂාව ආයුබෝවන්"
+  },
+  {
+   "in": "ᮘᮞ ᮞᮥᮔ᮪ᮓ ᮅᮛᮀ",
+   "out": "ᮘᮞ ᮞᮥᮔ᮪ᮓ ᮅᮛᮀ"
+  },
+  {
+   "in": "தமிழ் மொழி வணக்கம் ௧௨௩",
+   "out": "தமிழ் மொழி வணக்கம் ௧௨௩"
+  },
+  {
+   "in": "తెలుగు భాష నమస్కారం",
+   "out": "తెలుగు భాష నమస్కారం"
+  },
+  {
+   "in": "བོད་ཡིག ཀུན་ཏུ་བཟང་པོ",
+   "out": "བོད་ཡིག ཀུན་ཏུ་བཟང་པོ"
+  },
+  {
+   "in": "ພາສາລາວ ສະບາຍດີ",
+   "out": "ພາສາລາວ ສະບາຍດີ"
+  },
+  {
+   "in": "ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ",
+   "out": "ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ"
+  },
+  {
+   "in": "ᏣᎳᎩ ᎦᏬᏂᎯᏍᏗ",
+   "out": "ᏣᎳᎩ ᎦᏬᏂᎯᏍᏗ"
+  },
+  {
+   "in": "ܐܬܘܪܝܐ ܠܫܢܐ",
+   "out": "ܐܬܘܪܝܐ ܠܫܢܐ"
+  },
+  {
+   "in": "ދިވެހި ބަސް",
+   "out": "ދިވެހި ބަސް"
+  },
+  {
+   "in": "Hello, plain Latin with café and naïve",
+   "out": "Hello, plain Latin with café and naïve"
+  },
+  {
+   "in": "Ελληνικά and English mixed",
+   "out": "Ελληνικά and English mixed"
+  },
+  {
+   "in": "Привет world, mixed Latin Привет",
+   "out": "Привет world, mixed Latin Привет"
+  },
+  {
+   "in": "Здравствуйте!!! ... ??? ,,, --- «цитата» „цитата“ (скобки) [x] {y}",
+   "out": "Здравствуйте!!! ... ??? ,,, --- «цитата» „цитата“ (скобки) [x] {y}"
+  },
+  {
+   "in": "Тест 😀 emoji 🎵 Привет 𝒜 𐎠 нота",
+   "out": "Тест 😀 emoji 🎵 Привет 𝒜 𐎠 нота"
+  },
+  {
+   "in": "é́ combining ̃ Привет̆ ̀",
+   "out": "é́ combining ̃ Привет̆ ̀"
+  },
+  {
+   "in": "a b c   spaces   Привет  двойной",
+   "out": "a b c   spaces   Привет  двойной"
+  },
+  {
+   "in": "Привет",
+   "out": "Привет"
+  },
+  {
+   "in": ".,;:!?",
+   "out": ".,;:!?"
+  },
+  {
+   "in": "12345 67890",
+   "out": "12345 67890"
+  },
+  {
+   "in": "Ёё Ии Йй Ъъ Ыы Ээ Юю Яя",
+   "out": "Ёё Ии Йй Ъъ Ыы Ээ Юю Яя"
+  },
+  {
+   "in": "ΑΒΓΔ ΕΖΗΘ αβγδ ςσ",
+   "out": "ΑΒΓΔ ΕΖΗΘ αβγδ ςσ"
+  },
+  {
+   "in": "٣٫١٤ ۱۲۳ ߀߁ ०१२ ১২৩ ૧૨૩",
+   "out": "٣٫١٤ ۱۲۳ ߀߁ ०१२ ১২৩ ૧૨૩"
+  },
+  {
+   "in": "क्ष त्र ज्ञ श्र द्य ध्यान",
+   "out": "क्ष त्र ज्ञ श्र द्य ध्यान"
+  },
+  {
+   "in": "कृष्ण ऋषि पृथ्वी",
+   "out": "कृष्ण ऋषि पृथ्वी"
+  },
+  {
+   "in": "কৃষ্ণ ঋষি অ আ ই",
+   "out": "কৃষ্ণ ঋষি অ আ ই"
+  },
+  {
+   "in": "ကျွန်တော် မြန်မာ ကို",
+   "out": "ကျွန်တော် မြန်မာ ကို"
+  },
+  {
+   "in": "ฤๅษี ฦ ศึกษา ปัญญา",
+   "out": "ฤๅษี ฦ ศึกษา ปัญญา"
+  },
+  {
+   "in": "ใหญ่ ไหม เกาะ เสือ แมว",
+   "out": "ใหญ่ ไหม เกาะ เสือ แมว"
+  },
+  {
+   "in": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ",
+   "out": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ"
+  },
+  {
+   "in": "בְּרֵאשִׁית בָּרָא אֱלֹהִים",
+   "out": "בְּרֵאשִׁית בָּרָא אֱלֹהִים"
+  },
+  {
+   "in": "תוֹדָה רַבָּה לְךָ אֵלֶיהָ",
+   "out": "תוֹדָ‌ רַבָּ‌ לְךָ אֵלֶיהָ"
+  },
+  {
+   "in": "Ѣ ѣ Ѳ ѳ Ѵ ѵ Ґ ґ Є є Ї ї Ў ў Ђ ђ Љ љ Њ њ Џ џ",
+   "out": "Ѣ ѣ Ѳ ѳ Ѵ ѵ Ґ ґ Є є Ї ї Ў ў Ђ ђ Љ љ Њ њ Џ џ"
+  },
+  {
+   "in": "",
+   "out": ""
+  },
+  {
+   "in": " ",
+   "out": " "
+  }
+ ],
+ "edges": [
+  {
+   "in": "Привет, как дела?",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "?",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Γειά σου κόσμε",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "G",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 3,
+     "txt": "ei",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 8,
+     "txt": "ou",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "e",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "สวัสดีครับ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "w",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "p",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "नमस्ते दुनिया",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 4,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "aa",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "שלום עולם",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "sh",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "m",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "مرحبا بالعالم",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "m",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "안녕하세요 반갑습니다",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "안",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "녕",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "하",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "세",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "요",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "반",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "갑",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "습",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "니",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "다",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "こんにちは、世界！カタカナもある",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "こ",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "ん",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "に",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "ち",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "は",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": ", ",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "世",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "界",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "! ",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "カ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "タ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "カ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "ナ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "も",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "あ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "る",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "你好，世界",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "你",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "好",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": ", ",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "世",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "界",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Hello, plain Latin with café and naïve",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "H",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "o",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "p",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "L",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "t",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "w",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "t",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "h",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "c",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "f",
+     "type": "orig"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "é",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "d",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": "ï",
+     "type": "orig"
+    },
+    {
+     "start": 36,
+     "end": 37,
+     "txt": "v",
+     "type": "orig"
+    },
+    {
+     "start": 37,
+     "end": 38,
+     "txt": "e",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Ελληνικά and English mixed",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "d",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "E",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "g",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "s",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "h",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "m",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "x",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "d",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Ёжик в тумане",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "zh",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "e",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ทดสอบ ภาษาไทย",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "th",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ph",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 13,
+     "txt": "thai",
+     "type": "rom exp"
+    }
+   ]
+  },
+  {
+   "in": "Привет, как дела?",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "?",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Ёжик в тумане 123",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "zh",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "3",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Щука, цирк, ъ ь Ъ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "Shch",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ts",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ΣΟΦΙΑ και σοφία",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "S",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "O",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "F",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "I",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "A",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "f",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "a",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "Ὁμήρου Ἰλιάς, ΘΕΣΣΑΛΟΝΙΚΗ Thessaloníki",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "O",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 6,
+     "txt": "ou",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "I",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "TH",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "S",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "S",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "A",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "L",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "O",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "N",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "I",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "K",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "T",
+     "type": "orig"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "h",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "s",
+     "type": "orig"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "s",
+     "type": "orig"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "o",
+     "type": "orig"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": "í",
+     "type": "orig"
+    },
+    {
+     "start": 36,
+     "end": 37,
+     "txt": "k",
+     "type": "orig"
+    },
+    {
+     "start": 37,
+     "end": 38,
+     "txt": "i",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "مَرْحَبًا بِكُمْ في العالم",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "f",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "m",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "السلام عليكم ورحمة الله ٠١٢٣٤٥٦٧٨٩",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "w",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "0",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "3",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "4",
+     "type": "orig"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "5",
+     "type": "orig"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "6",
+     "type": "orig"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "7",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "8",
+     "type": "orig"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "9",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "ﻻ ﷲ ﻼ ﭐ ﺏ ﺑ ﺒ ﺐ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "b",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "שָׁלוֹם עוֹלָם",
+   "out": [
+    {
+     "start": 0,
+     "end": 3,
+     "txt": "sha",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 6,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 11,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "m",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "הָבָה נָגִילָה, מַה זֶּה ה",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "g",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 11,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "z",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "h",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "שלום עולם בלי ניקוד",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "sh",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "q",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "d",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ԱՅԲՈՒԲԵՆ հայերեն բառ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "A",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "Y",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "B",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 5,
+     "txt": "U",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "B",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "N",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "r",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ქართული ენა და სიტყვა",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "kh",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "q",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "a",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "አማርኛ ቋንቋ ኢትዮጵያ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "maa",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "re",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "nyaa",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "qwaa",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ne",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "qwaa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "te",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "yo",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "phe",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "yaa",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "สวัสดีครับ เรียนภาษาไทย",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "w",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 15,
+     "txt": "ria",
+     "type": "rom exp"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "ph",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 23,
+     "txt": "thai",
+     "type": "rom exp"
+    }
+   ]
+  },
+  {
+   "in": "เด็กไปโรงเรียน แม่ใจดี ไม้ใหม่ ๑๒๓",
+   "out": [
+    {
+     "start": 0,
+     "end": 3,
+     "txt": "de",
+     "type": "rom exp"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 6,
+     "txt": "pai",
+     "type": "rom exp"
+    },
+    {
+     "start": 6,
+     "end": 8,
+     "txt": "ro",
+     "type": "rom exp"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "ng",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 13,
+     "txt": "ria",
+     "type": "rom exp"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 17,
+     "txt": "mae",
+     "type": "rom exp"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 20,
+     "txt": "chai",
+     "type": "rom exp"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 25,
+     "txt": "mai",
+     "type": "rom exp"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 28,
+     "txt": "hai",
+     "type": "rom exp"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "3",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "ทดสอบ ภาษาไทย อ่าน อยู่ ที่นี่",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "th",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ph",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 13,
+     "txt": "thai",
+     "type": "rom exp"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "",
+     "type": "rom del"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "",
+     "type": "rom del"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "uu",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "th",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "नमस्ते दुनिया, हिन्दी भाषा १२३",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 4,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 19,
+     "txt": "n",
+     "type": "rom exp"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "3",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "संस्कृतम् ज्ञान क्षत्रिय श्री",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "sa",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "m",
+     "type": "rom tail"
+    },
+    {
+     "start": 2,
+     "end": 4,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ta",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 9,
+     "txt": "m",
+     "type": "rom exp"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 12,
+     "txt": "j",
+     "type": "rom exp"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "ny",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 18,
+     "txt": "k",
+     "type": "rom exp"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "ssa",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 21,
+     "txt": "t",
+     "type": "rom exp"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 27,
+     "txt": "sh",
+     "type": "rom exp"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "ii",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "বাংলা ভাষা আমি তোমাকে ভালোবাসি",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "ng",
+     "type": "rom tail"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "i",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ગુજરાતી ભાષા કેમ છો",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "g",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "ja",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ch",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "o",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ਪੰਜਾਬੀ ਭਾਸ਼ਾ ਸੱਤ ਅੱਖ ਮੱਛੀ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "pa",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "m",
+     "type": "rom tail"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "j",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "sa",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 16,
+     "txt": "tta",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 20,
+     "txt": "kkha",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 24,
+     "txt": "cch",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "ii",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ಕನ್ನಡ ಭಾಷೆ ನಮಸ್ಕಾರ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "ka",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 3,
+     "txt": "n",
+     "type": "rom exp"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "dda",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 15,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ra",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ខ្មែរ ភាសាខ្មែរ សួស្តី ប្រទេសកម្ពុជា",
+   "out": [
+    {
+     "start": 0,
+     "end": 2,
+     "txt": "kh",
+     "type": "rom exp"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "ae",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "ro",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ph",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 12,
+     "txt": "kh",
+     "type": "rom exp"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "ae",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "ro",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ua",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 20,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 25,
+     "txt": "b",
+     "type": "rom exp"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "ro",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "sa",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "ka",
+     "type": "rom"
+    },
+    {
+     "start": 30,
+     "end": 32,
+     "txt": "m",
+     "type": "rom exp"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "c",
+     "type": "rom"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": "aa",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "മലയാളം ഭാഷ നമസ്കാരം",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "la",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "lla",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "m",
+     "type": "rom tail"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "ssa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 15,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "m",
+     "type": "rom tail"
+    }
+   ]
+  },
+  {
+   "in": "မြန်မာ ဘာသာစကား မင်္ဂလာပါ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 4,
+     "txt": "n",
+     "type": "rom exp"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "ca",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 19,
+     "txt": "ng",
+     "type": "rom exp"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "ga",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "aa",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ଓଡ଼ିଆ ଭାଷା ନମସ୍କାର",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "dd",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 15,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ra",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "සිංහල භාෂාව ආයුබෝවන්",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "n",
+     "type": "rom tail"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "ha",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "la",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "va",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "oo",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "va",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 20,
+     "txt": "n",
+     "type": "rom exp"
+    }
+   ]
+  },
+  {
+   "in": "ᮘᮞ ᮞᮥᮔ᮪ᮓ ᮅᮛᮀ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "ba",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "sa",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 7,
+     "txt": "n",
+     "type": "rom exp"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "da",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "ng",
+     "type": "rom tail"
+    }
+   ]
+  },
+  {
+   "in": "தமிழ் மொழி வணக்கம் ௧௨௩",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "ta",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 5,
+     "txt": "l",
+     "type": "rom exp"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "va",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 15,
+     "txt": "k",
+     "type": "rom exp"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "ka",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 18,
+     "txt": "m",
+     "type": "rom exp"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "3",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "తెలుగు భాష నమస్కారం",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "g",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "bh",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "ssa",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "na",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "ma",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 15,
+     "txt": "s",
+     "type": "rom exp"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "m",
+     "type": "rom tail"
+    }
+   ]
+  },
+  {
+   "in": "བོད་ཡིག ཀུན་ཏུ་བཟང་པོ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "·",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "g",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "·",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "·",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "z",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "ng",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "·",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "o",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ພາສາລາວ ສະບາຍດີ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "ph",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "w",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "nyo",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "ii",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ᠮᠣᠩᠭᠣᠯ ᠬᠡᠯᠡ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "ng",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "g",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "q",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "e",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ᏣᎳᎩ ᎦᏬᏂᎯᏍᏗ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "tsa",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "la",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "gi",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "ga",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "wo",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ni",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "hi",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "di",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ܐܬܘܪܝܐ ܠܫܢܐ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "w",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "yu",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "sh",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ދިވެހި ބަސް",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "dh",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "Hello, plain Latin with café and naïve",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "H",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "o",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "p",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "L",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "t",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "w",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "t",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "h",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "c",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "f",
+     "type": "orig"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "é",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "d",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": "ï",
+     "type": "orig"
+    },
+    {
+     "start": 36,
+     "end": 37,
+     "txt": "v",
+     "type": "orig"
+    },
+    {
+     "start": 37,
+     "end": 38,
+     "txt": "e",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Ελληνικά and English mixed",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "d",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "E",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "g",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "s",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "h",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "m",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "x",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "d",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Привет world, mixed Latin Привет",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "w",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "o",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "r",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "l",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "d",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "m",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "x",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "d",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "L",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "t",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "t",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "Здравствуйте!!! ... ??? ,,, --- «цитата» „цитата“ (скобки) [x] {y}",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "Z",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "!",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "!",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "!",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": ".",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": ".",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": ".",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "?",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "?",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "?",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "-",
+     "type": "orig"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "-",
+     "type": "orig"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "-",
+     "type": "orig"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "«",
+     "type": "orig"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "ts",
+     "type": "rom"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 36,
+     "end": 37,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 37,
+     "end": 38,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 38,
+     "end": 39,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 39,
+     "end": 40,
+     "txt": "»",
+     "type": "orig"
+    },
+    {
+     "start": 40,
+     "end": 41,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 41,
+     "end": 42,
+     "txt": "„",
+     "type": "orig"
+    },
+    {
+     "start": 42,
+     "end": 43,
+     "txt": "ts",
+     "type": "rom"
+    },
+    {
+     "start": 43,
+     "end": 44,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 44,
+     "end": 45,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 45,
+     "end": 46,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 46,
+     "end": 47,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 47,
+     "end": 48,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 48,
+     "end": 49,
+     "txt": "“",
+     "type": "orig"
+    },
+    {
+     "start": 49,
+     "end": 50,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 50,
+     "end": 51,
+     "txt": "(",
+     "type": "orig"
+    },
+    {
+     "start": 51,
+     "end": 52,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 52,
+     "end": 53,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 53,
+     "end": 54,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 54,
+     "end": 55,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 55,
+     "end": 56,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 56,
+     "end": 57,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 57,
+     "end": 58,
+     "txt": ")",
+     "type": "orig"
+    },
+    {
+     "start": 58,
+     "end": 59,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 59,
+     "end": 60,
+     "txt": "[",
+     "type": "orig"
+    },
+    {
+     "start": 60,
+     "end": 61,
+     "txt": "x",
+     "type": "orig"
+    },
+    {
+     "start": 61,
+     "end": 62,
+     "txt": "]",
+     "type": "orig"
+    },
+    {
+     "start": 62,
+     "end": 63,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 63,
+     "end": 64,
+     "txt": "{",
+     "type": "orig"
+    },
+    {
+     "start": 64,
+     "end": 65,
+     "txt": "y",
+     "type": "orig"
+    },
+    {
+     "start": 65,
+     "end": 66,
+     "txt": "}",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Тест 😀 emoji 🎵 Привет 𝒜 𐎠 нота",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "T",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "😀",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "m",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "o",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "j",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "🎵",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "𝒜",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "𐎠",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "a",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "é́ combining ̃ Привет̆ ̀",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "é",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "c",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "o",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "m",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "b",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "i",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "n",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "g",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "",
+     "type": "mark"
+    }
+   ]
+  },
+  {
+   "in": "a b c   spaces   Привет  двойной",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "b",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "c",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "s",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "p",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "c",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "e",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "s",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "i",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "Привет",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "P",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "t",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": ".,;:!?",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": ".",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": ",",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": ";",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": ":",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "!",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "?",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "12345 67890",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "3",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "4",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "5",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "6",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "7",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "8",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "9",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "0",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "Ёё Ии Йй Ъъ Ыы Ээ Юю Яя",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "I",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "I",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "Y",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "Yu",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "yu",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "Ya",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "ya",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ΑΒΓΔ ΕΖΗΘ αβγδ ςσ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "A",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "B",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "G",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "D",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "Z",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "E",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "TH",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "g",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "s",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "٣٫١٤ ۱۲۳ ߀߁ ०१२ ১২৩ ૧૨૩",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "3",
+     "type": "orig"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": ",",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "4",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "3",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "0",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "0",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "3",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "1",
+     "type": "orig"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "2",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "3",
+     "type": "orig"
+    }
+   ]
+  },
+  {
+   "in": "क्ष त्र ज्ञ श्र द्य ध्यान",
+   "out": [
+    {
+     "start": 0,
+     "end": 2,
+     "txt": "k",
+     "type": "rom exp"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "ssa",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 6,
+     "txt": "t",
+     "type": "rom exp"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 10,
+     "txt": "j",
+     "type": "rom exp"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "nya",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 14,
+     "txt": "sh",
+     "type": "rom exp"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 18,
+     "txt": "d",
+     "type": "rom exp"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "ya",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 22,
+     "txt": "dh",
+     "type": "rom exp"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "n",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "कृष्ण ऋषि पृथ्वी",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 4,
+     "txt": "ss",
+     "type": "rom exp"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "nna",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 14,
+     "txt": "th",
+     "type": "rom exp"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "v",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "ii",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "কৃষ্ণ ঋষি অ আ ই",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 4,
+     "txt": "ss",
+     "type": "rom exp"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "nna",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "ss",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "i",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ကျွန်တော် မြန်မာ ကို",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "wa",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 5,
+     "txt": "n",
+     "type": "rom exp"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 9,
+     "txt": "aa",
+     "type": "rom exp"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "ra",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 14,
+     "txt": "n",
+     "type": "rom exp"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "u",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ฤๅษี ฦ ศึกษา ปัญญา",
+   "out": [
+    {
+     "start": 0,
+     "end": 2,
+     "txt": "rue",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "ii",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "lue",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "ue",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "s",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "aa",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "p",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "aa",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "ใหญ่ ไหม เกาะ เสือ แมว",
+   "out": [
+    {
+     "start": 0,
+     "end": 2,
+     "txt": "hai",
+     "type": "rom exp"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 5,
+     "end": 7,
+     "txt": "hai",
+     "type": "rom exp"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 9,
+     "end": 13,
+     "txt": "ko",
+     "type": "rom exp"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 18,
+     "txt": "suea",
+     "type": "rom exp"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 22,
+     "txt": "maeo",
+     "type": "rom exp"
+    }
+   ]
+  },
+  {
+   "in": "ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَالَمِينَ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "b",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": "'",
+     "type": "rom"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "m",
+     "type": "rom"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": "n",
+     "type": "rom"
+    },
+    {
+     "start": 36,
+     "end": 37,
+     "txt": "a",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "בְּרֵאשִׁית בָּרָא אֱלֹהִים",
+   "out": [
+    {
+     "start": 0,
+     "end": 3,
+     "txt": "be",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 6,
+     "end": 9,
+     "txt": "shi",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 15,
+     "txt": "ba",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 21,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 26,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "m",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "תוֹדָה רַבָּה לְךָ אֵלֶיהָ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "t",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 3,
+     "txt": "o",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": "d",
+     "type": "rom"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": "r",
+     "type": "rom"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 12,
+     "txt": "ba",
+     "type": "rom"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "",
+     "type": "mark"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "k",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": "a",
+     "type": "rom"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": "l",
+     "type": "rom"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "e",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": "y",
+     "type": "rom"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "h",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": "a",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "Ѣ ѣ Ѳ ѳ Ѵ ѵ Ґ ґ Є є Ї ї Ў ў Ђ ђ Љ љ Њ њ Џ џ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": "YA",
+     "type": "rom"
+    },
+    {
+     "start": 1,
+     "end": 2,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 2,
+     "end": 3,
+     "txt": "ya",
+     "type": "rom"
+    },
+    {
+     "start": 3,
+     "end": 4,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 4,
+     "end": 5,
+     "txt": "F",
+     "type": "rom"
+    },
+    {
+     "start": 5,
+     "end": 6,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 6,
+     "end": 7,
+     "txt": "f",
+     "type": "rom"
+    },
+    {
+     "start": 7,
+     "end": 8,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 8,
+     "end": 9,
+     "txt": "I",
+     "type": "rom"
+    },
+    {
+     "start": 9,
+     "end": 10,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 10,
+     "end": 11,
+     "txt": "i",
+     "type": "rom"
+    },
+    {
+     "start": 11,
+     "end": 12,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 12,
+     "end": 13,
+     "txt": "GH",
+     "type": "rom"
+    },
+    {
+     "start": 13,
+     "end": 14,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 14,
+     "end": 15,
+     "txt": "gh",
+     "type": "rom"
+    },
+    {
+     "start": 15,
+     "end": 16,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 16,
+     "end": 17,
+     "txt": "Ie",
+     "type": "rom"
+    },
+    {
+     "start": 17,
+     "end": 18,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 18,
+     "end": 19,
+     "txt": "ie",
+     "type": "rom"
+    },
+    {
+     "start": 19,
+     "end": 20,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 20,
+     "end": 21,
+     "txt": "YI",
+     "type": "rom"
+    },
+    {
+     "start": 21,
+     "end": 22,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 22,
+     "end": 23,
+     "txt": "yi",
+     "type": "rom"
+    },
+    {
+     "start": 23,
+     "end": 24,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 24,
+     "end": 25,
+     "txt": "U",
+     "type": "rom"
+    },
+    {
+     "start": 25,
+     "end": 26,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 26,
+     "end": 27,
+     "txt": "u",
+     "type": "rom"
+    },
+    {
+     "start": 27,
+     "end": 28,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 28,
+     "end": 29,
+     "txt": "DJ",
+     "type": "rom"
+    },
+    {
+     "start": 29,
+     "end": 30,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 30,
+     "end": 31,
+     "txt": "dj",
+     "type": "rom"
+    },
+    {
+     "start": 31,
+     "end": 32,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 32,
+     "end": 33,
+     "txt": "LJ",
+     "type": "rom"
+    },
+    {
+     "start": 33,
+     "end": 34,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 34,
+     "end": 35,
+     "txt": "lj",
+     "type": "rom"
+    },
+    {
+     "start": 35,
+     "end": 36,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 36,
+     "end": 37,
+     "txt": "NJ",
+     "type": "rom"
+    },
+    {
+     "start": 37,
+     "end": 38,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 38,
+     "end": 39,
+     "txt": "nj",
+     "type": "rom"
+    },
+    {
+     "start": 39,
+     "end": 40,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 40,
+     "end": 41,
+     "txt": "Dzh",
+     "type": "rom"
+    },
+    {
+     "start": 41,
+     "end": 42,
+     "txt": " ",
+     "type": "orig"
+    },
+    {
+     "start": 42,
+     "end": 43,
+     "txt": "dzh",
+     "type": "rom"
+    }
+   ]
+  },
+  {
+   "in": "",
+   "out": []
+  },
+  {
+   "in": " ",
+   "out": [
+    {
+     "start": 0,
+     "end": 1,
+     "txt": " ",
+     "type": "orig"
+    }
+   ]
+  }
+ ],
+ "uromanizeParts": [
+  {
+   "in": [
+    "Привет,",
+    "как",
+    "дела?"
+   ],
+   "out": [
+    "Privet,",
+    "kak",
+    "dela?"
+   ]
+  },
+  {
+   "in": [
+    "Γειά",
+    "σου",
+    "κόσμε"
+   ],
+   "out": [
+    "Geia",
+    "sou",
+    "kosme"
+   ]
+  },
+  {
+   "in": [
+    "नमस्ते",
+    "दुनिया"
+   ],
+   "out": [
+    "namaste",
+    "duniyaa"
+   ]
+  },
+  {
+   "in": [
+    "שלום",
+    "עולם"
+   ],
+   "out": [
+    "shlvm",
+    "'vlm"
+   ]
+  },
+  {
+   "in": [
+    "مرحبا",
+    "بالعالم"
+   ],
+   "out": [
+    "mrhba",
+    "bal'alm"
+   ]
+  },
+  {
+   "in": [
+    "안녕하세요",
+    "반갑습니다"
+   ],
+   "out": [
+    "안녕하세요",
+    "반갑습니다"
+   ]
+  },
+  {
+   "in": [
+    "Hello,",
+    "plain",
+    "Latin",
+    "with",
+    "café",
+    "and",
+    "naïve"
+   ],
+   "out": [
+    "Hello,",
+    "plain",
+    "Latin",
+    "with",
+    "café",
+    "and",
+    "naïve"
+   ]
+  },
+  {
+   "in": [
+    "Ελληνικά",
+    "and",
+    "English",
+    "mixed"
+   ],
+   "out": [
+    "Ellenika",
+    "and",
+    "English",
+    "mixed"
+   ]
+  },
+  {
+   "in": [
+    "Ёжик",
+    "в",
+    "тумане"
+   ],
+   "out": [
+    "Ezhik",
+    "v",
+    "tumane"
+   ]
+  },
+  {
+   "in": [
+    "ทดสอบ",
+    "ภาษาไทย"
+   ],
+   "out": [
+    "thdsop",
+    "phaasaathai"
+   ]
+  },
+  {
+   "in": [
+    "Привет,",
+    "как",
+    "дела?"
+   ],
+   "out": [
+    "Privet,",
+    "kak",
+    "dela?"
+   ]
+  },
+  {
+   "in": [
+    "Ёжик",
+    "в",
+    "тумане",
+    "123"
+   ],
+   "out": [
+    "Ezhik",
+    "v",
+    "tumane",
+    "123"
+   ]
+  },
+  {
+   "in": [
+    "Щука,",
+    "цирк,",
+    "ъ",
+    "ь",
+    "Ъ"
+   ],
+   "out": [
+    "Shchuka,",
+    "tsirk,",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "in": [
+    "ΣΟΦΙΑ",
+    "και",
+    "σοφία"
+   ],
+   "out": [
+    "SOFIA",
+    "kai",
+    "sofia"
+   ]
+  },
+  {
+   "in": [
+    "Ὁμήρου",
+    "Ἰλιάς,",
+    "ΘΕΣΣΑΛΟΝΙΚΗ",
+    "Thessaloníki"
+   ],
+   "out": [
+    "Omerou",
+    "Ilias,",
+    "THESSALONIKE",
+    "Thessaloníki"
+   ]
+  },
+  {
+   "in": [
+    "مَرْحَبًا",
+    "بِكُمْ",
+    "في",
+    "العالم"
+   ],
+   "out": [
+    "marhaba",
+    "bikum",
+    "fy",
+    "al'alm"
+   ]
+  },
+  {
+   "in": [
+    "السلام",
+    "عليكم",
+    "ورحمة",
+    "الله",
+    "٠١٢٣٤٥٦٧٨٩"
+   ],
+   "out": [
+    "alslam",
+    "'lykm",
+    "wrhma",
+    "allh",
+    "0123456789"
+   ]
+  },
+  {
+   "in": [
+    "ﻻ",
+    "ﷲ",
+    "ﻼ",
+    "ﭐ",
+    "ﺏ",
+    "ﺑ",
+    "ﺒ",
+    "ﺐ"
+   ],
+   "out": [
+    "la",
+    "allh",
+    "la",
+    "a",
+    "b",
+    "b",
+    "b",
+    "b"
+   ]
+  },
+  {
+   "in": [
+    "שָׁלוֹם",
+    "עוֹלָם"
+   ],
+   "out": [
+    "shalom",
+    "'olam"
+   ]
+  },
+  {
+   "in": [
+    "הָבָה",
+    "נָגִילָה,",
+    "מַה",
+    "זֶּה",
+    "ה"
+   ],
+   "out": [
+    "hava",
+    "nagila,",
+    "ma",
+    "ze",
+    "h"
+   ]
+  },
+  {
+   "in": [
+    "שלום",
+    "עולם",
+    "בלי",
+    "ניקוד"
+   ],
+   "out": [
+    "shlvm",
+    "'vlm",
+    "vly",
+    "nyqvd"
+   ]
+  },
+  {
+   "in": [
+    "ԱՅԲՈՒԲԵՆ",
+    "հայերեն",
+    "բառ"
+   ],
+   "out": [
+    "AYBUBEN",
+    "hayeren",
+    "bar"
+   ]
+  },
+  {
+   "in": [
+    "ქართული",
+    "ენა",
+    "და",
+    "სიტყვა"
+   ],
+   "out": [
+    "khartuli",
+    "ena",
+    "da",
+    "sitqva"
+   ]
+  },
+  {
+   "in": [
+    "አማርኛ",
+    "ቋንቋ",
+    "ኢትዮጵያ"
+   ],
+   "out": [
+    "amaarenyaa",
+    "qwaaneqwaa",
+    "iteyopheyaa"
+   ]
+  },
+  {
+   "in": [
+    "สวัสดีครับ",
+    "เรียนภาษาไทย"
+   ],
+   "out": [
+    "swatdiikrap",
+    "rianphaasaathai"
+   ]
+  },
+  {
+   "in": [
+    "เด็กไปโรงเรียน",
+    "แม่ใจดี",
+    "ไม้ใหม่",
+    "๑๒๓"
+   ],
+   "out": [
+    "dekpairongrian",
+    "maechaidii",
+    "maihaim",
+    "123"
+   ]
+  },
+  {
+   "in": [
+    "ทดสอบ",
+    "ภาษาไทย",
+    "อ่าน",
+    "อยู่",
+    "ที่นี่"
+   ],
+   "out": [
+    "thdsop",
+    "phaasaathai",
+    "aan",
+    "yuu",
+    "thiinii"
+   ]
+  },
+  {
+   "in": [
+    "नमस्ते",
+    "दुनिया,",
+    "हिन्दी",
+    "भाषा",
+    "१२३"
+   ],
+   "out": [
+    "namaste",
+    "duniyaa,",
+    "hindii",
+    "bhaassaa",
+    "123"
+   ]
+  },
+  {
+   "in": [
+    "संस्कृतम्",
+    "ज्ञान",
+    "क्षत्रिय",
+    "श्री"
+   ],
+   "out": [
+    "samskrtam",
+    "jnyaana",
+    "kssatriya",
+    "shrii"
+   ]
+  },
+  {
+   "in": [
+    "বাংলা",
+    "ভাষা",
+    "আমি",
+    "তোমাকে",
+    "ভালোবাসি"
+   ],
+   "out": [
+    "baanglaa",
+    "bhaassaa",
+    "aami",
+    "tomaake",
+    "bhaalobaasi"
+   ]
+  },
+  {
+   "in": [
+    "ગુજરાતી",
+    "ભાષા",
+    "કેમ",
+    "છો"
+   ],
+   "out": [
+    "gujaraatii",
+    "bhaassaa",
+    "kema",
+    "cho"
+   ]
+  },
+  {
+   "in": [
+    "ਪੰਜਾਬੀ",
+    "ਭਾਸ਼ਾ",
+    "ਸੱਤ",
+    "ਅੱਖ",
+    "ਮੱਛੀ"
+   ],
+   "out": [
+    "pamjaabii",
+    "bhaasaa",
+    "satta",
+    "akkha",
+    "macchii"
+   ]
+  },
+  {
+   "in": [
+    "ಕನ್ನಡ",
+    "ಭಾಷೆ",
+    "ನಮಸ್ಕಾರ"
+   ],
+   "out": [
+    "kannadda",
+    "bhaasse",
+    "namaskaara"
+   ]
+  },
+  {
+   "in": [
+    "ខ្មែរ",
+    "ភាសាខ្មែរ",
+    "សួស្តី",
+    "ប្រទេសកម្ពុជា"
+   ],
+   "out": [
+    "khmaero",
+    "phaasaakhmaero",
+    "suastii",
+    "brotesakampucaa"
+   ]
+  },
+  {
+   "in": [
+    "മലയാളം",
+    "ഭാഷ",
+    "നമസ്കാരം"
+   ],
+   "out": [
+    "malayaallam",
+    "bhaassa",
+    "namaskaaram"
+   ]
+  },
+  {
+   "in": [
+    "မြန်မာ",
+    "ဘာသာစကား",
+    "မင်္ဂလာပါ"
+   ],
+   "out": [
+    "mranmaa",
+    "bhaasaacakaa",
+    "manggalaapaa"
+   ]
+  },
+  {
+   "in": [
+    "ଓଡ଼ିଆ",
+    "ଭାଷା",
+    "ନମସ୍କାର"
+   ],
+   "out": [
+    "oddiaa",
+    "bhaassaa",
+    "namaskaara"
+   ]
+  },
+  {
+   "in": [
+    "සිංහල",
+    "භාෂාව",
+    "ආයුබෝවන්"
+   ],
+   "out": [
+    "sinhala",
+    "baasaava",
+    "aayuboovan"
+   ]
+  },
+  {
+   "in": [
+    "ᮘᮞ",
+    "ᮞᮥᮔ᮪ᮓ",
+    "ᮅᮛᮀ"
+   ],
+   "out": [
+    "basa",
+    "sunda",
+    "urang"
+   ]
+  },
+  {
+   "in": [
+    "தமிழ்",
+    "மொழி",
+    "வணக்கம்",
+    "௧௨௩"
+   ],
+   "out": [
+    "tamil",
+    "moli",
+    "vanakkam",
+    "123"
+   ]
+  },
+  {
+   "in": [
+    "తెలుగు",
+    "భాష",
+    "నమస్కారం"
+   ],
+   "out": [
+    "telugu",
+    "bhaassa",
+    "namaskaaram"
+   ]
+  },
+  {
+   "in": [
+    "བོད་ཡིག",
+    "ཀུན་ཏུ་བཟང་པོ"
+   ],
+   "out": [
+    "bod·yig",
+    "kun·tu·bzng·po"
+   ]
+  },
+  {
+   "in": [
+    "ພາສາລາວ",
+    "ສະບາຍດີ"
+   ],
+   "out": [
+    "phaasaalaaw",
+    "sabaanyodii"
+   ]
+  },
+  {
+   "in": [
+    "ᠮᠣᠩᠭᠣᠯ",
+    "ᠬᠡᠯᠡ"
+   ],
+   "out": [
+    "monggol",
+    "qele"
+   ]
+  },
+  {
+   "in": [
+    "ᏣᎳᎩ",
+    "ᎦᏬᏂᎯᏍᏗ"
+   ],
+   "out": [
+    "tsalagi",
+    "gawonihisdi"
+   ]
+  },
+  {
+   "in": [
+    "ܐܬܘܪܝܐ",
+    "ܠܫܢܐ"
+   ],
+   "out": [
+    "atwryua",
+    "lshna"
+   ]
+  },
+  {
+   "in": [
+    "ދިވެހި",
+    "ބަސް"
+   ],
+   "out": [
+    "dhivehi",
+    "bas"
+   ]
+  },
+  {
+   "in": [
+    "Hello,",
+    "plain",
+    "Latin",
+    "with",
+    "café",
+    "and",
+    "naïve"
+   ],
+   "out": [
+    "Hello,",
+    "plain",
+    "Latin",
+    "with",
+    "café",
+    "and",
+    "naïve"
+   ]
+  },
+  {
+   "in": [
+    "Ελληνικά",
+    "and",
+    "English",
+    "mixed"
+   ],
+   "out": [
+    "Ellenika",
+    "and",
+    "English",
+    "mixed"
+   ]
+  },
+  {
+   "in": [
+    "Привет",
+    "world,",
+    "mixed",
+    "Latin",
+    "Привет"
+   ],
+   "out": [
+    "Privet",
+    "world,",
+    "mixed",
+    "Latin",
+    "Privet"
+   ]
+  },
+  {
+   "in": [
+    "Здравствуйте!!!",
+    "...",
+    "???",
+    ",,,",
+    "---",
+    "«цитата»",
+    "„цитата“",
+    "(скобки)",
+    "[x]",
+    "{y}"
+   ],
+   "out": [
+    "Zdravstvuite!!!",
+    "...",
+    "???",
+    ",,,",
+    "---",
+    "«tsitata»",
+    "„tsitata“",
+    "(skobki)",
+    "[x]",
+    "{y}"
+   ]
+  },
+  {
+   "in": [
+    "Тест",
+    "😀",
+    "emoji",
+    "🎵",
+    "Привет",
+    "𝒜",
+    "𐎠",
+    "нота"
+   ],
+   "out": [
+    "Test",
+    "😀",
+    "emoji",
+    "🎵",
+    "Privet",
+    "𝒜",
+    "𐎠",
+    "nota"
+   ]
+  },
+  {
+   "in": [
+    "é́",
+    "combining",
+    "̃",
+    "Привет̆",
+    "̀"
+   ],
+   "out": [
+    "é",
+    "combining",
+    "",
+    "Privet",
+    ""
+   ]
+  },
+  {
+   "in": [
+    "a",
+    "b",
+    "c",
+    "",
+    "",
+    "spaces",
+    "",
+    "",
+    "Привет",
+    "",
+    "двойной"
+   ],
+   "out": [
+    "a",
+    "b",
+    "c",
+    "",
+    "",
+    "spaces",
+    "",
+    "",
+    "Privet",
+    "",
+    "dvoinoi"
+   ]
+  },
+  {
+   "in": [
+    "12345",
+    "67890"
+   ],
+   "out": [
+    "12345",
+    "67890"
+   ]
+  },
+  {
+   "in": [
+    "Ёё",
+    "Ии",
+    "Йй",
+    "Ъъ",
+    "Ыы",
+    "Ээ",
+    "Юю",
+    "Яя"
+   ],
+   "out": [
+    "Ee",
+    "Ii",
+    "Ii",
+    "",
+    "Yy",
+    "Ee",
+    "Yuyu",
+    "Yaya"
+   ]
+  },
+  {
+   "in": [
+    "ΑΒΓΔ",
+    "ΕΖΗΘ",
+    "αβγδ",
+    "ςσ"
+   ],
+   "out": [
+    "ABGD",
+    "EZETh",
+    "abgd",
+    "ss"
+   ]
+  },
+  {
+   "in": [
+    "٣٫١٤",
+    "۱۲۳",
+    "߀߁",
+    "०१२",
+    "১২৩",
+    "૧૨૩"
+   ],
+   "out": [
+    "٣٫١٤",
+    "۱۲۳",
+    "߀߁",
+    "०१२",
+    "১২৩",
+    "૧૨૩"
+   ]
+  },
+  {
+   "in": [
+    "क्ष",
+    "त्र",
+    "ज्ञ",
+    "श्र",
+    "द्य",
+    "ध्यान"
+   ],
+   "out": [
+    "kssa",
+    "tra",
+    "jnya",
+    "shra",
+    "dya",
+    "dhyaan"
+   ]
+  },
+  {
+   "in": [
+    "कृष्ण",
+    "ऋषि",
+    "पृथ्वी"
+   ],
+   "out": [
+    "krssnna",
+    "rssi",
+    "prthvii"
+   ]
+  },
+  {
+   "in": [
+    "কৃষ্ণ",
+    "ঋষি",
+    "অ",
+    "আ",
+    "ই"
+   ],
+   "out": [
+    "krssnna",
+    "rssi",
+    "a",
+    "aa",
+    "i"
+   ]
+  },
+  {
+   "in": [
+    "ကျွန်တော်",
+    "မြန်မာ",
+    "ကို"
+   ],
+   "out": [
+    "kywanteaa",
+    "mranmaa",
+    "kiu"
+   ]
+  },
+  {
+   "in": [
+    "ฤๅษี",
+    "ฦ",
+    "ศึกษา",
+    "ปัญญา"
+   ],
+   "out": [
+    "ruesii",
+    "lue",
+    "sueksaa",
+    "panyaa"
+   ]
+  },
+  {
+   "in": [
+    "ใหญ่",
+    "ไหม",
+    "เกาะ",
+    "เสือ",
+    "แมว"
+   ],
+   "out": [
+    "hain",
+    "haim",
+    "ko",
+    "suea",
+    "maeo"
+   ]
+  },
+  {
+   "in": [
+    "ٱلْحَمْدُ",
+    "لِلَّهِ",
+    "رَبِّ",
+    "ٱلْعَالَمِينَ"
+   ],
+   "out": [
+    "alhamdu",
+    "lilahi",
+    "rabi",
+    "al'aalamiyna"
+   ]
+  },
+  {
+   "in": [
+    "בְּרֵאשִׁית",
+    "בָּרָא",
+    "אֱלֹהִים"
+   ],
+   "out": [
+    "bereashiyt",
+    "baraa",
+    "elohim"
+   ]
+  },
+  {
+   "in": [
+    "תוֹדָה",
+    "רַבָּה",
+    "לְךָ",
+    "אֵלֶיהָ"
+   ],
+   "out": [
+    "toda",
+    "raba",
+    "leka",
+    "aeleyha"
+   ]
+  },
+  {
+   "in": [
+    "Ѣ",
+    "ѣ",
+    "Ѳ",
+    "ѳ",
+    "Ѵ",
+    "ѵ",
+    "Ґ",
+    "ґ",
+    "Є",
+    "є",
+    "Ї",
+    "ї",
+    "Ў",
+    "ў",
+    "Ђ",
+    "ђ",
+    "Љ",
+    "љ",
+    "Њ",
+    "њ",
+    "Џ",
+    "џ"
+   ],
+   "out": [
+    "Ya",
+    "ya",
+    "F",
+    "f",
+    "I",
+    "i",
+    "Gh",
+    "gh",
+    "Ie",
+    "ie",
+    "Yi",
+    "yi",
+    "U",
+    "u",
+    "Dj",
+    "dj",
+    "Lj",
+    "lj",
+    "Nj",
+    "nj",
+    "Dzh",
+    "dzh"
+   ]
+  },
+  {
+   "in": [
+    "",
+    ""
+   ],
+   "out": [
+    "",
+    ""
+   ]
+  },
+  {
+   "in": [
+    "נָגִי",
+    "לָה"
+   ],
+   "out": [
+    "nagi",
+    "la"
+   ]
+  },
+  {
+   "in": [
+    "הָבָ",
+    "ה"
+   ],
+   "out": [
+    "hava",
+    "h"
+   ]
+  },
+  {
+   "in": [
+    "Hel",
+    "lo"
+   ],
+   "out": [
+    "Hel",
+    "lo"
+   ]
+  },
+  {
+   "in": [
+    "При",
+    "вет"
+   ],
+   "out": [
+    "Pri",
+    "vet"
+   ]
+  },
+  {
+   "in": [
+    "",
+    ""
+   ],
+   "out": [
+    "",
+    ""
+   ]
+  },
+  {
+   "in": [
+    "",
+    "Привет",
+    ""
+   ],
+   "out": [
+    "",
+    "Privet",
+    ""
+   ]
+  },
+  {
+   "in": [
+    "ส",
+    "วัส",
+    "ดี"
+   ],
+   "out": [
+    "s",
+    "wat",
+    "dii"
+   ]
+  },
+  {
+   "in": [
+    "เ",
+    "ด็ก"
+   ],
+   "out": [
+    "de",
+    "k"
+   ]
+  },
+  {
+   "in": [
+    "नम",
+    "स्ते"
+   ],
+   "out": [
+    "nama",
+    "ste"
+   ]
+  },
+  {
+   "in": [
+    "सं",
+    "स्कृ",
+    "तम्"
+   ],
+   "out": [
+    "sam",
+    "skr",
+    "tam"
+   ]
+  },
+  {
+   "in": [
+    "مر",
+    "حبا"
+   ],
+   "out": [
+    "mr",
+    "hba"
+   ]
+  },
+  {
+   "in": [
+    "ΣΟ",
+    "ΦΙΑ"
+   ],
+   "out": [
+    "SO",
+    "FIA"
+   ]
+  },
+  {
+   "in": [
+    "Ёж",
+    "ик",
+    " ",
+    "в"
+   ],
+   "out": [
+    "Ezh",
+    "ik",
+    " ",
+    "v"
+   ]
+  },
+  {
+   "in": [
+    "ਸੱ",
+    "ਤ"
+   ],
+   "out": [
+    "satta",
+    ""
+   ]
+  },
+  {
+   "in": [
+    "မြန်",
+    "မာ"
+   ],
+   "out": [
+    "mran",
+    "maa"
+   ]
+  },
+  {
+   "in": [
+    "日本",
+    "語"
+   ],
+   "out": [
+    "日本",
+    "語"
+   ]
+  },
+  {
+   "in": [
+    "😀",
+    "Привет",
+    "🎵"
+   ],
+   "out": [
+    "😀",
+    "Privet",
+    "🎵"
+   ]
+  },
+  {
+   "in": [
+    "ﻻ",
+    "ﺏ"
+   ],
+   "out": [
+    "la",
+    "b"
+   ]
+  },
+  {
+   "in": [
+    "ក",
+    "ខ្មែរ"
+   ],
+   "out": [
+    "ka",
+    "khmaero"
+   ]
+  }
+ ]
+}

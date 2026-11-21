@@ -1,0 +1,1743 @@
+{
+ "categories": [
+  {
+   "id": "lyrics",
+   "name": "Lyrics"
+  },
+  {
+   "id": "text",
+   "name": "Lyric text"
+  },
+  {
+   "id": "languages",
+   "name": "Languages"
+  },
+  {
+   "id": "highlight",
+   "name": "Highlight"
+  },
+  {
+   "id": "surface",
+   "name": "Glass"
+  },
+  {
+   "id": "header",
+   "name": "Header"
+  },
+  {
+   "id": "controls",
+   "name": "Controls"
+  },
+  {
+   "id": "album",
+   "name": "Album mode"
+  },
+  {
+   "id": "fun",
+   "name": "Fun"
+  },
+  {
+   "id": "fullscreen",
+   "name": "Fullscreen"
+  },
+  {
+   "id": "behavior",
+   "name": "Behavior"
+  },
+  {
+   "id": "app",
+   "name": "App"
+  }
+ ],
+ "fmts": {
+  "FmtOffset": {
+   "ts": "fmtOffset",
+   "js": "((v) => (v === 0 ? \"in sync\" : `${v > 0 ? \"+\" : \"\"}${v.toFixed(1)}s`))"
+  },
+  "AutoSync": {
+   "ts": "(v) => (v ? `after ${v}s` : \"off\")",
+   "js": "((v) => (v ? `after ${v}s` : \"off\"))"
+  },
+  "FollowSpeed": {
+   "ts": "(v) => `${v} ms`",
+   "js": "((v) => `${v} ms`)"
+  },
+  "ScrollSpeed": {
+   "ts": "(v) => `${v}×`",
+   "js": "((v) => `${v}×`)"
+  },
+  "PanelHeight": {
+   "ts": "(v) => `${v}px`",
+   "js": "((v) => `${v}px`)"
+  },
+  "LineHeight": {
+   "ts": "(v) => v.toFixed(2)",
+   "js": "((v) => v.toFixed(2))"
+  },
+  "LetterSpacing": {
+   "ts": "(v) => (v ? `${v > 0 ? \"+\" : \"\"}${v.toFixed(2)}em` : \"normal\")",
+   "js": "((v) => (v ? `${v > 0 ? \"+\" : \"\"}${v.toFixed(2)}em` : \"normal\"))"
+  },
+  "RainbowSpeed": {
+   "ts": "(v) => `${v}s`",
+   "js": "((v) => `${v}s`)"
+  },
+  "Times": {
+   "ts": "times",
+   "js": "((v) => `${Math.round(v * 100)}%`)"
+  },
+  "Pct": {
+   "ts": "pct",
+   "js": "((v) => `${Math.round(v)}%`)"
+  },
+  "BgAlpha": {
+   "ts": "(v) => `${v}%${v === 0 ? \" · clear\" : v === 100 ? \" · solid\" : v === DEFAULTS.bgAlpha ? \" · default\" : \"\"}`",
+   "js": "((v) => `${v}%${v === 0 ? \" · clear\" : v === 100 ? \" · solid\" : v === DEFAULTS.bgAlpha ? \" · default\" : \"\"}`)"
+  },
+  "PanSpeed": {
+   "ts": "(v) => `${v} px/s`",
+   "js": "((v) => `${v} px/s`)"
+  },
+  "BarThickness": {
+   "ts": "(v) => `${v + 2}px`",
+   "js": "((v) => `${v + 2}px`)"
+  }
+ },
+ "items": [
+  {
+   "id": "lyricProvider",
+   "cat": "lyrics",
+   "key": "lyricProvider",
+   "label": "Provider · all songs",
+   "desc": "Where lyrics come from. Auto picks the best-timed source; pick one to always try it first.",
+   "hint": null,
+   "hintExpr": "lyricSource ? `now showing ${lyricSource.provider} ${tierDots(lyricSource.tier)}` : \"Auto picks the best-timed lyrics\"",
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "auto",
+      "label": "Auto"
+     },
+     {
+      "value": "spicy",
+      "label": "Spicy"
+     },
+     {
+      "value": "lrcmux",
+      "label": "LRCMux"
+     },
+     {
+      "value": "netease",
+      "label": "NetEase"
+     },
+     {
+      "value": "lrclib",
+      "label": "LrcLib"
+     }
+    ],
+    "preview": false,
+    "peek": null,
+    "onChange": "(v) => set(\"lyricProvider\", v)",
+    "note": null
+   }
+  },
+  {
+   "id": "songProvider",
+   "cat": "lyrics",
+   "key": null,
+   "label": "Provider · this song",
+   "desc": "Same as above, for the song playing now only.",
+   "hint": null,
+   "hintExpr": "track ? `${track.title} · Auto follows the choice above` : \"nothing playing\"",
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "auto",
+      "label": "Auto"
+     },
+     {
+      "value": "spicy",
+      "label": "Spicy"
+     },
+     {
+      "value": "lrcmux",
+      "label": "LRCMux"
+     },
+     {
+      "value": "netease",
+      "label": "NetEase"
+     },
+     {
+      "value": "lrclib",
+      "label": "LrcLib"
+     }
+    ],
+    "preview": false,
+    "peek": null,
+    "onChange": "setSongProvider",
+    "note": null
+   }
+  },
+  {
+   "id": "lyricOffset",
+   "cat": "lyrics",
+   "key": "lyricOffset",
+   "label": "Offset · all songs",
+   "desc": "Lyrics running ahead or behind? Shift them later (+) or earlier (−) for every song. On the widget: [ and ].",
+   "hint": null,
+   "hintExpr": "fmtOffset(s.lyricOffset)",
+   "control": {
+    "kind": "slider",
+    "min": -5,
+    "max": 5,
+    "step": 0.1,
+    "fmt": "FmtOffset",
+    "onChange": "(v) => set(\"lyricOffset\", Math.round(v * 10) / 10)"
+   }
+  },
+  {
+   "id": "songOffset",
+   "cat": "lyrics",
+   "key": null,
+   "label": "Offset · this song",
+   "desc": "Same, for this song only; added to the all-songs offset. On the widget: ⇧ with [ and ], \\ resets.",
+   "hint": null,
+   "hintExpr": "track ? `${track.title} · ${fmtOffset(songOffset)}` : \"nothing playing\"",
+   "control": {
+    "kind": "slider",
+    "min": -5,
+    "max": 5,
+    "step": 0.1,
+    "fmt": null,
+    "onChange": "(v) => setSongOffset(Math.round(v * 10) / 10)"
+   }
+  },
+  {
+   "id": "autoSync",
+   "cat": "lyrics",
+   "key": "autoSync",
+   "label": "Auto sync after scrolling",
+   "desc": "After you scroll the lyrics, jump back to the line being sung this long after you stop. 0 turns it off.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 10,
+    "step": 1,
+    "fmt": "AutoSync",
+    "onChange": null
+   }
+  },
+  {
+   "id": "followSpeed",
+   "cat": "lyrics",
+   "key": "followSpeed",
+   "label": "Follow speed",
+   "desc": "How long the list takes to glide to the next line.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 150,
+    "max": 900,
+    "step": 10,
+    "fmt": "FollowSpeed",
+    "onChange": null
+   }
+  },
+  {
+   "id": "scrollSpeed",
+   "cat": "lyrics",
+   "key": "scrollSpeed",
+   "label": "Scroll speed",
+   "desc": "How far the lyrics move per mouse-wheel step.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0.25,
+    "max": 3,
+    "step": 0.25,
+    "fmt": "ScrollSpeed",
+    "onChange": null
+   }
+  },
+  {
+   "id": "panelHeight",
+   "cat": "lyrics",
+   "key": "panelHeight",
+   "label": "Lyrics height",
+   "desc": "How tall the lyrics panel is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 160,
+    "max": 520,
+    "step": 10,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "clickToJump",
+   "cat": "lyrics",
+   "key": "clickToJump",
+   "label": "Click a line to jump",
+   "desc": "Clicking a lyric line moves the song to it.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "showLineTimes",
+   "cat": "lyrics",
+   "key": "showLineTimes",
+   "label": "Line times on hover",
+   "desc": "A small badge with the line's start time while the pointer is on it.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "hideGaps",
+   "cat": "lyrics",
+   "key": "hideGaps",
+   "label": "Hide instrumental dots",
+   "desc": "Leave out the • • • shown during instrumental breaks.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "hideBackingVocals",
+   "cat": "lyrics",
+   "key": "hideBackingVocals",
+   "label": "Hide backing vocals",
+   "desc": "Leave out the smaller backing-vocal lines.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "hideCredits",
+   "cat": "lyrics",
+   "key": "hideCredits",
+   "label": "Hide credits",
+   "desc": "Leave out the songwriter credits after the last line.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "romanized",
+   "cat": "languages",
+   "key": null,
+   "label": "Romanize",
+   "desc": "Japanese, Korean, Chinese and other scripts in Latin letters. Latin only replaces the lyrics; Both shows each line with its romanization under it. Same as the あ button, which cycles through them.",
+   "hint": null,
+   "hintExpr": "canRomanize ? undefined : \"nothing to romanize in this song\"",
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "off",
+      "label": "Off"
+     },
+     {
+      "value": "latin",
+      "label": "Latin only"
+     },
+     {
+      "value": "dual",
+      "label": "Both"
+     }
+    ],
+    "preview": false,
+    "peek": "(v) => ({ romanize: v })",
+    "onChange": "setRomanized",
+    "note": null
+   }
+  },
+  {
+   "id": "romanizeDefault",
+   "cat": "languages",
+   "key": "romanizeDefault",
+   "label": "Romanize at launch",
+   "desc": "What Romanize starts every launch on.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "off",
+      "label": "Off"
+     },
+     {
+      "value": "latin",
+      "label": "Latin only"
+     },
+     {
+      "value": "dual",
+      "label": "Both"
+     }
+    ],
+    "preview": false,
+    "peek": "(v) => ({ romanize: v })",
+    "onChange": "(v) => set(\"romanizeDefault\", v)",
+    "note": null
+   }
+  },
+  {
+   "id": "fontJa",
+   "cat": "languages",
+   "key": "fontJa",
+   "label": "Japanese font",
+   "desc": "Typeface for Japanese lyrics. Point at one to try it; only fonts you have are offered.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "default",
+      "label": "Default"
+     },
+     {
+      "value": "Yu Gothic UI",
+      "label": "Yu Gothic UI"
+     },
+     {
+      "value": "Meiryo",
+      "label": "Meiryo"
+     },
+     {
+      "value": "MS Gothic",
+      "label": "MS Gothic"
+     },
+     {
+      "value": "BIZ UDPGothic",
+      "label": "BIZ UDPGothic"
+     },
+     {
+      "value": "Noto Sans JP",
+      "label": "Noto Sans JP"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": "options after Default are CJK_FONTS[lang].options filtered to the installed fonts, each label drawn in its own font"
+   }
+  },
+  {
+   "id": "fontKo",
+   "cat": "languages",
+   "key": "fontKo",
+   "label": "Korean font",
+   "desc": "Typeface for Korean lyrics. Point at one to try it; only fonts you have are offered.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "default",
+      "label": "Default"
+     },
+     {
+      "value": "Noto Sans KR",
+      "label": "Noto Sans KR"
+     },
+     {
+      "value": "Malgun Gothic",
+      "label": "Malgun Gothic"
+     },
+     {
+      "value": "Gulim",
+      "label": "Gulim"
+     },
+     {
+      "value": "Batang",
+      "label": "Batang"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": "options after Default are CJK_FONTS[lang].options filtered to the installed fonts, each label drawn in its own font"
+   }
+  },
+  {
+   "id": "fontZh",
+   "cat": "languages",
+   "key": "fontZh",
+   "label": "Chinese font",
+   "desc": "Typeface for Chinese lyrics. Point at one to try it; only fonts you have are offered.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "default",
+      "label": "Default"
+     },
+     {
+      "value": "Microsoft YaHei UI",
+      "label": "Microsoft YaHei UI"
+     },
+     {
+      "value": "Microsoft JhengHei UI",
+      "label": "Microsoft JhengHei UI"
+     },
+     {
+      "value": "SimHei",
+      "label": "SimHei"
+     },
+     {
+      "value": "DengXian",
+      "label": "DengXian"
+     },
+     {
+      "value": "Noto Sans SC",
+      "label": "Noto Sans SC"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": "options after Default are CJK_FONTS[lang].options filtered to the installed fonts, each label drawn in its own font"
+   }
+  },
+  {
+   "id": "lyricSize",
+   "cat": "text",
+   "key": "lyricSize",
+   "label": "Size",
+   "desc": "How big the lyrics are.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 13,
+    "max": 28,
+    "step": 1,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "lyricFont",
+   "cat": "text",
+   "key": "lyricFont",
+   "label": "Font",
+   "desc": "The lyrics' typeface. Point at one to try it in the preview.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  },
+  {
+   "id": "lyricWeight",
+   "cat": "text",
+   "key": "lyricWeight",
+   "label": "Weight",
+   "desc": "How heavy the lyric letters are.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "regular",
+      "label": "Regular"
+     },
+     {
+      "value": "semibold",
+      "label": "Semibold"
+     },
+     {
+      "value": "bold",
+      "label": "Bold"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "lineHeight",
+   "cat": "text",
+   "key": "lineHeight",
+   "label": "Line height",
+   "desc": "Room within a wrapped line, top to bottom.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 1,
+    "max": 1.8,
+    "step": 0.02,
+    "fmt": "LineHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "lineSpacing",
+   "cat": "text",
+   "key": "lineSpacing",
+   "label": "Line spacing",
+   "desc": "Space between one lyric line and the next.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 2,
+    "max": 28,
+    "step": 1,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "letterSpacing",
+   "cat": "text",
+   "key": "letterSpacing",
+   "label": "Letter spacing",
+   "desc": "Space between letters: tighter or looser than the font's own.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": -0.05,
+    "max": 0.2,
+    "step": 0.01,
+    "fmt": "LetterSpacing",
+    "onChange": null
+   }
+  },
+  {
+   "id": "lyricAlign",
+   "cat": "text",
+   "key": "lyricAlign",
+   "label": "Alignment",
+   "desc": "Lyrics against the left edge, or centred.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "left",
+      "label": "Left"
+     },
+     {
+      "value": "center",
+      "label": "Center"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "italicLyrics",
+   "cat": "text",
+   "key": "italicLyrics",
+   "label": "Italic",
+   "desc": "Slanted lyrics.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "highlight",
+   "cat": "highlight",
+   "key": "highlight",
+   "label": "Highlight colour",
+   "desc": "The colour the sung part of each line lights up in. Rainbow cycles through them all.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "white",
+      "label": "White"
+     },
+     {
+      "value": "pink",
+      "label": "Pink"
+     },
+     {
+      "value": "gold",
+      "label": "Gold"
+     },
+     {
+      "value": "mint",
+      "label": "Mint"
+     },
+     {
+      "value": "sky",
+      "label": "Sky"
+     },
+     {
+      "value": "rainbow",
+      "label": "Rainbow"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "rainbowSpeed",
+   "cat": "highlight",
+   "key": "rainbowSpeed",
+   "label": "Rainbow speed",
+   "desc": "Seconds for one trip round the colours, with the Rainbow highlight.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 1,
+    "max": 20,
+    "step": 1,
+    "fmt": "RainbowSpeed",
+    "onChange": null
+   }
+  },
+  {
+   "id": "lyricMotion",
+   "cat": "highlight",
+   "key": "lyricMotion",
+   "label": "Lyric motion",
+   "desc": "How much the sung letters bounce: Calm keeps them still, Bouncy doubles the wave.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "calm",
+      "label": "Calm"
+     },
+     {
+      "value": "normal",
+      "label": "Normal"
+     },
+     {
+      "value": "bouncy",
+      "label": "Bouncy"
+     }
+    ],
+    "preview": false,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "highlightStrength",
+   "cat": "highlight",
+   "key": "highlightStrength",
+   "label": "Highlight strength",
+   "desc": "How bright the sung part of the line is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0.5,
+    "max": 1.2,
+    "step": 0.05,
+    "fmt": "Times",
+    "onChange": null
+   }
+  },
+  {
+   "id": "glowStrength",
+   "cat": "highlight",
+   "key": "glowStrength",
+   "label": "Glow",
+   "desc": "The soft glow around letters as they are sung.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 3,
+    "step": 0.1,
+    "fmt": "Times",
+    "onChange": null
+   }
+  },
+  {
+   "id": "fsLayout",
+   "cat": "fullscreen",
+   "key": "fsLayout",
+   "label": "Layout",
+   "desc": "Split: the cover, title and controls beside the lyrics. Lyrics dominant: a small cover and title above big lyrics.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "split",
+      "label": "Split"
+     },
+     {
+      "value": "lyrics",
+      "label": "Lyrics dominant"
+     }
+    ],
+    "preview": false,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "fsShowLyrics",
+   "cat": "fullscreen",
+   "key": "fsShowLyrics",
+   "label": "Show lyrics",
+   "desc": "Open fullscreen with the lyrics showing. The button at the top still hides them.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "fsHideCover",
+   "cat": "fullscreen",
+   "key": "fsHideCover",
+   "label": "Hide cover",
+   "desc": "Leave out the big cover; the title and controls sit at the bottom.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "fsSwap",
+   "cat": "fullscreen",
+   "key": "fsSwap",
+   "label": "Cover on the right",
+   "desc": "Put the cover and controls on the right and the lyrics on the left.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "fsAnimatedBg",
+   "cat": "fullscreen",
+   "key": "fsAnimatedBg",
+   "label": "Animated background",
+   "desc": "The cover, blurred, drifting slowly behind everything. Off: a still blur.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "fsPinControls",
+   "cat": "fullscreen",
+   "key": "fsPinControls",
+   "label": "Keep controls showing",
+   "desc": "The controls stay instead of fading when the mouse rests.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "fsOnTop",
+   "cat": "fullscreen",
+   "key": "fsOnTop",
+   "label": "Always on top",
+   "desc": "Keep fullscreen above every other window. The small widget follows Behavior → Always on top.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "fsLyricScale",
+   "cat": "fullscreen",
+   "key": "fsLyricScale",
+   "label": "Lyrics size",
+   "desc": "How big the lyrics are, scaled with the screen so only a few lines show.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 60,
+    "max": 160,
+    "step": 5,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "animationStyle",
+   "cat": "highlight",
+   "key": "animationStyle",
+   "label": "Word animation",
+   "desc": "How sung words move. Spicy: Spicy Lyrics' pop, a little bouncier, with the letter wave only on words held a second or longer.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "playback",
+      "label": "Playback"
+     },
+     {
+      "value": "spicy",
+      "label": "Spicy"
+     }
+    ],
+    "preview": false,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "sweepDirection",
+   "cat": "highlight",
+   "key": "sweepDirection",
+   "label": "Sweep direction",
+   "desc": "The fill runs along the line as it is sung, or top to bottom over each word.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "across",
+      "label": "Along the line"
+     },
+     {
+      "value": "down",
+      "label": "Top to bottom"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "sweepSoftness",
+   "cat": "highlight",
+   "key": "sweepSoftness",
+   "label": "Sweep edge",
+   "desc": "How soft the edge between sung and unsung is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 50,
+    "step": 1,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "upcomingBrightness",
+   "cat": "highlight",
+   "key": "upcomingBrightness",
+   "label": "Upcoming lines",
+   "desc": "How bright the lines not yet sung are.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0.2,
+    "max": 1.9,
+    "step": 0.05,
+    "fmt": "Times",
+    "onChange": null
+   }
+  },
+  {
+   "id": "sungBrightness",
+   "cat": "highlight",
+   "key": "sungBrightness",
+   "label": "Sung lines",
+   "desc": "How bright the lines already sung are.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0.2,
+    "max": 2,
+    "step": 0.05,
+    "fmt": "Times",
+    "onChange": null
+   }
+  },
+  {
+   "id": "blurLines",
+   "cat": "highlight",
+   "key": "blurLines",
+   "label": "Blur distant lines",
+   "desc": "Soften lines the further they are from the one being sung.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "bgAlpha",
+   "cat": "surface",
+   "key": "bgAlpha",
+   "label": "Background",
+   "desc": "How see-through the widget is: 0% clear, 72% the default glass, 100% solid.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 100,
+    "step": 1,
+    "fmt": "BgAlpha",
+    "onChange": null
+   }
+  },
+  {
+   "id": "glassTint",
+   "cat": "surface",
+   "key": "glassTint",
+   "label": "Glass tint",
+   "desc": "The colour of the glass itself.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "dark",
+      "label": "Dark"
+     },
+     {
+      "value": "black",
+      "label": "Black"
+     },
+     {
+      "value": "warm",
+      "label": "Warm"
+     },
+     {
+      "value": "cool",
+      "label": "Cool"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "corners",
+   "cat": "surface",
+   "key": "corners",
+   "label": "Corners",
+   "desc": "How rounded the widget's corners are.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 24,
+    "step": 1,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "coverBlur",
+   "cat": "surface",
+   "key": "coverBlur",
+   "label": "Cover blur",
+   "desc": "How soft the cover behind the widget is: 0 shows it sharp.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 100,
+    "step": 5,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "coverSaturation",
+   "cat": "surface",
+   "key": "coverSaturation",
+   "label": "Cover colour",
+   "desc": "How strong the cover's colours are behind the widget.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 250,
+    "step": 5,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "coverBrightness",
+   "cat": "surface",
+   "key": "coverBrightness",
+   "label": "Cover brightness",
+   "desc": "How bright the cover is behind the widget.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 30,
+    "max": 160,
+    "step": 5,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "edgeHighlight",
+   "cat": "surface",
+   "key": "edgeHighlight",
+   "label": "Edge highlight",
+   "desc": "The thin light line around the widget's edge.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "shadowStrength",
+   "cat": "surface",
+   "key": "shadowStrength",
+   "label": "Shadow",
+   "desc": "The drop shadow under the widget.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 200,
+    "step": 5,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "restOpacity",
+   "cat": "surface",
+   "key": "restOpacity",
+   "label": "Fade when not hovered",
+   "desc": "How visible the whole widget stays while the pointer is elsewhere.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 20,
+    "max": 100,
+    "step": 5,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "widgetWidth",
+   "cat": "header",
+   "key": "widgetWidth",
+   "label": "Widget width",
+   "desc": "How wide the widget is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 300,
+    "max": 480,
+    "step": 10,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "showCover",
+   "cat": "header",
+   "key": "showCover",
+   "label": "Show cover",
+   "desc": "The small cover next to the title.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "coverShape",
+   "cat": "header",
+   "key": "coverShape",
+   "label": "Cover shape",
+   "desc": "The small cover next to the title: rounded, square or a circle.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "rounded",
+      "label": "Rounded"
+     },
+     {
+      "value": "square",
+      "label": "Square"
+     },
+     {
+      "value": "circle",
+      "label": "Circle"
+     }
+    ],
+    "preview": true,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "panSpeed",
+   "cat": "header",
+   "key": "panSpeed",
+   "label": "Long title speed",
+   "desc": "How fast a title or artist too long for the widget slides to show the rest.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 2,
+    "max": 40,
+    "step": 1,
+    "fmt": "PanSpeed",
+    "onChange": null
+   }
+  },
+  {
+   "id": "titleScale",
+   "cat": "header",
+   "key": "titleScale",
+   "label": "Title size",
+   "desc": "Size of the song title and artist.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0.8,
+    "max": 1.6,
+    "step": 0.05,
+    "fmt": "Times",
+    "onChange": null
+   }
+  },
+  {
+   "id": "showArtist",
+   "cat": "header",
+   "key": "showArtist",
+   "label": "Show artist",
+   "desc": "The artist under the title.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "nextSong",
+   "cat": "header",
+   "key": "nextSong",
+   "label": "Next song",
+   "desc": "The next song in Spotify's queue: the NEXT label top right, a popup in the song's last 10 seconds, both, or neither. Click either to skip.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "chips",
+    "options": [
+     {
+      "value": "label",
+      "label": "Label"
+     },
+     {
+      "value": "popup",
+      "label": "Popup"
+     },
+     {
+      "value": "both",
+      "label": "Both"
+     },
+     {
+      "value": "off",
+      "label": "Off"
+     }
+    ],
+    "preview": false,
+    "peek": null,
+    "onChange": null,
+    "note": null
+   }
+  },
+  {
+   "id": "showSource",
+   "cat": "controls",
+   "key": "showSource",
+   "label": "Show source label",
+   "desc": "The player and lyrics source under the progress bar, e.g. Spotify · spicy ●●●.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "showLyricSource",
+   "cat": "controls",
+   "key": "showLyricSource",
+   "label": "Show lyrics provider",
+   "desc": "The lyrics part of the source label, e.g. · spicy ●●●. Click it to try another provider.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "showTimes",
+   "cat": "controls",
+   "key": "showTimes",
+   "label": "Show times",
+   "desc": "The elapsed and remaining times.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "showTotalTime",
+   "cat": "controls",
+   "key": "showTotalTime",
+   "label": "Show song length",
+   "desc": "The time on the right shows the song's length instead of the time left. Clicking it does the same.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "showProgress",
+   "cat": "controls",
+   "key": "showProgress",
+   "label": "Show progress bar",
+   "desc": "The bar showing how far into the song you are.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "barThickness",
+   "cat": "controls",
+   "key": "barThickness",
+   "label": "Progress bar thickness",
+   "desc": "How thick the progress bar is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 1,
+    "max": 6,
+    "step": 1,
+    "fmt": "BarThickness",
+    "onChange": null
+   }
+  },
+  {
+   "id": "tintBar",
+   "cat": "controls",
+   "key": "tintBar",
+   "label": "Colour the progress bar",
+   "desc": "Light the progress bar in the Highlight colour.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "showShuffleRepeat",
+   "cat": "controls",
+   "key": "showShuffleRepeat",
+   "label": "Show shuffle & repeat",
+   "desc": "The shuffle and repeat buttons.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "showVolume",
+   "cat": "controls",
+   "key": "showVolume",
+   "label": "Show volume",
+   "desc": "The volume button.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "pinControls",
+   "cat": "controls",
+   "key": "pinControls",
+   "label": "Controls always visible",
+   "desc": "Keep the play controls shown, not only while the pointer is on the widget.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "albumOnLaunch",
+   "cat": "album",
+   "key": "albumOnLaunch",
+   "label": "Open in album mode",
+   "desc": "Start in album mode, with the big cover.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "showVisualizer",
+   "cat": "album",
+   "key": "showVisualizer",
+   "label": "Visualizer",
+   "desc": "The bars next to the title, moving with the music.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "bubbleOpacity",
+   "cat": "album",
+   "key": "bubbleOpacity",
+   "label": "Lyric bubble",
+   "desc": "How dark the bubble behind the album-mode lyric is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 0,
+    "max": 100,
+    "step": 2,
+    "fmt": "Pct",
+    "onChange": null
+   }
+  },
+  {
+   "id": "albumLyricSize",
+   "cat": "album",
+   "key": "albumLyricSize",
+   "label": "Lyric size",
+   "desc": "How big the album-mode lyric is.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 11,
+    "max": 24,
+    "step": 1,
+    "fmt": "PanelHeight",
+    "onChange": null
+   }
+  },
+  {
+   "id": "spinCover",
+   "cat": "fun",
+   "key": "spinCover",
+   "label": "Spinning cover",
+   "desc": "The small cover turns round like a record while music plays.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "spinSpeed",
+   "cat": "fun",
+   "key": "spinSpeed",
+   "label": "Spin speed",
+   "desc": "Seconds per turn of the spinning cover.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "slider",
+    "min": 1,
+    "max": 20,
+    "step": 1,
+    "fmt": "RainbowSpeed",
+    "onChange": null
+   }
+  },
+  {
+   "id": "floatingCover",
+   "cat": "fun",
+   "key": "floatingCover",
+   "label": "Floating cover",
+   "desc": "The small cover gently bobs up and down.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "partyBackground",
+   "cat": "fun",
+   "key": "partyBackground",
+   "label": "Party background",
+   "desc": "The cover's glow behind the widget cycles through every colour.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "allCaps",
+   "cat": "fun",
+   "key": "allCaps",
+   "label": "ALL CAPS",
+   "desc": "Lyrics in capital letters, in the panel and in album mode.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": true
+   }
+  },
+  {
+   "id": "lyricsOnLaunch",
+   "cat": "behavior",
+   "key": "lyricsOnLaunch",
+   "label": "Open lyrics on launch",
+   "desc": "Start with the lyrics panel open instead of just the player.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "hideWhenIdle",
+   "cat": "behavior",
+   "key": "hideWhenIdle",
+   "label": "Hide when nothing plays",
+   "desc": "The widget disappears while no music plays, and comes back when it starts.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "showChangelog",
+   "cat": "behavior",
+   "key": "showChangelog",
+   "label": "Show changelog after updates",
+   "desc": "Open What's new on the first launch of each new version.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "alwaysOnTop",
+   "cat": "behavior",
+   "key": "alwaysOnTop",
+   "label": "Always on top",
+   "desc": "Keep the widget above every other window.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "toggle",
+    "preview": false
+   }
+  },
+  {
+   "id": "spicyKey",
+   "cat": "app",
+   "key": null,
+   "label": "Spicy Lyrics key",
+   "desc": "Your own free key for word-by-word lyrics from Spicy Lyrics, with any player. Get key opens Spicy Lyrics: sign in, create an application, then copy its key.",
+   "hint": null,
+   "hintExpr": "keyStatus",
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  },
+  {
+   "id": "token",
+   "cat": "app",
+   "key": null,
+   "label": "Spotify token",
+   "desc": "Spotify's pass for word-by-word lyrics when there is no Spicy Lyrics key, or it fails. Spotify sends it by itself while it is open.",
+   "hint": null,
+   "hintExpr": "tokenStatus",
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  },
+  {
+   "id": "updates",
+   "cat": "app",
+   "key": null,
+   "label": "Updates",
+   "desc": "New versions come from GitHub. Playback asks on launch when one is out; Update installs it and restarts Playback.",
+   "hint": null,
+   "hintExpr": "updateHint",
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  },
+  {
+   "id": "versions",
+   "cat": "app",
+   "key": null,
+   "label": "Version control",
+   "desc": "Every version of Playback, newest first, with what changed in each. Update or revert to any of them; Playback restarts on it.",
+   "hint": null,
+   "hintExpr": null,
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  },
+  {
+   "id": "versionInfo",
+   "cat": "app",
+   "key": null,
+   "label": "Version info",
+   "desc": "Which version and flavor of Playback this is, what it runs on, and your Windows version.",
+   "hint": null,
+   "hintExpr": "appVersion ? versionTag : undefined",
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  },
+  {
+   "id": "uninstall",
+   "cat": "app",
+   "key": null,
+   "label": "Uninstall Playback",
+   "desc": "Removes Playback, its settings, your Spicy Lyrics key and sign-in, saved lyrics, and the bridge from Spotify (Spotify restarts once).",
+   "hint": null,
+   "hintExpr": "uninstall === \"busy\" ? \"removing the bridge, then closing…\" : \"removes everything, like it was never installed\"",
+   "control": {
+    "kind": "custom",
+    "note": "built from runtime state or custom markup (buttons, forms, font list)"
+   }
+  }
+ ]
+}

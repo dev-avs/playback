@@ -1,0 +1,9188 @@
+{
+ "defaults": {
+  "romanizeDefault": "off",
+  "lyricSize": 17,
+  "panSpeed": 8,
+  "fsLayout": "split",
+  "fsSwap": false,
+  "fsHideCover": false,
+  "fsShowLyrics": true,
+  "fsAnimatedBg": true,
+  "fsLyricScale": 100,
+  "fsPinControls": false,
+  "fsOnTop": true,
+  "animationStyle": "playback",
+  "lyricFont": "Default",
+  "lyricOffset": 0,
+  "alwaysOnTop": true,
+  "blurLines": true,
+  "lyricsOnLaunch": false,
+  "autoSync": 3,
+  "showTotalTime": false,
+  "lyricAlign": "left",
+  "highlight": "white",
+  "corners": 13,
+  "nextSong": "label",
+  "showSource": true,
+  "showLyricSource": true,
+  "showVisualizer": true,
+  "lyricMotion": "normal",
+  "hideWhenIdle": false,
+  "showChangelog": true,
+  "lyricWeight": "bold",
+  "lineSpacing": 10,
+  "clickToJump": true,
+  "showLineTimes": true,
+  "scrollSpeed": 1,
+  "coverBlur": 50,
+  "coverShape": "rounded",
+  "spinCover": false,
+  "allCaps": false,
+  "fontJa": "default",
+  "fontKo": "default",
+  "fontZh": "default",
+  "lineHeight": 1.18,
+  "letterSpacing": 0,
+  "italicLyrics": false,
+  "titleScale": 1,
+  "upcomingBrightness": 1,
+  "sungBrightness": 1,
+  "highlightStrength": 1,
+  "glowStrength": 1,
+  "sweepDirection": "across",
+  "sweepSoftness": 20,
+  "followSpeed": 420,
+  "hideGaps": false,
+  "hideBackingVocals": false,
+  "hideCredits": false,
+  "panelHeight": 300,
+  "widgetWidth": 350,
+  "showCover": true,
+  "showArtist": true,
+  "showTimes": true,
+  "showProgress": true,
+  "showShuffleRepeat": true,
+  "showVolume": true,
+  "pinControls": false,
+  "restOpacity": 100,
+  "barThickness": 2,
+  "tintBar": false,
+  "glassTint": "dark",
+  "coverSaturation": 140,
+  "coverBrightness": 100,
+  "edgeHighlight": true,
+  "shadowStrength": 100,
+  "albumOnLaunch": false,
+  "bubbleOpacity": 48,
+  "albumLyricSize": 13,
+  "rainbowSpeed": 8,
+  "spinSpeed": 6,
+  "partyBackground": false,
+  "floatingCover": false,
+  "bgAlpha": 72,
+  "songOffsets": {},
+  "lyricProvider": "auto",
+  "songProviders": {}
+ },
+ "keys": {
+  "romanizeDefault": "set.romanizeDefault",
+  "lyricSize": "set.lyricSize",
+  "panSpeed": "set.panSpeed",
+  "animationStyle": "set.animationStyle",
+  "fsLayout": "set.fsLayout",
+  "fsSwap": "set.fsSwap",
+  "fsHideCover": "set.fsHideCover",
+  "fsShowLyrics": "set.fsShowLyrics",
+  "fsAnimatedBg": "set.fsAnimatedBg",
+  "fsLyricScale": "set.fsLyricScale",
+  "fsPinControls": "set.fsPinControls",
+  "fsOnTop": "set.fsOnTop",
+  "lyricFont": "set.lyricFont",
+  "lyricOffset": "lyricOffset",
+  "alwaysOnTop": "set.alwaysOnTop",
+  "blurLines": "set.blurLines",
+  "lyricsOnLaunch": "set.lyricsOnLaunch",
+  "autoSync": "set.autoSync",
+  "showTotalTime": "set.showTotalTime",
+  "lyricAlign": "set.lyricAlign",
+  "highlight": "set.highlight",
+  "corners": "set.corners",
+  "nextSong": "set.nextSong",
+  "showSource": "set.showSource",
+  "showLyricSource": "set.showLyricSource",
+  "showVisualizer": "set.showVisualizer",
+  "lyricMotion": "set.lyricMotion",
+  "hideWhenIdle": "set.hideWhenIdle",
+  "showChangelog": "set.showChangelog",
+  "lyricWeight": "set.lyricWeight",
+  "lineSpacing": "set.lineSpacing",
+  "clickToJump": "set.clickToJump",
+  "showLineTimes": "set.showLineTimes",
+  "scrollSpeed": "set.scrollSpeed",
+  "coverBlur": "set.coverBlur",
+  "coverShape": "set.coverShape",
+  "spinCover": "set.spinCover",
+  "allCaps": "set.allCaps",
+  "fontJa": "set.fontJa",
+  "fontKo": "set.fontKo",
+  "fontZh": "set.fontZh",
+  "lineHeight": "set.lineHeight",
+  "letterSpacing": "set.letterSpacing",
+  "italicLyrics": "set.italicLyrics",
+  "titleScale": "set.titleScale",
+  "upcomingBrightness": "set.upcomingBrightness",
+  "sungBrightness": "set.sungBrightness",
+  "highlightStrength": "set.highlightStrength",
+  "glowStrength": "set.glowStrength",
+  "sweepDirection": "set.sweepDirection",
+  "sweepSoftness": "set.sweepSoftness",
+  "followSpeed": "set.followSpeed",
+  "hideGaps": "set.hideGaps",
+  "hideBackingVocals": "set.hideBackingVocals",
+  "hideCredits": "set.hideCredits",
+  "panelHeight": "set.panelHeight",
+  "widgetWidth": "set.widgetWidth",
+  "showCover": "set.showCover",
+  "showArtist": "set.showArtist",
+  "showTimes": "set.showTimes",
+  "showProgress": "set.showProgress",
+  "showShuffleRepeat": "set.showShuffleRepeat",
+  "showVolume": "set.showVolume",
+  "pinControls": "set.pinControls",
+  "restOpacity": "set.restOpacity",
+  "barThickness": "set.barThickness",
+  "tintBar": "set.tintBar",
+  "glassTint": "set.glassTint",
+  "coverSaturation": "set.coverSaturation",
+  "coverBrightness": "set.coverBrightness",
+  "edgeHighlight": "set.edgeHighlight",
+  "shadowStrength": "set.shadowStrength",
+  "albumOnLaunch": "set.albumOnLaunch",
+  "bubbleOpacity": "set.bubbleOpacity",
+  "albumLyricSize": "set.albumLyricSize",
+  "rainbowSpeed": "set.rainbowSpeed",
+  "spinSpeed": "set.spinSpeed",
+  "partyBackground": "set.partyBackground",
+  "floatingCover": "set.floatingCover",
+  "bgAlpha": "set.bgAlpha",
+  "songOffsets": "set.songOffsets",
+  "lyricProvider": "set.lyricProvider",
+  "songProviders": "set.songProviders",
+  "lyricSource": "state.lyricSource",
+  "track": "state.track",
+  "romanized": "state.romanized",
+  "canRomanize": "state.canRomanize",
+  "art": "state.art"
+ },
+ "defaultKeyOrder": [
+  "romanizeDefault",
+  "lyricSize",
+  "panSpeed",
+  "fsLayout",
+  "fsSwap",
+  "fsHideCover",
+  "fsShowLyrics",
+  "fsAnimatedBg",
+  "fsLyricScale",
+  "fsPinControls",
+  "fsOnTop",
+  "animationStyle",
+  "lyricFont",
+  "lyricOffset",
+  "alwaysOnTop",
+  "blurLines",
+  "lyricsOnLaunch",
+  "autoSync",
+  "showTotalTime",
+  "lyricAlign",
+  "highlight",
+  "corners",
+  "nextSong",
+  "showSource",
+  "showLyricSource",
+  "showVisualizer",
+  "lyricMotion",
+  "hideWhenIdle",
+  "showChangelog",
+  "lyricWeight",
+  "lineSpacing",
+  "clickToJump",
+  "showLineTimes",
+  "scrollSpeed",
+  "coverBlur",
+  "coverShape",
+  "spinCover",
+  "allCaps",
+  "fontJa",
+  "fontKo",
+  "fontZh",
+  "lineHeight",
+  "letterSpacing",
+  "italicLyrics",
+  "titleScale",
+  "upcomingBrightness",
+  "sungBrightness",
+  "highlightStrength",
+  "glowStrength",
+  "sweepDirection",
+  "sweepSoftness",
+  "followSpeed",
+  "hideGaps",
+  "hideBackingVocals",
+  "hideCredits",
+  "panelHeight",
+  "widgetWidth",
+  "showCover",
+  "showArtist",
+  "showTimes",
+  "showProgress",
+  "showShuffleRepeat",
+  "showVolume",
+  "pinControls",
+  "restOpacity",
+  "barThickness",
+  "tintBar",
+  "glassTint",
+  "coverSaturation",
+  "coverBrightness",
+  "edgeHighlight",
+  "shadowStrength",
+  "albumOnLaunch",
+  "bubbleOpacity",
+  "albumLyricSize",
+  "rainbowSpeed",
+  "spinSpeed",
+  "partyBackground",
+  "floatingCover",
+  "bgAlpha",
+  "songOffsets",
+  "lyricProvider",
+  "songProviders"
+ ],
+ "keyOrder": [
+  "romanizeDefault",
+  "lyricSize",
+  "panSpeed",
+  "animationStyle",
+  "fsLayout",
+  "fsSwap",
+  "fsHideCover",
+  "fsShowLyrics",
+  "fsAnimatedBg",
+  "fsLyricScale",
+  "fsPinControls",
+  "fsOnTop",
+  "lyricFont",
+  "lyricOffset",
+  "alwaysOnTop",
+  "blurLines",
+  "lyricsOnLaunch",
+  "autoSync",
+  "showTotalTime",
+  "lyricAlign",
+  "highlight",
+  "corners",
+  "nextSong",
+  "showSource",
+  "showLyricSource",
+  "showVisualizer",
+  "lyricMotion",
+  "hideWhenIdle",
+  "showChangelog",
+  "lyricWeight",
+  "lineSpacing",
+  "clickToJump",
+  "showLineTimes",
+  "scrollSpeed",
+  "coverBlur",
+  "coverShape",
+  "spinCover",
+  "allCaps",
+  "fontJa",
+  "fontKo",
+  "fontZh",
+  "lineHeight",
+  "letterSpacing",
+  "italicLyrics",
+  "titleScale",
+  "upcomingBrightness",
+  "sungBrightness",
+  "highlightStrength",
+  "glowStrength",
+  "sweepDirection",
+  "sweepSoftness",
+  "followSpeed",
+  "hideGaps",
+  "hideBackingVocals",
+  "hideCredits",
+  "panelHeight",
+  "widgetWidth",
+  "showCover",
+  "showArtist",
+  "showTimes",
+  "showProgress",
+  "showShuffleRepeat",
+  "showVolume",
+  "pinControls",
+  "restOpacity",
+  "barThickness",
+  "tintBar",
+  "glassTint",
+  "coverSaturation",
+  "coverBrightness",
+  "edgeHighlight",
+  "shadowStrength",
+  "albumOnLaunch",
+  "bubbleOpacity",
+  "albumLyricSize",
+  "rainbowSpeed",
+  "spinSpeed",
+  "partyBackground",
+  "floatingCover",
+  "bgAlpha",
+  "songOffsets",
+  "lyricProvider",
+  "songProviders",
+  "lyricSource",
+  "track",
+  "romanized",
+  "canRomanize",
+  "art"
+ ],
+ "snapshots": [
+  {
+   "storage": {},
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "set.lyricSize": "21",
+    "lyricOffset": "-0.3",
+    "set.highlight": "\"gold\"",
+    "set.alwaysOnTop": "false"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 21,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": -0.3,\n  \"alwaysOnTop\": false,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"gold\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "set.songOffsets": "{\"artist|title\":1.5,\"a|b\":-0.2}",
+    "set.songProviders": "{\"artist|title\":\"netease\"}"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {\n    \"artist|title\": 1.5,\n    \"a|b\": -0.2\n  },\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {\n    \"artist|title\": \"netease\"\n  }\n}"
+  },
+  {
+   "storage": {
+    "set.lineHeight": "1.18",
+    "set.letterSpacing": "-0.05",
+    "set.scrollSpeed": "0.25",
+    "set.glowStrength": "0.1"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 0.25,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": -0.05,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 0.1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "set.lyricSize": "not json",
+    "set.corners": "",
+    "set.panSpeed": "NaN"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "set.romanizeDefault": "true",
+    "set.nextSong": "null",
+    "set.coverBlur": "\"50\"",
+    "set.fontJa": "\"Yu \\\"Gothic\\\"\""
+   },
+   "out": "{\n  \"romanizeDefault\": true,\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": null,\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": \"50\",\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"Yu \\\"Gothic\\\"\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "set.lyricFont": "\"Segoe UI\"",
+    "set.bgAlpha": "1e2",
+    "set.widgetWidth": "350.0",
+    "set.rainbowSpeed": "1e21"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Segoe UI\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 1e+21,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 100,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "set.lyricFont": "\"日本語 ✓ \\u2028 \\u007f\"",
+    "set.followSpeed": "9007199254740993"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"日本語 ✓   \",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 9007199254740992,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  },
+  {
+   "storage": {
+    "state.track": "{\"key\":\"a|b\"}",
+    "set.unknown": "1"
+   },
+   "out": "{\n  \"romanizeDefault\": \"off\",\n  \"lyricSize\": 17,\n  \"panSpeed\": 8,\n  \"fsLayout\": \"split\",\n  \"fsSwap\": false,\n  \"fsHideCover\": false,\n  \"fsShowLyrics\": true,\n  \"fsAnimatedBg\": true,\n  \"fsLyricScale\": 100,\n  \"fsPinControls\": false,\n  \"fsOnTop\": true,\n  \"animationStyle\": \"playback\",\n  \"lyricFont\": \"Default\",\n  \"lyricOffset\": 0,\n  \"alwaysOnTop\": true,\n  \"blurLines\": true,\n  \"lyricsOnLaunch\": false,\n  \"autoSync\": 3,\n  \"showTotalTime\": false,\n  \"lyricAlign\": \"left\",\n  \"highlight\": \"white\",\n  \"corners\": 13,\n  \"nextSong\": \"label\",\n  \"showSource\": true,\n  \"showLyricSource\": true,\n  \"showVisualizer\": true,\n  \"lyricMotion\": \"normal\",\n  \"hideWhenIdle\": false,\n  \"showChangelog\": true,\n  \"lyricWeight\": \"bold\",\n  \"lineSpacing\": 10,\n  \"clickToJump\": true,\n  \"showLineTimes\": true,\n  \"scrollSpeed\": 1,\n  \"coverBlur\": 50,\n  \"coverShape\": \"rounded\",\n  \"spinCover\": false,\n  \"allCaps\": false,\n  \"fontJa\": \"default\",\n  \"fontKo\": \"default\",\n  \"fontZh\": \"default\",\n  \"lineHeight\": 1.18,\n  \"letterSpacing\": 0,\n  \"italicLyrics\": false,\n  \"titleScale\": 1,\n  \"upcomingBrightness\": 1,\n  \"sungBrightness\": 1,\n  \"highlightStrength\": 1,\n  \"glowStrength\": 1,\n  \"sweepDirection\": \"across\",\n  \"sweepSoftness\": 20,\n  \"followSpeed\": 420,\n  \"hideGaps\": false,\n  \"hideBackingVocals\": false,\n  \"hideCredits\": false,\n  \"panelHeight\": 300,\n  \"widgetWidth\": 350,\n  \"showCover\": true,\n  \"showArtist\": true,\n  \"showTimes\": true,\n  \"showProgress\": true,\n  \"showShuffleRepeat\": true,\n  \"showVolume\": true,\n  \"pinControls\": false,\n  \"restOpacity\": 100,\n  \"barThickness\": 2,\n  \"tintBar\": false,\n  \"glassTint\": \"dark\",\n  \"coverSaturation\": 140,\n  \"coverBrightness\": 100,\n  \"edgeHighlight\": true,\n  \"shadowStrength\": 100,\n  \"albumOnLaunch\": false,\n  \"bubbleOpacity\": 48,\n  \"albumLyricSize\": 13,\n  \"rainbowSpeed\": 8,\n  \"spinSpeed\": 6,\n  \"partyBackground\": false,\n  \"floatingCover\": false,\n  \"bgAlpha\": 72,\n  \"songOffsets\": {},\n  \"lyricProvider\": \"auto\",\n  \"songProviders\": {}\n}"
+  }
+ ],
+ "reads": [
+  {
+   "raw": null,
+   "out": "INIT"
+  },
+  {
+   "raw": "",
+   "out": "INIT"
+  },
+  {
+   "raw": " ",
+   "out": "INIT"
+  },
+  {
+   "raw": "5",
+   "out": 5
+  },
+  {
+   "raw": " 5 ",
+   "out": 5
+  },
+  {
+   "raw": "-0",
+   "out": 0
+  },
+  {
+   "raw": "1.18",
+   "out": 1.18
+  },
+  {
+   "raw": "1e21",
+   "out": 1e+21
+  },
+  {
+   "raw": "1e-7",
+   "out": 1e-7
+  },
+  {
+   "raw": "0.1",
+   "out": 0.1
+  },
+  {
+   "raw": "true",
+   "out": true
+  },
+  {
+   "raw": "null",
+   "out": null
+  },
+  {
+   "raw": "\"x\"",
+   "out": "x"
+  },
+  {
+   "raw": "\"\\u00e9\"",
+   "out": "é"
+  },
+  {
+   "raw": "{}",
+   "out": {}
+  },
+  {
+   "raw": "[]",
+   "out": []
+  },
+  {
+   "raw": "{\"a\":1,\"b\":[1,2,{\"c\":null}]}",
+   "out": {
+    "a": 1,
+    "b": [
+     1,
+     2,
+     {
+      "c": null
+     }
+    ]
+   }
+  },
+  {
+   "raw": "undefined",
+   "out": "INIT"
+  },
+  {
+   "raw": "NaN",
+   "out": "INIT"
+  },
+  {
+   "raw": "{",
+   "out": "INIT"
+  },
+  {
+   "raw": "[1,]",
+   "out": "INIT"
+  },
+  {
+   "raw": "'x'",
+   "out": "INIT"
+  },
+  {
+   "raw": "01",
+   "out": "INIT"
+  },
+  {
+   "raw": "1.",
+   "out": "INIT"
+  },
+  {
+   "raw": ".5",
+   "out": "INIT"
+  },
+  {
+   "raw": "+1",
+   "out": "INIT"
+  },
+  {
+   "raw": " 5",
+   "out": "INIT"
+  },
+  {
+   "raw": "123456789012345678901234567890",
+   "out": 1.2345678901234568e+29
+  }
+ ],
+ "writes": [
+  {
+   "in": "null",
+   "out": "null"
+  },
+  {
+   "in": "true",
+   "out": "true"
+  },
+  {
+   "in": "false",
+   "out": "false"
+  },
+  {
+   "in": "0",
+   "out": "0"
+  },
+  {
+   "in": "1",
+   "out": "1"
+  },
+  {
+   "in": "-1",
+   "out": "-1"
+  },
+  {
+   "in": "1.18",
+   "out": "1.18"
+  },
+  {
+   "in": "0.1",
+   "out": "0.1"
+  },
+  {
+   "in": "1e21",
+   "out": "1e+21"
+  },
+  {
+   "in": "1e-7",
+   "out": "1e-7"
+  },
+  {
+   "in": "1.5e300",
+   "out": "1.5e+300"
+  },
+  {
+   "in": "123456789.123",
+   "out": "123456789.123"
+  },
+  {
+   "in": "0.000001",
+   "out": "0.000001"
+  },
+  {
+   "in": "0.0000001",
+   "out": "1e-7"
+  },
+  {
+   "in": "\"x\"",
+   "out": "\"x\""
+  },
+  {
+   "in": "\"a\\\"b\\\\c\\n\\t\\u0001é日本\"",
+   "out": "\"a\\\"b\\\\c\\n\\t\\u0001é日本\""
+  },
+  {
+   "in": "[]",
+   "out": "[]"
+  },
+  {
+   "in": "{}",
+   "out": "{}"
+  },
+  {
+   "in": "[1,[2,3],{}]",
+   "out": "[1,[2,3],{}]"
+  },
+  {
+   "in": "{\"b\":1,\"a\":{\"x\":[true,null,\"s\"]}}",
+   "out": "{\"b\":1,\"a\":{\"x\":[true,null,\"s\"]}}"
+  },
+  {
+   "in": "{\"songs\":{\"a|b\":1.5}}",
+   "out": "{\"songs\":{\"a|b\":1.5}}"
+  },
+  {
+   "in": "100",
+   "out": "100"
+  },
+  {
+   "in": "1e3",
+   "out": "1000"
+  },
+  {
+   "in": "12345678901234567890",
+   "out": "12345678901234567000"
+  },
+  {
+   "in": "-0.5",
+   "out": "-0.5"
+  },
+  {
+   "in": "2.5e-5",
+   "out": "0.000025"
+  }
+ ],
+ "carry": [
+  {
+   "nextSong": null,
+   "showNext": null,
+   "out": null
+  },
+  {
+   "nextSong": null,
+   "showNext": "false",
+   "out": "\"off\""
+  },
+  {
+   "nextSong": null,
+   "showNext": "true",
+   "out": null
+  },
+  {
+   "nextSong": null,
+   "showNext": "x",
+   "out": null
+  },
+  {
+   "nextSong": "\"label\"",
+   "showNext": "false",
+   "out": null
+  },
+  {
+   "nextSong": "\"off\"",
+   "showNext": null,
+   "out": null
+  },
+  {
+   "nextSong": "null",
+   "showNext": "false",
+   "out": null
+  },
+  {
+   "nextSong": "",
+   "showNext": "false",
+   "out": null
+  }
+ ],
+ "helpers": {
+  "fontStack": [
+   {
+    "in": "Default",
+    "out": null
+   },
+   {
+    "in": "Segoe UI",
+    "out": "\"Segoe UI Variable Display\", \"Segoe UI\""
+   },
+   {
+    "in": "Bahnschrift",
+    "out": "\"Bahnschrift\""
+   },
+   {
+    "in": "Georgia",
+    "out": "\"Georgia\""
+   },
+   {
+    "in": "Mono",
+    "out": "\"Cascadia Code\", \"Consolas\""
+   },
+   {
+    "in": "",
+    "out": null
+   },
+   {
+    "in": "Segoe UI Variable",
+    "out": "\"Segoe UI Variable\""
+   },
+   {
+    "in": "a\"b\\c",
+    "out": "\"abc\""
+   },
+   {
+    "in": "\"",
+    "out": "\"\""
+   },
+   {
+    "in": "\\",
+    "out": "\"\""
+   },
+   {
+    "in": "Noto Sans JP",
+    "out": "\"Noto Sans JP\""
+   },
+   {
+    "in": "日本語",
+    "out": "\"日本語\""
+   },
+   {
+    "in": " ",
+    "out": "\" \""
+   },
+   {
+    "in": "default",
+    "out": "\"default\""
+   },
+   {
+    "in": "Default ",
+    "out": "\"Default \""
+   }
+  ],
+  "romaMode": [
+   {
+    "in": true,
+    "out": "latin"
+   },
+   {
+    "in": false,
+    "out": "off"
+   },
+   {
+    "in": "off",
+    "out": "off"
+   },
+   {
+    "in": "latin",
+    "out": "latin"
+   },
+   {
+    "in": "dual",
+    "out": "dual"
+   },
+   {
+    "in": "Off",
+    "out": "off"
+   },
+   {
+    "in": "both",
+    "out": "off"
+   },
+   {
+    "in": "",
+    "out": "off"
+   },
+   {
+    "in": null,
+    "out": "off"
+   },
+   {
+    "in": 0,
+    "out": "off"
+   },
+   {
+    "in": 1,
+    "out": "off"
+   },
+   {
+    "in": "latin ",
+    "out": "off"
+   },
+   {
+    "in": [],
+    "out": "off"
+   },
+   {
+    "in": {},
+    "out": "off"
+   },
+   {
+    "in": 1.5,
+    "out": "off"
+   }
+  ],
+  "highlightVars": [
+   {
+    "in": "white",
+    "out": {
+     "--lit-h": 0,
+     "--lit-s": "0%",
+     "--lit-l": "100%"
+    }
+   },
+   {
+    "in": "pink",
+    "out": {
+     "--lit-h": 330,
+     "--lit-s": "90%",
+     "--lit-l": "78%"
+    }
+   },
+   {
+    "in": "gold",
+    "out": {
+     "--lit-h": 45,
+     "--lit-s": "95%",
+     "--lit-l": "65%"
+    }
+   },
+   {
+    "in": "mint",
+    "out": {
+     "--lit-h": 155,
+     "--lit-s": "70%",
+     "--lit-l": "70%"
+    }
+   },
+   {
+    "in": "sky",
+    "out": {
+     "--lit-h": 200,
+     "--lit-s": "90%",
+     "--lit-l": "72%"
+    }
+   },
+   {
+    "in": "rainbow",
+    "out": {
+     "--lit-h": 0,
+     "--lit-s": "90%",
+     "--lit-l": "72%"
+    }
+   },
+   {
+    "in": "bogus",
+    "out": {
+     "--lit-h": 0,
+     "--lit-s": "0%",
+     "--lit-l": "100%"
+    }
+   },
+   {
+    "in": "",
+    "out": {
+     "--lit-h": 0,
+     "--lit-s": "0%",
+     "--lit-l": "100%"
+    }
+   },
+   {
+    "in": "White",
+    "out": {
+     "--lit-h": 0,
+     "--lit-s": "0%",
+     "--lit-l": "100%"
+    }
+   }
+  ],
+  "cjkStack": [
+   {
+    "lang": "ja",
+    "font": "default",
+    "out": "\"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "Meiryo",
+    "out": "\"Meiryo\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "",
+    "out": "\"\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "a\"b",
+    "out": "\"ab\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "\\",
+    "out": "\"\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "Noto Sans KR",
+    "out": "\"Noto Sans KR\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "日本語",
+    "out": "\"日本語\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ja",
+    "font": "Default",
+    "out": "\"Default\", \"Yu Gothic UI\", \"Meiryo\""
+   },
+   {
+    "lang": "ko",
+    "font": "default",
+    "out": "\"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "Meiryo",
+    "out": "\"Meiryo\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "",
+    "out": "\"\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "a\"b",
+    "out": "\"ab\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "\\",
+    "out": "\"\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "Noto Sans KR",
+    "out": "\"Noto Sans KR\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "日本語",
+    "out": "\"日本語\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "ko",
+    "font": "Default",
+    "out": "\"Default\", \"Noto Sans KR\", \"Malgun Gothic\""
+   },
+   {
+    "lang": "zh",
+    "font": "default",
+    "out": "\"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "Meiryo",
+    "out": "\"Meiryo\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "",
+    "out": "\"\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "a\"b",
+    "out": "\"ab\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "\\",
+    "out": "\"\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "Noto Sans KR",
+    "out": "\"Noto Sans KR\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "日本語",
+    "out": "\"日本語\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   },
+   {
+    "lang": "zh",
+    "font": "Default",
+    "out": "\"Default\", \"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\""
+   }
+  ],
+  "tierDots": [
+   {
+    "in": "0",
+    "out": "○○○"
+   },
+   {
+    "in": "1",
+    "out": "●○○"
+   },
+   {
+    "in": "2",
+    "out": "●●○"
+   },
+   {
+    "in": "3",
+    "out": "●●●"
+   },
+   {
+    "in": "4",
+    "out": "●●●●"
+   },
+   {
+    "in": "5",
+    "out": "●●●●●"
+   },
+   {
+    "in": "1.5",
+    "out": "●○"
+   },
+   {
+    "in": "2.7",
+    "out": "●●"
+   },
+   {
+    "in": "0.2",
+    "out": "○○"
+   },
+   {
+    "in": "3.5",
+    "out": "●●●"
+   },
+   {
+    "in": "100",
+    "out": "●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●"
+   },
+   {
+    "in": "-1",
+    "out": null
+   },
+   {
+    "in": "-0.5",
+    "out": "○○○"
+   },
+   {
+    "in": "1e+21",
+    "out": null
+   },
+   {
+    "in": "Infinity",
+    "out": null
+   }
+  ],
+  "songKey": [
+   {
+    "artist": "Artist",
+    "title": "Title",
+    "out": "artist|title"
+   },
+   {
+    "artist": "  Artist  ",
+    "title": "\tTitle\n",
+    "out": "artist|title"
+   },
+   {
+    "artist": "ÄRTIST",
+    "title": "ΣΊΣΥΦΟΣ",
+    "out": "ärtist|σίσυφος"
+   },
+   {
+    "artist": "",
+    "title": "",
+    "out": "|"
+   },
+   {
+    "artist": "a|b",
+    "title": "c|d",
+    "out": "a|b|c|d"
+   },
+   {
+    "artist": " x ",
+    "title": "﻿y",
+    "out": "x|y"
+   },
+   {
+    "artist": "z",
+    "title": "z",
+    "out": "z|z"
+   },
+   {
+    "artist": "İstanbul",
+    "title": "ǅ",
+    "out": "i̇stanbul|ǆ"
+   },
+   {
+    "artist": "ΟΔΥΣΣΕΎΣ",
+    "title": "Σ",
+    "out": "οδυσσεύς|σ"
+   },
+   {
+    "artist": "日本語",
+    "title": "한국어",
+    "out": "日本語|한국어"
+   },
+   {
+    "artist": "᠎",
+    "title": "​",
+    "out": "᠎|​"
+   }
+  ],
+  "providerOf": [
+   {
+    "in": null,
+    "out": ""
+   },
+   {
+    "in": "",
+    "out": ""
+   },
+   {
+    "in": "netease/yrc",
+    "out": "netease"
+   },
+   {
+    "in": "spicy",
+    "out": "spicy"
+   },
+   {
+    "in": "a/b/c",
+    "out": "a"
+   },
+   {
+    "in": "/x",
+    "out": ""
+   },
+   {
+    "in": "x/",
+    "out": "x"
+   },
+   {
+    "in": "lrclib/lrc",
+    "out": "lrclib"
+   }
+  ]
+ },
+ "logoArt": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%230b0b0d%22%2F%3E%3Cg%20stroke-linecap%3D%22round%22%20stroke%3D%22%23fff%22%3E%3Cline%20x1%3D%2217%22%20y1%3D%2218%22%20x2%3D%2240%22%20y2%3D%2218%22%20stroke-opacity%3D%22.28%22%20stroke-width%3D%225%22%2F%3E%3Cline%20x1%3D%2213%22%20y1%3D%2232%22%20x2%3D%2251%22%20y2%3D%2232%22%20stroke-opacity%3D%22.28%22%20stroke-width%3D%229%22%2F%3E%3Cline%20x1%3D%2213%22%20y1%3D%2232%22%20x2%3D%2237%22%20y2%3D%2232%22%20stroke-width%3D%229%22%2F%3E%3Cline%20x1%3D%2217%22%20y1%3D%2246%22%20x2%3D%2234%22%20y2%3D%2246%22%20stroke-opacity%3D%22.28%22%20stroke-width%3D%225%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E",
+ "tables": {
+  "LYRIC_FONTS": {
+   "Default": null,
+   "Segoe UI": "\"Segoe UI Variable Display\", \"Segoe UI\"",
+   "Bahnschrift": "\"Bahnschrift\"",
+   "Georgia": "\"Georgia\"",
+   "Mono": "\"Cascadia Code\", \"Consolas\""
+  },
+  "ROMA_MODES": [
+   "off",
+   "latin",
+   "dual"
+  ],
+  "ROMA_LABELS": {
+   "off": "Off",
+   "latin": "Latin only",
+   "dual": "Both"
+  },
+  "HIGHLIGHTS": {
+   "white": {
+    "name": "White",
+    "h": 0,
+    "s": 0,
+    "l": 100
+   },
+   "pink": {
+    "name": "Pink",
+    "h": 330,
+    "s": 90,
+    "l": 78
+   },
+   "gold": {
+    "name": "Gold",
+    "h": 45,
+    "s": 95,
+    "l": 65
+   },
+   "mint": {
+    "name": "Mint",
+    "h": 155,
+    "s": 70,
+    "l": 70
+   },
+   "sky": {
+    "name": "Sky",
+    "h": 200,
+    "s": 90,
+    "l": 72
+   },
+   "rainbow": {
+    "name": "Rainbow",
+    "h": 0,
+    "s": 90,
+    "l": 72
+   }
+  },
+  "SWEEP_ANGLES": {
+   "across": "90deg",
+   "down": "180deg"
+  },
+  "SWEEP_ANGLES_RTL": {
+   "across": "270deg",
+   "down": "180deg"
+  },
+  "GLASS_TINTS": {
+   "dark": {
+    "name": "Dark",
+    "rgb": "20, 20, 22"
+   },
+   "black": {
+    "name": "Black",
+    "rgb": "0, 0, 0"
+   },
+   "warm": {
+    "name": "Warm",
+    "rgb": "56, 34, 22"
+   },
+   "cool": {
+    "name": "Cool",
+    "rgb": "18, 30, 56"
+   }
+  },
+  "LYRIC_WEIGHTS": {
+   "regular": 400,
+   "semibold": 600,
+   "bold": 700
+  },
+  "COVER_SHAPES": {
+   "rounded": "6px",
+   "square": "2px",
+   "circle": "50%"
+  },
+  "CJK_FONTS": {
+   "ja": {
+    "name": "Japanese font",
+    "stack": "\"Yu Gothic UI\", \"Meiryo\"",
+    "options": [
+     "Yu Gothic UI",
+     "Meiryo",
+     "MS Gothic",
+     "BIZ UDPGothic",
+     "Noto Sans JP"
+    ]
+   },
+   "ko": {
+    "name": "Korean font",
+    "stack": "\"Noto Sans KR\", \"Malgun Gothic\"",
+    "options": [
+     "Noto Sans KR",
+     "Malgun Gothic",
+     "Gulim",
+     "Batang"
+    ]
+   },
+   "zh": {
+    "name": "Chinese font",
+    "stack": "\"Microsoft YaHei UI\", \"Microsoft JhengHei UI\", \"Microsoft YaHei\"",
+    "options": [
+     "Microsoft YaHei UI",
+     "Microsoft JhengHei UI",
+     "SimHei",
+     "DengXian",
+     "Noto Sans SC"
+    ]
+   }
+  },
+  "MOTIONS": {
+   "calm": 0,
+   "normal": 1,
+   "bouncy": 1.8
+  },
+  "PROVIDERS": [
+   "spicy",
+   "lrcmux",
+   "netease",
+   "lrclib"
+  ],
+  "PROVIDER_NAMES": {
+   "auto": "Auto",
+   "spicy": "Spicy",
+   "lrcmux": "LRCMux",
+   "netease": "NetEase",
+   "lrclib": "LrcLib"
+  }
+ },
+ "items": {
+  "categories": [
+   {
+    "id": "lyrics",
+    "name": "Lyrics"
+   },
+   {
+    "id": "text",
+    "name": "Lyric text"
+   },
+   {
+    "id": "languages",
+    "name": "Languages"
+   },
+   {
+    "id": "highlight",
+    "name": "Highlight"
+   },
+   {
+    "id": "surface",
+    "name": "Glass"
+   },
+   {
+    "id": "header",
+    "name": "Header"
+   },
+   {
+    "id": "controls",
+    "name": "Controls"
+   },
+   {
+    "id": "album",
+    "name": "Album mode"
+   },
+   {
+    "id": "fun",
+    "name": "Fun"
+   },
+   {
+    "id": "fullscreen",
+    "name": "Fullscreen"
+   },
+   {
+    "id": "behavior",
+    "name": "Behavior"
+   },
+   {
+    "id": "app",
+    "name": "App"
+   }
+  ],
+  "fmts": {
+   "FmtOffset": {
+    "ts": "fmtOffset",
+    "js": "((v) => (v === 0 ? \"in sync\" : `${v > 0 ? \"+\" : \"\"}${v.toFixed(1)}s`))"
+   },
+   "AutoSync": {
+    "ts": "(v) => (v ? `after ${v}s` : \"off\")",
+    "js": "((v) => (v ? `after ${v}s` : \"off\"))"
+   },
+   "FollowSpeed": {
+    "ts": "(v) => `${v} ms`",
+    "js": "((v) => `${v} ms`)"
+   },
+   "ScrollSpeed": {
+    "ts": "(v) => `${v}×`",
+    "js": "((v) => `${v}×`)"
+   },
+   "PanelHeight": {
+    "ts": "(v) => `${v}px`",
+    "js": "((v) => `${v}px`)"
+   },
+   "LineHeight": {
+    "ts": "(v) => v.toFixed(2)",
+    "js": "((v) => v.toFixed(2))"
+   },
+   "LetterSpacing": {
+    "ts": "(v) => (v ? `${v > 0 ? \"+\" : \"\"}${v.toFixed(2)}em` : \"normal\")",
+    "js": "((v) => (v ? `${v > 0 ? \"+\" : \"\"}${v.toFixed(2)}em` : \"normal\"))"
+   },
+   "RainbowSpeed": {
+    "ts": "(v) => `${v}s`",
+    "js": "((v) => `${v}s`)"
+   },
+   "Times": {
+    "ts": "times",
+    "js": "((v) => `${Math.round(v * 100)}%`)"
+   },
+   "Pct": {
+    "ts": "pct",
+    "js": "((v) => `${Math.round(v)}%`)"
+   },
+   "BgAlpha": {
+    "ts": "(v) => `${v}%${v === 0 ? \" · clear\" : v === 100 ? \" · solid\" : v === DEFAULTS.bgAlpha ? \" · default\" : \"\"}`",
+    "js": "((v) => `${v}%${v === 0 ? \" · clear\" : v === 100 ? \" · solid\" : v === DEFAULTS.bgAlpha ? \" · default\" : \"\"}`)"
+   },
+   "PanSpeed": {
+    "ts": "(v) => `${v} px/s`",
+    "js": "((v) => `${v} px/s`)"
+   },
+   "BarThickness": {
+    "ts": "(v) => `${v + 2}px`",
+    "js": "((v) => `${v + 2}px`)"
+   }
+  },
+  "items": [
+   {
+    "id": "lyricProvider",
+    "cat": "lyrics",
+    "key": "lyricProvider",
+    "label": "Provider · all songs",
+    "desc": "Where lyrics come from. Auto picks the best-timed source; pick one to always try it first.",
+    "hint": null,
+    "hintExpr": "lyricSource ? `now showing ${lyricSource.provider} ${tierDots(lyricSource.tier)}` : \"Auto picks the best-timed lyrics\"",
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "auto",
+       "label": "Auto"
+      },
+      {
+       "value": "spicy",
+       "label": "Spicy"
+      },
+      {
+       "value": "lrcmux",
+       "label": "LRCMux"
+      },
+      {
+       "value": "netease",
+       "label": "NetEase"
+      },
+      {
+       "value": "lrclib",
+       "label": "LrcLib"
+      }
+     ],
+     "preview": false,
+     "peek": null,
+     "onChange": "(v) => set(\"lyricProvider\", v)",
+     "note": null
+    }
+   },
+   {
+    "id": "songProvider",
+    "cat": "lyrics",
+    "key": null,
+    "label": "Provider · this song",
+    "desc": "Same as above, for the song playing now only.",
+    "hint": null,
+    "hintExpr": "track ? `${track.title} · Auto follows the choice above` : \"nothing playing\"",
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "auto",
+       "label": "Auto"
+      },
+      {
+       "value": "spicy",
+       "label": "Spicy"
+      },
+      {
+       "value": "lrcmux",
+       "label": "LRCMux"
+      },
+      {
+       "value": "netease",
+       "label": "NetEase"
+      },
+      {
+       "value": "lrclib",
+       "label": "LrcLib"
+      }
+     ],
+     "preview": false,
+     "peek": null,
+     "onChange": "setSongProvider",
+     "note": null
+    }
+   },
+   {
+    "id": "lyricOffset",
+    "cat": "lyrics",
+    "key": "lyricOffset",
+    "label": "Offset · all songs",
+    "desc": "Lyrics running ahead or behind? Shift them later (+) or earlier (−) for every song. On the widget: [ and ].",
+    "hint": null,
+    "hintExpr": "fmtOffset(s.lyricOffset)",
+    "control": {
+     "kind": "slider",
+     "min": -5,
+     "max": 5,
+     "step": 0.1,
+     "fmt": "FmtOffset",
+     "onChange": "(v) => set(\"lyricOffset\", Math.round(v * 10) / 10)"
+    }
+   },
+   {
+    "id": "songOffset",
+    "cat": "lyrics",
+    "key": null,
+    "label": "Offset · this song",
+    "desc": "Same, for this song only; added to the all-songs offset. On the widget: ⇧ with [ and ], \\ resets.",
+    "hint": null,
+    "hintExpr": "track ? `${track.title} · ${fmtOffset(songOffset)}` : \"nothing playing\"",
+    "control": {
+     "kind": "slider",
+     "min": -5,
+     "max": 5,
+     "step": 0.1,
+     "fmt": null,
+     "onChange": "(v) => setSongOffset(Math.round(v * 10) / 10)"
+    }
+   },
+   {
+    "id": "autoSync",
+    "cat": "lyrics",
+    "key": "autoSync",
+    "label": "Auto sync after scrolling",
+    "desc": "After you scroll the lyrics, jump back to the line being sung this long after you stop. 0 turns it off.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 10,
+     "step": 1,
+     "fmt": "AutoSync",
+     "onChange": null
+    }
+   },
+   {
+    "id": "followSpeed",
+    "cat": "lyrics",
+    "key": "followSpeed",
+    "label": "Follow speed",
+    "desc": "How long the list takes to glide to the next line.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 150,
+     "max": 900,
+     "step": 10,
+     "fmt": "FollowSpeed",
+     "onChange": null
+    }
+   },
+   {
+    "id": "scrollSpeed",
+    "cat": "lyrics",
+    "key": "scrollSpeed",
+    "label": "Scroll speed",
+    "desc": "How far the lyrics move per mouse-wheel step.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0.25,
+     "max": 3,
+     "step": 0.25,
+     "fmt": "ScrollSpeed",
+     "onChange": null
+    }
+   },
+   {
+    "id": "panelHeight",
+    "cat": "lyrics",
+    "key": "panelHeight",
+    "label": "Lyrics height",
+    "desc": "How tall the lyrics panel is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 160,
+     "max": 520,
+     "step": 10,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "clickToJump",
+    "cat": "lyrics",
+    "key": "clickToJump",
+    "label": "Click a line to jump",
+    "desc": "Clicking a lyric line moves the song to it.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "showLineTimes",
+    "cat": "lyrics",
+    "key": "showLineTimes",
+    "label": "Line times on hover",
+    "desc": "A small badge with the line's start time while the pointer is on it.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "hideGaps",
+    "cat": "lyrics",
+    "key": "hideGaps",
+    "label": "Hide instrumental dots",
+    "desc": "Leave out the • • • shown during instrumental breaks.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "hideBackingVocals",
+    "cat": "lyrics",
+    "key": "hideBackingVocals",
+    "label": "Hide backing vocals",
+    "desc": "Leave out the smaller backing-vocal lines.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "hideCredits",
+    "cat": "lyrics",
+    "key": "hideCredits",
+    "label": "Hide credits",
+    "desc": "Leave out the songwriter credits after the last line.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "romanized",
+    "cat": "languages",
+    "key": null,
+    "label": "Romanize",
+    "desc": "Japanese, Korean, Chinese and other scripts in Latin letters. Latin only replaces the lyrics; Both shows each line with its romanization under it. Same as the あ button, which cycles through them.",
+    "hint": null,
+    "hintExpr": "canRomanize ? undefined : \"nothing to romanize in this song\"",
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "off",
+       "label": "Off"
+      },
+      {
+       "value": "latin",
+       "label": "Latin only"
+      },
+      {
+       "value": "dual",
+       "label": "Both"
+      }
+     ],
+     "preview": false,
+     "peek": "(v) => ({ romanize: v })",
+     "onChange": "setRomanized",
+     "note": null
+    }
+   },
+   {
+    "id": "romanizeDefault",
+    "cat": "languages",
+    "key": "romanizeDefault",
+    "label": "Romanize at launch",
+    "desc": "What Romanize starts every launch on.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "off",
+       "label": "Off"
+      },
+      {
+       "value": "latin",
+       "label": "Latin only"
+      },
+      {
+       "value": "dual",
+       "label": "Both"
+      }
+     ],
+     "preview": false,
+     "peek": "(v) => ({ romanize: v })",
+     "onChange": "(v) => set(\"romanizeDefault\", v)",
+     "note": null
+    }
+   },
+   {
+    "id": "fontJa",
+    "cat": "languages",
+    "key": "fontJa",
+    "label": "Japanese font",
+    "desc": "Typeface for Japanese lyrics. Point at one to try it; only fonts you have are offered.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "default",
+       "label": "Default"
+      },
+      {
+       "value": "Yu Gothic UI",
+       "label": "Yu Gothic UI"
+      },
+      {
+       "value": "Meiryo",
+       "label": "Meiryo"
+      },
+      {
+       "value": "MS Gothic",
+       "label": "MS Gothic"
+      },
+      {
+       "value": "BIZ UDPGothic",
+       "label": "BIZ UDPGothic"
+      },
+      {
+       "value": "Noto Sans JP",
+       "label": "Noto Sans JP"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": "options after Default are CJK_FONTS[lang].options filtered to the installed fonts, each label drawn in its own font"
+    }
+   },
+   {
+    "id": "fontKo",
+    "cat": "languages",
+    "key": "fontKo",
+    "label": "Korean font",
+    "desc": "Typeface for Korean lyrics. Point at one to try it; only fonts you have are offered.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "default",
+       "label": "Default"
+      },
+      {
+       "value": "Noto Sans KR",
+       "label": "Noto Sans KR"
+      },
+      {
+       "value": "Malgun Gothic",
+       "label": "Malgun Gothic"
+      },
+      {
+       "value": "Gulim",
+       "label": "Gulim"
+      },
+      {
+       "value": "Batang",
+       "label": "Batang"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": "options after Default are CJK_FONTS[lang].options filtered to the installed fonts, each label drawn in its own font"
+    }
+   },
+   {
+    "id": "fontZh",
+    "cat": "languages",
+    "key": "fontZh",
+    "label": "Chinese font",
+    "desc": "Typeface for Chinese lyrics. Point at one to try it; only fonts you have are offered.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "default",
+       "label": "Default"
+      },
+      {
+       "value": "Microsoft YaHei UI",
+       "label": "Microsoft YaHei UI"
+      },
+      {
+       "value": "Microsoft JhengHei UI",
+       "label": "Microsoft JhengHei UI"
+      },
+      {
+       "value": "SimHei",
+       "label": "SimHei"
+      },
+      {
+       "value": "DengXian",
+       "label": "DengXian"
+      },
+      {
+       "value": "Noto Sans SC",
+       "label": "Noto Sans SC"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": "options after Default are CJK_FONTS[lang].options filtered to the installed fonts, each label drawn in its own font"
+    }
+   },
+   {
+    "id": "lyricSize",
+    "cat": "text",
+    "key": "lyricSize",
+    "label": "Size",
+    "desc": "How big the lyrics are.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 13,
+     "max": 28,
+     "step": 1,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "lyricFont",
+    "cat": "text",
+    "key": "lyricFont",
+    "label": "Font",
+    "desc": "The lyrics' typeface. Point at one to try it in the preview.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   },
+   {
+    "id": "lyricWeight",
+    "cat": "text",
+    "key": "lyricWeight",
+    "label": "Weight",
+    "desc": "How heavy the lyric letters are.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "regular",
+       "label": "Regular"
+      },
+      {
+       "value": "semibold",
+       "label": "Semibold"
+      },
+      {
+       "value": "bold",
+       "label": "Bold"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "lineHeight",
+    "cat": "text",
+    "key": "lineHeight",
+    "label": "Line height",
+    "desc": "Room within a wrapped line, top to bottom.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 1,
+     "max": 1.8,
+     "step": 0.02,
+     "fmt": "LineHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "lineSpacing",
+    "cat": "text",
+    "key": "lineSpacing",
+    "label": "Line spacing",
+    "desc": "Space between one lyric line and the next.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 2,
+     "max": 28,
+     "step": 1,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "letterSpacing",
+    "cat": "text",
+    "key": "letterSpacing",
+    "label": "Letter spacing",
+    "desc": "Space between letters: tighter or looser than the font's own.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": -0.05,
+     "max": 0.2,
+     "step": 0.01,
+     "fmt": "LetterSpacing",
+     "onChange": null
+    }
+   },
+   {
+    "id": "lyricAlign",
+    "cat": "text",
+    "key": "lyricAlign",
+    "label": "Alignment",
+    "desc": "Lyrics against the left edge, or centred.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "left",
+       "label": "Left"
+      },
+      {
+       "value": "center",
+       "label": "Center"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "italicLyrics",
+    "cat": "text",
+    "key": "italicLyrics",
+    "label": "Italic",
+    "desc": "Slanted lyrics.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "highlight",
+    "cat": "highlight",
+    "key": "highlight",
+    "label": "Highlight colour",
+    "desc": "The colour the sung part of each line lights up in. Rainbow cycles through them all.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "white",
+       "label": "White"
+      },
+      {
+       "value": "pink",
+       "label": "Pink"
+      },
+      {
+       "value": "gold",
+       "label": "Gold"
+      },
+      {
+       "value": "mint",
+       "label": "Mint"
+      },
+      {
+       "value": "sky",
+       "label": "Sky"
+      },
+      {
+       "value": "rainbow",
+       "label": "Rainbow"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "rainbowSpeed",
+    "cat": "highlight",
+    "key": "rainbowSpeed",
+    "label": "Rainbow speed",
+    "desc": "Seconds for one trip round the colours, with the Rainbow highlight.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 1,
+     "max": 20,
+     "step": 1,
+     "fmt": "RainbowSpeed",
+     "onChange": null
+    }
+   },
+   {
+    "id": "lyricMotion",
+    "cat": "highlight",
+    "key": "lyricMotion",
+    "label": "Lyric motion",
+    "desc": "How much the sung letters bounce: Calm keeps them still, Bouncy doubles the wave.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "calm",
+       "label": "Calm"
+      },
+      {
+       "value": "normal",
+       "label": "Normal"
+      },
+      {
+       "value": "bouncy",
+       "label": "Bouncy"
+      }
+     ],
+     "preview": false,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "highlightStrength",
+    "cat": "highlight",
+    "key": "highlightStrength",
+    "label": "Highlight strength",
+    "desc": "How bright the sung part of the line is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0.5,
+     "max": 1.2,
+     "step": 0.05,
+     "fmt": "Times",
+     "onChange": null
+    }
+   },
+   {
+    "id": "glowStrength",
+    "cat": "highlight",
+    "key": "glowStrength",
+    "label": "Glow",
+    "desc": "The soft glow around letters as they are sung.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 3,
+     "step": 0.1,
+     "fmt": "Times",
+     "onChange": null
+    }
+   },
+   {
+    "id": "fsLayout",
+    "cat": "fullscreen",
+    "key": "fsLayout",
+    "label": "Layout",
+    "desc": "Split: the cover, title and controls beside the lyrics. Lyrics dominant: a small cover and title above big lyrics.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "split",
+       "label": "Split"
+      },
+      {
+       "value": "lyrics",
+       "label": "Lyrics dominant"
+      }
+     ],
+     "preview": false,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "fsShowLyrics",
+    "cat": "fullscreen",
+    "key": "fsShowLyrics",
+    "label": "Show lyrics",
+    "desc": "Open fullscreen with the lyrics showing. The button at the top still hides them.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "fsHideCover",
+    "cat": "fullscreen",
+    "key": "fsHideCover",
+    "label": "Hide cover",
+    "desc": "Leave out the big cover; the title and controls sit at the bottom.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "fsSwap",
+    "cat": "fullscreen",
+    "key": "fsSwap",
+    "label": "Cover on the right",
+    "desc": "Put the cover and controls on the right and the lyrics on the left.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "fsAnimatedBg",
+    "cat": "fullscreen",
+    "key": "fsAnimatedBg",
+    "label": "Animated background",
+    "desc": "The cover, blurred, drifting slowly behind everything. Off: a still blur.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "fsPinControls",
+    "cat": "fullscreen",
+    "key": "fsPinControls",
+    "label": "Keep controls showing",
+    "desc": "The controls stay instead of fading when the mouse rests.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "fsOnTop",
+    "cat": "fullscreen",
+    "key": "fsOnTop",
+    "label": "Always on top",
+    "desc": "Keep fullscreen above every other window. The small widget follows Behavior → Always on top.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "fsLyricScale",
+    "cat": "fullscreen",
+    "key": "fsLyricScale",
+    "label": "Lyrics size",
+    "desc": "How big the lyrics are, scaled with the screen so only a few lines show.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 60,
+     "max": 160,
+     "step": 5,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "animationStyle",
+    "cat": "highlight",
+    "key": "animationStyle",
+    "label": "Word animation",
+    "desc": "How sung words move. Spicy: Spicy Lyrics' pop, a little bouncier, with the letter wave only on words held a second or longer.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "playback",
+       "label": "Playback"
+      },
+      {
+       "value": "spicy",
+       "label": "Spicy"
+      }
+     ],
+     "preview": false,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "sweepDirection",
+    "cat": "highlight",
+    "key": "sweepDirection",
+    "label": "Sweep direction",
+    "desc": "The fill runs along the line as it is sung, or top to bottom over each word.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "across",
+       "label": "Along the line"
+      },
+      {
+       "value": "down",
+       "label": "Top to bottom"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "sweepSoftness",
+    "cat": "highlight",
+    "key": "sweepSoftness",
+    "label": "Sweep edge",
+    "desc": "How soft the edge between sung and unsung is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 50,
+     "step": 1,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "upcomingBrightness",
+    "cat": "highlight",
+    "key": "upcomingBrightness",
+    "label": "Upcoming lines",
+    "desc": "How bright the lines not yet sung are.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0.2,
+     "max": 1.9,
+     "step": 0.05,
+     "fmt": "Times",
+     "onChange": null
+    }
+   },
+   {
+    "id": "sungBrightness",
+    "cat": "highlight",
+    "key": "sungBrightness",
+    "label": "Sung lines",
+    "desc": "How bright the lines already sung are.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0.2,
+     "max": 2,
+     "step": 0.05,
+     "fmt": "Times",
+     "onChange": null
+    }
+   },
+   {
+    "id": "blurLines",
+    "cat": "highlight",
+    "key": "blurLines",
+    "label": "Blur distant lines",
+    "desc": "Soften lines the further they are from the one being sung.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "bgAlpha",
+    "cat": "surface",
+    "key": "bgAlpha",
+    "label": "Background",
+    "desc": "How see-through the widget is: 0% clear, 72% the default glass, 100% solid.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 100,
+     "step": 1,
+     "fmt": "BgAlpha",
+     "onChange": null
+    }
+   },
+   {
+    "id": "glassTint",
+    "cat": "surface",
+    "key": "glassTint",
+    "label": "Glass tint",
+    "desc": "The colour of the glass itself.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "dark",
+       "label": "Dark"
+      },
+      {
+       "value": "black",
+       "label": "Black"
+      },
+      {
+       "value": "warm",
+       "label": "Warm"
+      },
+      {
+       "value": "cool",
+       "label": "Cool"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "corners",
+    "cat": "surface",
+    "key": "corners",
+    "label": "Corners",
+    "desc": "How rounded the widget's corners are.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 24,
+     "step": 1,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "coverBlur",
+    "cat": "surface",
+    "key": "coverBlur",
+    "label": "Cover blur",
+    "desc": "How soft the cover behind the widget is: 0 shows it sharp.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 100,
+     "step": 5,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "coverSaturation",
+    "cat": "surface",
+    "key": "coverSaturation",
+    "label": "Cover colour",
+    "desc": "How strong the cover's colours are behind the widget.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 250,
+     "step": 5,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "coverBrightness",
+    "cat": "surface",
+    "key": "coverBrightness",
+    "label": "Cover brightness",
+    "desc": "How bright the cover is behind the widget.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 30,
+     "max": 160,
+     "step": 5,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "edgeHighlight",
+    "cat": "surface",
+    "key": "edgeHighlight",
+    "label": "Edge highlight",
+    "desc": "The thin light line around the widget's edge.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "shadowStrength",
+    "cat": "surface",
+    "key": "shadowStrength",
+    "label": "Shadow",
+    "desc": "The drop shadow under the widget.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 200,
+     "step": 5,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "restOpacity",
+    "cat": "surface",
+    "key": "restOpacity",
+    "label": "Fade when not hovered",
+    "desc": "How visible the whole widget stays while the pointer is elsewhere.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 20,
+     "max": 100,
+     "step": 5,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "widgetWidth",
+    "cat": "header",
+    "key": "widgetWidth",
+    "label": "Widget width",
+    "desc": "How wide the widget is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 300,
+     "max": 480,
+     "step": 10,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "showCover",
+    "cat": "header",
+    "key": "showCover",
+    "label": "Show cover",
+    "desc": "The small cover next to the title.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "coverShape",
+    "cat": "header",
+    "key": "coverShape",
+    "label": "Cover shape",
+    "desc": "The small cover next to the title: rounded, square or a circle.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "rounded",
+       "label": "Rounded"
+      },
+      {
+       "value": "square",
+       "label": "Square"
+      },
+      {
+       "value": "circle",
+       "label": "Circle"
+      }
+     ],
+     "preview": true,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "panSpeed",
+    "cat": "header",
+    "key": "panSpeed",
+    "label": "Long title speed",
+    "desc": "How fast a title or artist too long for the widget slides to show the rest.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 2,
+     "max": 40,
+     "step": 1,
+     "fmt": "PanSpeed",
+     "onChange": null
+    }
+   },
+   {
+    "id": "titleScale",
+    "cat": "header",
+    "key": "titleScale",
+    "label": "Title size",
+    "desc": "Size of the song title and artist.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0.8,
+     "max": 1.6,
+     "step": 0.05,
+     "fmt": "Times",
+     "onChange": null
+    }
+   },
+   {
+    "id": "showArtist",
+    "cat": "header",
+    "key": "showArtist",
+    "label": "Show artist",
+    "desc": "The artist under the title.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "nextSong",
+    "cat": "header",
+    "key": "nextSong",
+    "label": "Next song",
+    "desc": "The next song in Spotify's queue: the NEXT label top right, a popup in the song's last 10 seconds, both, or neither. Click either to skip.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "chips",
+     "options": [
+      {
+       "value": "label",
+       "label": "Label"
+      },
+      {
+       "value": "popup",
+       "label": "Popup"
+      },
+      {
+       "value": "both",
+       "label": "Both"
+      },
+      {
+       "value": "off",
+       "label": "Off"
+      }
+     ],
+     "preview": false,
+     "peek": null,
+     "onChange": null,
+     "note": null
+    }
+   },
+   {
+    "id": "showSource",
+    "cat": "controls",
+    "key": "showSource",
+    "label": "Show source label",
+    "desc": "The player and lyrics source under the progress bar, e.g. Spotify · spicy ●●●.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "showLyricSource",
+    "cat": "controls",
+    "key": "showLyricSource",
+    "label": "Show lyrics provider",
+    "desc": "The lyrics part of the source label, e.g. · spicy ●●●. Click it to try another provider.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "showTimes",
+    "cat": "controls",
+    "key": "showTimes",
+    "label": "Show times",
+    "desc": "The elapsed and remaining times.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "showTotalTime",
+    "cat": "controls",
+    "key": "showTotalTime",
+    "label": "Show song length",
+    "desc": "The time on the right shows the song's length instead of the time left. Clicking it does the same.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "showProgress",
+    "cat": "controls",
+    "key": "showProgress",
+    "label": "Show progress bar",
+    "desc": "The bar showing how far into the song you are.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "barThickness",
+    "cat": "controls",
+    "key": "barThickness",
+    "label": "Progress bar thickness",
+    "desc": "How thick the progress bar is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 1,
+     "max": 6,
+     "step": 1,
+     "fmt": "BarThickness",
+     "onChange": null
+    }
+   },
+   {
+    "id": "tintBar",
+    "cat": "controls",
+    "key": "tintBar",
+    "label": "Colour the progress bar",
+    "desc": "Light the progress bar in the Highlight colour.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "showShuffleRepeat",
+    "cat": "controls",
+    "key": "showShuffleRepeat",
+    "label": "Show shuffle & repeat",
+    "desc": "The shuffle and repeat buttons.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "showVolume",
+    "cat": "controls",
+    "key": "showVolume",
+    "label": "Show volume",
+    "desc": "The volume button.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "pinControls",
+    "cat": "controls",
+    "key": "pinControls",
+    "label": "Controls always visible",
+    "desc": "Keep the play controls shown, not only while the pointer is on the widget.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "albumOnLaunch",
+    "cat": "album",
+    "key": "albumOnLaunch",
+    "label": "Open in album mode",
+    "desc": "Start in album mode, with the big cover.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "showVisualizer",
+    "cat": "album",
+    "key": "showVisualizer",
+    "label": "Visualizer",
+    "desc": "The bars next to the title, moving with the music.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "bubbleOpacity",
+    "cat": "album",
+    "key": "bubbleOpacity",
+    "label": "Lyric bubble",
+    "desc": "How dark the bubble behind the album-mode lyric is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 0,
+     "max": 100,
+     "step": 2,
+     "fmt": "Pct",
+     "onChange": null
+    }
+   },
+   {
+    "id": "albumLyricSize",
+    "cat": "album",
+    "key": "albumLyricSize",
+    "label": "Lyric size",
+    "desc": "How big the album-mode lyric is.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 11,
+     "max": 24,
+     "step": 1,
+     "fmt": "PanelHeight",
+     "onChange": null
+    }
+   },
+   {
+    "id": "spinCover",
+    "cat": "fun",
+    "key": "spinCover",
+    "label": "Spinning cover",
+    "desc": "The small cover turns round like a record while music plays.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "spinSpeed",
+    "cat": "fun",
+    "key": "spinSpeed",
+    "label": "Spin speed",
+    "desc": "Seconds per turn of the spinning cover.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "slider",
+     "min": 1,
+     "max": 20,
+     "step": 1,
+     "fmt": "RainbowSpeed",
+     "onChange": null
+    }
+   },
+   {
+    "id": "floatingCover",
+    "cat": "fun",
+    "key": "floatingCover",
+    "label": "Floating cover",
+    "desc": "The small cover gently bobs up and down.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "partyBackground",
+    "cat": "fun",
+    "key": "partyBackground",
+    "label": "Party background",
+    "desc": "The cover's glow behind the widget cycles through every colour.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "allCaps",
+    "cat": "fun",
+    "key": "allCaps",
+    "label": "ALL CAPS",
+    "desc": "Lyrics in capital letters, in the panel and in album mode.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": true
+    }
+   },
+   {
+    "id": "lyricsOnLaunch",
+    "cat": "behavior",
+    "key": "lyricsOnLaunch",
+    "label": "Open lyrics on launch",
+    "desc": "Start with the lyrics panel open instead of just the player.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "hideWhenIdle",
+    "cat": "behavior",
+    "key": "hideWhenIdle",
+    "label": "Hide when nothing plays",
+    "desc": "The widget disappears while no music plays, and comes back when it starts.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "showChangelog",
+    "cat": "behavior",
+    "key": "showChangelog",
+    "label": "Show changelog after updates",
+    "desc": "Open What's new on the first launch of each new version.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "alwaysOnTop",
+    "cat": "behavior",
+    "key": "alwaysOnTop",
+    "label": "Always on top",
+    "desc": "Keep the widget above every other window.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "toggle",
+     "preview": false
+    }
+   },
+   {
+    "id": "spicyKey",
+    "cat": "app",
+    "key": null,
+    "label": "Spicy Lyrics key",
+    "desc": "Your own free key for word-by-word lyrics from Spicy Lyrics, with any player. Get key opens Spicy Lyrics: sign in, create an application, then copy its key.",
+    "hint": null,
+    "hintExpr": "keyStatus",
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   },
+   {
+    "id": "token",
+    "cat": "app",
+    "key": null,
+    "label": "Spotify token",
+    "desc": "Spotify's pass for word-by-word lyrics when there is no Spicy Lyrics key, or it fails. Spotify sends it by itself while it is open.",
+    "hint": null,
+    "hintExpr": "tokenStatus",
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   },
+   {
+    "id": "updates",
+    "cat": "app",
+    "key": null,
+    "label": "Updates",
+    "desc": "New versions come from GitHub. Playback asks on launch when one is out; Update installs it and restarts Playback.",
+    "hint": null,
+    "hintExpr": "updateHint",
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   },
+   {
+    "id": "versions",
+    "cat": "app",
+    "key": null,
+    "label": "Version control",
+    "desc": "Every version of Playback, newest first, with what changed in each. Update or revert to any of them; Playback restarts on it.",
+    "hint": null,
+    "hintExpr": null,
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   },
+   {
+    "id": "versionInfo",
+    "cat": "app",
+    "key": null,
+    "label": "Version info",
+    "desc": "Which version and flavor of Playback this is, what it runs on, and your Windows version.",
+    "hint": null,
+    "hintExpr": "appVersion ? versionTag : undefined",
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   },
+   {
+    "id": "uninstall",
+    "cat": "app",
+    "key": null,
+    "label": "Uninstall Playback",
+    "desc": "Removes Playback, its settings, your Spicy Lyrics key and sign-in, saved lyrics, and the bridge from Spotify (Spotify restarts once).",
+    "hint": null,
+    "hintExpr": "uninstall === \"busy\" ? \"removing the bridge, then closing…\" : \"removes everything, like it was never installed\"",
+    "control": {
+     "kind": "custom",
+     "note": "built from runtime state or custom markup (buttons, forms, font list)"
+    }
+   }
+  ]
+ },
+ "fmt": {
+  "FmtOffset": [
+   {
+    "v": 0,
+    "out": "in sync"
+   },
+   {
+    "v": 0.5,
+    "out": "+0.5s"
+   },
+   {
+    "v": 1,
+    "out": "+1.0s"
+   },
+   {
+    "v": -1,
+    "out": "-1.0s"
+   },
+   {
+    "v": 0.005,
+    "out": "+0.0s"
+   },
+   {
+    "v": 0.015,
+    "out": "+0.0s"
+   },
+   {
+    "v": 1.005,
+    "out": "+1.0s"
+   },
+   {
+    "v": 2.5,
+    "out": "+2.5s"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5s"
+   },
+   {
+    "v": 0.125,
+    "out": "+0.1s"
+   },
+   {
+    "v": 0.375,
+    "out": "+0.4s"
+   },
+   {
+    "v": 12.345,
+    "out": "+12.3s"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0s"
+   },
+   {
+    "v": 100,
+    "out": "+100.0s"
+   },
+   {
+    "v": 72,
+    "out": "+72.0s"
+   },
+   {
+    "v": 99.5,
+    "out": "+99.5s"
+   },
+   {
+    "v": 1e+21,
+    "out": "+1e+21s"
+   },
+   {
+    "v": 1e-7,
+    "out": "+0.0s"
+   },
+   {
+    "v": 1234567.891,
+    "out": "+1234567.9s"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "+0.0s"
+   },
+   {
+    "v": 8.345,
+    "out": "+8.3s"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.1s"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.0s"
+   },
+   {
+    "v": -5,
+    "out": "-5.0s"
+   },
+   {
+    "v": -4.9,
+    "out": "-4.9s"
+   },
+   {
+    "v": -4.8,
+    "out": "-4.8s"
+   },
+   {
+    "v": -4.7,
+    "out": "-4.7s"
+   },
+   {
+    "v": -4.6,
+    "out": "-4.6s"
+   },
+   {
+    "v": -4.5,
+    "out": "-4.5s"
+   },
+   {
+    "v": -4.4,
+    "out": "-4.4s"
+   },
+   {
+    "v": -4.3,
+    "out": "-4.3s"
+   },
+   {
+    "v": -4.2,
+    "out": "-4.2s"
+   },
+   {
+    "v": -4.1,
+    "out": "-4.1s"
+   },
+   {
+    "v": -4,
+    "out": "-4.0s"
+   },
+   {
+    "v": -3.9,
+    "out": "-3.9s"
+   },
+   {
+    "v": -3.8,
+    "out": "-3.8s"
+   },
+   {
+    "v": -3.7,
+    "out": "-3.7s"
+   },
+   {
+    "v": -3.6,
+    "out": "-3.6s"
+   },
+   {
+    "v": -3.5,
+    "out": "-3.5s"
+   },
+   {
+    "v": -3.4,
+    "out": "-3.4s"
+   },
+   {
+    "v": -3.3,
+    "out": "-3.3s"
+   },
+   {
+    "v": -3.2,
+    "out": "-3.2s"
+   },
+   {
+    "v": -3.1,
+    "out": "-3.1s"
+   },
+   {
+    "v": -3,
+    "out": "-3.0s"
+   },
+   {
+    "v": -2.9,
+    "out": "-2.9s"
+   },
+   {
+    "v": -2.8,
+    "out": "-2.8s"
+   },
+   {
+    "v": -2.7,
+    "out": "-2.7s"
+   },
+   {
+    "v": -2.6,
+    "out": "-2.6s"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5s"
+   },
+   {
+    "v": -2.4,
+    "out": "-2.4s"
+   },
+   {
+    "v": -2.3,
+    "out": "-2.3s"
+   },
+   {
+    "v": -2.2,
+    "out": "-2.2s"
+   },
+   {
+    "v": -2.1,
+    "out": "-2.1s"
+   },
+   {
+    "v": -2,
+    "out": "-2.0s"
+   },
+   {
+    "v": -1.9,
+    "out": "-1.9s"
+   },
+   {
+    "v": -1.8,
+    "out": "-1.8s"
+   },
+   {
+    "v": -1.7,
+    "out": "-1.7s"
+   },
+   {
+    "v": -1.6,
+    "out": "-1.6s"
+   },
+   {
+    "v": -1.5,
+    "out": "-1.5s"
+   },
+   {
+    "v": -1.4,
+    "out": "-1.4s"
+   },
+   {
+    "v": -1.3,
+    "out": "-1.3s"
+   },
+   {
+    "v": -1.2,
+    "out": "-1.2s"
+   },
+   {
+    "v": -1.1,
+    "out": "-1.1s"
+   },
+   {
+    "v": -1,
+    "out": "-1.0s"
+   },
+   {
+    "v": -0.9,
+    "out": "-0.9s"
+   },
+   {
+    "v": -0.8,
+    "out": "-0.8s"
+   },
+   {
+    "v": -0.7,
+    "out": "-0.7s"
+   },
+   {
+    "v": -0.6,
+    "out": "-0.6s"
+   },
+   {
+    "v": -0.5,
+    "out": "-0.5s"
+   },
+   {
+    "v": -0.4,
+    "out": "-0.4s"
+   },
+   {
+    "v": -0.3,
+    "out": "-0.3s"
+   },
+   {
+    "v": -0.2,
+    "out": "-0.2s"
+   },
+   {
+    "v": -0.1,
+    "out": "-0.1s"
+   },
+   {
+    "v": 0,
+    "out": "in sync"
+   },
+   {
+    "v": 0.1,
+    "out": "+0.1s"
+   },
+   {
+    "v": 0.2,
+    "out": "+0.2s"
+   },
+   {
+    "v": 0.3,
+    "out": "+0.3s"
+   },
+   {
+    "v": 0.4,
+    "out": "+0.4s"
+   },
+   {
+    "v": 0.5,
+    "out": "+0.5s"
+   },
+   {
+    "v": 0.6,
+    "out": "+0.6s"
+   },
+   {
+    "v": 0.7,
+    "out": "+0.7s"
+   },
+   {
+    "v": 0.8,
+    "out": "+0.8s"
+   },
+   {
+    "v": 0.9,
+    "out": "+0.9s"
+   },
+   {
+    "v": 1,
+    "out": "+1.0s"
+   },
+   {
+    "v": 1.1,
+    "out": "+1.1s"
+   },
+   {
+    "v": 1.2,
+    "out": "+1.2s"
+   },
+   {
+    "v": 1.3,
+    "out": "+1.3s"
+   },
+   {
+    "v": 1.4,
+    "out": "+1.4s"
+   },
+   {
+    "v": 1.5,
+    "out": "+1.5s"
+   },
+   {
+    "v": 1.6,
+    "out": "+1.6s"
+   },
+   {
+    "v": 1.7,
+    "out": "+1.7s"
+   },
+   {
+    "v": 1.8,
+    "out": "+1.8s"
+   },
+   {
+    "v": 1.9,
+    "out": "+1.9s"
+   },
+   {
+    "v": 2,
+    "out": "+2.0s"
+   },
+   {
+    "v": 2.1,
+    "out": "+2.1s"
+   },
+   {
+    "v": 2.2,
+    "out": "+2.2s"
+   },
+   {
+    "v": 2.3,
+    "out": "+2.3s"
+   },
+   {
+    "v": 2.4,
+    "out": "+2.4s"
+   },
+   {
+    "v": 2.5,
+    "out": "+2.5s"
+   },
+   {
+    "v": 2.6,
+    "out": "+2.6s"
+   },
+   {
+    "v": 2.7,
+    "out": "+2.7s"
+   },
+   {
+    "v": 2.8,
+    "out": "+2.8s"
+   },
+   {
+    "v": 2.9,
+    "out": "+2.9s"
+   },
+   {
+    "v": 3,
+    "out": "+3.0s"
+   },
+   {
+    "v": 3.1,
+    "out": "+3.1s"
+   },
+   {
+    "v": 3.2,
+    "out": "+3.2s"
+   },
+   {
+    "v": 3.3,
+    "out": "+3.3s"
+   },
+   {
+    "v": 3.4,
+    "out": "+3.4s"
+   },
+   {
+    "v": 3.5,
+    "out": "+3.5s"
+   },
+   {
+    "v": 3.6,
+    "out": "+3.6s"
+   },
+   {
+    "v": 3.7,
+    "out": "+3.7s"
+   },
+   {
+    "v": 3.8,
+    "out": "+3.8s"
+   },
+   {
+    "v": 3.9,
+    "out": "+3.9s"
+   },
+   {
+    "v": 4,
+    "out": "+4.0s"
+   },
+   {
+    "v": 4.1,
+    "out": "+4.1s"
+   },
+   {
+    "v": 4.2,
+    "out": "+4.2s"
+   },
+   {
+    "v": 4.3,
+    "out": "+4.3s"
+   },
+   {
+    "v": 4.4,
+    "out": "+4.4s"
+   },
+   {
+    "v": 4.5,
+    "out": "+4.5s"
+   },
+   {
+    "v": 4.6,
+    "out": "+4.6s"
+   },
+   {
+    "v": 4.7,
+    "out": "+4.7s"
+   },
+   {
+    "v": 4.8,
+    "out": "+4.8s"
+   },
+   {
+    "v": 4.9,
+    "out": "+4.9s"
+   },
+   {
+    "v": 5,
+    "out": "+5.0s"
+   }
+  ],
+  "AutoSync": [
+   {
+    "v": 0,
+    "out": "off"
+   },
+   {
+    "v": 0.5,
+    "out": "after 0.5s"
+   },
+   {
+    "v": 1,
+    "out": "after 1s"
+   },
+   {
+    "v": -1,
+    "out": "after -1s"
+   },
+   {
+    "v": 0.005,
+    "out": "after 0.005s"
+   },
+   {
+    "v": 0.015,
+    "out": "after 0.015s"
+   },
+   {
+    "v": 1.005,
+    "out": "after 1.005s"
+   },
+   {
+    "v": 2.5,
+    "out": "after 2.5s"
+   },
+   {
+    "v": -2.5,
+    "out": "after -2.5s"
+   },
+   {
+    "v": 0.125,
+    "out": "after 0.125s"
+   },
+   {
+    "v": 0.375,
+    "out": "after 0.375s"
+   },
+   {
+    "v": 12.345,
+    "out": "after 12.345s"
+   },
+   {
+    "v": -0.0001,
+    "out": "after -0.0001s"
+   },
+   {
+    "v": 100,
+    "out": "after 100s"
+   },
+   {
+    "v": 72,
+    "out": "after 72s"
+   },
+   {
+    "v": 99.5,
+    "out": "after 99.5s"
+   },
+   {
+    "v": 1e+21,
+    "out": "after 1e+21s"
+   },
+   {
+    "v": 1e-7,
+    "out": "after 1e-7s"
+   },
+   {
+    "v": 1234567.891,
+    "out": "after 1234567.891s"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "after 0.049999999999999996s"
+   },
+   {
+    "v": 8.345,
+    "out": "after 8.345s"
+   },
+   {
+    "v": -0.05,
+    "out": "after -0.05s"
+   },
+   {
+    "v": -0.01,
+    "out": "after -0.01s"
+   },
+   {
+    "v": 0,
+    "out": "off"
+   },
+   {
+    "v": 1,
+    "out": "after 1s"
+   },
+   {
+    "v": 2,
+    "out": "after 2s"
+   },
+   {
+    "v": 3,
+    "out": "after 3s"
+   },
+   {
+    "v": 4,
+    "out": "after 4s"
+   },
+   {
+    "v": 5,
+    "out": "after 5s"
+   },
+   {
+    "v": 6,
+    "out": "after 6s"
+   },
+   {
+    "v": 7,
+    "out": "after 7s"
+   },
+   {
+    "v": 8,
+    "out": "after 8s"
+   },
+   {
+    "v": 9,
+    "out": "after 9s"
+   },
+   {
+    "v": 10,
+    "out": "after 10s"
+   }
+  ],
+  "FollowSpeed": [
+   {
+    "v": 0,
+    "out": "0 ms"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5 ms"
+   },
+   {
+    "v": 1,
+    "out": "1 ms"
+   },
+   {
+    "v": -1,
+    "out": "-1 ms"
+   },
+   {
+    "v": 0.005,
+    "out": "0.005 ms"
+   },
+   {
+    "v": 0.015,
+    "out": "0.015 ms"
+   },
+   {
+    "v": 1.005,
+    "out": "1.005 ms"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5 ms"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5 ms"
+   },
+   {
+    "v": 0.125,
+    "out": "0.125 ms"
+   },
+   {
+    "v": 0.375,
+    "out": "0.375 ms"
+   },
+   {
+    "v": 12.345,
+    "out": "12.345 ms"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0001 ms"
+   },
+   {
+    "v": 100,
+    "out": "100 ms"
+   },
+   {
+    "v": 72,
+    "out": "72 ms"
+   },
+   {
+    "v": 99.5,
+    "out": "99.5 ms"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21 ms"
+   },
+   {
+    "v": 1e-7,
+    "out": "1e-7 ms"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.891 ms"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.049999999999999996 ms"
+   },
+   {
+    "v": 8.345,
+    "out": "8.345 ms"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05 ms"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01 ms"
+   },
+   {
+    "v": 150,
+    "out": "150 ms"
+   },
+   {
+    "v": 160,
+    "out": "160 ms"
+   },
+   {
+    "v": 170,
+    "out": "170 ms"
+   },
+   {
+    "v": 180,
+    "out": "180 ms"
+   },
+   {
+    "v": 190,
+    "out": "190 ms"
+   },
+   {
+    "v": 200,
+    "out": "200 ms"
+   },
+   {
+    "v": 210,
+    "out": "210 ms"
+   },
+   {
+    "v": 220,
+    "out": "220 ms"
+   },
+   {
+    "v": 230,
+    "out": "230 ms"
+   },
+   {
+    "v": 240,
+    "out": "240 ms"
+   },
+   {
+    "v": 250,
+    "out": "250 ms"
+   },
+   {
+    "v": 260,
+    "out": "260 ms"
+   },
+   {
+    "v": 270,
+    "out": "270 ms"
+   },
+   {
+    "v": 280,
+    "out": "280 ms"
+   },
+   {
+    "v": 290,
+    "out": "290 ms"
+   },
+   {
+    "v": 300,
+    "out": "300 ms"
+   },
+   {
+    "v": 310,
+    "out": "310 ms"
+   },
+   {
+    "v": 320,
+    "out": "320 ms"
+   },
+   {
+    "v": 330,
+    "out": "330 ms"
+   },
+   {
+    "v": 340,
+    "out": "340 ms"
+   },
+   {
+    "v": 350,
+    "out": "350 ms"
+   },
+   {
+    "v": 360,
+    "out": "360 ms"
+   },
+   {
+    "v": 370,
+    "out": "370 ms"
+   },
+   {
+    "v": 380,
+    "out": "380 ms"
+   },
+   {
+    "v": 390,
+    "out": "390 ms"
+   },
+   {
+    "v": 400,
+    "out": "400 ms"
+   },
+   {
+    "v": 410,
+    "out": "410 ms"
+   },
+   {
+    "v": 420,
+    "out": "420 ms"
+   },
+   {
+    "v": 430,
+    "out": "430 ms"
+   },
+   {
+    "v": 440,
+    "out": "440 ms"
+   },
+   {
+    "v": 450,
+    "out": "450 ms"
+   },
+   {
+    "v": 460,
+    "out": "460 ms"
+   },
+   {
+    "v": 470,
+    "out": "470 ms"
+   },
+   {
+    "v": 480,
+    "out": "480 ms"
+   },
+   {
+    "v": 490,
+    "out": "490 ms"
+   },
+   {
+    "v": 500,
+    "out": "500 ms"
+   },
+   {
+    "v": 510,
+    "out": "510 ms"
+   },
+   {
+    "v": 520,
+    "out": "520 ms"
+   },
+   {
+    "v": 530,
+    "out": "530 ms"
+   },
+   {
+    "v": 540,
+    "out": "540 ms"
+   },
+   {
+    "v": 550,
+    "out": "550 ms"
+   },
+   {
+    "v": 560,
+    "out": "560 ms"
+   },
+   {
+    "v": 570,
+    "out": "570 ms"
+   },
+   {
+    "v": 580,
+    "out": "580 ms"
+   },
+   {
+    "v": 590,
+    "out": "590 ms"
+   },
+   {
+    "v": 600,
+    "out": "600 ms"
+   },
+   {
+    "v": 610,
+    "out": "610 ms"
+   },
+   {
+    "v": 620,
+    "out": "620 ms"
+   },
+   {
+    "v": 630,
+    "out": "630 ms"
+   },
+   {
+    "v": 640,
+    "out": "640 ms"
+   },
+   {
+    "v": 650,
+    "out": "650 ms"
+   },
+   {
+    "v": 660,
+    "out": "660 ms"
+   },
+   {
+    "v": 670,
+    "out": "670 ms"
+   },
+   {
+    "v": 680,
+    "out": "680 ms"
+   },
+   {
+    "v": 690,
+    "out": "690 ms"
+   },
+   {
+    "v": 700,
+    "out": "700 ms"
+   },
+   {
+    "v": 710,
+    "out": "710 ms"
+   },
+   {
+    "v": 720,
+    "out": "720 ms"
+   },
+   {
+    "v": 730,
+    "out": "730 ms"
+   },
+   {
+    "v": 740,
+    "out": "740 ms"
+   },
+   {
+    "v": 750,
+    "out": "750 ms"
+   },
+   {
+    "v": 760,
+    "out": "760 ms"
+   },
+   {
+    "v": 770,
+    "out": "770 ms"
+   },
+   {
+    "v": 780,
+    "out": "780 ms"
+   },
+   {
+    "v": 790,
+    "out": "790 ms"
+   },
+   {
+    "v": 800,
+    "out": "800 ms"
+   },
+   {
+    "v": 810,
+    "out": "810 ms"
+   },
+   {
+    "v": 820,
+    "out": "820 ms"
+   },
+   {
+    "v": 830,
+    "out": "830 ms"
+   },
+   {
+    "v": 840,
+    "out": "840 ms"
+   },
+   {
+    "v": 850,
+    "out": "850 ms"
+   },
+   {
+    "v": 860,
+    "out": "860 ms"
+   },
+   {
+    "v": 870,
+    "out": "870 ms"
+   },
+   {
+    "v": 880,
+    "out": "880 ms"
+   },
+   {
+    "v": 890,
+    "out": "890 ms"
+   },
+   {
+    "v": 900,
+    "out": "900 ms"
+   }
+  ],
+  "ScrollSpeed": [
+   {
+    "v": 0,
+    "out": "0×"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5×"
+   },
+   {
+    "v": 1,
+    "out": "1×"
+   },
+   {
+    "v": -1,
+    "out": "-1×"
+   },
+   {
+    "v": 0.005,
+    "out": "0.005×"
+   },
+   {
+    "v": 0.015,
+    "out": "0.015×"
+   },
+   {
+    "v": 1.005,
+    "out": "1.005×"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5×"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5×"
+   },
+   {
+    "v": 0.125,
+    "out": "0.125×"
+   },
+   {
+    "v": 0.375,
+    "out": "0.375×"
+   },
+   {
+    "v": 12.345,
+    "out": "12.345×"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0001×"
+   },
+   {
+    "v": 100,
+    "out": "100×"
+   },
+   {
+    "v": 72,
+    "out": "72×"
+   },
+   {
+    "v": 99.5,
+    "out": "99.5×"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21×"
+   },
+   {
+    "v": 1e-7,
+    "out": "1e-7×"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.891×"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.049999999999999996×"
+   },
+   {
+    "v": 8.345,
+    "out": "8.345×"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05×"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01×"
+   },
+   {
+    "v": 0.25,
+    "out": "0.25×"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5×"
+   },
+   {
+    "v": 0.75,
+    "out": "0.75×"
+   },
+   {
+    "v": 1,
+    "out": "1×"
+   },
+   {
+    "v": 1.25,
+    "out": "1.25×"
+   },
+   {
+    "v": 1.5,
+    "out": "1.5×"
+   },
+   {
+    "v": 1.75,
+    "out": "1.75×"
+   },
+   {
+    "v": 2,
+    "out": "2×"
+   },
+   {
+    "v": 2.25,
+    "out": "2.25×"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5×"
+   },
+   {
+    "v": 2.75,
+    "out": "2.75×"
+   },
+   {
+    "v": 3,
+    "out": "3×"
+   }
+  ],
+  "PanelHeight": [
+   {
+    "v": 0,
+    "out": "0px"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5px"
+   },
+   {
+    "v": 1,
+    "out": "1px"
+   },
+   {
+    "v": -1,
+    "out": "-1px"
+   },
+   {
+    "v": 0.005,
+    "out": "0.005px"
+   },
+   {
+    "v": 0.015,
+    "out": "0.015px"
+   },
+   {
+    "v": 1.005,
+    "out": "1.005px"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5px"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5px"
+   },
+   {
+    "v": 0.125,
+    "out": "0.125px"
+   },
+   {
+    "v": 0.375,
+    "out": "0.375px"
+   },
+   {
+    "v": 12.345,
+    "out": "12.345px"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0001px"
+   },
+   {
+    "v": 100,
+    "out": "100px"
+   },
+   {
+    "v": 72,
+    "out": "72px"
+   },
+   {
+    "v": 99.5,
+    "out": "99.5px"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21px"
+   },
+   {
+    "v": 1e-7,
+    "out": "1e-7px"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.891px"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.049999999999999996px"
+   },
+   {
+    "v": 8.345,
+    "out": "8.345px"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05px"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01px"
+   },
+   {
+    "v": 160,
+    "out": "160px"
+   },
+   {
+    "v": 170,
+    "out": "170px"
+   },
+   {
+    "v": 180,
+    "out": "180px"
+   },
+   {
+    "v": 190,
+    "out": "190px"
+   },
+   {
+    "v": 200,
+    "out": "200px"
+   },
+   {
+    "v": 210,
+    "out": "210px"
+   },
+   {
+    "v": 220,
+    "out": "220px"
+   },
+   {
+    "v": 230,
+    "out": "230px"
+   },
+   {
+    "v": 240,
+    "out": "240px"
+   },
+   {
+    "v": 250,
+    "out": "250px"
+   },
+   {
+    "v": 260,
+    "out": "260px"
+   },
+   {
+    "v": 270,
+    "out": "270px"
+   },
+   {
+    "v": 280,
+    "out": "280px"
+   },
+   {
+    "v": 290,
+    "out": "290px"
+   },
+   {
+    "v": 300,
+    "out": "300px"
+   },
+   {
+    "v": 310,
+    "out": "310px"
+   },
+   {
+    "v": 320,
+    "out": "320px"
+   },
+   {
+    "v": 330,
+    "out": "330px"
+   },
+   {
+    "v": 340,
+    "out": "340px"
+   },
+   {
+    "v": 350,
+    "out": "350px"
+   },
+   {
+    "v": 360,
+    "out": "360px"
+   },
+   {
+    "v": 370,
+    "out": "370px"
+   },
+   {
+    "v": 380,
+    "out": "380px"
+   },
+   {
+    "v": 390,
+    "out": "390px"
+   },
+   {
+    "v": 400,
+    "out": "400px"
+   },
+   {
+    "v": 410,
+    "out": "410px"
+   },
+   {
+    "v": 420,
+    "out": "420px"
+   },
+   {
+    "v": 430,
+    "out": "430px"
+   },
+   {
+    "v": 440,
+    "out": "440px"
+   },
+   {
+    "v": 450,
+    "out": "450px"
+   },
+   {
+    "v": 460,
+    "out": "460px"
+   },
+   {
+    "v": 470,
+    "out": "470px"
+   },
+   {
+    "v": 480,
+    "out": "480px"
+   },
+   {
+    "v": 490,
+    "out": "490px"
+   },
+   {
+    "v": 500,
+    "out": "500px"
+   },
+   {
+    "v": 510,
+    "out": "510px"
+   },
+   {
+    "v": 520,
+    "out": "520px"
+   },
+   {
+    "v": 13,
+    "out": "13px"
+   },
+   {
+    "v": 14,
+    "out": "14px"
+   },
+   {
+    "v": 15,
+    "out": "15px"
+   },
+   {
+    "v": 16,
+    "out": "16px"
+   },
+   {
+    "v": 17,
+    "out": "17px"
+   },
+   {
+    "v": 18,
+    "out": "18px"
+   },
+   {
+    "v": 19,
+    "out": "19px"
+   },
+   {
+    "v": 20,
+    "out": "20px"
+   },
+   {
+    "v": 21,
+    "out": "21px"
+   },
+   {
+    "v": 22,
+    "out": "22px"
+   },
+   {
+    "v": 23,
+    "out": "23px"
+   },
+   {
+    "v": 24,
+    "out": "24px"
+   },
+   {
+    "v": 25,
+    "out": "25px"
+   },
+   {
+    "v": 26,
+    "out": "26px"
+   },
+   {
+    "v": 27,
+    "out": "27px"
+   },
+   {
+    "v": 28,
+    "out": "28px"
+   },
+   {
+    "v": 2,
+    "out": "2px"
+   },
+   {
+    "v": 3,
+    "out": "3px"
+   },
+   {
+    "v": 4,
+    "out": "4px"
+   },
+   {
+    "v": 5,
+    "out": "5px"
+   },
+   {
+    "v": 6,
+    "out": "6px"
+   },
+   {
+    "v": 7,
+    "out": "7px"
+   },
+   {
+    "v": 8,
+    "out": "8px"
+   },
+   {
+    "v": 9,
+    "out": "9px"
+   },
+   {
+    "v": 10,
+    "out": "10px"
+   },
+   {
+    "v": 11,
+    "out": "11px"
+   },
+   {
+    "v": 12,
+    "out": "12px"
+   },
+   {
+    "v": 13,
+    "out": "13px"
+   },
+   {
+    "v": 14,
+    "out": "14px"
+   },
+   {
+    "v": 15,
+    "out": "15px"
+   },
+   {
+    "v": 16,
+    "out": "16px"
+   },
+   {
+    "v": 17,
+    "out": "17px"
+   },
+   {
+    "v": 18,
+    "out": "18px"
+   },
+   {
+    "v": 19,
+    "out": "19px"
+   },
+   {
+    "v": 20,
+    "out": "20px"
+   },
+   {
+    "v": 21,
+    "out": "21px"
+   },
+   {
+    "v": 22,
+    "out": "22px"
+   },
+   {
+    "v": 23,
+    "out": "23px"
+   },
+   {
+    "v": 24,
+    "out": "24px"
+   },
+   {
+    "v": 25,
+    "out": "25px"
+   },
+   {
+    "v": 26,
+    "out": "26px"
+   },
+   {
+    "v": 27,
+    "out": "27px"
+   },
+   {
+    "v": 28,
+    "out": "28px"
+   },
+   {
+    "v": 0,
+    "out": "0px"
+   },
+   {
+    "v": 1,
+    "out": "1px"
+   },
+   {
+    "v": 2,
+    "out": "2px"
+   },
+   {
+    "v": 3,
+    "out": "3px"
+   },
+   {
+    "v": 4,
+    "out": "4px"
+   },
+   {
+    "v": 5,
+    "out": "5px"
+   },
+   {
+    "v": 6,
+    "out": "6px"
+   },
+   {
+    "v": 7,
+    "out": "7px"
+   },
+   {
+    "v": 8,
+    "out": "8px"
+   },
+   {
+    "v": 9,
+    "out": "9px"
+   },
+   {
+    "v": 10,
+    "out": "10px"
+   },
+   {
+    "v": 11,
+    "out": "11px"
+   },
+   {
+    "v": 12,
+    "out": "12px"
+   },
+   {
+    "v": 13,
+    "out": "13px"
+   },
+   {
+    "v": 14,
+    "out": "14px"
+   },
+   {
+    "v": 15,
+    "out": "15px"
+   },
+   {
+    "v": 16,
+    "out": "16px"
+   },
+   {
+    "v": 17,
+    "out": "17px"
+   },
+   {
+    "v": 18,
+    "out": "18px"
+   },
+   {
+    "v": 19,
+    "out": "19px"
+   },
+   {
+    "v": 20,
+    "out": "20px"
+   },
+   {
+    "v": 21,
+    "out": "21px"
+   },
+   {
+    "v": 22,
+    "out": "22px"
+   },
+   {
+    "v": 23,
+    "out": "23px"
+   },
+   {
+    "v": 24,
+    "out": "24px"
+   },
+   {
+    "v": 0,
+    "out": "0px"
+   },
+   {
+    "v": 5,
+    "out": "5px"
+   },
+   {
+    "v": 10,
+    "out": "10px"
+   },
+   {
+    "v": 15,
+    "out": "15px"
+   },
+   {
+    "v": 20,
+    "out": "20px"
+   },
+   {
+    "v": 25,
+    "out": "25px"
+   },
+   {
+    "v": 30,
+    "out": "30px"
+   },
+   {
+    "v": 35,
+    "out": "35px"
+   },
+   {
+    "v": 40,
+    "out": "40px"
+   },
+   {
+    "v": 45,
+    "out": "45px"
+   },
+   {
+    "v": 50,
+    "out": "50px"
+   },
+   {
+    "v": 55,
+    "out": "55px"
+   },
+   {
+    "v": 60,
+    "out": "60px"
+   },
+   {
+    "v": 65,
+    "out": "65px"
+   },
+   {
+    "v": 70,
+    "out": "70px"
+   },
+   {
+    "v": 75,
+    "out": "75px"
+   },
+   {
+    "v": 80,
+    "out": "80px"
+   },
+   {
+    "v": 85,
+    "out": "85px"
+   },
+   {
+    "v": 90,
+    "out": "90px"
+   },
+   {
+    "v": 95,
+    "out": "95px"
+   },
+   {
+    "v": 100,
+    "out": "100px"
+   },
+   {
+    "v": 300,
+    "out": "300px"
+   },
+   {
+    "v": 310,
+    "out": "310px"
+   },
+   {
+    "v": 320,
+    "out": "320px"
+   },
+   {
+    "v": 330,
+    "out": "330px"
+   },
+   {
+    "v": 340,
+    "out": "340px"
+   },
+   {
+    "v": 350,
+    "out": "350px"
+   },
+   {
+    "v": 360,
+    "out": "360px"
+   },
+   {
+    "v": 370,
+    "out": "370px"
+   },
+   {
+    "v": 380,
+    "out": "380px"
+   },
+   {
+    "v": 390,
+    "out": "390px"
+   },
+   {
+    "v": 400,
+    "out": "400px"
+   },
+   {
+    "v": 410,
+    "out": "410px"
+   },
+   {
+    "v": 420,
+    "out": "420px"
+   },
+   {
+    "v": 430,
+    "out": "430px"
+   },
+   {
+    "v": 440,
+    "out": "440px"
+   },
+   {
+    "v": 450,
+    "out": "450px"
+   },
+   {
+    "v": 460,
+    "out": "460px"
+   },
+   {
+    "v": 470,
+    "out": "470px"
+   },
+   {
+    "v": 480,
+    "out": "480px"
+   },
+   {
+    "v": 11,
+    "out": "11px"
+   },
+   {
+    "v": 12,
+    "out": "12px"
+   },
+   {
+    "v": 13,
+    "out": "13px"
+   },
+   {
+    "v": 14,
+    "out": "14px"
+   },
+   {
+    "v": 15,
+    "out": "15px"
+   },
+   {
+    "v": 16,
+    "out": "16px"
+   },
+   {
+    "v": 17,
+    "out": "17px"
+   },
+   {
+    "v": 18,
+    "out": "18px"
+   },
+   {
+    "v": 19,
+    "out": "19px"
+   },
+   {
+    "v": 20,
+    "out": "20px"
+   },
+   {
+    "v": 21,
+    "out": "21px"
+   },
+   {
+    "v": 22,
+    "out": "22px"
+   },
+   {
+    "v": 23,
+    "out": "23px"
+   },
+   {
+    "v": 24,
+    "out": "24px"
+   }
+  ],
+  "LineHeight": [
+   {
+    "v": 0,
+    "out": "0.00"
+   },
+   {
+    "v": 0.5,
+    "out": "0.50"
+   },
+   {
+    "v": 1,
+    "out": "1.00"
+   },
+   {
+    "v": -1,
+    "out": "-1.00"
+   },
+   {
+    "v": 0.005,
+    "out": "0.01"
+   },
+   {
+    "v": 0.015,
+    "out": "0.01"
+   },
+   {
+    "v": 1.005,
+    "out": "1.00"
+   },
+   {
+    "v": 2.5,
+    "out": "2.50"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.50"
+   },
+   {
+    "v": 0.125,
+    "out": "0.13"
+   },
+   {
+    "v": 0.375,
+    "out": "0.38"
+   },
+   {
+    "v": 12.345,
+    "out": "12.35"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.00"
+   },
+   {
+    "v": 100,
+    "out": "100.00"
+   },
+   {
+    "v": 72,
+    "out": "72.00"
+   },
+   {
+    "v": 99.5,
+    "out": "99.50"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21"
+   },
+   {
+    "v": 1e-7,
+    "out": "0.00"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.89"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.05"
+   },
+   {
+    "v": 8.345,
+    "out": "8.35"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01"
+   },
+   {
+    "v": 1,
+    "out": "1.00"
+   },
+   {
+    "v": 1.02,
+    "out": "1.02"
+   },
+   {
+    "v": 1.04,
+    "out": "1.04"
+   },
+   {
+    "v": 1.06,
+    "out": "1.06"
+   },
+   {
+    "v": 1.08,
+    "out": "1.08"
+   },
+   {
+    "v": 1.1,
+    "out": "1.10"
+   },
+   {
+    "v": 1.12,
+    "out": "1.12"
+   },
+   {
+    "v": 1.14,
+    "out": "1.14"
+   },
+   {
+    "v": 1.16,
+    "out": "1.16"
+   },
+   {
+    "v": 1.18,
+    "out": "1.18"
+   },
+   {
+    "v": 1.2,
+    "out": "1.20"
+   },
+   {
+    "v": 1.22,
+    "out": "1.22"
+   },
+   {
+    "v": 1.24,
+    "out": "1.24"
+   },
+   {
+    "v": 1.26,
+    "out": "1.26"
+   },
+   {
+    "v": 1.28,
+    "out": "1.28"
+   },
+   {
+    "v": 1.3,
+    "out": "1.30"
+   },
+   {
+    "v": 1.32,
+    "out": "1.32"
+   },
+   {
+    "v": 1.34,
+    "out": "1.34"
+   },
+   {
+    "v": 1.36,
+    "out": "1.36"
+   },
+   {
+    "v": 1.38,
+    "out": "1.38"
+   },
+   {
+    "v": 1.4,
+    "out": "1.40"
+   },
+   {
+    "v": 1.42,
+    "out": "1.42"
+   },
+   {
+    "v": 1.44,
+    "out": "1.44"
+   },
+   {
+    "v": 1.46,
+    "out": "1.46"
+   },
+   {
+    "v": 1.48,
+    "out": "1.48"
+   },
+   {
+    "v": 1.5,
+    "out": "1.50"
+   },
+   {
+    "v": 1.52,
+    "out": "1.52"
+   },
+   {
+    "v": 1.54,
+    "out": "1.54"
+   },
+   {
+    "v": 1.56,
+    "out": "1.56"
+   },
+   {
+    "v": 1.58,
+    "out": "1.58"
+   },
+   {
+    "v": 1.6,
+    "out": "1.60"
+   },
+   {
+    "v": 1.62,
+    "out": "1.62"
+   },
+   {
+    "v": 1.64,
+    "out": "1.64"
+   },
+   {
+    "v": 1.66,
+    "out": "1.66"
+   },
+   {
+    "v": 1.68,
+    "out": "1.68"
+   },
+   {
+    "v": 1.7,
+    "out": "1.70"
+   },
+   {
+    "v": 1.72,
+    "out": "1.72"
+   },
+   {
+    "v": 1.74,
+    "out": "1.74"
+   },
+   {
+    "v": 1.76,
+    "out": "1.76"
+   },
+   {
+    "v": 1.78,
+    "out": "1.78"
+   },
+   {
+    "v": 1.8,
+    "out": "1.80"
+   }
+  ],
+  "LetterSpacing": [
+   {
+    "v": 0,
+    "out": "normal"
+   },
+   {
+    "v": 0.5,
+    "out": "+0.50em"
+   },
+   {
+    "v": 1,
+    "out": "+1.00em"
+   },
+   {
+    "v": -1,
+    "out": "-1.00em"
+   },
+   {
+    "v": 0.005,
+    "out": "+0.01em"
+   },
+   {
+    "v": 0.015,
+    "out": "+0.01em"
+   },
+   {
+    "v": 1.005,
+    "out": "+1.00em"
+   },
+   {
+    "v": 2.5,
+    "out": "+2.50em"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.50em"
+   },
+   {
+    "v": 0.125,
+    "out": "+0.13em"
+   },
+   {
+    "v": 0.375,
+    "out": "+0.38em"
+   },
+   {
+    "v": 12.345,
+    "out": "+12.35em"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.00em"
+   },
+   {
+    "v": 100,
+    "out": "+100.00em"
+   },
+   {
+    "v": 72,
+    "out": "+72.00em"
+   },
+   {
+    "v": 99.5,
+    "out": "+99.50em"
+   },
+   {
+    "v": 1e+21,
+    "out": "+1e+21em"
+   },
+   {
+    "v": 1e-7,
+    "out": "+0.00em"
+   },
+   {
+    "v": 1234567.891,
+    "out": "+1234567.89em"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "+0.05em"
+   },
+   {
+    "v": 8.345,
+    "out": "+8.35em"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05em"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01em"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05em"
+   },
+   {
+    "v": -0.04,
+    "out": "-0.04em"
+   },
+   {
+    "v": -0.03,
+    "out": "-0.03em"
+   },
+   {
+    "v": -0.02,
+    "out": "-0.02em"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01em"
+   },
+   {
+    "v": 0,
+    "out": "normal"
+   },
+   {
+    "v": 0.01,
+    "out": "+0.01em"
+   },
+   {
+    "v": 0.02,
+    "out": "+0.02em"
+   },
+   {
+    "v": 0.03,
+    "out": "+0.03em"
+   },
+   {
+    "v": 0.04,
+    "out": "+0.04em"
+   },
+   {
+    "v": 0.05,
+    "out": "+0.05em"
+   },
+   {
+    "v": 0.06,
+    "out": "+0.06em"
+   },
+   {
+    "v": 0.07,
+    "out": "+0.07em"
+   },
+   {
+    "v": 0.08,
+    "out": "+0.08em"
+   },
+   {
+    "v": 0.09,
+    "out": "+0.09em"
+   },
+   {
+    "v": 0.1,
+    "out": "+0.10em"
+   },
+   {
+    "v": 0.11,
+    "out": "+0.11em"
+   },
+   {
+    "v": 0.12,
+    "out": "+0.12em"
+   },
+   {
+    "v": 0.13,
+    "out": "+0.13em"
+   },
+   {
+    "v": 0.14,
+    "out": "+0.14em"
+   },
+   {
+    "v": 0.15,
+    "out": "+0.15em"
+   },
+   {
+    "v": 0.16,
+    "out": "+0.16em"
+   },
+   {
+    "v": 0.17,
+    "out": "+0.17em"
+   },
+   {
+    "v": 0.18,
+    "out": "+0.18em"
+   },
+   {
+    "v": 0.19,
+    "out": "+0.19em"
+   },
+   {
+    "v": 0.2,
+    "out": "+0.20em"
+   }
+  ],
+  "RainbowSpeed": [
+   {
+    "v": 0,
+    "out": "0s"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5s"
+   },
+   {
+    "v": 1,
+    "out": "1s"
+   },
+   {
+    "v": -1,
+    "out": "-1s"
+   },
+   {
+    "v": 0.005,
+    "out": "0.005s"
+   },
+   {
+    "v": 0.015,
+    "out": "0.015s"
+   },
+   {
+    "v": 1.005,
+    "out": "1.005s"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5s"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5s"
+   },
+   {
+    "v": 0.125,
+    "out": "0.125s"
+   },
+   {
+    "v": 0.375,
+    "out": "0.375s"
+   },
+   {
+    "v": 12.345,
+    "out": "12.345s"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0001s"
+   },
+   {
+    "v": 100,
+    "out": "100s"
+   },
+   {
+    "v": 72,
+    "out": "72s"
+   },
+   {
+    "v": 99.5,
+    "out": "99.5s"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21s"
+   },
+   {
+    "v": 1e-7,
+    "out": "1e-7s"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.891s"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.049999999999999996s"
+   },
+   {
+    "v": 8.345,
+    "out": "8.345s"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05s"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01s"
+   },
+   {
+    "v": 1,
+    "out": "1s"
+   },
+   {
+    "v": 2,
+    "out": "2s"
+   },
+   {
+    "v": 3,
+    "out": "3s"
+   },
+   {
+    "v": 4,
+    "out": "4s"
+   },
+   {
+    "v": 5,
+    "out": "5s"
+   },
+   {
+    "v": 6,
+    "out": "6s"
+   },
+   {
+    "v": 7,
+    "out": "7s"
+   },
+   {
+    "v": 8,
+    "out": "8s"
+   },
+   {
+    "v": 9,
+    "out": "9s"
+   },
+   {
+    "v": 10,
+    "out": "10s"
+   },
+   {
+    "v": 11,
+    "out": "11s"
+   },
+   {
+    "v": 12,
+    "out": "12s"
+   },
+   {
+    "v": 13,
+    "out": "13s"
+   },
+   {
+    "v": 14,
+    "out": "14s"
+   },
+   {
+    "v": 15,
+    "out": "15s"
+   },
+   {
+    "v": 16,
+    "out": "16s"
+   },
+   {
+    "v": 17,
+    "out": "17s"
+   },
+   {
+    "v": 18,
+    "out": "18s"
+   },
+   {
+    "v": 19,
+    "out": "19s"
+   },
+   {
+    "v": 20,
+    "out": "20s"
+   },
+   {
+    "v": 1,
+    "out": "1s"
+   },
+   {
+    "v": 2,
+    "out": "2s"
+   },
+   {
+    "v": 3,
+    "out": "3s"
+   },
+   {
+    "v": 4,
+    "out": "4s"
+   },
+   {
+    "v": 5,
+    "out": "5s"
+   },
+   {
+    "v": 6,
+    "out": "6s"
+   },
+   {
+    "v": 7,
+    "out": "7s"
+   },
+   {
+    "v": 8,
+    "out": "8s"
+   },
+   {
+    "v": 9,
+    "out": "9s"
+   },
+   {
+    "v": 10,
+    "out": "10s"
+   },
+   {
+    "v": 11,
+    "out": "11s"
+   },
+   {
+    "v": 12,
+    "out": "12s"
+   },
+   {
+    "v": 13,
+    "out": "13s"
+   },
+   {
+    "v": 14,
+    "out": "14s"
+   },
+   {
+    "v": 15,
+    "out": "15s"
+   },
+   {
+    "v": 16,
+    "out": "16s"
+   },
+   {
+    "v": 17,
+    "out": "17s"
+   },
+   {
+    "v": 18,
+    "out": "18s"
+   },
+   {
+    "v": 19,
+    "out": "19s"
+   },
+   {
+    "v": 20,
+    "out": "20s"
+   }
+  ],
+  "Times": [
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 0.5,
+    "out": "50%"
+   },
+   {
+    "v": 1,
+    "out": "100%"
+   },
+   {
+    "v": -1,
+    "out": "-100%"
+   },
+   {
+    "v": 0.005,
+    "out": "1%"
+   },
+   {
+    "v": 0.015,
+    "out": "2%"
+   },
+   {
+    "v": 1.005,
+    "out": "100%"
+   },
+   {
+    "v": 2.5,
+    "out": "250%"
+   },
+   {
+    "v": -2.5,
+    "out": "-250%"
+   },
+   {
+    "v": 0.125,
+    "out": "13%"
+   },
+   {
+    "v": 0.375,
+    "out": "38%"
+   },
+   {
+    "v": 12.345,
+    "out": "1235%"
+   },
+   {
+    "v": -0.0001,
+    "out": "0%"
+   },
+   {
+    "v": 100,
+    "out": "10000%"
+   },
+   {
+    "v": 72,
+    "out": "7200%"
+   },
+   {
+    "v": 99.5,
+    "out": "9950%"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+23%"
+   },
+   {
+    "v": 1e-7,
+    "out": "0%"
+   },
+   {
+    "v": 1234567.891,
+    "out": "123456789%"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "5%"
+   },
+   {
+    "v": 8.345,
+    "out": "835%"
+   },
+   {
+    "v": -0.05,
+    "out": "-5%"
+   },
+   {
+    "v": -0.01,
+    "out": "-1%"
+   },
+   {
+    "v": 0.5,
+    "out": "50%"
+   },
+   {
+    "v": 0.55,
+    "out": "55%"
+   },
+   {
+    "v": 0.6,
+    "out": "60%"
+   },
+   {
+    "v": 0.65,
+    "out": "65%"
+   },
+   {
+    "v": 0.7,
+    "out": "70%"
+   },
+   {
+    "v": 0.75,
+    "out": "75%"
+   },
+   {
+    "v": 0.8,
+    "out": "80%"
+   },
+   {
+    "v": 0.85,
+    "out": "85%"
+   },
+   {
+    "v": 0.9,
+    "out": "90%"
+   },
+   {
+    "v": 0.95,
+    "out": "95%"
+   },
+   {
+    "v": 1,
+    "out": "100%"
+   },
+   {
+    "v": 1.05,
+    "out": "105%"
+   },
+   {
+    "v": 1.1,
+    "out": "110%"
+   },
+   {
+    "v": 1.15,
+    "out": "115%"
+   },
+   {
+    "v": 1.2,
+    "out": "120%"
+   },
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 0.1,
+    "out": "10%"
+   },
+   {
+    "v": 0.2,
+    "out": "20%"
+   },
+   {
+    "v": 0.3,
+    "out": "30%"
+   },
+   {
+    "v": 0.4,
+    "out": "40%"
+   },
+   {
+    "v": 0.5,
+    "out": "50%"
+   },
+   {
+    "v": 0.6,
+    "out": "60%"
+   },
+   {
+    "v": 0.7,
+    "out": "70%"
+   },
+   {
+    "v": 0.8,
+    "out": "80%"
+   },
+   {
+    "v": 0.9,
+    "out": "90%"
+   },
+   {
+    "v": 1,
+    "out": "100%"
+   },
+   {
+    "v": 1.1,
+    "out": "110%"
+   },
+   {
+    "v": 1.2,
+    "out": "120%"
+   },
+   {
+    "v": 1.3,
+    "out": "130%"
+   },
+   {
+    "v": 1.4,
+    "out": "140%"
+   },
+   {
+    "v": 1.5,
+    "out": "150%"
+   },
+   {
+    "v": 1.6,
+    "out": "160%"
+   },
+   {
+    "v": 1.7,
+    "out": "170%"
+   },
+   {
+    "v": 1.8,
+    "out": "180%"
+   },
+   {
+    "v": 1.9,
+    "out": "190%"
+   },
+   {
+    "v": 2,
+    "out": "200%"
+   },
+   {
+    "v": 2.1,
+    "out": "210%"
+   },
+   {
+    "v": 2.2,
+    "out": "220%"
+   },
+   {
+    "v": 2.3,
+    "out": "230%"
+   },
+   {
+    "v": 2.4,
+    "out": "240%"
+   },
+   {
+    "v": 2.5,
+    "out": "250%"
+   },
+   {
+    "v": 2.6,
+    "out": "260%"
+   },
+   {
+    "v": 2.7,
+    "out": "270%"
+   },
+   {
+    "v": 2.8,
+    "out": "280%"
+   },
+   {
+    "v": 2.9,
+    "out": "290%"
+   },
+   {
+    "v": 3,
+    "out": "300%"
+   },
+   {
+    "v": 0.2,
+    "out": "20%"
+   },
+   {
+    "v": 0.25,
+    "out": "25%"
+   },
+   {
+    "v": 0.3,
+    "out": "30%"
+   },
+   {
+    "v": 0.35,
+    "out": "35%"
+   },
+   {
+    "v": 0.4,
+    "out": "40%"
+   },
+   {
+    "v": 0.45,
+    "out": "45%"
+   },
+   {
+    "v": 0.5,
+    "out": "50%"
+   },
+   {
+    "v": 0.55,
+    "out": "55%"
+   },
+   {
+    "v": 0.6,
+    "out": "60%"
+   },
+   {
+    "v": 0.65,
+    "out": "65%"
+   },
+   {
+    "v": 0.7,
+    "out": "70%"
+   },
+   {
+    "v": 0.75,
+    "out": "75%"
+   },
+   {
+    "v": 0.8,
+    "out": "80%"
+   },
+   {
+    "v": 0.85,
+    "out": "85%"
+   },
+   {
+    "v": 0.9,
+    "out": "90%"
+   },
+   {
+    "v": 0.95,
+    "out": "95%"
+   },
+   {
+    "v": 1,
+    "out": "100%"
+   },
+   {
+    "v": 1.05,
+    "out": "105%"
+   },
+   {
+    "v": 1.1,
+    "out": "110%"
+   },
+   {
+    "v": 1.15,
+    "out": "115%"
+   },
+   {
+    "v": 1.2,
+    "out": "120%"
+   },
+   {
+    "v": 1.25,
+    "out": "125%"
+   },
+   {
+    "v": 1.3,
+    "out": "130%"
+   },
+   {
+    "v": 1.35,
+    "out": "135%"
+   },
+   {
+    "v": 1.4,
+    "out": "140%"
+   },
+   {
+    "v": 1.45,
+    "out": "145%"
+   },
+   {
+    "v": 1.5,
+    "out": "150%"
+   },
+   {
+    "v": 1.55,
+    "out": "155%"
+   },
+   {
+    "v": 1.6,
+    "out": "160%"
+   },
+   {
+    "v": 1.65,
+    "out": "165%"
+   },
+   {
+    "v": 1.7,
+    "out": "170%"
+   },
+   {
+    "v": 1.75,
+    "out": "175%"
+   },
+   {
+    "v": 1.8,
+    "out": "180%"
+   },
+   {
+    "v": 1.85,
+    "out": "185%"
+   },
+   {
+    "v": 1.9,
+    "out": "190%"
+   },
+   {
+    "v": 0.2,
+    "out": "20%"
+   },
+   {
+    "v": 0.25,
+    "out": "25%"
+   },
+   {
+    "v": 0.3,
+    "out": "30%"
+   },
+   {
+    "v": 0.35,
+    "out": "35%"
+   },
+   {
+    "v": 0.4,
+    "out": "40%"
+   },
+   {
+    "v": 0.45,
+    "out": "45%"
+   },
+   {
+    "v": 0.5,
+    "out": "50%"
+   },
+   {
+    "v": 0.55,
+    "out": "55%"
+   },
+   {
+    "v": 0.6,
+    "out": "60%"
+   },
+   {
+    "v": 0.65,
+    "out": "65%"
+   },
+   {
+    "v": 0.7,
+    "out": "70%"
+   },
+   {
+    "v": 0.75,
+    "out": "75%"
+   },
+   {
+    "v": 0.8,
+    "out": "80%"
+   },
+   {
+    "v": 0.85,
+    "out": "85%"
+   },
+   {
+    "v": 0.9,
+    "out": "90%"
+   },
+   {
+    "v": 0.95,
+    "out": "95%"
+   },
+   {
+    "v": 1,
+    "out": "100%"
+   },
+   {
+    "v": 1.05,
+    "out": "105%"
+   },
+   {
+    "v": 1.1,
+    "out": "110%"
+   },
+   {
+    "v": 1.15,
+    "out": "115%"
+   },
+   {
+    "v": 1.2,
+    "out": "120%"
+   },
+   {
+    "v": 1.25,
+    "out": "125%"
+   },
+   {
+    "v": 1.3,
+    "out": "130%"
+   },
+   {
+    "v": 1.35,
+    "out": "135%"
+   },
+   {
+    "v": 1.4,
+    "out": "140%"
+   },
+   {
+    "v": 1.45,
+    "out": "145%"
+   },
+   {
+    "v": 1.5,
+    "out": "150%"
+   },
+   {
+    "v": 1.55,
+    "out": "155%"
+   },
+   {
+    "v": 1.6,
+    "out": "160%"
+   },
+   {
+    "v": 1.65,
+    "out": "165%"
+   },
+   {
+    "v": 1.7,
+    "out": "170%"
+   },
+   {
+    "v": 1.75,
+    "out": "175%"
+   },
+   {
+    "v": 1.8,
+    "out": "180%"
+   },
+   {
+    "v": 1.85,
+    "out": "185%"
+   },
+   {
+    "v": 1.9,
+    "out": "190%"
+   },
+   {
+    "v": 1.95,
+    "out": "195%"
+   },
+   {
+    "v": 2,
+    "out": "200%"
+   },
+   {
+    "v": 0.8,
+    "out": "80%"
+   },
+   {
+    "v": 0.85,
+    "out": "85%"
+   },
+   {
+    "v": 0.9,
+    "out": "90%"
+   },
+   {
+    "v": 0.95,
+    "out": "95%"
+   },
+   {
+    "v": 1,
+    "out": "100%"
+   },
+   {
+    "v": 1.05,
+    "out": "105%"
+   },
+   {
+    "v": 1.1,
+    "out": "110%"
+   },
+   {
+    "v": 1.15,
+    "out": "115%"
+   },
+   {
+    "v": 1.2,
+    "out": "120%"
+   },
+   {
+    "v": 1.25,
+    "out": "125%"
+   },
+   {
+    "v": 1.3,
+    "out": "130%"
+   },
+   {
+    "v": 1.35,
+    "out": "135%"
+   },
+   {
+    "v": 1.4,
+    "out": "140%"
+   },
+   {
+    "v": 1.45,
+    "out": "145%"
+   },
+   {
+    "v": 1.5,
+    "out": "150%"
+   },
+   {
+    "v": 1.55,
+    "out": "155%"
+   },
+   {
+    "v": 1.6,
+    "out": "160%"
+   }
+  ],
+  "Pct": [
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 0.5,
+    "out": "1%"
+   },
+   {
+    "v": 1,
+    "out": "1%"
+   },
+   {
+    "v": -1,
+    "out": "-1%"
+   },
+   {
+    "v": 0.005,
+    "out": "0%"
+   },
+   {
+    "v": 0.015,
+    "out": "0%"
+   },
+   {
+    "v": 1.005,
+    "out": "1%"
+   },
+   {
+    "v": 2.5,
+    "out": "3%"
+   },
+   {
+    "v": -2.5,
+    "out": "-2%"
+   },
+   {
+    "v": 0.125,
+    "out": "0%"
+   },
+   {
+    "v": 0.375,
+    "out": "0%"
+   },
+   {
+    "v": 12.345,
+    "out": "12%"
+   },
+   {
+    "v": -0.0001,
+    "out": "0%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   },
+   {
+    "v": 72,
+    "out": "72%"
+   },
+   {
+    "v": 99.5,
+    "out": "100%"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21%"
+   },
+   {
+    "v": 1e-7,
+    "out": "0%"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234568%"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0%"
+   },
+   {
+    "v": 8.345,
+    "out": "8%"
+   },
+   {
+    "v": -0.05,
+    "out": "0%"
+   },
+   {
+    "v": -0.01,
+    "out": "0%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 65,
+    "out": "65%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 75,
+    "out": "75%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 85,
+    "out": "85%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 95,
+    "out": "95%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   },
+   {
+    "v": 105,
+    "out": "105%"
+   },
+   {
+    "v": 110,
+    "out": "110%"
+   },
+   {
+    "v": 115,
+    "out": "115%"
+   },
+   {
+    "v": 120,
+    "out": "120%"
+   },
+   {
+    "v": 125,
+    "out": "125%"
+   },
+   {
+    "v": 130,
+    "out": "130%"
+   },
+   {
+    "v": 135,
+    "out": "135%"
+   },
+   {
+    "v": 140,
+    "out": "140%"
+   },
+   {
+    "v": 145,
+    "out": "145%"
+   },
+   {
+    "v": 150,
+    "out": "150%"
+   },
+   {
+    "v": 155,
+    "out": "155%"
+   },
+   {
+    "v": 160,
+    "out": "160%"
+   },
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 1,
+    "out": "1%"
+   },
+   {
+    "v": 2,
+    "out": "2%"
+   },
+   {
+    "v": 3,
+    "out": "3%"
+   },
+   {
+    "v": 4,
+    "out": "4%"
+   },
+   {
+    "v": 5,
+    "out": "5%"
+   },
+   {
+    "v": 6,
+    "out": "6%"
+   },
+   {
+    "v": 7,
+    "out": "7%"
+   },
+   {
+    "v": 8,
+    "out": "8%"
+   },
+   {
+    "v": 9,
+    "out": "9%"
+   },
+   {
+    "v": 10,
+    "out": "10%"
+   },
+   {
+    "v": 11,
+    "out": "11%"
+   },
+   {
+    "v": 12,
+    "out": "12%"
+   },
+   {
+    "v": 13,
+    "out": "13%"
+   },
+   {
+    "v": 14,
+    "out": "14%"
+   },
+   {
+    "v": 15,
+    "out": "15%"
+   },
+   {
+    "v": 16,
+    "out": "16%"
+   },
+   {
+    "v": 17,
+    "out": "17%"
+   },
+   {
+    "v": 18,
+    "out": "18%"
+   },
+   {
+    "v": 19,
+    "out": "19%"
+   },
+   {
+    "v": 20,
+    "out": "20%"
+   },
+   {
+    "v": 21,
+    "out": "21%"
+   },
+   {
+    "v": 22,
+    "out": "22%"
+   },
+   {
+    "v": 23,
+    "out": "23%"
+   },
+   {
+    "v": 24,
+    "out": "24%"
+   },
+   {
+    "v": 25,
+    "out": "25%"
+   },
+   {
+    "v": 26,
+    "out": "26%"
+   },
+   {
+    "v": 27,
+    "out": "27%"
+   },
+   {
+    "v": 28,
+    "out": "28%"
+   },
+   {
+    "v": 29,
+    "out": "29%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 31,
+    "out": "31%"
+   },
+   {
+    "v": 32,
+    "out": "32%"
+   },
+   {
+    "v": 33,
+    "out": "33%"
+   },
+   {
+    "v": 34,
+    "out": "34%"
+   },
+   {
+    "v": 35,
+    "out": "35%"
+   },
+   {
+    "v": 36,
+    "out": "36%"
+   },
+   {
+    "v": 37,
+    "out": "37%"
+   },
+   {
+    "v": 38,
+    "out": "38%"
+   },
+   {
+    "v": 39,
+    "out": "39%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 41,
+    "out": "41%"
+   },
+   {
+    "v": 42,
+    "out": "42%"
+   },
+   {
+    "v": 43,
+    "out": "43%"
+   },
+   {
+    "v": 44,
+    "out": "44%"
+   },
+   {
+    "v": 45,
+    "out": "45%"
+   },
+   {
+    "v": 46,
+    "out": "46%"
+   },
+   {
+    "v": 47,
+    "out": "47%"
+   },
+   {
+    "v": 48,
+    "out": "48%"
+   },
+   {
+    "v": 49,
+    "out": "49%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 5,
+    "out": "5%"
+   },
+   {
+    "v": 10,
+    "out": "10%"
+   },
+   {
+    "v": 15,
+    "out": "15%"
+   },
+   {
+    "v": 20,
+    "out": "20%"
+   },
+   {
+    "v": 25,
+    "out": "25%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 35,
+    "out": "35%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 45,
+    "out": "45%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 55,
+    "out": "55%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 65,
+    "out": "65%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 75,
+    "out": "75%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 85,
+    "out": "85%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 95,
+    "out": "95%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   },
+   {
+    "v": 105,
+    "out": "105%"
+   },
+   {
+    "v": 110,
+    "out": "110%"
+   },
+   {
+    "v": 115,
+    "out": "115%"
+   },
+   {
+    "v": 120,
+    "out": "120%"
+   },
+   {
+    "v": 125,
+    "out": "125%"
+   },
+   {
+    "v": 130,
+    "out": "130%"
+   },
+   {
+    "v": 135,
+    "out": "135%"
+   },
+   {
+    "v": 140,
+    "out": "140%"
+   },
+   {
+    "v": 145,
+    "out": "145%"
+   },
+   {
+    "v": 150,
+    "out": "150%"
+   },
+   {
+    "v": 155,
+    "out": "155%"
+   },
+   {
+    "v": 160,
+    "out": "160%"
+   },
+   {
+    "v": 165,
+    "out": "165%"
+   },
+   {
+    "v": 170,
+    "out": "170%"
+   },
+   {
+    "v": 175,
+    "out": "175%"
+   },
+   {
+    "v": 180,
+    "out": "180%"
+   },
+   {
+    "v": 185,
+    "out": "185%"
+   },
+   {
+    "v": 190,
+    "out": "190%"
+   },
+   {
+    "v": 195,
+    "out": "195%"
+   },
+   {
+    "v": 200,
+    "out": "200%"
+   },
+   {
+    "v": 205,
+    "out": "205%"
+   },
+   {
+    "v": 210,
+    "out": "210%"
+   },
+   {
+    "v": 215,
+    "out": "215%"
+   },
+   {
+    "v": 220,
+    "out": "220%"
+   },
+   {
+    "v": 225,
+    "out": "225%"
+   },
+   {
+    "v": 230,
+    "out": "230%"
+   },
+   {
+    "v": 235,
+    "out": "235%"
+   },
+   {
+    "v": 240,
+    "out": "240%"
+   },
+   {
+    "v": 245,
+    "out": "245%"
+   },
+   {
+    "v": 250,
+    "out": "250%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 35,
+    "out": "35%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 45,
+    "out": "45%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 55,
+    "out": "55%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 65,
+    "out": "65%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 75,
+    "out": "75%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 85,
+    "out": "85%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 95,
+    "out": "95%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   },
+   {
+    "v": 105,
+    "out": "105%"
+   },
+   {
+    "v": 110,
+    "out": "110%"
+   },
+   {
+    "v": 115,
+    "out": "115%"
+   },
+   {
+    "v": 120,
+    "out": "120%"
+   },
+   {
+    "v": 125,
+    "out": "125%"
+   },
+   {
+    "v": 130,
+    "out": "130%"
+   },
+   {
+    "v": 135,
+    "out": "135%"
+   },
+   {
+    "v": 140,
+    "out": "140%"
+   },
+   {
+    "v": 145,
+    "out": "145%"
+   },
+   {
+    "v": 150,
+    "out": "150%"
+   },
+   {
+    "v": 155,
+    "out": "155%"
+   },
+   {
+    "v": 160,
+    "out": "160%"
+   },
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 5,
+    "out": "5%"
+   },
+   {
+    "v": 10,
+    "out": "10%"
+   },
+   {
+    "v": 15,
+    "out": "15%"
+   },
+   {
+    "v": 20,
+    "out": "20%"
+   },
+   {
+    "v": 25,
+    "out": "25%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 35,
+    "out": "35%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 45,
+    "out": "45%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 55,
+    "out": "55%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 65,
+    "out": "65%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 75,
+    "out": "75%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 85,
+    "out": "85%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 95,
+    "out": "95%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   },
+   {
+    "v": 105,
+    "out": "105%"
+   },
+   {
+    "v": 110,
+    "out": "110%"
+   },
+   {
+    "v": 115,
+    "out": "115%"
+   },
+   {
+    "v": 120,
+    "out": "120%"
+   },
+   {
+    "v": 125,
+    "out": "125%"
+   },
+   {
+    "v": 130,
+    "out": "130%"
+   },
+   {
+    "v": 135,
+    "out": "135%"
+   },
+   {
+    "v": 140,
+    "out": "140%"
+   },
+   {
+    "v": 145,
+    "out": "145%"
+   },
+   {
+    "v": 150,
+    "out": "150%"
+   },
+   {
+    "v": 155,
+    "out": "155%"
+   },
+   {
+    "v": 160,
+    "out": "160%"
+   },
+   {
+    "v": 165,
+    "out": "165%"
+   },
+   {
+    "v": 170,
+    "out": "170%"
+   },
+   {
+    "v": 175,
+    "out": "175%"
+   },
+   {
+    "v": 180,
+    "out": "180%"
+   },
+   {
+    "v": 185,
+    "out": "185%"
+   },
+   {
+    "v": 190,
+    "out": "190%"
+   },
+   {
+    "v": 195,
+    "out": "195%"
+   },
+   {
+    "v": 200,
+    "out": "200%"
+   },
+   {
+    "v": 20,
+    "out": "20%"
+   },
+   {
+    "v": 25,
+    "out": "25%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 35,
+    "out": "35%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 45,
+    "out": "45%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 55,
+    "out": "55%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 65,
+    "out": "65%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 75,
+    "out": "75%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 85,
+    "out": "85%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 95,
+    "out": "95%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   },
+   {
+    "v": 0,
+    "out": "0%"
+   },
+   {
+    "v": 2,
+    "out": "2%"
+   },
+   {
+    "v": 4,
+    "out": "4%"
+   },
+   {
+    "v": 6,
+    "out": "6%"
+   },
+   {
+    "v": 8,
+    "out": "8%"
+   },
+   {
+    "v": 10,
+    "out": "10%"
+   },
+   {
+    "v": 12,
+    "out": "12%"
+   },
+   {
+    "v": 14,
+    "out": "14%"
+   },
+   {
+    "v": 16,
+    "out": "16%"
+   },
+   {
+    "v": 18,
+    "out": "18%"
+   },
+   {
+    "v": 20,
+    "out": "20%"
+   },
+   {
+    "v": 22,
+    "out": "22%"
+   },
+   {
+    "v": 24,
+    "out": "24%"
+   },
+   {
+    "v": 26,
+    "out": "26%"
+   },
+   {
+    "v": 28,
+    "out": "28%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 32,
+    "out": "32%"
+   },
+   {
+    "v": 34,
+    "out": "34%"
+   },
+   {
+    "v": 36,
+    "out": "36%"
+   },
+   {
+    "v": 38,
+    "out": "38%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 42,
+    "out": "42%"
+   },
+   {
+    "v": 44,
+    "out": "44%"
+   },
+   {
+    "v": 46,
+    "out": "46%"
+   },
+   {
+    "v": 48,
+    "out": "48%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 52,
+    "out": "52%"
+   },
+   {
+    "v": 54,
+    "out": "54%"
+   },
+   {
+    "v": 56,
+    "out": "56%"
+   },
+   {
+    "v": 58,
+    "out": "58%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 62,
+    "out": "62%"
+   },
+   {
+    "v": 64,
+    "out": "64%"
+   },
+   {
+    "v": 66,
+    "out": "66%"
+   },
+   {
+    "v": 68,
+    "out": "68%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 72,
+    "out": "72%"
+   },
+   {
+    "v": 74,
+    "out": "74%"
+   },
+   {
+    "v": 76,
+    "out": "76%"
+   },
+   {
+    "v": 78,
+    "out": "78%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 82,
+    "out": "82%"
+   },
+   {
+    "v": 84,
+    "out": "84%"
+   },
+   {
+    "v": 86,
+    "out": "86%"
+   },
+   {
+    "v": 88,
+    "out": "88%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 92,
+    "out": "92%"
+   },
+   {
+    "v": 94,
+    "out": "94%"
+   },
+   {
+    "v": 96,
+    "out": "96%"
+   },
+   {
+    "v": 98,
+    "out": "98%"
+   },
+   {
+    "v": 100,
+    "out": "100%"
+   }
+  ],
+  "BgAlpha": [
+   {
+    "v": 0,
+    "out": "0% · clear"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5%"
+   },
+   {
+    "v": 1,
+    "out": "1%"
+   },
+   {
+    "v": -1,
+    "out": "-1%"
+   },
+   {
+    "v": 0.005,
+    "out": "0.005%"
+   },
+   {
+    "v": 0.015,
+    "out": "0.015%"
+   },
+   {
+    "v": 1.005,
+    "out": "1.005%"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5%"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5%"
+   },
+   {
+    "v": 0.125,
+    "out": "0.125%"
+   },
+   {
+    "v": 0.375,
+    "out": "0.375%"
+   },
+   {
+    "v": 12.345,
+    "out": "12.345%"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0001%"
+   },
+   {
+    "v": 100,
+    "out": "100% · solid"
+   },
+   {
+    "v": 72,
+    "out": "72% · default"
+   },
+   {
+    "v": 99.5,
+    "out": "99.5%"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21%"
+   },
+   {
+    "v": 1e-7,
+    "out": "1e-7%"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.891%"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.049999999999999996%"
+   },
+   {
+    "v": 8.345,
+    "out": "8.345%"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05%"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01%"
+   },
+   {
+    "v": 0,
+    "out": "0% · clear"
+   },
+   {
+    "v": 1,
+    "out": "1%"
+   },
+   {
+    "v": 2,
+    "out": "2%"
+   },
+   {
+    "v": 3,
+    "out": "3%"
+   },
+   {
+    "v": 4,
+    "out": "4%"
+   },
+   {
+    "v": 5,
+    "out": "5%"
+   },
+   {
+    "v": 6,
+    "out": "6%"
+   },
+   {
+    "v": 7,
+    "out": "7%"
+   },
+   {
+    "v": 8,
+    "out": "8%"
+   },
+   {
+    "v": 9,
+    "out": "9%"
+   },
+   {
+    "v": 10,
+    "out": "10%"
+   },
+   {
+    "v": 11,
+    "out": "11%"
+   },
+   {
+    "v": 12,
+    "out": "12%"
+   },
+   {
+    "v": 13,
+    "out": "13%"
+   },
+   {
+    "v": 14,
+    "out": "14%"
+   },
+   {
+    "v": 15,
+    "out": "15%"
+   },
+   {
+    "v": 16,
+    "out": "16%"
+   },
+   {
+    "v": 17,
+    "out": "17%"
+   },
+   {
+    "v": 18,
+    "out": "18%"
+   },
+   {
+    "v": 19,
+    "out": "19%"
+   },
+   {
+    "v": 20,
+    "out": "20%"
+   },
+   {
+    "v": 21,
+    "out": "21%"
+   },
+   {
+    "v": 22,
+    "out": "22%"
+   },
+   {
+    "v": 23,
+    "out": "23%"
+   },
+   {
+    "v": 24,
+    "out": "24%"
+   },
+   {
+    "v": 25,
+    "out": "25%"
+   },
+   {
+    "v": 26,
+    "out": "26%"
+   },
+   {
+    "v": 27,
+    "out": "27%"
+   },
+   {
+    "v": 28,
+    "out": "28%"
+   },
+   {
+    "v": 29,
+    "out": "29%"
+   },
+   {
+    "v": 30,
+    "out": "30%"
+   },
+   {
+    "v": 31,
+    "out": "31%"
+   },
+   {
+    "v": 32,
+    "out": "32%"
+   },
+   {
+    "v": 33,
+    "out": "33%"
+   },
+   {
+    "v": 34,
+    "out": "34%"
+   },
+   {
+    "v": 35,
+    "out": "35%"
+   },
+   {
+    "v": 36,
+    "out": "36%"
+   },
+   {
+    "v": 37,
+    "out": "37%"
+   },
+   {
+    "v": 38,
+    "out": "38%"
+   },
+   {
+    "v": 39,
+    "out": "39%"
+   },
+   {
+    "v": 40,
+    "out": "40%"
+   },
+   {
+    "v": 41,
+    "out": "41%"
+   },
+   {
+    "v": 42,
+    "out": "42%"
+   },
+   {
+    "v": 43,
+    "out": "43%"
+   },
+   {
+    "v": 44,
+    "out": "44%"
+   },
+   {
+    "v": 45,
+    "out": "45%"
+   },
+   {
+    "v": 46,
+    "out": "46%"
+   },
+   {
+    "v": 47,
+    "out": "47%"
+   },
+   {
+    "v": 48,
+    "out": "48%"
+   },
+   {
+    "v": 49,
+    "out": "49%"
+   },
+   {
+    "v": 50,
+    "out": "50%"
+   },
+   {
+    "v": 51,
+    "out": "51%"
+   },
+   {
+    "v": 52,
+    "out": "52%"
+   },
+   {
+    "v": 53,
+    "out": "53%"
+   },
+   {
+    "v": 54,
+    "out": "54%"
+   },
+   {
+    "v": 55,
+    "out": "55%"
+   },
+   {
+    "v": 56,
+    "out": "56%"
+   },
+   {
+    "v": 57,
+    "out": "57%"
+   },
+   {
+    "v": 58,
+    "out": "58%"
+   },
+   {
+    "v": 59,
+    "out": "59%"
+   },
+   {
+    "v": 60,
+    "out": "60%"
+   },
+   {
+    "v": 61,
+    "out": "61%"
+   },
+   {
+    "v": 62,
+    "out": "62%"
+   },
+   {
+    "v": 63,
+    "out": "63%"
+   },
+   {
+    "v": 64,
+    "out": "64%"
+   },
+   {
+    "v": 65,
+    "out": "65%"
+   },
+   {
+    "v": 66,
+    "out": "66%"
+   },
+   {
+    "v": 67,
+    "out": "67%"
+   },
+   {
+    "v": 68,
+    "out": "68%"
+   },
+   {
+    "v": 69,
+    "out": "69%"
+   },
+   {
+    "v": 70,
+    "out": "70%"
+   },
+   {
+    "v": 71,
+    "out": "71%"
+   },
+   {
+    "v": 72,
+    "out": "72% · default"
+   },
+   {
+    "v": 73,
+    "out": "73%"
+   },
+   {
+    "v": 74,
+    "out": "74%"
+   },
+   {
+    "v": 75,
+    "out": "75%"
+   },
+   {
+    "v": 76,
+    "out": "76%"
+   },
+   {
+    "v": 77,
+    "out": "77%"
+   },
+   {
+    "v": 78,
+    "out": "78%"
+   },
+   {
+    "v": 79,
+    "out": "79%"
+   },
+   {
+    "v": 80,
+    "out": "80%"
+   },
+   {
+    "v": 81,
+    "out": "81%"
+   },
+   {
+    "v": 82,
+    "out": "82%"
+   },
+   {
+    "v": 83,
+    "out": "83%"
+   },
+   {
+    "v": 84,
+    "out": "84%"
+   },
+   {
+    "v": 85,
+    "out": "85%"
+   },
+   {
+    "v": 86,
+    "out": "86%"
+   },
+   {
+    "v": 87,
+    "out": "87%"
+   },
+   {
+    "v": 88,
+    "out": "88%"
+   },
+   {
+    "v": 89,
+    "out": "89%"
+   },
+   {
+    "v": 90,
+    "out": "90%"
+   },
+   {
+    "v": 91,
+    "out": "91%"
+   },
+   {
+    "v": 92,
+    "out": "92%"
+   },
+   {
+    "v": 93,
+    "out": "93%"
+   },
+   {
+    "v": 94,
+    "out": "94%"
+   },
+   {
+    "v": 95,
+    "out": "95%"
+   },
+   {
+    "v": 96,
+    "out": "96%"
+   },
+   {
+    "v": 97,
+    "out": "97%"
+   },
+   {
+    "v": 98,
+    "out": "98%"
+   },
+   {
+    "v": 99,
+    "out": "99%"
+   },
+   {
+    "v": 100,
+    "out": "100% · solid"
+   }
+  ],
+  "PanSpeed": [
+   {
+    "v": 0,
+    "out": "0 px/s"
+   },
+   {
+    "v": 0.5,
+    "out": "0.5 px/s"
+   },
+   {
+    "v": 1,
+    "out": "1 px/s"
+   },
+   {
+    "v": -1,
+    "out": "-1 px/s"
+   },
+   {
+    "v": 0.005,
+    "out": "0.005 px/s"
+   },
+   {
+    "v": 0.015,
+    "out": "0.015 px/s"
+   },
+   {
+    "v": 1.005,
+    "out": "1.005 px/s"
+   },
+   {
+    "v": 2.5,
+    "out": "2.5 px/s"
+   },
+   {
+    "v": -2.5,
+    "out": "-2.5 px/s"
+   },
+   {
+    "v": 0.125,
+    "out": "0.125 px/s"
+   },
+   {
+    "v": 0.375,
+    "out": "0.375 px/s"
+   },
+   {
+    "v": 12.345,
+    "out": "12.345 px/s"
+   },
+   {
+    "v": -0.0001,
+    "out": "-0.0001 px/s"
+   },
+   {
+    "v": 100,
+    "out": "100 px/s"
+   },
+   {
+    "v": 72,
+    "out": "72 px/s"
+   },
+   {
+    "v": 99.5,
+    "out": "99.5 px/s"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21 px/s"
+   },
+   {
+    "v": 1e-7,
+    "out": "1e-7 px/s"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234567.891 px/s"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "0.049999999999999996 px/s"
+   },
+   {
+    "v": 8.345,
+    "out": "8.345 px/s"
+   },
+   {
+    "v": -0.05,
+    "out": "-0.05 px/s"
+   },
+   {
+    "v": -0.01,
+    "out": "-0.01 px/s"
+   },
+   {
+    "v": 2,
+    "out": "2 px/s"
+   },
+   {
+    "v": 3,
+    "out": "3 px/s"
+   },
+   {
+    "v": 4,
+    "out": "4 px/s"
+   },
+   {
+    "v": 5,
+    "out": "5 px/s"
+   },
+   {
+    "v": 6,
+    "out": "6 px/s"
+   },
+   {
+    "v": 7,
+    "out": "7 px/s"
+   },
+   {
+    "v": 8,
+    "out": "8 px/s"
+   },
+   {
+    "v": 9,
+    "out": "9 px/s"
+   },
+   {
+    "v": 10,
+    "out": "10 px/s"
+   },
+   {
+    "v": 11,
+    "out": "11 px/s"
+   },
+   {
+    "v": 12,
+    "out": "12 px/s"
+   },
+   {
+    "v": 13,
+    "out": "13 px/s"
+   },
+   {
+    "v": 14,
+    "out": "14 px/s"
+   },
+   {
+    "v": 15,
+    "out": "15 px/s"
+   },
+   {
+    "v": 16,
+    "out": "16 px/s"
+   },
+   {
+    "v": 17,
+    "out": "17 px/s"
+   },
+   {
+    "v": 18,
+    "out": "18 px/s"
+   },
+   {
+    "v": 19,
+    "out": "19 px/s"
+   },
+   {
+    "v": 20,
+    "out": "20 px/s"
+   },
+   {
+    "v": 21,
+    "out": "21 px/s"
+   },
+   {
+    "v": 22,
+    "out": "22 px/s"
+   },
+   {
+    "v": 23,
+    "out": "23 px/s"
+   },
+   {
+    "v": 24,
+    "out": "24 px/s"
+   },
+   {
+    "v": 25,
+    "out": "25 px/s"
+   },
+   {
+    "v": 26,
+    "out": "26 px/s"
+   },
+   {
+    "v": 27,
+    "out": "27 px/s"
+   },
+   {
+    "v": 28,
+    "out": "28 px/s"
+   },
+   {
+    "v": 29,
+    "out": "29 px/s"
+   },
+   {
+    "v": 30,
+    "out": "30 px/s"
+   },
+   {
+    "v": 31,
+    "out": "31 px/s"
+   },
+   {
+    "v": 32,
+    "out": "32 px/s"
+   },
+   {
+    "v": 33,
+    "out": "33 px/s"
+   },
+   {
+    "v": 34,
+    "out": "34 px/s"
+   },
+   {
+    "v": 35,
+    "out": "35 px/s"
+   },
+   {
+    "v": 36,
+    "out": "36 px/s"
+   },
+   {
+    "v": 37,
+    "out": "37 px/s"
+   },
+   {
+    "v": 38,
+    "out": "38 px/s"
+   },
+   {
+    "v": 39,
+    "out": "39 px/s"
+   },
+   {
+    "v": 40,
+    "out": "40 px/s"
+   }
+  ],
+  "BarThickness": [
+   {
+    "v": 0,
+    "out": "2px"
+   },
+   {
+    "v": 0.5,
+    "out": "2.5px"
+   },
+   {
+    "v": 1,
+    "out": "3px"
+   },
+   {
+    "v": -1,
+    "out": "1px"
+   },
+   {
+    "v": 0.005,
+    "out": "2.005px"
+   },
+   {
+    "v": 0.015,
+    "out": "2.015px"
+   },
+   {
+    "v": 1.005,
+    "out": "3.005px"
+   },
+   {
+    "v": 2.5,
+    "out": "4.5px"
+   },
+   {
+    "v": -2.5,
+    "out": "-0.5px"
+   },
+   {
+    "v": 0.125,
+    "out": "2.125px"
+   },
+   {
+    "v": 0.375,
+    "out": "2.375px"
+   },
+   {
+    "v": 12.345,
+    "out": "14.345px"
+   },
+   {
+    "v": -0.0001,
+    "out": "1.9999px"
+   },
+   {
+    "v": 100,
+    "out": "102px"
+   },
+   {
+    "v": 72,
+    "out": "74px"
+   },
+   {
+    "v": 99.5,
+    "out": "101.5px"
+   },
+   {
+    "v": 1e+21,
+    "out": "1e+21px"
+   },
+   {
+    "v": 1e-7,
+    "out": "2.0000001px"
+   },
+   {
+    "v": 1234567.891,
+    "out": "1234569.891px"
+   },
+   {
+    "v": 0.049999999999999996,
+    "out": "2.05px"
+   },
+   {
+    "v": 8.345,
+    "out": "10.345px"
+   },
+   {
+    "v": -0.05,
+    "out": "1.95px"
+   },
+   {
+    "v": -0.01,
+    "out": "1.99px"
+   },
+   {
+    "v": 1,
+    "out": "3px"
+   },
+   {
+    "v": 2,
+    "out": "4px"
+   },
+   {
+    "v": 3,
+    "out": "5px"
+   },
+   {
+    "v": 4,
+    "out": "6px"
+   },
+   {
+    "v": 5,
+    "out": "7px"
+   },
+   {
+    "v": 6,
+    "out": "8px"
+   }
+  ]
+ },
+ "jsNum": [
+  {
+   "v": 0,
+   "str": "0",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 0,
+   "str": "0",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 0,
+   "str": "0",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 0.5,
+   "str": "0.5",
+   "round": 1,
+   "fixed": [
+    "1",
+    "0.5",
+    "0.50",
+    "0.500"
+   ]
+  },
+  {
+   "v": 5,
+   "str": "5",
+   "round": 5,
+   "fixed": [
+    "5",
+    "5.0",
+    "5.00",
+    "5.000"
+   ]
+  },
+  {
+   "v": 0.07142857142857142,
+   "str": "0.07142857142857142",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.07",
+    "0.071"
+   ]
+  },
+  {
+   "v": 1,
+   "str": "1",
+   "round": 1,
+   "fixed": [
+    "1",
+    "1.0",
+    "1.00",
+    "1.000"
+   ]
+  },
+  {
+   "v": 10,
+   "str": "10",
+   "round": 10,
+   "fixed": [
+    "10",
+    "10.0",
+    "10.00",
+    "10.000"
+   ]
+  },
+  {
+   "v": 0.14285714285714285,
+   "str": "0.14285714285714285",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.14",
+    "0.143"
+   ]
+  },
+  {
+   "v": -1,
+   "str": "-1",
+   "round": -1,
+   "fixed": [
+    "-1",
+    "-1.0",
+    "-1.00",
+    "-1.000"
+   ]
+  },
+  {
+   "v": -10,
+   "str": "-10",
+   "round": -10,
+   "fixed": [
+    "-10",
+    "-10.0",
+    "-10.00",
+    "-10.000"
+   ]
+  },
+  {
+   "v": -0.14285714285714285,
+   "str": "-0.14285714285714285",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.1",
+    "-0.14",
+    "-0.143"
+   ]
+  },
+  {
+   "v": 0.005,
+   "str": "0.005",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.01",
+    "0.005"
+   ]
+  },
+  {
+   "v": 0.05,
+   "str": "0.05",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.05",
+    "0.050"
+   ]
+  },
+  {
+   "v": 0.0007142857142857143,
+   "str": "0.0007142857142857143",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.001"
+   ]
+  },
+  {
+   "v": 0.015,
+   "str": "0.015",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.01",
+    "0.015"
+   ]
+  },
+  {
+   "v": 0.15,
+   "str": "0.15",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.15",
+    "0.150"
+   ]
+  },
+  {
+   "v": 0.002142857142857143,
+   "str": "0.002142857142857143",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.002"
+   ]
+  },
+  {
+   "v": 1.005,
+   "str": "1.005",
+   "round": 1,
+   "fixed": [
+    "1",
+    "1.0",
+    "1.00",
+    "1.005"
+   ]
+  },
+  {
+   "v": 10.049999999999999,
+   "str": "10.049999999999999",
+   "round": 10,
+   "fixed": [
+    "10",
+    "10.0",
+    "10.05",
+    "10.050"
+   ]
+  },
+  {
+   "v": 0.14357142857142854,
+   "str": "0.14357142857142854",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.14",
+    "0.144"
+   ]
+  },
+  {
+   "v": 2.5,
+   "str": "2.5",
+   "round": 3,
+   "fixed": [
+    "3",
+    "2.5",
+    "2.50",
+    "2.500"
+   ]
+  },
+  {
+   "v": 25,
+   "str": "25",
+   "round": 25,
+   "fixed": [
+    "25",
+    "25.0",
+    "25.00",
+    "25.000"
+   ]
+  },
+  {
+   "v": 0.35714285714285715,
+   "str": "0.35714285714285715",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.4",
+    "0.36",
+    "0.357"
+   ]
+  },
+  {
+   "v": -2.5,
+   "str": "-2.5",
+   "round": -2,
+   "fixed": [
+    "-3",
+    "-2.5",
+    "-2.50",
+    "-2.500"
+   ]
+  },
+  {
+   "v": -25,
+   "str": "-25",
+   "round": -25,
+   "fixed": [
+    "-25",
+    "-25.0",
+    "-25.00",
+    "-25.000"
+   ]
+  },
+  {
+   "v": -0.35714285714285715,
+   "str": "-0.35714285714285715",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.4",
+    "-0.36",
+    "-0.357"
+   ]
+  },
+  {
+   "v": 0.125,
+   "str": "0.125",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.13",
+    "0.125"
+   ]
+  },
+  {
+   "v": 1.25,
+   "str": "1.25",
+   "round": 1,
+   "fixed": [
+    "1",
+    "1.3",
+    "1.25",
+    "1.250"
+   ]
+  },
+  {
+   "v": 0.017857142857142856,
+   "str": "0.017857142857142856",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.02",
+    "0.018"
+   ]
+  },
+  {
+   "v": 0.375,
+   "str": "0.375",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.4",
+    "0.38",
+    "0.375"
+   ]
+  },
+  {
+   "v": 3.75,
+   "str": "3.75",
+   "round": 4,
+   "fixed": [
+    "4",
+    "3.8",
+    "3.75",
+    "3.750"
+   ]
+  },
+  {
+   "v": 0.05357142857142857,
+   "str": "0.05357142857142857",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.1",
+    "0.05",
+    "0.054"
+   ]
+  },
+  {
+   "v": 12.345,
+   "str": "12.345",
+   "round": 12,
+   "fixed": [
+    "12",
+    "12.3",
+    "12.35",
+    "12.345"
+   ]
+  },
+  {
+   "v": 123.45,
+   "str": "123.45",
+   "round": 123,
+   "fixed": [
+    "123",
+    "123.5",
+    "123.45",
+    "123.450"
+   ]
+  },
+  {
+   "v": 1.7635714285714286,
+   "str": "1.7635714285714286",
+   "round": 2,
+   "fixed": [
+    "2",
+    "1.8",
+    "1.76",
+    "1.764"
+   ]
+  },
+  {
+   "v": -0.0001,
+   "str": "-0.0001",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.0",
+    "-0.00",
+    "-0.000"
+   ]
+  },
+  {
+   "v": -0.001,
+   "str": "-0.001",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.0",
+    "-0.00",
+    "-0.001"
+   ]
+  },
+  {
+   "v": -0.000014285714285714287,
+   "str": "-0.000014285714285714287",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.0",
+    "-0.00",
+    "-0.000"
+   ]
+  },
+  {
+   "v": 100,
+   "str": "100",
+   "round": 100,
+   "fixed": [
+    "100",
+    "100.0",
+    "100.00",
+    "100.000"
+   ]
+  },
+  {
+   "v": 1000,
+   "str": "1000",
+   "round": 1000,
+   "fixed": [
+    "1000",
+    "1000.0",
+    "1000.00",
+    "1000.000"
+   ]
+  },
+  {
+   "v": 14.285714285714286,
+   "str": "14.285714285714286",
+   "round": 14,
+   "fixed": [
+    "14",
+    "14.3",
+    "14.29",
+    "14.286"
+   ]
+  },
+  {
+   "v": 72,
+   "str": "72",
+   "round": 72,
+   "fixed": [
+    "72",
+    "72.0",
+    "72.00",
+    "72.000"
+   ]
+  },
+  {
+   "v": 720,
+   "str": "720",
+   "round": 720,
+   "fixed": [
+    "720",
+    "720.0",
+    "720.00",
+    "720.000"
+   ]
+  },
+  {
+   "v": 10.285714285714286,
+   "str": "10.285714285714286",
+   "round": 10,
+   "fixed": [
+    "10",
+    "10.3",
+    "10.29",
+    "10.286"
+   ]
+  },
+  {
+   "v": 99.5,
+   "str": "99.5",
+   "round": 100,
+   "fixed": [
+    "100",
+    "99.5",
+    "99.50",
+    "99.500"
+   ]
+  },
+  {
+   "v": 995,
+   "str": "995",
+   "round": 995,
+   "fixed": [
+    "995",
+    "995.0",
+    "995.00",
+    "995.000"
+   ]
+  },
+  {
+   "v": 14.214285714285714,
+   "str": "14.214285714285714",
+   "round": 14,
+   "fixed": [
+    "14",
+    "14.2",
+    "14.21",
+    "14.214"
+   ]
+  },
+  {
+   "v": 1e+21,
+   "str": "1e+21",
+   "round": 1e+21,
+   "fixed": [
+    "1e+21",
+    "1e+21",
+    "1e+21",
+    "1e+21"
+   ]
+  },
+  {
+   "v": 1e+22,
+   "str": "1e+22",
+   "round": 1e+22,
+   "fixed": [
+    "1e+22",
+    "1e+22",
+    "1e+22",
+    "1e+22"
+   ]
+  },
+  {
+   "v": 142857142857142860000,
+   "str": "142857142857142860000",
+   "round": 142857142857142860000,
+   "fixed": [
+    "142857142857142861824",
+    "142857142857142861824.0",
+    "142857142857142861824.00",
+    "142857142857142861824.000"
+   ]
+  },
+  {
+   "v": 1e-7,
+   "str": "1e-7",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 0.000001,
+   "str": "0.000001",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 1.4285714285714284e-8,
+   "str": "1.4285714285714284e-8",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 1234567.891,
+   "str": "1234567.891",
+   "round": 1234568,
+   "fixed": [
+    "1234568",
+    "1234567.9",
+    "1234567.89",
+    "1234567.891"
+   ]
+  },
+  {
+   "v": 12345678.91,
+   "str": "12345678.91",
+   "round": 12345679,
+   "fixed": [
+    "12345679",
+    "12345678.9",
+    "12345678.91",
+    "12345678.910"
+   ]
+  },
+  {
+   "v": 176366.84157142858,
+   "str": "176366.84157142858",
+   "round": 176367,
+   "fixed": [
+    "176367",
+    "176366.8",
+    "176366.84",
+    "176366.842"
+   ]
+  },
+  {
+   "v": 0.049999999999999996,
+   "str": "0.049999999999999996",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.05",
+    "0.050"
+   ]
+  },
+  {
+   "v": 0.49999999999999994,
+   "str": "0.49999999999999994",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.5",
+    "0.50",
+    "0.500"
+   ]
+  },
+  {
+   "v": 0.007142857142857143,
+   "str": "0.007142857142857143",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.01",
+    "0.007"
+   ]
+  },
+  {
+   "v": 8.345,
+   "str": "8.345",
+   "round": 8,
+   "fixed": [
+    "8",
+    "8.3",
+    "8.35",
+    "8.345"
+   ]
+  },
+  {
+   "v": 83.45,
+   "str": "83.45",
+   "round": 83,
+   "fixed": [
+    "83",
+    "83.5",
+    "83.45",
+    "83.450"
+   ]
+  },
+  {
+   "v": 1.1921428571428572,
+   "str": "1.1921428571428572",
+   "round": 1,
+   "fixed": [
+    "1",
+    "1.2",
+    "1.19",
+    "1.192"
+   ]
+  },
+  {
+   "v": -0.05,
+   "str": "-0.05",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.1",
+    "-0.05",
+    "-0.050"
+   ]
+  },
+  {
+   "v": -0.5,
+   "str": "-0.5",
+   "round": 0,
+   "fixed": [
+    "-1",
+    "-0.5",
+    "-0.50",
+    "-0.500"
+   ]
+  },
+  {
+   "v": -0.0071428571428571435,
+   "str": "-0.0071428571428571435",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.0",
+    "-0.01",
+    "-0.007"
+   ]
+  },
+  {
+   "v": -0.01,
+   "str": "-0.01",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.0",
+    "-0.01",
+    "-0.010"
+   ]
+  },
+  {
+   "v": -0.1,
+   "str": "-0.1",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.1",
+    "-0.10",
+    "-0.100"
+   ]
+  },
+  {
+   "v": -0.0014285714285714286,
+   "str": "-0.0014285714285714286",
+   "round": 0,
+   "fixed": [
+    "-0",
+    "-0.0",
+    "-0.00",
+    "-0.001"
+   ]
+  },
+  {
+   "v": 0.30000000000000004,
+   "str": "0.30000000000000004",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.3",
+    "0.30",
+    "0.300"
+   ]
+  },
+  {
+   "v": 0.3333333333333333,
+   "str": "0.3333333333333333",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.3",
+    "0.33",
+    "0.333"
+   ]
+  },
+  {
+   "v": 5e-7,
+   "str": "5e-7",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 123456789012345680000,
+   "str": "123456789012345680000",
+   "round": 123456789012345680000,
+   "fixed": [
+    "123456789012345683968",
+    "123456789012345683968.0",
+    "123456789012345683968.00",
+    "123456789012345683968.000"
+   ]
+  },
+  {
+   "v": 1e+21,
+   "str": "1e+21",
+   "round": 1e+21,
+   "fixed": [
+    "1e+21",
+    "1e+21",
+    "1e+21",
+    "1e+21"
+   ]
+  },
+  {
+   "v": 1.7976931348623157e+308,
+   "str": "1.7976931348623157e+308",
+   "round": 1.7976931348623157e+308,
+   "fixed": [
+    "1.7976931348623157e+308",
+    "1.7976931348623157e+308",
+    "1.7976931348623157e+308",
+    "1.7976931348623157e+308"
+   ]
+  },
+  {
+   "v": 5e-324,
+   "str": "5e-324",
+   "round": 0,
+   "fixed": [
+    "0",
+    "0.0",
+    "0.00",
+    "0.000"
+   ]
+  },
+  {
+   "v": 4.35,
+   "str": "4.35",
+   "round": 4,
+   "fixed": [
+    "4",
+    "4.3",
+    "4.35",
+    "4.350"
+   ]
+  },
+  {
+   "v": 1.45,
+   "str": "1.45",
+   "round": 1,
+   "fixed": [
+    "1",
+    "1.4",
+    "1.45",
+    "1.450"
+   ]
+  },
+  {
+   "v": 10.235,
+   "str": "10.235",
+   "round": 10,
+   "fixed": [
+    "10",
+    "10.2",
+    "10.23",
+    "10.235"
+   ]
+  },
+  {
+   "v": 1.0000000000000002,
+   "str": "1.0000000000000002",
+   "round": 1,
+   "fixed": [
+    "1",
+    "1.0",
+    "1.00",
+    "1.000"
+   ]
+  }
+ ]
+}

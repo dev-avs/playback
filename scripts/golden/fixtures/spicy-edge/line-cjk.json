@@ -1,0 +1,11 @@
+{"Type":"Line","source":"spicy_lyrics","UploadAttribution":{"Uploader":{"username":"up","url":"https://example.com/u"},"Maker":{"username":"mk"}},"SongWriters":["Writer One","Writer Two"],"Content":[
+{"StartTime":1.5,"EndTime":3.25,"Text":"こんにちは世界","TransliteratedText":"konnichiwa sekai","OppositeAligned":false},
+{"StartTime":3.25,"EndTime":6,"Text":"안녕하세요","OppositeAligned":true},
+{"StartTime":6,"EndTime":9.1,"Text":"你好，世界","TransliteratedText":"nǐ hǎo, shìjiè"},
+{"StartTime":9.1,"Text":"no end time"},
+{"EndTime":12,"Text":"no start time"},
+{"StartTime":0.1,"EndTime":0.2,"Text":"   "},
+{"StartTime":13,"EndTime":14,"Text":"  trimmed  ","OppositeAligned":"yes"},
+{"StartTime":0.1,"EndTime":0.30000000000000004,"Text":"float exact"},
+{"StartTime":15,"EndTime":16,"Text":"ひらがな カタカナ","TransliteratedText":""}
+]}

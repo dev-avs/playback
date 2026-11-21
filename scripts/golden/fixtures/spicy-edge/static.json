@@ -1,0 +1,15 @@
+{"Type":"Static","source":"spotify","SongWriters":["A Writer"," ","B Writer",""],"Content":[
+{"Text":"First line","Type":"Vocal"},
+{"Text":"  padded line \t"},
+{"Text":""},
+{"Text":"   "},
+{"Text":"日本語の歌詞","TransliteratedText":"nihongo no kashi"},
+{"Text":"가사 한 줄"},
+{"Text":"中文歌词"},
+{"TransliteratedText":"only transliterated"},
+{"Text":"kept","TransliteratedText":""},
+{"Text":"zero​width ​"},
+{"Text":" nbsp　ideographic﻿"},
+{"Text":"\u0085nel kept"},
+{"Text":"timed anyway","StartTime":5,"EndTime":9,"OppositeAligned":true}
+]}

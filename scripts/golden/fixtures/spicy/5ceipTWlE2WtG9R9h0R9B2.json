@@ -1,0 +1,401 @@
+{
+ "Type": "Line",
+ "SongWriters": [
+  "jomm"
+ ],
+ "StartTime": 20.499,
+ "EndTime": 226.07999999999998,
+ "Content": [
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "You ​got ​me ​feeling ​so ​insecure",
+   "StartTime": 20.499,
+   "EndTime": 23.954
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "The ​way ​you ​make ​me ​pretend",
+   "StartTime": 24.284,
+   "EndTime": 26.246
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "(I'll ​play ​pretend)",
+   "StartTime": 26.38,
+   "EndTime": 28.064
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Don't ​make ​it ​certain, ​you ​know, ​I'm ​sure",
+   "StartTime": 28.266,
+   "EndTime": 31.656
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​wanted ​more ​than ​a ​friend",
+   "StartTime": 31.976,
+   "EndTime": 34.594
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Spinning ​like ​a ​record",
+   "StartTime": 34.791,
+   "EndTime": 36.37
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Delusion's ​a ​drug ​and ​I'm ​on ​it",
+   "StartTime": 36.527,
+   "EndTime": 39.412
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​need ​you ​to ​need ​me ​the ​same ​way ​I ​need ​you",
+   "StartTime": 39.586,
+   "EndTime": 43.313
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "It ​kills ​me ​to ​stay, ​but ​it ​hurts ​more ​to ​lose ​you",
+   "StartTime": 43.487,
+   "EndTime": 47.127
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​lie ​to ​myself ​just ​for ​now ​oh",
+   "StartTime": 47.301,
+   "EndTime": 50.099
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Cos ​when ​the ​sunlight ​fades ​away",
+   "StartTime": 50.267,
+   "EndTime": 53.733
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​fall ​to ​pieces ​as ​I ​lie ​awake",
+   "StartTime": 53.896,
+   "EndTime": 57.623
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Why ​can't ​you ​see ​that ​I'm ​still ​here",
+   "StartTime": 57.785,
+   "EndTime": 61.657
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​play ​pretend ​cos ​I ​need ​you ​to ​stay",
+   "StartTime": 61.744,
+   "EndTime": 65.407
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "(I'll ​play ​pretend)",
+   "StartTime": 65.592,
+   "EndTime": 67.102
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Congratulations, ​you ​found ​the ​one",
+   "StartTime": 67.352,
+   "EndTime": 70.887
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'm ​glad ​that ​you're ​doing ​well",
+   "StartTime": 71.177,
+   "EndTime": 73.656
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "(I'll ​play ​pretend)",
+   "StartTime": 73.801,
+   "EndTime": 74.887
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Why ​can't ​I ​see ​that ​I'm ​just ​someone",
+   "StartTime": 75.049,
+   "EndTime": 78.463
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Don't ​wanna ​wake ​up ​just ​yet",
+   "StartTime": 78.828,
+   "EndTime": 81.446
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Spinning ​like ​a ​record",
+   "StartTime": 81.661,
+   "EndTime": 83.205
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Delusion's ​a ​drug ​and ​I'm ​on ​it",
+   "StartTime": 83.385,
+   "EndTime": 86.316
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​need ​you ​to ​need ​me ​the ​same ​way ​I ​need ​you",
+   "StartTime": 86.415,
+   "EndTime": 90.159
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "It ​kills ​me ​to ​stay, ​but ​it ​hurts ​more ​to ​lose ​you",
+   "StartTime": 90.333,
+   "EndTime": 93.95
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​lie ​to ​myself ​just ​for ​now ​oh",
+   "StartTime": 94.188,
+   "EndTime": 97.009
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Cos ​when ​the ​sunlight ​fades ​away",
+   "StartTime": 97.113,
+   "EndTime": 100.603
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​fall ​to ​pieces ​as ​I ​lie ​awake",
+   "StartTime": 100.754,
+   "EndTime": 104.567
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Why ​can't ​you ​see ​that ​I'm ​still ​here",
+   "StartTime": 104.666,
+   "EndTime": 108.41
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​play ​pretend ​cos ​I ​need ​you ​to ​stay",
+   "StartTime": 108.498,
+   "EndTime": 112.143
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​play ​pretend",
+   "StartTime": 112.392,
+   "EndTime": 113.948
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "No, ​don't ​you ​break ​my ​heart ​in ​two",
+   "StartTime": 114.314,
+   "EndTime": 118.569
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Holding ​onto ​maybes",
+   "StartTime": 118.685,
+   "EndTime": 121.501
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Some ​day, ​you ​won't ​be ​pretending ​to ​love ​me",
+   "StartTime": 121.663,
+   "EndTime": 125.186
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I've ​fallen ​in ​love",
+   "StartTime": 125.321,
+   "EndTime": 127.125
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I've ​fallen ​in ​love ​with ​you",
+   "StartTime": 127.259,
+   "EndTime": 129.686
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Cos ​when ​the ​sunlight ​fades ​away",
+   "StartTime": 159.454,
+   "EndTime": 163.023
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​fall ​to ​pieces ​as ​I ​lie ​awake",
+   "StartTime": 163.099,
+   "EndTime": 166.826
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Why ​can't ​you ​see ​that ​I'm ​still ​here",
+   "StartTime": 167,
+   "EndTime": 170.704
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​play ​pretend ​cos ​I ​need ​you ​to ​stay",
+   "StartTime": 170.878,
+   "EndTime": 174.663
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​can't ​pretend",
+   "StartTime": 174.837,
+   "EndTime": 177.083
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Don't ​try ​to ​be ​so ​nice ​to ​me",
+   "StartTime": 177.136,
+   "EndTime": 180.903
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Burning ​all ​your ​photos",
+   "StartTime": 181.112,
+   "EndTime": 184.032
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Wish ​I ​could ​hate ​you, ​it ​kills ​me ​to ​love ​you",
+   "StartTime": 184.148,
+   "EndTime": 188.467
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I've ​fallen ​in ​love ​oh",
+   "StartTime": 188.583,
+   "EndTime": 189.768
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "You've ​broken ​my ​heart ​in ​two",
+   "StartTime": 189.907,
+   "EndTime": 191.967
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Cos ​when ​the ​sunlight ​fades ​away",
+   "StartTime": 192.02,
+   "EndTime": 194.243
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​fall ​to ​pieces ​as ​I ​lie ​awake",
+   "StartTime": 194.393,
+   "EndTime": 198.045
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Why ​can't ​you ​see ​that ​I'm ​still ​here",
+   "StartTime": 198.294,
+   "EndTime": 202.625
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I'll ​play ​pretend ​cos ​I ​need ​you ​to ​stay",
+   "StartTime": 202.678,
+   "EndTime": 205.778
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I ​can't ​pretend",
+   "StartTime": 205.975,
+   "EndTime": 207.849
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Don't ​try ​to ​be ​so ​nice ​to ​me",
+   "StartTime": 207.949,
+   "EndTime": 212.157
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Burning ​all ​your ​photos",
+   "StartTime": 212.314,
+   "EndTime": 215.402
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "Wish ​I ​could ​hate ​you, ​it ​kills ​me ​to ​love ​you",
+   "StartTime": 215.495,
+   "EndTime": 218.746
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I've ​fallen ​in ​love",
+   "StartTime": 218.99,
+   "EndTime": 220.853
+  },
+  {
+   "Type": "Vocal",
+   "OppositeAligned": false,
+   "Text": "I've ​fallen ​in ​love ​with ​you",
+   "StartTime": 221.033,
+   "EndTime": 226.07999999999998
+  }
+ ],
+ "id": "5ceipTWlE2WtG9R9h0R9B2",
+ "source": "aml",
+ "Language": "eng",
+ "LanguageISO2": "en",
+ "HasTransliterations": false,
+ "uri": "spotify:track:5ceipTWlE2WtG9R9h0R9B2"
+}
