@@ -210,6 +210,8 @@ export interface PlayerBridge {
 
   // The changelog window.
   appVersion?(): Promise<string>;
+  /** what the app runs on, for Settings → Version info */
+  appInfo?(): Promise<{ runtime: string; os: string }>;
   openChangelog?(): Promise<void>;
   changelogOpen?(): Promise<boolean>;
   onChangelogOpen?(cb: (open: boolean) => void): () => void;

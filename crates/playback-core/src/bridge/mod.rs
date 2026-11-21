@@ -14,17 +14,16 @@ mod quick_open;
 mod server;
 mod track;
 
-use crate::media::Media;
 use crate::support::http::client;
 use crate::support::paths::data_file;
-use crate::{spicy, spotify, ui};
+use crate::host::Host;
+use crate::{spicy, spotify};
 use lookup::{Candidate, IdCache, Wanted};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use std::collections::HashSet;
 use std::sync::{LazyLock, Mutex};
 use std::time::Duration;
-use tauri::{AppHandle, Emitter, Manager};
 use track::Track;
 
 pub use server::start;
@@ -61,9 +60,8 @@ pub struct Song {
     pub duration: Option<f64>,
 }
 
-fn spotify_playing(app: &AppHandle) -> bool {
-    let latest = app.state::<Media>().latest();
-    latest
+fn spotify_playing(app: &dyn Host) -> bool {
+    app.media_latest()
         .as_ref()
         .and_then(|s| s["appId"].as_str())
         .is_some_and(|id| id.to_lowercase().contains("spotify"))
@@ -90,7 +88,7 @@ fn spotify_id(song: &Song) -> Option<String> {
 
 /// Have a hidden Spotify supply what this song lacks: its id, a fresh
 /// token, or both. Spotify playing it itself needs nothing.
-fn request_from_spotify(app: &AppHandle, song: &Song) {
+fn request_from_spotify(app: &dyn Host, song: &Song) {
     if spotify_playing(app) || song.title.is_empty() {
         return;
     }
@@ -117,7 +115,7 @@ fn request_from_spotify(app: &AppHandle, song: &Song) {
 }
 
 /// A Spotify opened for us closes once it handed over all it was asked for.
-fn close_quick_open_when_done(app: &AppHandle) {
+fn close_quick_open_when_done(app: &dyn Host) {
     if !quick_open::is_open() {
         return;
     }
@@ -130,7 +128,7 @@ fn close_quick_open_when_done(app: &AppHandle) {
 }
 
 /// fetchSpicyLyrics in src/player.d.ts.
-pub async fn spicy_lyrics(app: &AppHandle, song: Song) -> Value {
+pub async fn spicy_lyrics(app: &dyn Host, song: Song) -> Value {
     let id = spotify_id(&song);
     if id.is_none() || !token_fresh() {
         request_from_spotify(app, &song);
@@ -201,7 +199,7 @@ fn preload(next: Option<&track::Next>) {
         return;
     }
     let (id, name) = (n.id.clone(), n.name.clone().unwrap_or_default());
-    tauri::async_runtime::spawn(async move {
+    crate::rt::spawn(async move {
         let r = spicy::resolve(Some(&id)).await;
         eprintln!("[preload] {name}: {}", r["status"].as_str().unwrap_or("?"));
     });
@@ -210,7 +208,7 @@ fn preload(next: Option<&track::Next>) {
 // ── what the extension sends (server routes) ───────────────────────
 
 /// POST /token: `{ token, expiresAt, track }`.
-fn on_token(app: &AppHandle, payload: &Value) -> spotify::Saved {
+fn on_token(app: &dyn Host, payload: &Value) -> spotify::Saved {
     if let Ok(mut t) = serde_json::from_value::<Track>(payload["track"].clone()) {
         t.at = now();
         on_track(app, t);
@@ -222,7 +220,7 @@ fn on_token(app: &AppHandle, payload: &Value) -> spotify::Saved {
     );
     if saved.ok && !before {
         eprintln!("[bridge] token accepted, Spicy Lyrics is reachable again");
-        let _ = app.emit("spotify:tokenArrived", ());
+        let _ = app.emit("spotify:tokenArrived", Value::Null);
     } else if !saved.ok {
         eprintln!(
             "[bridge] token rejected: {}",
@@ -233,7 +231,7 @@ fn on_token(app: &AppHandle, payload: &Value) -> spotify::Saved {
     saved
 }
 
-fn on_track(app: &AppHandle, t: Track) {
+fn on_track(app: &dyn Host, t: Track) {
     let (changed, next_changed) = {
         let mut s = STATE.lock().unwrap();
         let before = s.track.as_ref();
@@ -245,7 +243,7 @@ fn on_track(app: &AppHandle, t: Track) {
     if changed || next_changed {
         preload(t.next.as_ref());
         // the queue changes on its own too, and the "Next" hint follows it
-        let _ = app.emit("bridge:track", ());
+        let _ = app.emit("bridge:track", Value::Null);
     }
     if changed {
         eprintln!(
@@ -261,13 +259,13 @@ fn on_track(app: &AppHandle, t: Track) {
         // The page asked on the session's change, before this id arrived; if
         // lyrics are on hand now, it looks again.
         if spicy::on_hand(&t.id) {
-            let _ = app.emit("spicy:lyricsArrived", ());
+            let _ = app.emit("spicy:lyricsArrived", Value::Null);
         }
     }
 }
 
 /// POST /spicy: `{ track, lyrics }`, lyrics Spicy Lyrics had in Spotify.
-fn on_spicy(app: &AppHandle, payload: &Value) -> Value {
+fn on_spicy(app: &dyn Host, payload: &Value) -> Value {
     let id = payload["track"]["id"].as_str().filter(|id| !id.is_empty());
     let lyrics = &payload["lyrics"];
     let Some(id) = id.filter(|_| !lyrics.is_null()) else {
@@ -280,7 +278,7 @@ fn on_spicy(app: &AppHandle, payload: &Value) -> Value {
     );
     spicy::remember(id, lyrics.clone());
     // the page may show this very song on a coarser source
-    let _ = app.emit("spicy:lyricsArrived", ());
+    let _ = app.emit("spicy:lyricsArrived", Value::Null);
     json!({ "ok": true })
 }
 
@@ -291,7 +289,7 @@ fn pending() -> Value {
 }
 
 /// POST /resolved: `{ title, artist, candidates, error? }`.
-fn on_resolved(app: &AppHandle, payload: &Value) {
+fn on_resolved(app: &dyn Host, payload: &Value) {
     let wanted = {
         let mut s = STATE.lock().unwrap();
         let matches = s.pending.as_ref().is_some_and(|w| {
@@ -316,7 +314,7 @@ fn on_resolved(app: &AppHandle, payload: &Value) {
             id.as_deref().unwrap_or("not on Spotify")
         );
         if id.is_some() {
-            let _ = app.emit("spicy:lyricsArrived", ());
+            let _ = app.emit("spicy:lyricsArrived", Value::Null);
         }
     }
     close_quick_open_when_done(app);
@@ -324,8 +322,8 @@ fn on_resolved(app: &AppHandle, payload: &Value) {
 
 /// POST /progress: Spotify's own clock, about once a second, which beats
 /// the media session's when that drifts mid-song.
-fn on_progress(app: &AppHandle, payload: Value) {
-    let _ = app.emit_to(ui::WIDGET, "bridge:progress", payload);
+fn on_progress(app: &dyn Host, payload: Value) {
+    let _ = app.emit_widget("bridge:progress", payload);
 }
 
 /// Called on quit: a hidden Spotify never outlives the app.

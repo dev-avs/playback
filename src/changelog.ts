@@ -22,6 +22,19 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.0-a",
+    date: "2026-11-20",
+    changes: {
+      new: [
+        "Added Version info to Settings → App: version, flavor, runtime and Windows version (also from the version tag in the footer)",
+      ],
+      qol: [
+        "Settings drags from anywhere on its card, not just the header",
+        "Installer warns that GPUI is experimental before installing it",
+      ],
+    },
+  },
+  {
     version: "1.6.0",
     date: "2026-11-19",
     changes: {
@@ -570,11 +583,14 @@ export const progressText = (s: UpdateState) =>
   s.total ? `${Math.round((s.downloaded / s.total) * 100)}%` : `${(s.downloaded / 1048576).toFixed(1)} MB`;
 
 export function compareVersions(a: string, b: string): number {
-  const pa = a.split(".").map(Number);
-  const pb = b.split(".").map(Number);
+  // a flavor revision after a dash comes after its version: 1.6.0 < 1.6.0-a < 1.6.0-b < 1.6.1
+  const [na, ra = ""] = a.split("-");
+  const [nb, rb = ""] = b.split("-");
+  const pa = na.split(".").map(Number);
+  const pb = nb.split(".").map(Number);
   for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
     const d = (pa[i] ?? 0) - (pb[i] ?? 0);
     if (d) return Math.sign(d);
   }
-  return 0;
+  return Math.sign(ra.length - rb.length) || (ra < rb ? -1 : ra > rb ? 1 : 0);
 }

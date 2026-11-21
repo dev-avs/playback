@@ -9,7 +9,8 @@
 
 use serde_json::Value;
 use std::time::Duration;
-use tauri::AppHandle;
+use crate::host::Host;
+use std::sync::Arc;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio::net::{TcpListener, TcpStream};
 
@@ -88,7 +89,7 @@ async fn reply(stream: &mut TcpStream, status: &str, allow_origin: &str, body: O
     let _ = stream.shutdown().await;
 }
 
-async fn serve(app: AppHandle, mut stream: TcpStream) {
+async fn serve(app: Arc<dyn Host>, mut stream: TcpStream) {
     let Some(mut req) = read_head(&mut stream).await else {
         return;
     };
@@ -127,16 +128,16 @@ async fn serve(app: AppHandle, mut stream: TcpStream) {
     let ok = r#"{"ok":true}"#.to_string();
     let (status, body) = match req.route.as_str() {
         "/resolved" => {
-            super::on_resolved(&app, &payload);
+            super::on_resolved(&*app, &payload);
             ("200 OK", ok)
         }
         "/progress" => {
-            super::on_progress(&app, payload);
+            super::on_progress(&*app, payload);
             ("200 OK", ok)
         }
-        "/spicy" => ("200 OK", super::on_spicy(&app, &payload).to_string()),
+        "/spicy" => ("200 OK", super::on_spicy(&*app, &payload).to_string()),
         _ => {
-            let saved = super::on_token(&app, &payload);
+            let saved = super::on_token(&*app, &payload);
             (
                 if saved.ok {
                     "200 OK"
@@ -152,8 +153,8 @@ async fn serve(app: AppHandle, mut stream: TcpStream) {
 
 /// Listens for the extension. A second copy of the app finds the port
 /// taken; the first one owns the bridge, and both read the same token file.
-pub fn start(app: AppHandle) {
-    tauri::async_runtime::spawn(async move {
+pub fn start(app: Arc<dyn Host>) {
+    crate::rt::spawn(async move {
         let listener = match TcpListener::bind(("127.0.0.1", PORT)).await {
             Ok(l) => l,
             Err(e) => return eprintln!("[bridge] could not listen on {PORT}: {e}"),
@@ -165,7 +166,7 @@ pub fn start(app: AppHandle) {
             };
             let app = app.clone();
             // a stalled connection cannot hold anything up
-            tauri::async_runtime::spawn(async move {
+            crate::rt::spawn(async move {
                 let _ = tokio::time::timeout(Duration::from_secs(30), serve(app, stream)).await;
             });
         }

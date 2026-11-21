@@ -7,7 +7,7 @@
 //! call nothing in the app. All the app does is show a hint at the bottom
 //! (the toast) and fill in the new application's name and URL.
 
-use super::key::{self, Checked};
+use playback_core::spicy::key::{self, Checked};
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
 use tauri::webview::{NewWindowResponse, PageLoadEvent};

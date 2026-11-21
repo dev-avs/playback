@@ -23,7 +23,7 @@ use std::collections::HashMap;
 use std::fs;
 use std::path::PathBuf;
 use std::sync::Mutex;
-use tauri::{AppHandle, Emitter};
+use crate::host::Host;
 
 /// Progress is sent to the page at most once per this many bytes.
 const REPORT_EVERY: u64 = 512 * 1024;
@@ -95,8 +95,8 @@ impl Default for Updater {
     }
 }
 
-fn current(app: &AppHandle) -> String {
-    app.package_info().version.to_string()
+fn current(app: &dyn Host) -> String {
+    app.version()
 }
 
 fn work_dir() -> PathBuf {
@@ -109,17 +109,20 @@ impl Updater {
     }
 
     /// Changes the state and tells every window.
-    fn set(&self, app: &AppHandle, change: impl FnOnce(&mut UpdateState)) -> UpdateState {
+    fn set(&self, app: &dyn Host, change: impl FnOnce(&mut UpdateState)) -> UpdateState {
         let state = {
             let mut s = self.state.lock().unwrap();
             change(&mut s);
             s.clone()
         };
-        let _ = app.emit("update:changed", &state);
+        let _ = app.emit(
+            "update:changed",
+            serde_json::to_value(&state).unwrap_or_default(),
+        );
         state
     }
 
-    fn fail(&self, app: &AppHandle, error: String) -> UpdateState {
+    fn fail(&self, app: &dyn Host, error: String) -> UpdateState {
         eprintln!("[update] {error}");
         self.set(app, |s| {
             s.status = Status::Error;
@@ -127,7 +130,7 @@ impl Updater {
         })
     }
 
-    pub async fn check(&self, app: &AppHandle) -> UpdateState {
+    pub async fn check(&self, app: &dyn Host) -> UpdateState {
         let s = self.state();
         if s.busy() {
             return s;
@@ -153,7 +156,7 @@ impl Updater {
     }
 
     /// Downloads the update and restarts into it. Checks first if nobody has.
-    pub async fn install(&self, app: &AppHandle) -> UpdateState {
+    pub async fn install(&self, app: &dyn Host) -> UpdateState {
         let s = self.state();
         if matches!(s.status, Status::Dev | Status::Downloading) {
             return s;
@@ -175,7 +178,7 @@ impl Updater {
     /// so settings persist across flavor switches.
     pub async fn bump(
         &self,
-        app: &AppHandle,
+        app: &dyn Host,
         version: String,
         flavor: Option<String>,
         settings_json: Option<String>,
@@ -216,7 +219,7 @@ impl Updater {
 
     async fn install_flavor(
         &self,
-        app: &AppHandle,
+        app: &dyn Host,
         version: String,
         flavor: String,
         stub_url: &str,
@@ -245,7 +248,7 @@ impl Updater {
         }
     }
 
-    fn start_download(&self, app: &AppHandle, version: &str) {
+    fn start_download(&self, app: &dyn Host, version: &str) {
         self.set(app, |s| {
             *s = UpdateState {
                 status: Status::Downloading,
@@ -258,7 +261,7 @@ impl Updater {
     }
 
     /// Counts bytes in, telling the page every so often.
-    fn counter<'a>(&'a self, app: &'a AppHandle, base: u64) -> impl FnMut(Progress) + 'a {
+    fn counter<'a>(&'a self, app: &'a dyn Host, base: u64) -> impl FnMut(Progress) + 'a {
         let (mut got, mut told) = (0u64, 0u64);
         move |p| match p {
             Progress::Size(n) => {
@@ -277,7 +280,7 @@ impl Updater {
     /// `pinned`: that version's own feed rather than the newest.
     async fn install_release(
         &self,
-        app: &AppHandle,
+        app: &dyn Host,
         pinned: Option<String>,
         version: String,
     ) -> UpdateState {
@@ -323,7 +326,7 @@ impl Updater {
     /// A legacy release: its full installer, run as it is (not silent, so
     /// it starts the app again when it is done), then this one quits so it
     /// can be replaced.
-    async fn install_legacy(&self, app: &AppHandle, version: String, url: &str) -> UpdateState {
+    async fn install_legacy(&self, app: &dyn Host, version: String, url: &str) -> UpdateState {
         self.start_download(app, &version);
         let file = work_dir().join(format!("player-setup-{version}.exe"));
         let done = async {

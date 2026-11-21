@@ -2,7 +2,7 @@
 
 pub mod cards;
 pub mod changelog;
-pub mod fonts;
+pub use playback_core::fonts;
 pub mod widget;
 
 /// The widget window's label (tauri.conf.json).

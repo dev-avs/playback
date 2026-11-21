@@ -3297,6 +3297,24 @@ checksum = "f6b464fbc74e149a392436b17d523f769e057cb6877f6a5c4618bc6f11800548"
 name = "playback"
 version = "0.1.0"
 dependencies = [
+ "playback-core",
+ "rusty-leveldb",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-clipboard-manager",
+ "tauri-plugin-global-shortcut",
+ "tauri-plugin-opener",
+ "tauri-plugin-single-instance",
+ "tokio",
+ "windows",
+]
+
+[[package]]
+name = "playback-core"
+version = "0.1.0"
+dependencies = [
  "aes-gcm",
  "base64 0.22.1",
  "flate2",
@@ -3304,16 +3322,9 @@ dependencies = [
  "lindera",
  "regex",
  "reqwest 0.12.28",
- "rusty-leveldb",
  "serde",
  "serde_json",
  "sha2 0.10.9",
- "tauri",
- "tauri-build",
- "tauri-plugin-clipboard-manager",
- "tauri-plugin-global-shortcut",
- "tauri-plugin-opener",
- "tauri-plugin-single-instance",
  "tokio",
  "windows",
 ]

@@ -100,12 +100,16 @@ pub async fn fetch(version: Option<&str>) -> Result<Feed, String> {
         .ok_or_else(|| "the release's latest.yml could not be read".into())
 }
 
-/// Dotted versions compared part by part, as numbers.
+/// Dotted versions compared part by part, as numbers, then by the flavor
+/// revision after a dash: 1.6.0 < 1.6.0-a < 1.6.0-b < 1.6.0-aa < 1.6.1.
 pub fn compare(a: &str, b: &str) -> Ordering {
     let parts = |v: &str| {
-        v.split('.')
+        let (number, revision) = v.split_once('-').unwrap_or((v, ""));
+        let number = number
+            .split('.')
             .map(|p| p.parse::<u64>().unwrap_or(0))
-            .collect::<Vec<_>>()
+            .collect::<Vec<_>>();
+        (number, revision.len(), revision.to_string())
     };
     parts(a).cmp(&parts(b))
 }
@@ -270,6 +274,11 @@ releaseDate: '2026-11-20T02:08:25.674Z'
         assert_eq!(compare("1.5.10", "1.5.9"), Ordering::Greater);
         assert_eq!(compare("1.5.8", "1.5.8"), Ordering::Equal);
         assert_eq!(compare("1.4.9", "1.5.0"), Ordering::Less);
+        assert_eq!(compare("1.6.0-a", "1.6.0"), Ordering::Greater);
+        assert_eq!(compare("1.6.0-b", "1.6.0-a"), Ordering::Greater);
+        assert_eq!(compare("1.6.0-aa", "1.6.0-z"), Ordering::Greater);
+        assert_eq!(compare("1.6.1", "1.6.0-b"), Ordering::Greater);
+        assert_eq!(compare("1.6.0-a", "1.6.0-a"), Ordering::Equal);
     }
 
     #[test]

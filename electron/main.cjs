@@ -872,18 +872,19 @@ let dragOrigin = null;
 
 const DRAG_INTERVAL_MS = 8; // ~120 Hz, comfortably above any display refresh
 
-function startDrag() {
-  if (fullscreenFrom) return;
+// `target`: the window being dragged (the widget, or Settings, which drags from anywhere)
+function startDrag(target = win) {
+  if (target === win && fullscreenFrom) return;
   stopDrag();
-  if (!win) return;
+  if (!target || target.isDestroyed()) return;
   const cursor = screen.getCursorScreenPoint();
-  const [x, y] = win.getPosition();
+  const [x, y] = target.getPosition();
   dragOrigin = { cursorX: cursor.x, cursorY: cursor.y, winX: x, winY: y };
 
   dragTimer = setInterval(() => {
-    if (!win || win.isDestroyed() || !dragOrigin) return stopDrag();
+    if (target.isDestroyed() || !dragOrigin) return stopDrag();
     const now = screen.getCursorScreenPoint();
-    win.setPosition(
+    target.setPosition(
       dragOrigin.winX + (now.x - dragOrigin.cursorX),
       dragOrigin.winY + (now.y - dragOrigin.cursorY),
     );
@@ -1606,6 +1607,10 @@ app.whenReady().then(() => {
   ipcMain.handle("settings:open", () => openSettings());
   ipcMain.handle("settings:close", () => closeSettings());
   ipcMain.handle("app:version", () => app.getVersion());
+  ipcMain.handle("app:info", () => ({
+    runtime: `Electron ${process.versions.electron} · Chromium ${process.versions.chrome}`,
+    os: `Windows ${require("os").release()} · ${process.arch}`,
+  }));
   ipcMain.handle("changelog:open", () => openChangelog());
   ipcMain.handle("changelog:isOpen", () => !!changelogWin);
   ipcMain.handle("changelog:openPast", () => openPastChangelog());
@@ -1779,7 +1784,7 @@ app.whenReady().then(() => {
     spicyKey.connect(BrowserWindow.fromWebContents(e.sender)).then(spicyKeyChanged));
   ipcMain.handle("spicyKey:set", (_e, raw) => spicyKey.set(raw).then(spicyKeyChanged));
   ipcMain.handle("spicyKey:clear", () => spicyKeyChanged(spicyKey.clear()));
-  ipcMain.handle("win:dragStart", () => startDrag());
+  ipcMain.handle("win:dragStart", (e) => startDrag(BrowserWindow.fromWebContents(e.sender) ?? win));
   ipcMain.handle("win:fullscreen", (_e, on) => setFullscreen(!!on));
   // Ctrl+Alt+F from anywhere; the widget owns the layout, so it decides.
   globalShortcut.register("CommandOrControl+Alt+F", () => win?.webContents.send("fullscreen:toggle"));

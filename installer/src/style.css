@@ -915,6 +915,110 @@ button {
     color: #111114;
 }
 
+.flavor-badge.warn,
+.flavor-card.selected .flavor-badge.warn {
+    background: rgba(255, 176, 32, 0.18);
+    color: #ffc04d;
+}
+
+/* ── GPUI gate: covers the whole window ── */
+.card > .gpui-gate {
+    position: absolute;
+    inset: 0;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    padding: 28px 24px 22px;
+    background: #0c0c0e;
+    border-radius: inherit;
+    animation: gate-in 420ms var(--out);
+}
+
+.gpui-gate[hidden] {
+    display: none;
+}
+
+@keyframes gate-in {
+    from {
+        opacity: 0;
+        transform: scale(0.97);
+    }
+}
+
+.gpui-gate-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin-bottom: 14px;
+    background: rgba(255, 176, 32, 0.16);
+    box-shadow: inset 0 0 0 1px rgba(255, 176, 32, 0.5);
+    color: #ffc04d;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.gpui-gate .heading {
+    color: #ffc04d;
+}
+
+.gpui-gate-text {
+    margin: 8px 0 0;
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.gpui-gate-text b {
+    color: #fff;
+}
+
+.gpui-gate-list {
+    margin: 8px 0 0;
+    padding-left: 18px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.gpui-gate-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.gpui-gate-actions .btn {
+    font-size: 11px;
+    padding: 7px 14px;
+}
+
+.btn.gpui-hold {
+    position: relative;
+    overflow: hidden;
+    min-width: 150px;
+    background: rgba(255, 90, 70, 0.3);
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+.btn.gpui-hold:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.gpui-hold-fill {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 90, 70, 0.85);
+    transform-origin: left;
+    transform: scaleX(var(--p, 0));
+}
+
+.gpui-hold-label {
+    position: relative;
+}
+
 .flavor-size {
     margin-left: auto;
     font-size: 11px;

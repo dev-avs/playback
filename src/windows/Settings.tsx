@@ -590,6 +590,44 @@ export default function Settings() {
     window.player?.appVersion?.().then(setAppVersion);
     return window.player?.onUpdateChanged?.(setUpdate);
   }, []);
+  // which build this is (the same React bundle runs in both shells), e.g. "1.6.0-Electron"
+  const flavorName = "__TAURI_INTERNALS__" in window ? "Tauri" : "Electron";
+  const versionTag = `${appVersion}-${flavorName}`;
+  // The whole window drags, except its controls (and a list's scrollbar). A
+  // click that ends a real drag is swallowed, so dragging never toggles anything.
+  const dragFrom = useRef<{ x: number; y: number } | null>(null);
+  const dragFromAnywhere = (e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    const t = e.target as HTMLElement;
+    if (t.closest("button, input, select, textarea, a, [contenteditable], .st-holdable, .st-info-value")) return;
+    if (t.scrollHeight > t.clientHeight && e.nativeEvent.offsetX >= t.clientWidth) return;
+    dragFrom.current = { x: e.screenX, y: e.screenY };
+    window.player?.dragStart?.();
+    const end = () => {
+      window.player?.dragEnd?.();
+      window.removeEventListener("pointerup", end);
+      window.removeEventListener("blur", end);
+    };
+    window.addEventListener("pointerup", end);
+    window.addEventListener("blur", end);
+  };
+  const swallowDragClick = (e: React.MouseEvent) => {
+    const from = dragFrom.current;
+    dragFrom.current = null;
+    if (from && Math.hypot(e.screenX - from.x, e.screenY - from.y) > 3) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+  };
+  // Version info panel (App → Version info, or the footer tag)
+  const [infoOpen, setInfoOpen] = useState(false);
+  const [sysInfo, setSysInfo] = useState<{ runtime: string; os: string } | null>(null);
+  useEffect(() => {
+    if (!infoOpen || sysInfo) return;
+    const edge = navigator.userAgent.match(/Edg\/([\d.]+)/)?.[1];
+    const fallback = { runtime: edge ? `WebView2 ${edge}` : "—", os: "Windows" };
+    (window.player?.appInfo?.() ?? Promise.resolve(fallback)).then(setSysInfo, () => setSysInfo(fallback));
+  }, [infoOpen, sysInfo]);
   const updateHint = !update
     ? "…"
     : {
@@ -1197,6 +1235,18 @@ export default function Settings() {
       ),
     },
     {
+      id: "versionInfo",
+      cat: "app",
+      label: "Version info",
+      hint: appVersion ? versionTag : undefined,
+      desc: "Which version and flavor of Playback this is, what it runs on, and your Windows version.",
+      control: (
+        <button className="st-pill" onClick={() => setInfoOpen(true)}>
+          Open
+        </button>
+      ),
+    },
+    {
       id: "uninstall",
       cat: "app",
       label: "Uninstall Playback",
@@ -1295,7 +1345,7 @@ export default function Settings() {
         window.player?.closeSettings?.();
       }}
     >
-      <div className="st-card" ref={cardRef}>
+      <div className="st-card" ref={cardRef} onPointerDown={dragFromAnywhere} onClickCapture={swallowDragClick}>
         <div className="st-bg st-bg-mono" />
         {cover.prev && (
           <div
@@ -1388,9 +1438,16 @@ export default function Settings() {
         </HoverContext.Provider>
 
         <footer className="st-foot">
-          <button className="st-reset" disabled={changelogOpen} onClick={() => window.player?.openChangelog?.()}>
-            What's new
-          </button>
+          <span className="st-foot-left">
+            <button className="st-reset" disabled={changelogOpen} onClick={() => window.player?.openChangelog?.()}>
+              What's new
+            </button>
+            {appVersion && (
+              <button className="st-foot-tag" onClick={() => setInfoOpen(true)} title="Version info">
+                {versionTag}
+              </button>
+            )}
+          </span>
           <span className="st-foot-right">
             {!q && (
               <button
@@ -1421,6 +1478,32 @@ export default function Settings() {
             </button>
           </span>
         </footer>
+
+        {infoOpen && (
+          <div className="st-info" onClick={() => setInfoOpen(false)}>
+            <div className="st-info-panel" onClick={(e) => e.stopPropagation()}>
+              <div className="st-info-head">
+                <span>Version info</span>
+                <button className="st-close" onClick={() => setInfoOpen(false)} aria-label="Close version info">
+                  ×
+                </button>
+              </div>
+              <div className="st-info-grid">
+                {[
+                  ["Version", appVersion],
+                  ["Flavor", flavorName],
+                  ["Runtime", sysInfo?.runtime ?? "…"],
+                  ["Operating system", sysInfo?.os ?? "…"],
+                ].map(([k, v]) => (
+                  <div className="st-info-tile" key={k}>
+                    <span className="st-info-label">{k}</span>
+                    <span className="st-info-value">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

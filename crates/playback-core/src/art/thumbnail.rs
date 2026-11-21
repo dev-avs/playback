@@ -60,7 +60,7 @@ pub async fn find(app_id: &str, title: &str) -> Option<String> {
     }
     for _ in 0..4 {
         let (id, t) = (app_id.to_string(), title.to_string());
-        let thumb = tauri::async_runtime::spawn_blocking(move || read(&id, &t))
+        let thumb = crate::rt::spawn_blocking(move || read(&id, &t))
             .await
             .ok()?;
         match thumb {

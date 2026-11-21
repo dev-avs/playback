@@ -1,6 +1,7 @@
 //! Everything the page can call. Each command only hands over to the module
 //! that does the work; nothing here decides anything.
 
+use crate::host::TauriHost;
 use crate::media::Media;
 use crate::spicetify::setup::{Setup, SetupState};
 use crate::ui::cards::{self, Card};
@@ -101,7 +102,7 @@ pub fn spotify_sign_out(app: AppHandle) {
 
 #[tauri::command]
 pub async fn spicy_lyrics(req: bridge::Song, app: AppHandle) -> Value {
-    bridge::spicy_lyrics(&app, req).await
+    bridge::spicy_lyrics(&TauriHost(app), req).await
 }
 
 #[derive(Deserialize)]
@@ -129,7 +130,7 @@ pub fn spicy_key_status() -> spicy::key::Status {
 
 #[tauri::command]
 pub async fn spicy_key_connect(app: AppHandle) -> spicy::key::Checked {
-    let checked = spicy::connect::connect(&app).await;
+    let checked = crate::spicy_connect::connect(&app).await;
     spicy_key_changed(&app, checked)
 }
 
@@ -242,7 +243,7 @@ pub fn update_state(updater: State<Updater>) -> UpdateState {
 
 #[tauri::command]
 pub async fn update_check(app: AppHandle, updater: State<'_, Updater>) -> Result<UpdateState, ()> {
-    Ok(updater.check(&app).await)
+    Ok(updater.check(&TauriHost(app)).await)
 }
 
 #[tauri::command]
@@ -250,7 +251,7 @@ pub async fn update_install(
     app: AppHandle,
     updater: State<'_, Updater>,
 ) -> Result<UpdateState, ()> {
-    Ok(updater.install(&app).await)
+    Ok(updater.install(&TauriHost(app)).await)
 }
 
 /// Version control: any release, older or newer.
@@ -262,7 +263,7 @@ pub async fn update_bump(
     app: AppHandle,
     updater: State<'_, Updater>,
 ) -> Result<UpdateState, ()> {
-    Ok(updater.bump(&app, version, flavor, settings_json).await)
+    Ok(updater.bump(&TauriHost(app), version, flavor, settings_json).await)
 }
 
 #[tauri::command]

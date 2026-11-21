@@ -12,7 +12,6 @@
 
 mod api;
 mod cache;
-pub mod connect;
 pub mod key;
 
 use crate::support::cache::Cache;

@@ -1,5 +1,7 @@
 //! Playback, the Tauri build. Replaces electron/ piece by piece; the page is
 //! the same React app, which reaches this side through src/bridge/tauri.ts.
+//! The backend modules below live in crates/playback-core, shared with the
+//! GPUI build; `host` is how they reach this app.
 //!
 //! - `media`    what Windows is playing, its buttons and the app's volume
 //! - `lyrics`   synced lyrics from LRCMux, NetEase and LrcLib
@@ -18,21 +20,18 @@
 
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-mod art;
-mod bridge;
 mod commands;
+mod host;
 mod install;
 mod launch;
-mod lyrics;
-mod media;
 mod migrate;
-mod spicetify;
-mod spicy;
-mod spotify;
-mod support;
+mod spicy_connect;
 mod ui;
-mod updates;
 
+// the shared backend (crates/playback-core), under the names it had here
+use playback_core::{art, bridge, lyrics, media, spicetify, spicy, spotify, support, updates};
+
+use std::sync::Arc;
 use tauri::{Emitter, Manager};
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, ShortcutState};
 
@@ -55,6 +54,7 @@ fn fullscreen_shortcut(app: &tauri::AppHandle) -> tauri::Result<()> {
 }
 
 fn main() {
+    playback_core::rt::init(tauri::async_runtime::handle().inner().clone());
     migrate::adopt_legacy_folder();
     tauri::Builder::default()
         // first, so a second launch leaves before anything has started
@@ -74,7 +74,7 @@ fn main() {
             if let Some(w) = app.get_webview_window("widget") {
                 let _ = w.set_always_on_top(true);
             }
-            bridge::start(app.handle().clone());
+            bridge::start(Arc::new(host::TauriHost(app.handle().clone())));
             launch::start(app.handle())?;
             Ok(())
         })

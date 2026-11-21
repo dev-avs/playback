@@ -26,7 +26,7 @@ const BRIDGE: &str = "player-bridge.js";
 /// Its name before 1.3.3.
 const LEGACY: [&str; 1] = ["player-token.js"];
 /// The bridge as this build ships it.
-pub const SOURCE: &[u8] = include_bytes!("../../../spicetify/player-bridge.js");
+pub const SOURCE: &[u8] = include_bytes!("../../../../spicetify/player-bridge.js");
 
 /// Where Spicetify and Spotify keep things, per their installers' defaults.
 pub struct Paths {

@@ -34,6 +34,9 @@ release
 
 # The installer (installer/): Rust build output and generated schemas
 installer/src-tauri/target
+crates/*/target
+crates/*/Cargo.lock
+spikes/*/target
 installer/src-tauri/gen
 
 # The thumbnail helper (native/smtc-thumb): `npm run thumb` copies the exe to electron/
@@ -41,7 +44,8 @@ native/smtc-thumb/target
 
 # The Tauri app (src-tauri/): Rust build output and generated schemas
 src-tauri/target
+crates/*/target
+crates/*/Cargo.lock
+spikes/*/target
 src-tauri/gen
 
-# The GPUI port (src-gpui/): Rust build output
-src-gpui/target

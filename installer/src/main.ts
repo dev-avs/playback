@@ -84,6 +84,70 @@ function holdEnd() {
   if (!$<HTMLButtonElement>("cancel").disabled) $("cancel-label").textContent = "Hold to cancel";
 }
 
+// GPUI is experimental: picking it opens a full-window warning. The button
+// unlocks after 5 s of reading, then has to be held for 5 s.
+const GATE_WAIT_MS = 5000;
+const GATE_HOLD_MS = 5000;
+let gpuiConfirmed = false;
+let gateFrame = 0;
+let gateHeldSince = 0;
+const secs = (ms: number) => (Math.max(0, ms) / 1000).toFixed(2);
+
+function openGate() {
+  const btn = $<HTMLButtonElement>("gpui-hold");
+  btn.disabled = true;
+  gateHeldSince = 0;
+  $("gpui-hold-fill").style.setProperty("--p", "0");
+  $("gpui-gate").hidden = false;
+  const opened = performance.now();
+  const tick = () => {
+    const left = GATE_WAIT_MS - (performance.now() - opened);
+    if (left > 0) {
+      $("gpui-hold-label").textContent = `Read this first · ${secs(left)}`;
+      gateFrame = requestAnimationFrame(tick);
+    } else {
+      btn.disabled = false;
+      $("gpui-hold-label").textContent = "Install GPUI";
+    }
+  };
+  cancelAnimationFrame(gateFrame);
+  tick();
+}
+
+function closeGate() {
+  cancelAnimationFrame(gateFrame);
+  gateHeldSince = 0;
+  $("gpui-gate").hidden = true;
+}
+
+function gpuiHoldStart() {
+  if ($<HTMLButtonElement>("gpui-hold").disabled) return;
+  gateHeldSince = performance.now();
+  const tick = () => {
+    if (!gateHeldSince) return;
+    const held = performance.now() - gateHeldSince;
+    $("gpui-hold-fill").style.setProperty("--p", String(Math.min(1, held / GATE_HOLD_MS)));
+    if (held < GATE_HOLD_MS) {
+      $("gpui-hold-label").textContent = secs(GATE_HOLD_MS - held);
+      gateFrame = requestAnimationFrame(tick);
+    } else {
+      gpuiConfirmed = true;
+      closeGate();
+      selectFlavor("gpui");
+      show("options");
+    }
+  };
+  tick();
+}
+
+function gpuiHoldEnd() {
+  if (!gateHeldSince) return;
+  gateHeldSince = 0;
+  cancelAnimationFrame(gateFrame);
+  $("gpui-hold-fill").style.setProperty("--p", "0");
+  $("gpui-hold-label").textContent = "Install GPUI";
+}
+
 function fail(message: string) {
   busy = false;
   card.classList.remove("installing");
@@ -351,9 +415,13 @@ $("flavor-next").addEventListener("click", () => show("options"));
 for (const el of document.querySelectorAll<HTMLButtonElement>(".flavor-card")) {
   el.addEventListener("click", () => {
     const id = el.dataset.flavor as FlavorId;
-    selectFlavor(id);
+    if (id === "gpui" && !gpuiConfirmed) openGate();
+    else selectFlavor(id);
   });
 }
+$("gpui-back").addEventListener("click", closeGate);
+$("gpui-hold").addEventListener("pointerdown", gpuiHoldStart);
+for (const ev of ["pointerup", "pointerleave", "pointercancel"]) $("gpui-hold").addEventListener(ev, gpuiHoldEnd);
 $("back").addEventListener("click", () => show("flavor"));
 $("browse").addEventListener("click", browse);
 $("bridge").addEventListener("click", () => toggle("bridge"));

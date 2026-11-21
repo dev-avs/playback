@@ -82,7 +82,7 @@ pub async fn fetch(texts: Vec<String>) -> Option<Vec<Vec<Token>>> {
     if let Some(hit) = FOUND.get(&key) {
         return Some(hit);
     }
-    let found = tauri::async_runtime::spawn_blocking(move || tokenize(&texts))
+    let found = crate::rt::spawn_blocking(move || tokenize(&texts))
         .await
         .ok()?;
     match found {

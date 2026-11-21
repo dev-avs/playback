@@ -10,6 +10,8 @@
 //! widget opens looking as it did.
 
 use crate::support::paths::data_dir;
+pub use playback_core::migrate::adopt_legacy_folder;
+use playback_core::migrate::copy_dir;
 use rusty_leveldb::{LdbIterator, Options, DB};
 use std::collections::BTreeMap;
 use std::fs;
@@ -17,47 +19,12 @@ use std::path::Path;
 use std::sync::OnceLock;
 use tauri::{AppHandle, Manager};
 
-/// The data folder's name before 1.4.3.
-pub const LEGACY_DATA: &str = "player";
-
 /// Electron's localStorage origin for the bundled page.
 const ORIGIN: &[u8] = b"_file://\x00";
 
 /// Written once the settings have been handed over, so they are not read
 /// again (and a setting the user has since reset does not come back).
 const IMPORTED: &str = "electron-settings-imported";
-
-/// A copy of electron/main.cjs's rename step, for an install updated
-/// straight from 1.4.2 or older: the old folder is copied, not moved, so a
-/// Version control revert to such a release still finds its settings.
-pub fn adopt_legacy_folder() {
-    let now = data_dir();
-    let before = now.with_file_name(LEGACY_DATA);
-    if now.exists() || !before.exists() {
-        return;
-    }
-    if let Err(e) = copy_dir(&before, &now, &["lockfile"]) {
-        eprintln!("[migrate] could not copy the old settings: {e}");
-    }
-}
-
-fn copy_dir(from: &Path, to: &Path, skip: &[&str]) -> std::io::Result<()> {
-    fs::create_dir_all(to)?;
-    for entry in fs::read_dir(from)? {
-        let entry = entry?;
-        let name = entry.file_name();
-        if skip.iter().any(|s| name == *s) {
-            continue;
-        }
-        let target = to.join(&name);
-        if entry.file_type()?.is_dir() {
-            copy_dir(&entry.path(), &target, skip)?;
-        } else {
-            fs::copy(entry.path(), target)?;
-        }
-    }
-    Ok(())
-}
 
 /// A localStorage string as Chromium stores it: a leading 0 for UTF-16LE, 1
 /// for Latin-1.

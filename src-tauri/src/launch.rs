@@ -80,7 +80,10 @@ pub fn start(app: &AppHandle) -> tauri::Result<()> {
             handle.state::<Widget>().reveal(&win);
         }
         // asked once per launch, unless the user skipped this version
-        let state = handle.state::<Updater>().check(&handle).await;
+        let state = handle
+            .state::<Updater>()
+            .check(&crate::host::TauriHost(handle.clone()))
+            .await;
         if state.available().is_some_and(|v| !Updater::is_skipped(v)) {
             open(&handle, Card::Update);
         }

@@ -124,6 +124,7 @@ contextBridge.exposeInMainWorld("player", {
   resizeSettings: (height) => ipcRenderer.invoke("settings:resize", height),
   // The changelog window.
   appVersion: () => ipcRenderer.invoke("app:version"),
+  appInfo: () => ipcRenderer.invoke("app:info"),
   openChangelog: () => ipcRenderer.invoke("changelog:open"),
   // whether What's new is open now, and every change after
   changelogOpen: () => ipcRenderer.invoke("changelog:isOpen"),

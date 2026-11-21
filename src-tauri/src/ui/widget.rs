@@ -142,7 +142,8 @@ impl Widget {
     /// Follows the cursor until drag_end, ~120 times a second.
     pub fn drag_start(&self, win: &WebviewWindow) {
         self.stop_drag();
-        if self.is_fullscreen() {
+        // a fullscreen widget stays put; the cards still drag (electron/main.cjs startDrag)
+        if win.label() == super::WIDGET && self.is_fullscreen() {
             return;
         }
         let Ok(origin) = win.outer_position() else {
@@ -172,7 +173,11 @@ impl Widget {
 
     pub fn drag_end(&self, win: &WebviewWindow) {
         self.stop_drag();
-        self.replay(win);
+        // the widget's last height, never a card's (a dragged Settings window
+        // would take the widget's height and be cut off)
+        if win.label() == super::WIDGET {
+            self.replay(win);
+        }
     }
 
     /// Launch has settled: the widget shows, unless the page hid it.

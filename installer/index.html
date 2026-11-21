@@ -105,11 +105,11 @@
                 <div class="flavor-head">
                   <span class="flavor-radio" aria-hidden="true"></span>
                   <span class="flavor-name">GPUI</span>
-                  <span class="flavor-badge">Native</span>
+                  <span class="flavor-badge warn">Experimental</span>
                   <span class="flavor-size" data-size="gpui"></span>
                 </div>
                 <p class="flavor-desc">
-                  Pure native Rust rendered directly on the GPU — no browser engine at all. Lowest RAM and CPU footprint.
+                  Native Rust drawn straight on the GPU, no browser engine. Early and unfinished.
                 </p>
               </button>
             </div>
@@ -223,6 +223,32 @@
               <button class="btn primary" id="retry">Try again</button>
             </div>
           </section>
+        </div>
+
+        <!-- GPUI is experimental: picking it takes over the window until confirmed -->
+        <div class="gpui-gate" id="gpui-gate" hidden>
+          <div class="gpui-gate-icon" aria-hidden="true">!</div>
+          <h2 class="heading">GPUI is experimental</h2>
+          <p class="gpui-gate-text">
+            It is still in development and <b>very buggy</b>. Expect:
+          </p>
+          <ul class="gpui-gate-list">
+            <li>Screens that look different from the other flavors</li>
+            <li>Stuttering or missing animations</li>
+            <li>Settings and features that are missing or don't work</li>
+            <li>Freezes and crashes</li>
+          </ul>
+          <p class="gpui-gate-text">
+            Not for everyday use. To leave it, run this installer again and pick Tauri.
+          </p>
+          <div class="grow"></div>
+          <div class="gpui-gate-actions">
+            <button class="btn quiet" id="gpui-back">Pick another flavor</button>
+            <button class="btn gpui-hold" id="gpui-hold" disabled>
+              <span class="gpui-hold-fill" id="gpui-hold-fill"></span>
+              <span class="gpui-hold-label" id="gpui-hold-label">Read this first · 5.00</span>
+            </button>
+          </div>
         </div>
       </main>
     </div>
