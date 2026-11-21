@@ -82,7 +82,13 @@ on day 1, not in Phase 3.
   `skipTaskbar`, settings placement rule, right-click close, drag regions, card-measure resize (7.8),
   cursor-poll hover (7.6), tray, single instance.
 - The real frame driver, built from the spike.
-- Gate: window-behaviour rows done (`GetWindowRect` asserts), fps log ≥55.
+- Gate: window-behaviour rows done (`GetWindowRect` asserts), fps log ≥55. **Done 2026-11-20
+  (off-screen):** `--selftest-shell` 48/48, `--selftest-cards` 192/192, frame log min ≥95 fps, max gap
+  ≤10.4 ms; ledger 151 rows done. Open: webPreferences rows (no Chromium, N/A?), `H.widget-no-throttle`,
+  skipTaskbar (not provable off-screen), a real on-screen launch by the user, and H rows `user-data`,
+  `fullscreen-enter`, `widget-initial`, `replay-state`, `external-links`, `audio-capture`, `routes`.
+  Known deviations: fixed changelog-then-update order, no cross-window drag-stop height replay,
+  approximate multi-DPI, no Setup timeout.
 
 ## Phase 4: CSS layer (`src-gpui/src/css/`)
 One slice per helper (~12), each with a tiny Electron test page and a passing diff: tween + cubic-bezier,
