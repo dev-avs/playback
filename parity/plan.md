@@ -113,7 +113,12 @@ no untolerated pixel. Tolerated edge pixels: corners ≤ 31/255 (tween-*, clip-*
 kf-bar-pulse), translated edges ≤ 20/255 (kf-next-popup-in) and ≤ 52/255 (kf-vol-pill-in);
 kf-empty-pulse and kf-fs-in max delta 1. `parity-diff.mjs --self-test` 19/19.
 
-### Slice B: geometry helpers (NOT done: 3 scale cases fail, 2026-11-21)
+### Slice B: geometry helpers (done 2026-11-21, 20/23 pass + 3 accepted)
+**User decision 2026-11-21:** `scale-pill-in` f001 (group opacity of overlapping pieces) and
+`scale-pill-pop` (Chromium's smeared first frame, 1-2 rounded-end pixels at 65-73/255) are accepted
+differences. `scale-pill-text`'s failure is DirectWrite measuring the text ~1px wider: it moves to
+slice C (text), not a scale issue.
+
 Helpers in `src-gpui/src/css/`: `scale` (a tree of `scale::Node`s laid out unscaled as GPUI divs, whose
 bounds are recorded and painted by the helper at `centre + (bounds − centre) × s` in f32, with no second
 layout pass; unrounded fills as pixel-aligned quads with alpha × covered area, rounded fills as GPUI
