@@ -137,7 +137,7 @@ fn spread_radius(r: f32, spread: f32) -> f32 {
 // ── Skia's blur ──
 
 /// W3C / Skia `PlanGauss` box width for `sigma`.
-fn box_width(sigma: f32) -> i32 {
+pub(super) fn box_width(sigma: f32) -> i32 {
     ((sigma as f64 * 3.0 * (2.0 * std::f64::consts::PI).sqrt() / 4.0 + 0.5).floor() as i32).max(1)
 }
 

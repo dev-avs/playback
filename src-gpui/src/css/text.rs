@@ -76,8 +76,16 @@ pub fn lyric_stack(latin: &str, cjk: &str) -> String {
 }
 
 /// Adds the bundled faces to GPUI's text system. Call once per `App`, before any text is shaped.
-/// The WOFF2 files are unpacked by DirectWrite (`IDWriteFactory5::UnpackFontFile`).
 pub fn load_fonts(cx: &App) -> Result<(), String> {
+    let fonts = unpacked()?.into_iter().map(Cow::Owned).collect();
+    cx.text_system().add_fonts(fonts).map_err(|e| e.to_string())?;
+    INSTALLED.with(|i| *i.borrow_mut() = Some(cx.text_system().all_font_names().into_iter().collect()));
+    Ok(())
+}
+
+/// The bundled faces as OpenType bytes: the WOFF2 files unpacked by DirectWrite
+/// (`IDWriteFactory5::UnpackFontFile`). `text_shadow` opens them too, for its glyph masks.
+pub(super) fn unpacked() -> Result<Vec<Vec<u8>>, String> {
     let mut fonts = Vec::with_capacity(SPICY_FILES.len());
     unsafe {
         let factory: IDWriteFactory5 = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED).map_err(|e| e.to_string())?;
@@ -91,12 +99,10 @@ pub fn load_fonts(cx: &App) -> Result<(), String> {
             stream.ReadFileFragment(&mut start, 0, size, &mut ctx).map_err(|e| e.to_string())?;
             let bytes = std::slice::from_raw_parts(start as *const u8, size as usize).to_vec();
             stream.ReleaseFileFragment(ctx);
-            fonts.push(Cow::Owned(bytes));
+            fonts.push(bytes);
         }
     }
-    cx.text_system().add_fonts(fonts).map_err(|e| e.to_string())?;
-    INSTALLED.with(|i| *i.borrow_mut() = Some(cx.text_system().all_font_names().into_iter().collect()));
-    Ok(())
+    Ok(fonts)
 }
 
 thread_local! {

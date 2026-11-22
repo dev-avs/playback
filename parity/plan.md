@@ -282,6 +282,89 @@ Both sides byte-stable (243 PNGs each). The 28 earlier cases unchanged (25 pass;
 scale-pill-pop as accepted in slice B; text-label still 0.1282% soft). `parity-diff.mjs --self-test`
 exit 0, `cargo test` (src-gpui 24, logic all ok), `--selftest-shell` 48/0, `--selftest-cards` 192/0.
 
+### Slice C – glow and sweep (2026-11-22, 13/13 pass)
+Helpers `src-gpui/src/css/text_shadow.rs` (`text-shadow`: `shadowed_text`, `paint_shadows`) and
+`src-gpui/src/css/sweep.rs` (`background-clip: text` + `linear-gradient`: `swept`), both on `text.rs`'s
+`Shaped`. `shadow::box_width` is now `pub(super)`; `text::unpacked` (the bundled faces as OpenType bytes)
+is split out of `load_fonts` for `text_shadow`'s DirectWrite masks.
+- Text-shadows in use (`grep -n text-shadow src/*.css src/windows/*.css`): App.css:364 (line depth blur,
+  `--BlurAmount` 0 / .55 / 1.1 / … 2.2px at `--grad-dim`), App.css:1428 (unit glow, `--gb` / `--go` from
+  the animator), App.css:1455-1457 (album lyric overlay, two layers), Settings.css:681 (preview lines),
+  Settings.css:737 (preview current line). App.css:1863 `.fs-lyric-line.current` has no case: no element
+  carries `fs-lyric-line` (`grep -rn fs-lyric-line src --include=*.tsx --include=*.ts` is empty).
+- Glyph masks: gpui's glyph rasterizer is crate-private, so `text_shadow` makes the masks with
+  DirectWrite as gpui does (same faces, rendering mode, grid fit, grayscale AA, quarter-px x variants)
+  at `Shaped::paint`'s positions. Each layer is baked on the CPU and painted as one sprite, cached.
+- Motion: `scripts/primitives/gen-sweep-motion.mts` runs `src/lyrics/lyricAnimator.ts` (`collectLine`,
+  `stepLine(k / 60, 1 / 60)`) on one `.word` (data-s .100, data-e .600) and writes
+  `pages/sweep-word-motion.js` (65 rows of `--gp` / `--gb` / `--go`); the page applies the row of each
+  virtual frame, the GPUI scene steps the Rust port (`playback_logic::lyric_animator`) the same way.
+  Regenerating it gives the same file.
+- Commands as slices A/B: `node scripts/primitives/run.mjs [--gpui] [--stability] [--only=…]`, then
+  `node scripts/primitives/diff.mjs`. `node scripts/primitives/gen-sweep-motion.mts` regenerates the
+  motion rows.
+
+**Method, text-shadow: blurred glyph masks, not a ring of copies (measured).** Electron pages with
+`Like a record in my mind` (17px SpicyLyrics Bold, transparent fill) and `text-shadow: 0 0 <b> #fff`,
+compared by alpha with two models built from the same page's unblurred shadow mask (`0 0 .5px`, σ .25,
+which Skia keeps unblurred):
+
+| blur | σ | Skia blur of the mask: max / rms / px > 8 | best-fit ring of offset copies (8 or 16 copies, radius and alpha fitted): max / rms / px > 8 |
+|---|---|---|---|
+| 1.1px | .55 | 9 / 0.25 / 1 | 35 / 3.99 / 1110 |
+| 1.53px (.09em) | .765 | 14 / 0.45 / 6 | 33 / 3.22 / 1008 |
+| 2.2px | 1.1 | 19 / 0.87 / 99 | 34 / 3.90 / 1386 |
+| 2.295px (.135em) | 1.1475 | 20 / 0.92 / 118 | 35 / 3.68 / 1220 |
+| 6.12px (.36em) | 3.06 | 22 / 1.83 / 435 | 44 / 5.43 / 2233 |
+| 8px | 4 | 16 / 1.83 / 419 | 41 / 5.55 / 2833 |
+| 14px | 7 | 10 / 1.82 / 30 | 36 / 6.04 / 3948 |
+
+Even the best-fitted ring, from the ideal mask (a GPUI ring would use white glyphs, heavier still), is
+33-44/255 off with 1000-3900 pixels over 8/255, so the ring of port.md 2.4 is replaced by the blur: Skia's
+`SkMaskBlurFilter` (σ = blur / 2; σ < 1/3 none, σ < 2 the small-sigma Bessel kernel ported in
+`small_blur`, σ ≥ 2 `shadow::blur`'s three boxes). The residual of a blur of the whole run's mask comes
+from overlapping glyphs: Skia blurs each glyph's mask and draws them src-over, which `text_shadow` does.
+The blurred mask is the coverage before text gamma/contrast (mass 226617 for the `.5px` shadow against
+271164 for `color: #fff`); a shadow without blur (App.css:364 at `--BlurAmount: 0.00px`) is the text
+drawn normally in the shadow colour under the text (glow-line-sharp). Layers: last listed at the bottom.
+
+**Method, sweep: a CPU bake of the gradient through black-text coverage, not HighlightStyle (measured).**
+Blink paints a `background-clip: text` gradient through the text drawn as a mask in black: a solid white
+gradient clipped to the test line has exactly `color: #000`'s alpha (0/255 apart, mass 222428), while
+`color: #fff` is up to 99/255 heavier (mass 271164). Per-run HighlightStyle colours (gotcha 7.1) would draw
+gamma-corrected coloured glyphs and cannot split a glyph at the sweep edge. So `sweep` bakes, per device
+pixel: the glyph masks through gpui's own black-glyph contrast and gamma correction (alpha_correction.hlsl
+at brightness 0, the system's gamma and grayscale contrast) × the border box's area coverage (the
+gradient only covers the box; word units are padded .18em below, App.css:501-505) × the gradient at the
+pixel centre (CSS Images 3 gradient line, premultiplied stops). Unit text-shadows are painted over it,
+as Blink paints the text after the background. A sweep edge inside one glyph (sweep-word-glyph, soft 0%
+at 50%) is within 18.6/255.
+
+| case | source | frames | max delta | untolerated soft % | edge px (max) | result |
+|---|---|---|---|---|---|---|
+| sweep-word-start | App.css:298-302, 338-364, 501-505, 1347-1358, 1415-1429 (`--gp` unset: −20%) | 1 | 7.6 | 0 | 0 | pass |
+| sweep-word-mid | as sweep-word-start, `--gp` 40% | 1 | 15.7 | 0 | 0 | pass |
+| sweep-word-glyph | as sweep-word-start, `--gp` 50%, `--sweep-soft` 0% (edge inside "c") | 1 | 18.6 | 0 | 1 (18.6) | pass |
+| sweep-word-end | as sweep-word-start, `--gp` 100% | 1 | 18.6 | 0 | 7 (18.6) | pass |
+| sweep-line | as sweep-word-start + App.css:1403-1408 (`.word[data-sweep]`, 180deg), `--gp` 30% | 1 | 14.5 | 0 | 0 | pass |
+| sweep-cjk | as sweep-word-mid + App.css:543-546 (`:lang(ja)`, harness text) | 1 | 13.4 | 0 | 0 | pass |
+| sweep-word-motion | as sweep-word-start; lyricAnimator.ts collectLine/stepLine, Rust port | 30 | 21.2 | 0 | 7 (21.2) | pass |
+| glow-word | App.css:1428 at the animator's glow peak for a word (`--gb` .135, `--go` .35) | 1 | 20.9 | 0 | 2 (20.9) | pass |
+| glow-letter | App.css:1428 for a `.letter` (`--gb` .36, `--go` 1) | 1 | 5.8 | 0 | 0 | pass |
+| glow-line-blur | App.css:338-364 at `--BlurAmount` .55, 1.1, 2.2px | 1 | 27 | 0 | 118 (27) | pass |
+| glow-line-sharp | App.css:338-364 at `--BlurAmount` 0.00px (App.tsx:2277) | 1 | 40.3 | 0.0264 | 206 (40.3) | pass |
+| glow-art-overlay | App.css:1431-1457 (13px, two layers) | 1 | 50 | 0.0975 | 367 (50) | pass |
+| glow-preview | Settings.css:660-682, 720-738 (defaults, Settings.tsx:369-384, 455-457) | 1 | 19.4 | 0 | 43 (19.4) | pass |
+
+The edge pixels of the plain-text cases (glow-line-sharp, glow-art-overlay) are the glyph rasterizer
+difference of slice C – text (Skia's masks against gpui's DirectWrite atlas), not the shadows.
+
+Both sides byte-stable (285 PNGs each; one Electron run showed hover-next-up f003 differing while a
+second Electron job ran alongside it, the rerun alone was byte-identical). The 36 earlier cases
+unchanged (33 pass; scale-pill-in and scale-pill-pop as accepted in slice B; text-label still 0.1282%
+soft). `parity-diff.mjs --self-test` exit 0, `cargo test` (src-gpui 26, logic all ok),
+`--selftest-shell` 48/0, `--selftest-cards` 192/0.
+
 ## Phases 5–7: screens
 Slices of 20–40 ledger rows, in port.md §5 order. Estimate: widget ~15 slices, settings ~15, other
 windows ~6. Each slice: worker → review by a different worker (rerun diffs + 5 spot checks) → rows

@@ -101,8 +101,8 @@ verified against a tiny Electron test page before any screen uses it. Required p
 | Rounded clipping (`overflow: hidden` + `border-radius`) | GPUI clips to **rectangles only**. Any child that touches a rounded edge must carry its own radii (fills, images, backdrops). Write one helper and use it everywhere |
 | `box-shadow` (outer, inset hairlines) | `BoxShadow`; inset 0.5px edges via the hairline border helper. Check that rounded hairlines are not jagged |
 | `filter: blur/saturate/brightness` on the cover | CPU bake (`image` crate) once per track and size; gaussian sigma = CSS px scaled to the bake size |
-| `text-shadow` (glow, blur halo) | ring of offset copies; tune per-copy alpha against Electron pixels, never by eye |
-| `background-clip: text` + gradient (lyric sweep) | per-character `HighlightStyle` (see gotcha 7.1) |
+| `text-shadow` (glow, blur halo) | `css/text_shadow.rs`: each glyph's DirectWrite mask blurred with Skia's filter (σ = blur/2). Measured 9–22/255 off Chromium; a ring of offset copies was 33–44/255 off |
+| `background-clip: text` + gradient (lyric sweep) | `css/sweep.rs`: CPU bake of gradient × black-glyph coverage (Chromium clips text at `#000` coverage; `#fff` is up to 99/255 heavier, so `HighlightStyle` can't match). Handles a sweep edge inside a glyph |
 | `mask-image` gradients (lyrics panel bottom fade) | per-row alpha from the row's y |
 | `radial-gradient` | CPU bake |
 | `max-height` transitions (lyrics panel, controls) | a clip wrapper whose height is tweened, with content laid out at full size |

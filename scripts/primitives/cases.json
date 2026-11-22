@@ -49,6 +49,19 @@
     { "name": "filter-preview", "size": [344, 220], "frames": 0, "timeline": [] },
     { "name": "radial-st-mono", "size": [644, 266], "frames": 0, "timeline": [] },
     { "name": "radial-cl-mono", "size": [364, 192], "frames": 0, "timeline": [] },
-    { "name": "radial-widget-mono", "size": [394, 132], "frames": 0, "timeline": [] }
+    { "name": "radial-widget-mono", "size": [394, 132], "frames": 0, "timeline": [] },
+    { "name": "sweep-word-start", "size": [96, 68], "frames": 0, "timeline": [], "text": [[22, 22, 51, 24]] },
+    { "name": "sweep-word-mid", "size": [96, 68], "frames": 0, "timeline": [], "text": [[22, 22, 51, 24]] },
+    { "name": "sweep-word-glyph", "size": [96, 68], "frames": 0, "timeline": [], "text": [[22, 22, 51, 24]] },
+    { "name": "sweep-word-end", "size": [96, 68], "frames": 0, "timeline": [], "text": [[22, 22, 51, 24]] },
+    { "name": "sweep-line", "size": [230, 66], "frames": 0, "timeline": [], "text": [[22, 22, 185, 21]] },
+    { "name": "sweep-cjk", "size": [124, 68], "frames": 0, "timeline": [], "text": [[22, 22, 79, 24]] },
+    { "name": "sweep-word-motion", "size": [96, 68], "frames": 30, "timeline": [], "text": [[22, 22, 51, 24]] },
+    { "name": "glow-word", "size": [96, 68], "frames": 0, "timeline": [], "text": [[22, 22, 51, 24]] },
+    { "name": "glow-letter", "size": [62, 68], "frames": 0, "timeline": [], "text": [[22, 22, 17, 24]] },
+    { "name": "glow-line-blur", "size": [230, 106], "frames": 0, "timeline": [], "text": [[22, 22, 185, 61]] },
+    { "name": "glow-line-sharp", "size": [230, 66], "frames": 0, "timeline": [], "text": [[22, 22, 185, 21]] },
+    { "name": "glow-art-overlay", "size": [182, 62], "frames": 0, "timeline": [], "text": [[22, 22, 137, 19]] },
+    { "name": "glow-preview", "size": [264, 92], "frames": 0, "timeline": [], "text": [[22, 22, 219, 21], [22, 48, 219, 21]] }
   ]
 }

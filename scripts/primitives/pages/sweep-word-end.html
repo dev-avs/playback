@@ -1,0 +1,45 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: flex; flex-direction: column; align-items: flex-start; padding: 22px; background: transparent; }
+/* src/App.css:3-22 */
+@font-face { font-family: "SpicyLyrics"; font-weight: 400; src: url("../../../src/fonts/spicy-lyrics/LyricsRegular.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 500; src: url("../../../src/fonts/spicy-lyrics/LyricsMedium.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 600; src: url("../../../src/fonts/spicy-lyrics/LyricsSemibold.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 700; src: url("../../../src/fonts/spicy-lyrics/LyricsBold.woff2") format("woff2"); }
+/* src/App.css:24-48 */
+@font-face { font-family: "SF Pro Text"; font-weight: 300; src: local("SF Pro Text Light"), local("SF-Pro-Text-Light"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 400; src: local("SF Pro Text Regular"), local("SF-Pro-Text-Regular"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 500; src: local("SF Pro Text Medium"), local("SF-Pro-Text-Medium"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 600; src: local("SF Pro Text Semibold"), local("SF-Pro-Text-Semibold"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 700; src: local("SF Pro Text Bold"), local("SF-Pro-Text-Bold"); }
+/* src/App.css:62, 69, 78-80 */
+:root { --latin-stack: "SpicyLyrics", "Noto Sans Georgian", "Vazirmatn", "SF Pro Text";
+  --cjk-stack: "Yu Gothic UI", "Noto Sans KR", "Malgun Gothic", "Microsoft YaHei UI";
+  --cjk-ja: "Yu Gothic UI", "Meiryo"; }
+/* src/App.css:296-302 .lyrics-inner: --lyric-size 17px, --sweep-angle 90deg */
+.lyrics-inner { --lyric-size: 17px; --sweep-angle: 90deg; }
+/* src/App.css:338-364 .lyric-line (weight 700, line-height 1.18, tracking normal: the defaults);
+   harness: no opacity (--line-opacity), nowrap */
+.lyric-line { font-family: var(--latin-stack), var(--cjk-stack), sans-serif; font-size: var(--lyric-size);
+  font-weight: 700; line-height: 1.18; --grad-lit: calc(0.85 * var(--lit-k, 1)); --grad-dim: 0.35;
+  --fill-alpha: var(--grad-dim); color: rgba(255, 255, 255, var(--fill-alpha));
+  text-shadow: 0 0 var(--BlurAmount, 0px) rgba(255, 255, 255, var(--grad-dim)); white-space: nowrap; }
+/* src/App.css:543-546 */
+.lyric-line:lang(ja) { font-family: var(--latin-stack), var(--cjk-ja), sans-serif; }
+/* src/App.css:1347-1358; harness: --s 1, --y 0 on every unit (the unit transforms are not this slice) */
+.word, .wordGroup, .letter { display: inline-block; vertical-align: baseline; line-height: inherit;
+  transform-origin: 50% var(--unit-oy, 85%); transform: translateY(calc(1em * var(--y, 0.01))) scale(var(--s, 0.95));
+  --s: 1; --y: 0; }
+/* src/App.css:501-505 */
+.lyric-line :is(.word:not([data-sweep]), .letter) { padding-bottom: 0.18em; margin-bottom: -0.18em;
+  --unit-oy: calc(0.85em * var(--lyric-lh, 1.18)); }
+/* src/App.css:1403-1408 */
+.word[data-sweep] { --s: 1; --y: 0; --sweep-angle: 180deg; display: block; }
+/* src/App.css:1415-1429 (--sweep-soft: src/settings.ts:154 sweepSoftness 20, --glow-k: :150 glowStrength 1) */
+.word, .letter { background-image: linear-gradient(var(--sweep-angle, 180deg),
+    hsl(var(--lit-h, 0) var(--lit-s, 0%) var(--lit-l, 100%) / var(--grad-lit)) var(--gp, -20%),
+    rgba(255, 255, 255, var(--grad-dim)) calc(var(--gp, -20%) + var(--sweep-soft, 20%)));
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 calc(1em * var(--gb, 0.09)) rgba(255, 255, 255, calc(var(--go, 0) * var(--glow-k, 1))); }
+</style></head><body><div class="stage"><div class="lyrics-inner"><div class="lyric-line"><span class="word" style="--gp: 100%">record</span></div></div></div></body></html>

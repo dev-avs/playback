@@ -14,6 +14,8 @@ use crate::css::mask::{masked, LYRICS_PANEL};
 use crate::css::{filter, radial};
 use crate::css::scale::{self, scale};
 use crate::css::text::{self, LineHeight};
+use crate::css::sweep::{self, swept, Sweep};
+use crate::css::text_shadow::{shadowed_text, text_shadow, TextShadow};
 use crate::css::rounded::{clip_child, Radii, Rect};
 use gpui::{div, img, point, prelude::*, px, AnyElement, Bounds, Hsla, ImageSource, Pixels, Point, Rgba};
 use serde::Deserialize;
@@ -92,6 +94,8 @@ pub enum Scene {
     PillIn { start: Option<f64> },
     /// scale-pill-pop: the reset pill landing (pop animation, background transition).
     PillPop { start: Option<f64>, bg: Tween<Rgba> },
+    /// sweep-word-motion: one `.word` swept and glowing as the animator steps it.
+    SweepMotion,
 }
 
 // pages/tween-*.html (src/App.css:115-131): background rgba(20, 20, 22, .72)
@@ -164,6 +168,19 @@ impl Scene {
             "radial-st-mono" => Scene::Still("radial-st-mono"),
             "radial-cl-mono" => Scene::Still("radial-cl-mono"),
             "radial-widget-mono" => Scene::Still("radial-widget-mono"),
+            "sweep-word-start" => Scene::Still("sweep-word-start"),
+            "sweep-word-mid" => Scene::Still("sweep-word-mid"),
+            "sweep-word-glyph" => Scene::Still("sweep-word-glyph"),
+            "sweep-word-end" => Scene::Still("sweep-word-end"),
+            "sweep-line" => Scene::Still("sweep-line"),
+            "sweep-cjk" => Scene::Still("sweep-cjk"),
+            "sweep-word-motion" => Scene::SweepMotion,
+            "glow-word" => Scene::Still("glow-word"),
+            "glow-letter" => Scene::Still("glow-letter"),
+            "glow-line-blur" => Scene::Still("glow-line-blur"),
+            "glow-line-sharp" => Scene::Still("glow-line-sharp"),
+            "glow-art-overlay" => Scene::Still("glow-art-overlay"),
+            "glow-preview" => Scene::Still("glow-preview"),
             "scale-pill-in" => Scene::PillIn { start: None },
             // src/windows/Settings.css:429-444: transition background 160ms ease
             "scale-pill-pop" => Scene::PillPop { start: None, bg: Tween::new(PILL_BG, Transition::new(160.0, Easing::EASE)) },
@@ -222,6 +239,21 @@ impl Scene {
     pub fn render(&self, now: f64) -> AnyElement {
         match self {
             Scene::Still(name) => still(name),
+            Scene::SweepMotion => {
+                // pages/sweep-word-motion.html: the animator's writes for this frame's time
+                // (scripts/primitives/gen-sweep-motion.mts): data-s .100, data-e .600, stepLine at k / 60, dt 1 / 60
+                use playback_logic::lyric_animator::{collect_line, step_line, WordInput};
+                let mut words = collect_line(&vec![WordInput { dot: false, word_group: false, s: 0.1, e: 0.6, sweep: false, letters: vec![] }]);
+                let n = ((now / (1000.0 / 60.0)).round() as usize).min(64);
+                for k in 0..=n {
+                    step_line(&mut words, k as f64 / 60.0, 1.0 / 60.0);
+                }
+                let st = &words[0].el.style;
+                let num = |v: &Option<String>, d: f32| v.as_deref().map_or(d, |v| v.trim_end_matches('%').parse().expect("animator number"));
+                // src/App.css:1421-1428 defaults: --gp -20%, --gb .09, --go 0
+                let (gp, gb, go) = (num(&st.gp, -20.0), num(&st.gb, 0.09), num(&st.go, 0.0));
+                stage().child(word_unit("record", text::CJK_STACK, gp, SWEEP_SOFT, gb, go)).into_any_element()
+            }
             Scene::PillIn { start } => {
                 let Some(s) = *start else { return stage().into_any_element() };
                 // src/windows/Settings.css:482-485 @keyframes st-reset-in: opacity 0 → 1, scale .85 → 1;
@@ -621,8 +653,81 @@ fn still(name: &str) -> AnyElement {
         "radial-widget-mono" => stage()
             .child(card(350.0, 88.0, 13.0).child(radial::background(&radial::WIDGET_MONO, radial::WIDGET_MONO_INSET, uniform(13.0), 1.0)))
             .into_any_element(),
+        // pages/sweep-word-*.html: one `.word` at --gp -20% (unset), 40%, 50% with Sweep softness 0, 100%
+        "sweep-word-start" => stage().child(word_unit("record", text::CJK_STACK, -20.0, SWEEP_SOFT, 0.09, 0.0)).into_any_element(),
+        "sweep-word-mid" => stage().child(word_unit("record", text::CJK_STACK, 40.0, SWEEP_SOFT, 0.09, 0.0)).into_any_element(),
+        "sweep-word-glyph" => stage().child(word_unit("record", text::CJK_STACK, 50.0, 0.0, 0.09, 0.0)).into_any_element(),
+        "sweep-word-end" => stage().child(word_unit("record", text::CJK_STACK, 100.0, SWEEP_SOFT, 0.09, 0.0)).into_any_element(),
+        // pages/sweep-line.html: a line-timed line, one `.word[data-sweep]` (src/App.css:1403-1408: 180deg, no padding)
+        "sweep-line" => {
+            let sw = sweep::lyric(180.0, white(GRAD_LIT), 30.0, SWEEP_SOFT, GRAD_DIM);
+            stage().child(swept("Like a record in my mind", lyric_style(text::CJK_STACK), sw, 0.0, &[unit_glow(0.09, 0.0)])).into_any_element()
+        }
+        // pages/sweep-cjk.html: src/App.css:543-546 :lang(ja); harness text
+        "sweep-cjk" => stage().child(word_unit("\u{591c}\u{660e}\u{3051}\u{306e}\u{8857}", text::CJK_JA, 40.0, SWEEP_SOFT, 0.09, 0.0)).into_any_element(),
+        // pages/glow-word.html: write_glow at g = 1 for a word (gb .09 + .045, go .35)
+        "glow-word" => stage().child(word_unit("record", text::CJK_STACK, 100.0, SWEEP_SOFT, 0.135, 0.35)).into_any_element(),
+        // pages/glow-letter.html: a `.letter` at g = 1 (gb .09 + .27, go min(1.85, 1)); src/App.css:501-505 pads it too
+        "glow-letter" => stage().child(word_unit("W", text::CJK_STACK, 100.0, SWEEP_SOFT, 0.36, 1.0)).into_any_element(),
+        // pages/glow-line-blur.html: plain lines (src/App.css:354-364: rgba(255,255,255,--grad-dim), text-shadow
+        // 0 0 --BlurAmount at --grad-dim) at 1, 2 and 4 BLUR_STEPs of .55px
+        "glow-line-blur" => {
+            let dim = text::Style { color: fill(white(GRAD_DIM)), ..lyric_style(text::CJK_STACK) };
+            let mut col = stage();
+            for b in [0.55, 1.1, 2.2] {
+                col = col.child(shadowed_text("Like a record in my mind", dim.clone(), &[text_shadow(0.0, 0.0, b, white(GRAD_DIM))]));
+            }
+            col.into_any_element()
+        }
+        // pages/glow-line-sharp.html: a plain line at --BlurAmount 0.00px (src/App.tsx:2277, blur 0: the
+        // shadow is drawn unblurred under the text, src/App.css:364)
+        "glow-line-sharp" => {
+            let dim = text::Style { color: fill(white(GRAD_DIM)), ..lyric_style(text::CJK_STACK) };
+            stage().child(shadowed_text("Like a record in my mind", dim, &[text_shadow(0.0, 0.0, 0.0, white(GRAD_DIM))])).into_any_element()
+        }
+        // pages/glow-art-overlay.html: src/App.css:1431-1457 .art-lyric-overlay text (--album-lyric-size 13px)
+        "glow-art-overlay" => {
+            let st = text::Style::new(text::lyric_stack(text::LATIN_STACK, text::CJK_STACK), 700, 13.0, LineHeight::Number(1.4), fill(white(1.0)))
+                .letter_spacing(-0.015 * 13.0);
+            let shadows = [text_shadow(0.0, 0.0, 8.0, white(0.3)), text_shadow(0.0, 1.0, 3.0, rgba(0, 0, 0, 0.6))];
+            stage().child(shadowed_text("Like a record in my mind", st, &shadows)).into_any_element()
+        }
+        // pages/glow-preview.html: src/windows/Settings.css:660-738 at the defaults (src/windows/Settings.tsx:369-384)
+        "glow-preview" => {
+            // :660-677 .st-pv-lyrics: var(--pv-font) = var(--latin-stack), var(--cjk-stack); --pv-size 17px; 700; 1.18; gap 6px
+            let st = text::Style::new(text::lyric_stack(text::LATIN_STACK, text::CJK_STACK), 700, 17.0, LineHeight::Number(1.18), fill(white(0.35)));
+            // :720-738 .st-pv-line.current: 90deg, lit .85 at 45%, rgba(255,255,255,.35) at 45% + 20%; glow .09em at .35 x .4
+            let sw = Sweep { angle: 90.0, lit: white(0.85), lit_at: 45.0, dim: white(0.35), dim_at: 65.0 };
+            let current = swept("The line being sung lights up", st.clone(), sw, 0.0, &[text_shadow(0.0, 0.0, 0.09 * 17.0, white(0.35 * 0.4))]);
+            // :679-682 .st-pv-line, --pv-blur 1.1px (distance 2 x .55, src/windows/Settings.tsx:455-457)
+            let far = shadowed_text("and further ones fade back", st, &[text_shadow(0.0, 0.0, 1.1, white(0.35))]);
+            stage().child(div().flex().flex_col().gap(px(6.0)).child(current).child(far)).into_any_element()
+        }
         _ => unreachable!("no still {name}"),
     }
+}
+
+// src/App.css:352-353 --grad-lit .85 x --lit-k (src/settings.ts:148 highlightStrength 1), --grad-dim .35
+const GRAD_LIT: f32 = 0.85;
+const GRAD_DIM: f32 = 0.35;
+// src/settings.ts:154 sweepSoftness 20 (src/App.tsx:2224 --sweep-soft)
+const SWEEP_SOFT: f32 = 20.0;
+
+/// `rgba(255, 255, 255, a)` (also `hsl(0 0% 100% / a)`, the Highlight colour's default).
+fn white(a: f32) -> Rgba {
+    Rgba { r: 1.0, g: 1.0, b: 1.0, a }
+}
+
+/// src/App.css:1428 `text-shadow: 0 0 calc(1em * --gb) rgba(255, 255, 255, --go * --glow-k)` (glowStrength 1).
+fn unit_glow(gb: f32, go: f32) -> TextShadow {
+    text_shadow(0.0, 0.0, 17.0 * gb, white(go))
+}
+
+/// One `.word` / `.letter` of a lyric line (src/App.css:1347-1358, 1415-1429): the 90deg sweep of
+/// .lyrics-inner (:302) at `gp` / `soft`, the unit glow, padded .18em below (:501-505).
+fn word_unit(t: &str, cjk: &str, gp: f32, soft: f32, gb: f32, go: f32) -> sweep::Swept {
+    let sw = sweep::lyric(90.0, white(GRAD_LIT), gp, soft, GRAD_DIM);
+    swept(t.to_string(), lyric_style(cjk), sw, layout_unit(0.18 * 17.0), &[unit_glow(gb, go)])
 }
 
 /// src/App.css:338-346 .lyric-line: `var(--latin-stack), <cjk>, sans-serif`, 17px (:298 --lyric-size), 700,

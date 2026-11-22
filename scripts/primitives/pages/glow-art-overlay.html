@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: flex; flex-direction: column; align-items: flex-start; padding: 22px; background: transparent; }
+/* src/App.css:3-22 */
+@font-face { font-family: "SpicyLyrics"; font-weight: 400; src: url("../../../src/fonts/spicy-lyrics/LyricsRegular.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 500; src: url("../../../src/fonts/spicy-lyrics/LyricsMedium.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 600; src: url("../../../src/fonts/spicy-lyrics/LyricsSemibold.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 700; src: url("../../../src/fonts/spicy-lyrics/LyricsBold.woff2") format("woff2"); }
+/* src/App.css:24-48 */
+@font-face { font-family: "SF Pro Text"; font-weight: 300; src: local("SF Pro Text Light"), local("SF-Pro-Text-Light"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 400; src: local("SF Pro Text Regular"), local("SF-Pro-Text-Regular"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 500; src: local("SF Pro Text Medium"), local("SF-Pro-Text-Medium"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 600; src: local("SF Pro Text Semibold"), local("SF-Pro-Text-Semibold"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 700; src: local("SF Pro Text Bold"), local("SF-Pro-Text-Bold"); }
+/* src/App.css:62, 69, 78-80 */
+:root { --latin-stack: "SpicyLyrics", "Noto Sans Georgian", "Vazirmatn", "SF Pro Text";
+  --cjk-stack: "Yu Gothic UI", "Noto Sans KR", "Malgun Gothic", "Microsoft YaHei UI";
+  --cjk-ja: "Yu Gothic UI", "Meiryo"; }
+/* src/App.css:1431-1457 .art-lyric-overlay: --album-lyric-size 13px; harness: no background,
+   backdrop-filter, padding or positioning, nowrap */
+.art-lyric-overlay { font-family: var(--latin-stack), var(--cjk-stack), sans-serif; color: #fff; font-size: 13px;
+  font-weight: 700; line-height: 1.4; letter-spacing: -0.015em; white-space: nowrap;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 1px 3px rgba(0, 0, 0, 0.6); }
+</style></head><body><div class="stage"><div class="art-lyric-overlay">Like a record in my mind</div></div></body></html>

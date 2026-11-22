@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+/* harness: transparent page, no margins (src/App.css:101 .stage pads the card by 22px) */
+html, body { margin: 0; background: transparent; overflow: hidden; }
+.stage { display: flex; flex-direction: column; align-items: flex-start; padding: 22px; background: transparent; }
+/* src/App.css:3-22 */
+@font-face { font-family: "SpicyLyrics"; font-weight: 400; src: url("../../../src/fonts/spicy-lyrics/LyricsRegular.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 500; src: url("../../../src/fonts/spicy-lyrics/LyricsMedium.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 600; src: url("../../../src/fonts/spicy-lyrics/LyricsSemibold.woff2") format("woff2"); }
+@font-face { font-family: "SpicyLyrics"; font-weight: 700; src: url("../../../src/fonts/spicy-lyrics/LyricsBold.woff2") format("woff2"); }
+/* src/App.css:24-48 */
+@font-face { font-family: "SF Pro Text"; font-weight: 300; src: local("SF Pro Text Light"), local("SF-Pro-Text-Light"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 400; src: local("SF Pro Text Regular"), local("SF-Pro-Text-Regular"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 500; src: local("SF Pro Text Medium"), local("SF-Pro-Text-Medium"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 600; src: local("SF Pro Text Semibold"), local("SF-Pro-Text-Semibold"); }
+@font-face { font-family: "SF Pro Text"; font-weight: 700; src: local("SF Pro Text Bold"), local("SF-Pro-Text-Bold"); }
+/* src/App.css:62, 69, 78-80 */
+:root { --latin-stack: "SpicyLyrics", "Noto Sans Georgian", "Vazirmatn", "SF Pro Text";
+  --cjk-stack: "Yu Gothic UI", "Noto Sans KR", "Malgun Gothic", "Microsoft YaHei UI";
+  --cjk-ja: "Yu Gothic UI", "Meiryo"; }
+/* src/windows/Settings.css:660-677; harness: no flex sizing or overflow, nowrap */
+.st-pv-lyrics { display: flex; flex-direction: column; gap: var(--pv-gap, 6px);
+  font-family: var(--pv-font), var(--cjk-stack), sans-serif; font-size: var(--pv-size); font-weight: var(--pv-weight, 700);
+  line-height: var(--pv-lh, 1.18); --pv-size: 17px; --pv-font: var(--latin-stack); white-space: nowrap; }
+/* src/windows/Settings.css:679-682 (harness: opacity 1) */
+.st-pv-line { color: rgba(255, 255, 255, 0.35); text-shadow: 0 0 var(--pv-blur, 0px) rgba(255, 255, 255, 0.35); }
+/* src/windows/Settings.css:720-738 */
+.st-pv-line.current { width: fit-content; opacity: 1; color: transparent;
+  background-image: linear-gradient(var(--pv-angle, 90deg),
+    hsl(var(--lit-h, 0) var(--lit-s, 0%) var(--lit-l, 100%) / var(--pv-lit-a, 0.85)) 45%,
+    rgba(255, 255, 255, 0.35) calc(45% + var(--pv-soft, 20%)));
+  -webkit-background-clip: text; background-clip: text;
+  text-shadow: 0 0 0.09em rgba(255, 255, 255, calc(var(--pv-glow, 0.35) * 0.4)); }
+</style></head><body><div class="stage"><div class="st-pv-lyrics"><div class="st-pv-line current" style="--pv-blur: 0px">The line being sung lights up</div><div class="st-pv-line" style="--pv-blur: 1.1px">and further ones fade back</div></div></div></body></html>
