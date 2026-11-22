@@ -123,15 +123,16 @@ const flavorUrls = new Map();
  * The flavors a release carries, as crates/playback-core/src/updates/feed.rs
  * reads them: `playback-<flavor>-setup-<v>.exe` + `playback-<flavor>-<v>-x64.nsis.7z`,
  * and the default `playback-setup-<v>.exe` pair, Tauri when its package is under
- * 25 MB (from 1.5.9), else Electron.
+ * 25 MB (from 1.5.9), else Electron. Each flavor's package size goes into `sizes`.
  */
-function flavorsOf(version, assets) {
+function flavorsOf(version, assets, sizes) {
   const url = (name) => assets.find((a) => a.name === name);
   const flavors = [];
   const add = (id, stub, pkg) => {
     if (!stub || !pkg) return;
     if (!flavors.includes(id)) flavors.push(id);
     flavorUrls.set(`${version} ${id}`, { stub: stub.browser_download_url, pkg: pkg.browser_download_url });
+    if (pkg.size > 0) sizes[id] = pkg.size;
   };
   const pkg = url(`playback-${version}-x64.nsis.7z`);
   if (pkg) add(pkg.size > 0 && pkg.size < 25 * 1024 * 1024 ? "tauri" : "electron", url(`playback-setup-${version}.exe`), pkg);
@@ -154,8 +155,16 @@ async function releases() {
     const installer = r.assets?.find((a) => a.name === `player-setup-${version}.exe`);
     if (legacy && !installer) continue; // nothing to install
     if (legacy) legacyInstallers.set(version, installer.browser_download_url);
-    const flavors = legacy ? [] : flavorsOf(version, r.assets ?? []);
-    list.push({ version, date: r.published_at, notes: r.body ?? "", legacy, ...(flavors.length && { flavors }) });
+    const sizes = {};
+    const flavors = legacy ? [] : flavorsOf(version, r.assets ?? [], sizes);
+    list.push({
+      version,
+      date: r.published_at,
+      notes: r.body ?? "",
+      legacy,
+      ...(flavors.length && { flavors }),
+      ...(Object.keys(sizes).length && { sizes }),
+    });
   }
   return list;
 }

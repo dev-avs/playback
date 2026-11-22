@@ -28,6 +28,15 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.4",
+    date: "2026-11-21",
+    changes: {
+      fixes: [
+        "Fixed Version control offering every flavor for a one-flavor revision, e.g. Tauri, Electron and GPUI for Tauri 1.6.3-a",
+      ],
+    },
+  },
+  {
     version: "1.6.3-a",
     date: "2026-11-20",
     flavor: "tauri",

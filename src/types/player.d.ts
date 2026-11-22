@@ -77,6 +77,8 @@ export interface Release {
   legacy: boolean;
   /** available flavors in this release (e.g. "tauri", "electron", "gpui") */
   flavors?: string[];
+  /** each flavor's package (.nsis.7z) size in bytes; a revision's unchanged copies match its base release's */
+  sizes?: Record<string, number>;
 }
 
 /** Spicetify and the bridge, as electron/spicetifySetup.cjs reports them. */

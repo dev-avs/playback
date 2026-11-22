@@ -13,13 +13,21 @@ const CURRENT_FLAVOR = "__TAURI_INTERNALS__" in window ? "tauri" : "electron";
 /**
  * The flavors Version control offers for a release. A flavor revision
  * (1.6.1-a) is one flavor's build, so only that one: the changelog names it,
- * or the release carries only its files. 1.6.0-a also carried copies of the
- * other flavors' 1.6.0 files, which are not offered.
+ * the release carries only its files, or it is the one flavor whose package
+ * is not the same size as in an older release of the same number. A Tauri
+ * revision (1.6.3-a) also carries copies of the other flavors' 1.6.3 files,
+ * which are not offered; a build older than the revision has no changelog
+ * entry for it, so the sizes tell them apart.
  */
-function offered(r: Release): string[] {
+function offered(r: Release, list: Release[]): string[] {
   const all = r.flavors ?? [];
   if (!r.version.includes("-")) return all;
-  const only = revisionFlavor(r.version) ?? (all.length === 1 ? all[0] : undefined);
+  const base = r.version.split("-")[0];
+  const copy = (f: string) =>
+    !!r.sizes?.[f] &&
+    list.some((o) => o.version.split("-")[0] === base && compareVersions(o.version, r.version) < 0 && o.sizes?.[f] === r.sizes?.[f]);
+  const rebuilt = all.filter((f) => !copy(f));
+  const only = revisionFlavor(r.version) ?? (all.length === 1 ? all[0] : rebuilt.length === 1 ? rebuilt[0] : undefined);
   return only ? all.filter((f) => f === only) : all;
 }
 
@@ -274,7 +282,7 @@ export default function Versions() {
                 const total = all.reduce((n, s) => n + s.points.length, 0);
                 const isOpen = expanded === r.version;
                 const more = total > NOTES_PREVIEW || (all[0]?.points[0]?.length ?? 0) > PREVIEW_CHARS;
-                const flavors = offered(r);
+                const flavors = offered(r, releases);
                 const single = flavors.length === 1 ? flavors[0] : undefined;
                 const label = r.version.includes("-") && single ? versionLabel(r.version, single as keyof typeof FLAVORS) : r.version;
                 return (

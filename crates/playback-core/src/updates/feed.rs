@@ -125,6 +125,9 @@ pub struct Release {
     /// available flavors in this release (e.g. ["tauri", "electron", "gpui"])
     #[serde(skip_serializing_if = "Vec::is_empty")]
     flavors: Vec<String>,
+    /// each flavor's package (.nsis.7z) size in bytes
+    #[serde(skip_serializing_if = "HashMap::is_empty")]
+    sizes: HashMap<String, u64>,
 }
 
 pub type FlavorUrls = HashMap<(String, String), (String, String)>;
@@ -148,6 +151,13 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>, FlavorUr
                     .find(|a| str_of(a, "name") == name)
                     .map(|a| str_of(a, "browser_download_url").to_string())
             };
+            let size = |name: &str| {
+                assets
+                    .iter()
+                    .find(|a| str_of(a, "name") == name)
+                    .and_then(|a| a["size"].as_u64())
+                    .unwrap_or(0)
+            };
             let legacy = asset("latest.yml").is_none();
             if legacy {
                 legacy_installers.insert(
@@ -156,17 +166,14 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>, FlavorUr
                 );
             }
             let mut flavors = Vec::new();
+            let mut sizes = HashMap::new();
             if !legacy {
                 // Default package (Tauri from 1.5.9+)
                 if let (Some(stub), Some(pkg)) = (
                     asset(&format!("playback-setup-{version}.exe")),
                     asset(&format!("playback-{version}-x64.nsis.7z")),
                 ) {
-                    let pkg_size = assets
-                        .iter()
-                        .find(|a| str_of(a, "name") == format!("playback-{version}-x64.nsis.7z"))
-                        .and_then(|a| a["size"].as_u64())
-                        .unwrap_or(0);
+                    let pkg_size = size(&format!("playback-{version}-x64.nsis.7z"));
                     let id = if pkg_size > 0 && pkg_size < 25 * 1024 * 1024 {
                         "tauri"
                     } else {
@@ -174,6 +181,9 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>, FlavorUr
                     };
                     flavors.push(id.to_string());
                     flavor_urls.insert((version.clone(), id.to_string()), (stub, pkg));
+                    if pkg_size > 0 {
+                        sizes.insert(id.to_string(), pkg_size);
+                    }
                 }
                 for id in ["tauri", "electron", "gpui"] {
                     if let (Some(stub), Some(pkg)) = (
@@ -184,6 +194,10 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>, FlavorUr
                             flavors.push(id.to_string());
                         }
                         flavor_urls.insert((version.clone(), id.to_string()), (stub, pkg));
+                        let pkg_size = size(&format!("playback-{id}-{version}-x64.nsis.7z"));
+                        if pkg_size > 0 {
+                            sizes.insert(id.to_string(), pkg_size);
+                        }
                     }
                 }
             }
@@ -193,6 +207,7 @@ fn installable(body: &Value) -> (Vec<Release>, HashMap<String, String>, FlavorUr
                 version,
                 legacy,
                 flavors,
+                sizes,
             })
         })
         .collect();
@@ -297,5 +312,35 @@ releaseDate: '2026-11-20T02:08:25.674Z'
             [("1.5.7", false), ("1.3.5", true)]
         );
         assert_eq!(legacy["1.3.5"], "https://x/1.3.5");
+        assert!(serde_json::to_value(&list[0]).unwrap().get("sizes").is_none());
+    }
+
+    #[test]
+    fn gives_each_flavors_package_size() {
+        let files = |v: &str, tauri: u64, electron: u64| {
+            json!([
+                { "name": "latest.yml" },
+                { "name": format!("playback-setup-{v}.exe") },
+                { "name": format!("playback-{v}-x64.nsis.7z"), "size": tauri },
+                { "name": format!("playback-electron-setup-{v}.exe") },
+                { "name": format!("playback-electron-{v}-x64.nsis.7z"), "size": electron },
+            ])
+        };
+        let body = json!([
+            { "tag_name": "v1.6.3-a", "assets": files("1.6.3-a", 10327004, 116128404) },
+            { "tag_name": "v1.6.3", "assets": files("1.6.3", 10326092, 116128404) },
+        ]);
+        let (list, _, _) = installable(&body);
+        let sizes = list
+            .iter()
+            .map(|r| serde_json::to_value(r).unwrap()["sizes"].clone())
+            .collect::<Vec<_>>();
+        assert_eq!(
+            sizes,
+            [
+                json!({ "tauri": 10327004, "electron": 116128404 }),
+                json!({ "tauri": 10326092, "electron": 116128404 }),
+            ]
+        );
     }
 }
