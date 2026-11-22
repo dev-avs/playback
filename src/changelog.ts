@@ -28,6 +28,16 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.4-a",
+    date: "2026-11-21",
+    flavor: "tauri",
+    changes: {
+      fixes: [
+        "Fixed right-click around the widget opening a browser menu (Back, Refresh, Print)",
+      ],
+    },
+  },
+  {
     version: "1.6.4",
     date: "2026-11-21",
     changes: {

@@ -140,4 +140,7 @@ function bridge(): PlayerBridge {
 if ("__TAURI_INTERNALS__" in window && !window.player) {
   window.player = bridge();
   dragByAppRegion();
+  // WebView2 shows its browser menu (Back, Refresh, Print) wherever the page
+  // doesn't take right-click itself; Electron has none
+  document.addEventListener("contextmenu", (e) => e.preventDefault());
 }
