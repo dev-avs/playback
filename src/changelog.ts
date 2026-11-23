@@ -28,6 +28,15 @@ export interface ChangelogEntry {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.6.5",
+    date: "2026-11-22",
+    changes: {
+      appearance: [
+        "Album mode and fullscreen now morph in and out: the cover, title, lyrics and controls glide to their new places",
+      ],
+    },
+  },
+  {
     version: "1.6.4-a",
     date: "2026-11-21",
     flavor: "tauri",

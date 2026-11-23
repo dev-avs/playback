@@ -212,6 +212,7 @@ window.player = {
     ipcRenderer.invoke("snap:fullscreen", !!on);
     return R.setFullscreen;
   },
+  fullscreenGeometry: () => ipcRenderer.invoke("snap:fsGeometry"),
   onFullscreenToggle: on("fullscreen"),
   resizeTo: resize,
   setAlwaysOnTop: none,

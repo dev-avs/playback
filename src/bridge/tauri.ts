@@ -131,6 +131,7 @@ function bridge(): PlayerBridge {
     setWidgetHidden: (hidden) => invoke("win_set_hidden", { hidden }),
     setAlwaysOnTop: (on) => invoke("win_set_always_on_top", { on }),
     setFullscreen: (on) => invoke("win_fullscreen", { on }),
+    fullscreenGeometry: () => invoke("win_fullscreen_geometry"),
     onFullscreenToggle: (cb) => on("fullscreen:toggle", () => cb()),
     minimize: () => invoke("win_minimize"),
     close: () => invoke("win_close"),

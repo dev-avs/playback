@@ -2885,6 +2885,68 @@ svg {
     animation-duration: 300ms;
 }
 
+/* ── Layout morphs ──
+   Into and out of album mode and fullscreen (App.tsx runMorph), with the same
+   duration and curve as above. While one runs (html.pb-morph) the card and the
+   blocks each layout has carry those names in every layout, so each moves and
+   resizes from its place in one to its place in the other; what only one
+   layout has fades. */
+.pb-morph .widget {
+    view-transition-name: pb-card;
+}
+
+/* the morph does the moving: each layout is taken as it ends up, not
+   partway into its own size transitions */
+.pb-morph .widget,
+.pb-morph .widget * {
+    transition: none !important;
+}
+
+.pb-morph .widget .art-wrap {
+    view-transition-name: fs-art;
+}
+
+.pb-morph .widget .info,
+.pb-morph .widget .art-mini-info {
+    view-transition-name: fs-info;
+}
+
+.pb-morph .widget > .lyrics-panel {
+    view-transition-name: fs-lyrics;
+}
+
+.pb-morph .widget > .scrubber,
+.pb-morph .widget .art-mini-progress {
+    view-transition-name: fs-scrubber;
+}
+
+.pb-morph .widget > .times {
+    view-transition-name: fs-times;
+}
+
+.pb-morph .widget > .controls,
+.pb-morph .widget .art-mini-controls {
+    view-transition-name: fs-controls;
+}
+
+.pb-morph .widget .next-up {
+    view-transition-name: fs-next;
+}
+
+.pb-morph .widget .next-popup {
+    view-transition-name: fs-next-popup;
+}
+
+.pb-morph .widget .fs-bar {
+    view-transition-name: fs-bar;
+}
+
+/* the card's two looks fill it as it changes shape */
+::view-transition-old(pb-card),
+::view-transition-new(pb-card) {
+    height: 100%;
+}
+
 /* ── Hovered lyric line, fullscreen ──
    A thicker outline, and the line grows a little toward the reader. */
 .widget.fullscreen .lyric-line {

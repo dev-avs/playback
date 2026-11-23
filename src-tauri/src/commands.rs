@@ -332,6 +332,11 @@ pub fn win_fullscreen(on: bool, win: WebviewWindow, w: State<Widget>) -> bool {
 }
 
 #[tauri::command]
+pub fn win_fullscreen_geometry(win: WebviewWindow, w: State<Widget>) -> Option<serde_json::Value> {
+    w.fullscreen_geometry(&win)
+}
+
+#[tauri::command]
 pub fn win_set_always_on_top(on: bool, win: WebviewWindow) {
     let _ = win.set_always_on_top(on);
 }

@@ -107,6 +107,8 @@ contextBridge.exposeInMainWorld("player", {
   dragEnd: () => ipcRenderer.invoke("win:dragEnd"),
   // Fullscreen: the window covers its screen (true) or goes back (false).
   setFullscreen: (on) => ipcRenderer.invoke("win:fullscreen", on),
+  // where the widget is and the screen it would cover, for the morph between them
+  fullscreenGeometry: () => ipcRenderer.invoke("win:fullscreenGeometry"),
   // Ctrl+Alt+F, from anywhere
   onFullscreenToggle(cb) {
     const handler = () => cb();

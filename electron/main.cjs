@@ -949,6 +949,16 @@ function setFullscreen(on) {
   return !!fullscreenFrom;
 }
 
+// For the renderer's morph (App.tsx toggleFullscreen): the widget's bounds and
+// the screen setFullscreen covers; while fullscreen, the bounds it goes back to
+// and the window's own.
+function fullscreenGeometry() {
+  if (!win) return null;
+  const from = fullscreenFrom ?? win.getBounds();
+  const area = fullscreenFrom ? win.getBounds() : screen.getDisplayMatching(from).bounds;
+  return { from, area };
+}
+
 function setWindowSize(w, width, height) {
   windowSizes.set(w, [width, height]);
   // Windows ignores setSize on a non-resizable window, so lift the flag
@@ -1788,6 +1798,7 @@ app.whenReady().then(() => {
   ipcMain.handle("spicyKey:clear", () => spicyKeyChanged(spicyKey.clear()));
   ipcMain.handle("win:dragStart", (e) => startDrag(BrowserWindow.fromWebContents(e.sender) ?? win));
   ipcMain.handle("win:fullscreen", (_e, on) => setFullscreen(!!on));
+  ipcMain.handle("win:fullscreenGeometry", () => fullscreenGeometry());
   // Ctrl+Alt+F from anywhere; the widget owns the layout, so it decides.
   globalShortcut.register("CommandOrControl+Alt+F", () => win?.webContents.send("fullscreen:toggle"));
   ipcMain.handle("win:dragEnd", () => stopDrag());

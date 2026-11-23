@@ -180,6 +180,13 @@ async function runJob(job) {
     if (on) win.setSize(...(scene.size ?? [1280, 720]));
     else win.setSize(width, lastH);
   });
+  // electron/main.cjs fullscreenGeometry: the widget's window sits at `fsFrom` (default: top right)
+  // of a screen the size of `size`
+  ipcMain.handle("snap:fsGeometry", () => {
+    const [sw, sh] = scene.size ?? [1280, 720];
+    const [x, y] = scene.fsFrom ?? [sw - width - 40, 40];
+    return { from: { x, y, width, height: lastH }, area: { x: 0, y: 0, width: sw, height: sh } };
+  });
   win.webContents.on("console-message", (e) => {
     if (e.level === "error") console.log(`  [${name}] ${e.message}`);
   });

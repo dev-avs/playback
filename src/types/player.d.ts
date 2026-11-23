@@ -200,6 +200,15 @@ export interface PlayerBridge {
   dragEnd(): Promise<void>;
   /** fullscreen: the window covers its screen (true) or goes back (false) */
   setFullscreen?(on: boolean): Promise<boolean>;
+  /**
+   * For the morph into and out of fullscreen: the widget's window bounds
+   * (`from`) and the screen it covers (`area`). Fullscreen, `from` is the
+   * bounds it goes back to and `area` its own.
+   */
+  fullscreenGeometry?(): Promise<{
+    from: { x: number; y: number; width: number; height: number };
+    area: { x: number; y: number; width: number; height: number };
+  } | null>;
   /** Ctrl+Alt+F, from anywhere */
   onFullscreenToggle?(cb: () => void): () => void;
   resizeTo(height: number, hovered?: boolean): Promise<void>;

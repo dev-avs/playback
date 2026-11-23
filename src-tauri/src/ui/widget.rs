@@ -190,6 +190,30 @@ impl Widget {
         self.fullscreen_from.lock().unwrap().is_some()
     }
 
+    /// For the page's morph (App.tsx toggleFullscreen; fullscreenGeometry in
+    /// electron/main.cjs): the widget's bounds and the screen set_fullscreen
+    /// covers; while fullscreen, the bounds it goes back to and the window's
+    /// own. Logical px, like the page's.
+    pub fn fullscreen_geometry(&self, win: &WebviewWindow) -> Option<serde_json::Value> {
+        let scale = win.scale_factor().unwrap_or(1.0);
+        let rect = |x: i32, y: i32, w: f64, h: f64| {
+            serde_json::json!({ "x": x as f64 / scale, "y": y as f64 / scale, "width": w, "height": h })
+        };
+        let at = win.outer_position().ok()?;
+        let (width, height) = logical_size(win);
+        let own = rect(at.x, at.y, width, height);
+        let from = *self.fullscreen_from.lock().unwrap();
+        Some(match from {
+            Some(b) => serde_json::json!({ "from": rect(b.at.x, b.at.y, b.width, b.height), "area": own }),
+            None => {
+                let screen = win.current_monitor().ok()??;
+                let size = screen.size().to_logical::<f64>(scale);
+                let pos = screen.position();
+                serde_json::json!({ "from": own, "area": rect(pos.x, pos.y, size.width, size.height) })
+            }
+        })
+    }
+
     /// Fullscreen (App.tsx's fullscreen layout): the widget's own window
     /// covers the screen it is on, so the lyrics, clock and settings carry on
     /// as they are. Returns whether it is fullscreen now.

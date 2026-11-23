@@ -6,6 +6,7 @@
 //   window      widget | settings | changelog | changelog-past | setup | update | versions
 //   width       card width (window = width + 44); default per window
 //   size        [w, h] fixed window size (fullscreen); otherwise the height follows the card
+//   fsFrom      [x, y] where the widget's window sits on that screen before fullscreen (default: top right)
 //   settings    { settingName: value } on top of the defaults (src/settings.ts names)
 //   storage     { rawStorageKey: value } for state.* keys etc.
 //   fake        deep-merged onto fixtures/fake-state.json ({ state, responses, noEvent })
@@ -34,7 +35,7 @@ export const scenes = [
   { name: "widget-lyrics-playing", kind: "core", window: "widget", settings: lyrics, fake: PLAYING },
   { name: "widget-lyrics-opened", kind: "core", window: "widget", steps: [hover, { op: "wait", ms: 400 }, aa, { op: "wait", ms: 1200 }] },
   { name: "widget-volume-open", kind: "core", window: "widget", settings: lyrics, steps: [hover, { op: "wait", ms: 400 }, { op: "click", selector: '.ctrl-btn[aria-label="Volume"]' }, { op: "wait", ms: 600 }] },
-  { name: "widget-album", kind: "core", window: "widget", steps: [{ op: "click", selector: ".art-wrap" }, { op: "wait", ms: 1200 }] },
+  { name: "widget-album", kind: "core", window: "widget", steps: [hover, { op: "wait", ms: 600 }, { op: "click", selector: ".art-wrap" }, { op: "wait", ms: 1200 }] },
   { name: "widget-album-compact", kind: "core", window: "widget", steps: [{ op: "click", selector: ".art-wrap" }, { op: "wait", ms: 1200 }, { op: "click", selector: ".art-wrap" }, { op: "wait", ms: 1200 }] },
   { name: "widget-album-lyrics", kind: "core", window: "widget", settings: { albumOnLaunch: true, lyricsOnLaunch: true } },
   { name: "widget-fullscreen", kind: "core", window: "widget", size: [1280, 720], steps: [{ op: "emit", event: "fullscreen" }, { op: "wait", ms: 4000 }] },
@@ -111,4 +112,10 @@ export const motions = [
   { name: "scroll-follow", window: "widget", settings: lyrics, fake: { state: { playing: true, status: "Playing", position: 33.7 } }, timeline: [], frames: 30 },
   { name: "next-popup", window: "widget", settings: { nextSong: "popup" }, fake: { state: { playing: true, status: "Playing", position: 189.3 }, responses: { getNext: { id: "n1", name: "Next Song", artist: "Next Artist", image: null } } }, timeline: [], frames: 30 },
   { name: "fullscreen-enter", window: "widget", size: [1280, 720], settings: lyrics, timeline: [{ t: 0, op: "emit", event: "fullscreen" }], frames: 45 },
+  // the four layout morphs (App.tsx runMorph), each way
+  { name: "fullscreen-exit", window: "widget", size: [1280, 720], settings: lyrics, steps: [{ op: "emit", event: "fullscreen" }, { op: "wait", ms: 4000 }], timeline: [{ t: 0, op: "emit", event: "fullscreen" }], frames: 30 },
+  { name: "album-enter", window: "widget", steps: [hover, { op: "wait", ms: 600 }], timeline: [{ t: 0, op: "click", selector: ".art-wrap" }], frames: 30 },
+  { name: "album-exit", window: "widget", steps: [hover, { op: "wait", ms: 600 }, { op: "click", selector: ".art-wrap" }, { op: "wait", ms: 1200 }], timeline: [{ t: 0, op: "click", selector: ".art-btn-back" }], frames: 30 },
+  { name: "album-enter-lyrics", window: "widget", settings: lyrics, steps: [hover, { op: "wait", ms: 600 }], timeline: [{ t: 0, op: "click", selector: ".art-wrap" }], frames: 30 },
+  { name: "album-exit-lyrics", window: "widget", settings: lyrics, steps: [hover, { op: "wait", ms: 600 }, { op: "click", selector: ".art-wrap" }, { op: "wait", ms: 1200 }], timeline: [{ t: 0, op: "click", selector: ".art-btn-back" }], frames: 30 },
 ];

@@ -125,6 +125,7 @@ fn main() {
             commands::win_drag_start,
             commands::win_drag_end,
             commands::win_fullscreen,
+            commands::win_fullscreen_geometry,
             commands::win_set_always_on_top,
             commands::win_minimize,
             commands::win_close,

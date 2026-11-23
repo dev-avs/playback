@@ -94,6 +94,30 @@ const NO_DRAG_SELECTOR =
 // keep in sync with STAGE_PAD in electron/main.cjs
 const STAGE_PAD = 22;
 
+// Two frames on: one painted at the window's new size, so a view transition
+// started now takes the layout from it (started sooner, it draws nothing).
+function nextFrames(): Promise<void> {
+  return new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+}
+
+/**
+ * Runs `then` inside the window's next resize event, so what it changes is in
+ * the first frame painted at the new size; after `ms` without one, runs it
+ * anyway.
+ */
+function onNextResize(then: () => void, ms = 500): Promise<void> {
+  return new Promise((resolve) => {
+    const finish = () => {
+      window.removeEventListener("resize", finish);
+      clearTimeout(timer);
+      then();
+      resolve();
+    };
+    window.addEventListener("resize", finish);
+    const timer = setTimeout(finish, ms);
+  });
+}
+
 /** How long a panning title rests at the start, and (twice over) at the end. */
 const PAN_REST_MS = 1500;
 
@@ -890,26 +914,100 @@ export default function App() {
     [fullscreen],
   );
 
+  // ── Layout morphs ──
+  // Album mode and fullscreen, in and out, move as one motion: a view
+  // transition morphs the card and each block the layouts share (App.css,
+  // "Layout morphs") from where it was to where it goes, and fades what only
+  // one layout has. The window never changes size mid-morph (that would skip
+  // the transition, and the card would clip or jump): it grows first, with the
+  // widget drawn where it already was on screen, and shrinks once it is over.
+  const stageRef = useRef<HTMLDivElement | null>(null);
+  const widgetElRef = useRef<HTMLDivElement | null>(null);
+  // a morph between layouts is running; toggles wait for it to end, and the
+  // window keeps its size until it is over (see widgetRef)
+  const morphingRef = useRef(false);
+  // the plain widget's last height and its lyrics panel's share of it, so the
+  // window can make room before album mode morphs back to it
+  const lastNormalRef = useRef<{ h: number; panel: number } | null>(null);
+  const runMorph = useCallback(async (update: () => void) => {
+    const root = document.documentElement;
+    root.classList.add("pb-morph");
+    try {
+      await document.startViewTransition(update).finished;
+    } finally {
+      root.classList.remove("pb-morph");
+    }
+  }, []);
+
   // Into and out of fullscreen. The lyrics show on the way in (and go back to
   // how they were on the way out); album mode has no place there.
   const lyricsBeforeFs = useRef<boolean | null>(null);
   const fullscreenRef = useRef(false);
-  const toggleFullscreen = useCallback((on?: boolean) => {
+  const toggleFullscreen = useCallback(async (on?: boolean) => {
     const next = on ?? !fullscreenRef.current;
-    if (next === fullscreenRef.current) return;
+    if (next === fullscreenRef.current || morphingRef.current) return;
     fullscreenRef.current = next;
-    if (next) {
-      lyricsBeforeFs.current = lyricsOpen;
-      setLyricsOpen(fsShowLyrics);
-      setArtMode(false);
-    } else if (lyricsBeforeFs.current != null) {
-      setLyricsOpen(lyricsBeforeFs.current);
-      lyricsBeforeFs.current = null;
+    const update = () => {
+      if (next) {
+        lyricsBeforeFs.current = lyricsOpen;
+        setLyricsOpen(fsShowLyrics);
+        setArtMode(false);
+      } else if (lyricsBeforeFs.current != null) {
+        setLyricsOpen(lyricsBeforeFs.current);
+        lyricsBeforeFs.current = null;
+      }
+      setFullscreenState(next);
+      if (next) wakeFs();
+    };
+    const stage = stageRef.current;
+    const player = window.player;
+    morphingRef.current = true;
+    try {
+      // where the widget's window is and the screen it covers (main.cjs)
+      const geo = stage && "startViewTransition" in document ? await player?.fullscreenGeometry?.() : null;
+      if (!stage || !geo || !player?.setFullscreen) {
+        update();
+        player?.setFullscreen?.(next);
+        return;
+      }
+      // the widget's spot on screen, inside the window that covers it
+      const place = () => {
+        stage.style.width = `${geo.from.width}px`;
+        stage.style.translate = `${geo.from.x - geo.area.x}px ${geo.from.y - geo.area.y}px`;
+      };
+      const unplace = () => {
+        stage.style.width = "";
+        stage.style.translate = "";
+      };
+      if (next) {
+        // the window covers the screen, the widget still where it was; then
+        // the morph out of that spot
+        const grown = onNextResize(place);
+        await player.setFullscreen(true);
+        await grown;
+        await nextFrames();
+        await runMorph(() => {
+          flushSync(update);
+          unplace();
+        });
+      } else {
+        // the morph into the widget's spot; then the window shrinks round it
+        await runMorph(() => {
+          flushSync(update);
+          place();
+        });
+        // the height the window goes back to (main.cjs keeps it for when
+        // fullscreen ends)
+        const h = widgetElRef.current?.getBoundingClientRect().height;
+        if (h) player.resizeTo(h + STAGE_PAD * 2, hoveredRef.current);
+        const shrunk = onNextResize(unplace);
+        await player.setFullscreen(false);
+        await shrunk;
+      }
+    } finally {
+      morphingRef.current = false;
     }
-    setFullscreenState(next);
-    if (next) wakeFs();
-    window.player?.setFullscreen?.(next);
-  }, [lyricsOpen, fsShowLyrics, wakeFs]);
+  }, [lyricsOpen, fsShowLyrics, wakeFs, runMorph]);
   // Ctrl+Alt+F from anywhere (main.cjs), Esc to leave
   const toggleRef = useRef(toggleFullscreen);
   useEffect(() => {
@@ -925,11 +1023,43 @@ export default function App() {
     return () => window.removeEventListener("keydown", onKey);
   }, [fullscreen]);
 
-  const setArtModeSafely = useCallback((on: boolean) => {
-    setArtMode(on);
-    if (!on) setArtCompact(false);
-    setVolOpen(false);
-  }, []);
+  // Into and out of album mode, morphed (see Layout morphs above).
+  const setArtModeSafely = useCallback(async (on: boolean) => {
+    const update = () => {
+      setArtMode(on);
+      if (!on) setArtCompact(false);
+      setVolOpen(false);
+    };
+    const el = widgetElRef.current;
+    if (!el || !document.startViewTransition) return update();
+    if (morphingRef.current) return;
+    morphingRef.current = true;
+    try {
+      // The window first makes room for the taller card. Album mode is a
+      // square; the plain widget is as tall as it last was, with or without
+      // its lyrics panel as they are now.
+      const last = lastNormalRef.current;
+      const lyricsNow = el.classList.contains("lyrics-open");
+      const will = on
+        ? widgetWidth
+        : !last
+          ? 0
+          : last.h - last.panel + (lyricsNow ? last.panel || panelHeight + 8 : 0);
+      const need = Math.ceil(Math.max(el.getBoundingClientRect().height, will)) + STAGE_PAD * 2;
+      if (window.player && need > window.innerHeight + 2) {
+        const grown = onNextResize(() => {});
+        window.player.resizeTo(need, hoveredRef.current);
+        await grown;
+        await nextFrames();
+      }
+      await runMorph(() => flushSync(update));
+    } finally {
+      // and gives it back once the morph is over
+      morphingRef.current = false;
+      const now = widgetElRef.current;
+      if (now) window.player?.resizeTo(now.getBoundingClientRect().height + STAGE_PAD * 2, hoveredRef.current);
+    }
+  }, [widgetWidth, panelHeight, runMorph]);
 
   // ── Window dragging ──
   // Anything that owns the pointer itself must not start a drag.
@@ -1554,12 +1684,20 @@ export default function App() {
   const widgetRef = useCallback((el: HTMLDivElement | null) => {
     resizeObserver.current?.disconnect();
     resizeObserver.current = null;
+    widgetElRef.current = el;
     if (!el || !window.player) return;
     const ro = new ResizeObserver(() => {
-      window.player?.resizeTo(
-        el.getBoundingClientRect().height + STAGE_PAD * 2,
-        hoveredRef.current,
-      );
+      const h = el.getBoundingClientRect().height;
+      // mid-morph the window keeps its size (a resize would cut the morph
+      // short); the morph sizes it once it is over
+      if (morphingRef.current) return;
+      window.player?.resizeTo(h + STAGE_PAD * 2, hoveredRef.current);
+      if (el.classList.contains("art-mode") || el.classList.contains("fullscreen")) return;
+      const panel = el.classList.contains("lyrics-open") ? el.querySelector<HTMLElement>(":scope > .lyrics-panel") : null;
+      lastNormalRef.current = {
+        h,
+        panel: panel ? panel.getBoundingClientRect().height + parseFloat(getComputedStyle(panel).marginBottom) : 0,
+      };
     });
     // border-box: the height sent is the border box, and a padding-only change
     // (album mode drops the padding) leaves the content box as it was
@@ -1842,6 +1980,7 @@ export default function App() {
     // hover is tracked on the stage, not the widget: the stage fills the
     // window, so growing the widget can never move the pointer out of it
     <div
+      ref={stageRef}
       className={`stage${fullscreen ? " fullscreen" : ""}`}
       onMouseEnter={enterHover}
       onMouseLeave={leaveHover}
